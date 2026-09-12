@@ -1,105 +1,115 @@
 <!-- codex-workflow-id: viettran-edgeAI/codex_workflow -->
 <!-- codex-workflow-managed-start -->
-# AGENTS.md
+# Quality Economy - project instructions
+
+This is the native 7Eterius/codex_workflow edition. The legacy ownership marker
+above is retained for safe lifecycle compatibility, not upstream update routing.
 
 ## Design Principles
 
-- Keep modules cohesive, interfaces explicit, coupling minimal, and behavior
-  testable, replaceable, and reusable.
-- Define proportionate acceptance and verification before implementation. Never
-  weaken coverage, assertions, or failure visibility to save time or tokens.
-- Avoid unnecessary process or safeguards; preserve unrelated user work and use
-  verified facts in durable documentation.
+- Preserve product meaning, visual quality, explicit interfaces, financial truth,
+  data safety, independent verification, and recoverable handoffs.
+- Optimize total model-weighted work to an accepted result, including discovery,
+  retries, verification and closure. Do not optimize only main-agent context.
+- Speed is secondary. Do not lower worker capability, omit necessary context,
+  weaken assertions, hide failures or suppress escalation to meet a token target.
+- Raw tokens, model-weighted cost and account allowance are different measures.
+  Do not promise savings or equal quality without representative evidence.
 
-## Working State
+## Working State and Default Route
 
-- `deployment state`: planning or executing a broad, possibly multi-session
-  deployment plan.
-- `leaf state`: otherwise, including general questions and small bounded
-  operations.
+**Heavy is the default route.** No route-selection phrase is required.
+Use `~/.codex/codex_workflow/heavy_route.md` for substantive work. Honor an
+explicit Light or Medium request; retain that choice until changed or the
+session ends. A new session defaults to Heavy unless project personalization
+explicitly overrides it. Do not infer Medium merely because the task is visual.
+
+Route is not deployment state. Questions, explanations, and genuinely small
+bounded leaf tasks use the worker-free direct fast path within Heavy. They do
+not initialize Companion, documentation intake, or deployment closure. A small
+subtask inside a substantive deployment remains part of that deployment.
+
+Light works directly without subagents. Explicit Medium uses
+`~/.codex/codex_workflow/medium_route.md`, with main-owned production and
+verification. Do not automatically upgrade leaf work into a deployment or
+expand an owner's requested scope because Heavy is selected.
+
+## Owner Contract
+
+Treat a complete owner brief as the decision and acceptance contract. Do not
+rewrite it, reopen accepted designs, repeat candidate competitions, or turn
+every numbered requirement into another worker. Maintain a compact working
+map of requirements, ownership, risks and acceptance evidence instead.
+
+Preserve explicit checkpoints, candidate/production isolation, identity,
+financial semantics and navigation. Design Velocity Mode applies only when
+explicitly enabled for the current task. Keep deferred gates OPEN; it is not a
+universal accessibility, security or release waiver. Never describe a bounded
+candidate proof as production-ready.
 
 ## Project Documentation
 
-Use the durable project documents under `agent_docs/`:
+Use the durable `agent_docs/` framework:
 
-- `project_overview.md`: goals, architecture, workflow, and major decisions.
-- `project_core_tech.md`: concise special technology or architecture notes.
-- `project_structure.md`: layout, modules, components, and ownership.
-- `project_progress.md`: goal, overall progress, current position, next milestone.
-- `project_diary.md`: distilled decisions, discarded approaches, mistakes, and
-  reusable lessons.
-- `latest_session_work.md`: detailed handoff evidence and continuation point.
-- Module-specific documents, when present.
+- `project_overview.md`: goals, architecture and major decisions.
+- `project_core_tech.md`: unusual technology and architecture constraints.
+- `project_structure.md`: layout, module boundaries and ownership.
+- `project_progress.md`: current goal, position and next milestone.
+- `project_diary.md`: lasting lessons and rejected approaches, not chronology.
+- `latest_session_work.md`: verified handoff and exact continuation point.
+- Module documents: authoritative domain detail, read according to relevance.
 
-In deployment state, you own `project_progress.md`, `project_diary.md`, and
-`latest_session_work.md`. Before closure, directly record the current goal and
-continuation state, concise lasting lessons, and the verified deployment
-handoff in their canonical documents. Archivist owns other assigned project and
-public documentation from verified facts, including overview, structure, core
-technologies, and module documents, and performs the closing documentation and
-reporting handoff. Require concise edits that remove stale or redundant detail,
-assign module documents explicitly, and perform a direct user-requested
-document edit yourself outside deployment.
+In deployment state, the main owns `project_progress.md`, `project_diary.md`,
+and `latest_session_work.md`. Update them before closure with verified facts,
+limitations and a recoverable next step. Archivist owns other assigned docs.
+Give each fact one canonical home. Keep raw logs and temporary reasoning out
+of durable documents. Never delete a main document without warning and a
+second explicit confirmation. Direct user-requested document edits outside
+substantive deployment can use the fast path.
 
-Keep raw logs, temporary reasoning, and short-lived checkpoints out of durable
-documents; give each fact one canonical home. Never delete a main project
-document without warning and a second explicit confirmation.
+## First Deployment Intake
 
-## Route Selection
+On first deployment-state entry, create one persistent Companion with
+`agent_type="companion"`, `task_name="companion"`, `fork_turns="none"`, or reuse
+the existing target. Reuse it across route changes; do not create a second one.
 
-Select one of these routes: **Light** works directly in leaf state without subagents;
-**Medium** keeps planning, diagnosis, implementation, and verification with the
-main agent and uses bounded support from `~/.codex/codex_workflow/medium_route.md`;
-**Heavy** delegates bounded production, verification, documentation,
-project-context, and Internet research under `~/.codex/codex_workflow/heavy_route.md`.
+The main directly reads the six core documents above, applicable global and
+project instructions, and owner-named decision/acceptance documents once.
+Give Companion the route, goal, constraints and one consolidated assignment to
+inventory module documentation, identify affected dependencies and cross-cutting
+rules, and report exact references, conflicts and unresolved gaps. Do not ask
+it to duplicate the main's six-document summary.
 
-Follow the user's route selection. Use Light when none is selected; do not infer
-Medium or Heavy. Keep the route until the user changes it or the session ends.
-Enter deployment state for Medium or Heavy only when the work is substantive.
+The main directly reads relevant module contracts and decision-critical source.
+Unknown dependency impact requires broader reading before implementation.
+Unread supporting modules are not assumed irrelevant or safe. Never skip an
+instruction file, explicit required read, security boundary, migration rule or
+financial invariant for a context budget. Missing required documents block
+entry; report the gap instead of inventing context.
 
-## Rollout Efficiency
+Reuse retained context and the relevance map within the session. Recheck affected
+surfaces when code, owner work, configuration, dependencies or evidence changes.
+Each Companion rollout reloads its context: combine related questions and avoid
+status-only requests, repeated broad summaries and tiny lookups already answered.
 
-Batch independent reads, searches, metadata checks, and other known-input
-operations. Keep dependencies and overlapping mutations sequential. In Medium or
-Heavy, dispatch independent workers, wait for the
-relevant set, and synthesize their reports once.
+## Efficiency and Authority
 
-Read personalization and project-local instructions from the protected regions
-at the end of this file. Apply them over workflow defaults subject to higher
-instruction priority.
+Batch independent known-input reads and tool operations; keep dependent and
+conflicting mutations sequential. Synthesize related worker evidence once.
+Follow-up capsules carry deltas instead of repeated briefs. Keep full logs in
+accessible artifacts and return useful diagnostics, exit status and references.
+Compactness must not conceal failures or missing observations.
 
-## Required Documentation Read
+Apply protected personalization and project-local instructions below over these
+defaults, subject to higher-priority instructions. Surface material conflicts;
+do not silently erase owner preferences. Model, effort and service-tier choices
+remain in Codex configuration, not inferred from these route names.
 
-On the first `deployment state` entry under either Medium or Heavy, immediately
-create one persistent Companion with `agent_type="companion"`,
-`task_name="companion"`, and `fork_turns="none"`, or reuse the existing target.
-Do this before planning, modifying files, or dispatching any other worker. Reuse
-that Companion after route changes; do not create a second one.
+Preserve owner work and live data. Never stage, commit, push, merge, reset, stash,
+clean or discard work without explicit authority for the current task. Honor
+isolated-store and candidate-preference boundaries as well as source isolation.
 
-Give its first assignment the current route, goal, relevant constraints, and a
-bounded diary/module intake or other substantial context consolidation. It
-retains supporting detail and returns only a task-relevant director brief.
-
-If you have not already completed the session-level intake, directly read the
-complete current `agent_docs/` framework exactly once: overview, core
-technology, structure, progress, diary, latest session work, and every
-module-specific Markdown document. This one direct read is shared across Medium
-and Heavy. Never repeat it later in the session. Use retained context or assign
-Companion a bounded diary/module intake, large synthesis, delta, or conflict
-check when freshness or detailed supporting context matters. Missing or
-unreadable required documents leave deployment entry incomplete; report the
-intake blocker.
-
-Do not overuse Companion. Each rollout reloads its persistent context. Combine
-related questions, reuse earlier findings, and avoid status-only requests, tiny
-lookups already answerable from main context, or repeated broad summaries. Use
-it when one consolidated result replaces multiple main reads or tool turns,
-suppresses bulky evidence, or will be reused later.
-
-## Platform Paths
-
-Interpret `/` as a platform-neutral separator and translate paths for the
-current operating system and shell.
+Interpret `/` as a platform-neutral separator for the current shell and OS.
 <!-- codex-workflow-managed-end -->
 
 <!-- codex-workflow-project-personalization-start -->

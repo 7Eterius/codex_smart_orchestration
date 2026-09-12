@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Semantic release tag, for example v1.1.0"
+        description: "Semantic release tag, for example v1.2.0"
         required: true
         type: string
       prerelease:
@@ -27,6 +27,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -39,6 +41,7 @@ jobs:
           MANUAL_TAG: ${{ inputs.tag }}
         shell: bash
         run: |
+          set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
             release_tag="$GITHUB_REF_NAME"
           else
@@ -46,7 +49,7 @@ jobs:
           fi
           release_version="${release_tag#v}"
           release_archive="dist/codex_workflow-${release_version}.zip"
-          python -B scripts/test_workflow_runtime.py -v
+          python -B scripts/test_fork.py -v
           python -B scripts/test_deployment_token_report.py -v
           python -B codex_workflow/runtime/workflow.py validate \
             --package-root codex_workflow \
@@ -71,6 +74,7 @@ jobs:
           MANUAL_PRERELEASE: ${{ inputs.prerelease }}
         shell: bash
         run: |
+          set -euo pipefail
           release_options=(--generate-notes)
           if [[ "$GITHUB_EVENT_NAME" == "push" || "$MANUAL_PRERELEASE" != "false" ]]; then
             release_options+=(--prerelease)
@@ -78,6 +82,6 @@ jobs:
           gh release create "$RELEASE_TAG" \
             "$RELEASE_ARCHIVE" \
             dist/SHA256SUMS \
-            --title "codex_workflow $RELEASE_TAG" \
+            --title "Quality Economy $RELEASE_TAG" \
             --target "$RELEASE_SHA" \
             "${release_options[@]}"

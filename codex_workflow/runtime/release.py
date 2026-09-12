@@ -16,9 +16,9 @@ from pathlib import Path, PurePosixPath
 from .errors import ValidationError
 
 
-RELEASES_URL = (
-    "https://api.github.com/repos/viettran-edgeAI/codex_workflow/releases?per_page=100"
-)
+RELEASE_REPOSITORY = "7Eterius/codex_workflow"
+# Fork releases only. Never silently fall back to the upstream release stream.
+RELEASES_URL = f"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases?per_page=100"
 
 
 @total_ordering

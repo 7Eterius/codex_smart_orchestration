@@ -1,103 +1,122 @@
-<h3 align="center"><big><big><strong>SIMPLE&emsp;&emsp;───&emsp;&emsp;EASY&emsp;&emsp;───&emsp;&emsp;EFFICIENT</strong></big></big></h3>
-<p align="center"><small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(to use)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(to install)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(token consumption)</small></p>
-<hr>
+# Codex Workflow - Quality Economy
 
-![Workflow illustration](illustration.png)
+Native **Heavy-by-default** edition of `7Eterius/codex_workflow`, based on
+`viettran-edgeAI/codex_workflow` at `6d9b06f73bee7f899001b0bb102c70529a24313f`.
 
-Built for token-efficient agent orchestration, with swarm execution, persistent context support, and compact knowledge handoffs between agents. `agent_docs/` provides durable project memory for goals, architecture, decisions, progress, and session handoffs.
+Describe the work. No `use Heavy route` prefix, opt-in profile, or per-prompt
+activation is needed in an initialized project. Quality Economy is built into
+the installed project and route instructions, not appended personalization.
 
-> ⭐ For lightweight tasks, it won’t overdo things. Light route is default.
+## Behavior
 
-## 1. Quick installation ⚙️
-### Open Codex CLI / Codex app from your project directory
+Substantive work keeps the capable parent, configured Luna production workers,
+independent Tester, persistent Companion and recoverable Archivist handoff.
+One coherent production owner is the default; additional workers need a concrete
+reason. Quality, correct semantics, safety, independent evidence and visual
+acceptance come before speed. Worker models and reasoning are unchanged.
 
-Change permision to `approve for me` or `full access`.
-▶️ Send:
-```text
-Download and extract the latest `codex_workflow-<version>.zip` asset from https://github.com/viettran-edgeAI/codex_workflow/releases. Verify it against `SHA256SUMS`, then read the bundled `codex_workflow/operate/bootstrap.md` and follow it to complete the initial installation.
+Complete questions and small bounded leaf requests use Heavy's worker-free
+fast path. They do not start a deployment ceremony. Explicit Light and Medium
+remain available; a new session defaults to Heavy. Existing deliberate project
+routing overrides are preserved and remain effective.
+
+The main reads core project and owner documents, then relevant module contracts.
+Companion locates affected dependencies and cross-cutting constraints. Unknown
+impact broadens intake. Evidence is reused only when known applicable and fresh;
+changed shared code invalidates relevant prior checks. The main examines final
+running-product screenshots itself. Closing Archivists receive exact evidence
+and state references instead of an automatic 200-turn inherited transcript.
+
+No model-budget formula or equal-quality savings claim is implied. Measure
+complete accepted deployments, rework, token reports and account-allowance
+changes. Serial execution alone does not save tokens.
+
+## First adoption from source
+
+Use Python 3.11 or newer. Keep this checkout OUTSIDE application projects and
+stop their Codex agents before applying. Use a reviewed commit from a full-history
+Git checkout of this fork. The migration tests read the pinned upstream baseline
+from local Git history; an extracted source archive alone cannot run that suite.
+Do not install old ZIP files under `dist/`: those are historical upstream assets.
+
+From the root of the reviewed checkout, first validate and run tests:
+
+```bash
+python3 -B scripts/test_fork.py -v
+python3 -B scripts/test_deployment_token_report.py -v
+python3 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
 ```
-> ⭐ Recommended: use 5.6 Luna xhigh for installation. 
 
-🔄 Restart Codex after installation
+Preview adoption for the explicit project directories:
 
-The initial bootstrap will include creating the project documentation framework `agent_docs/` using `archivist` subagent. Once that bootstrap is complete, the current project is ready to use. Whenever you need to install this workflow for a new project, simply open Codex and send: `codex_workflow --install`
-
-> Requires Python 3.11 or newer for deterministic lifecycle operations.
-
-**Note:** If you are currently using 1.1.3 version, you cannot upgrade directly to a newer version(cause I removed --configure feature). Run `codex_workflow --remove` to uninstall it first, then install the newer version.
-
-## 2. Workflow usage 
-
-### This workflow has 3 routes:
-- Light route : No subagents, no workflow, minimal context.
-- Heavy route : Implement the full set of workers, including `companion`, `investigator`, `default executor`, `senior executor`, `tester`, and `archivist`. The main agent orchestrates the work.
-- Medium route: Deploy `Companion`, `Investigator` and `Archivist` to assistance the Main agent. The main agent handles the deployment itself. Choose this route when you want workflow-mode context support without delegating production work, like front-end design, visualization, or 3D works, but it will burn tokens faster than Heavy route.
-
-### Built-in project memory - `agent_docs`
-`agent_docs/` is the project's durable documentation framework: it records the goals, architecture, progress, decisions, and latest-session handoff. Medium and Heavy routes use it. The main agent updates progress, diary, and latest-session work for each substantive deployment; `Archivist` initializes the framework and handles other assigned documentation plus closure reporting.
-
-### How to use
-- Normally, for simple work, general Q&A, you don't need to do anything. `light route` is the default route.
-
---------------------------------
-- When starting a new task, tell Codex :
-```text
-use medium/heavy route. [your task description]
+```bash
+python3 -B scripts/install_quality_economy.py \
+  --project "/absolute/path/to/Materia" \
+  --project "/absolute/path/to/RussianReading"
 ```
-Or continue a task that was already underway in the previous session: 
+
+Review the paths, warnings, preserved preferences and backup locations. To apply,
+repeat that command with `--apply --approve SHA_FROM_REVIEWED_PREVIEW`.
+The helper rejects changed preview inputs and uses the inherited compensating
+transaction for the combined plan. It does not run Git, change application
+source or touch live stores. Stop agents: approval hashing is not a file lock.
+
+A healthy existing upstream install can be adopted in place. Uninstalling first
+is unnecessary and loses useful source-backup context. The helper preflights all
+explicit project targets, preserves local rules, personalization, disabled state
+and durable project documents, and takes lifecycle backups for an existing
+runtime. It supports adopting another older project after the shared runtime
+has already been updated. A malformed or unrecognized install must be repaired,
+not blindly overwritten. Never delete `~/.codex` or `agent_docs/` to force it.
+
+The earlier optional `### Quality Economy v1` personalization block, if present,
+must be removed through personalization before adoption to avoid duplicate or
+contradictory rules. Preserve unrelated preferences. Native defaults need no
+replacement profile.
+
+After application, inspect the JSON `agent_actions`. Fresh/unfinished project
+documentation must be initialized by Archivist as specified in
+`codex_workflow/operate/install.md`. An installer success alone does not mean
+project-context initialization has completed. Restart Codex, then describe work
+normally. The helper never selects your parent model or changes its speed.
+Sol Medium with Standard speed is a reasonable initial selection, not a
+model-quality guarantee or an enforced requirement.
+
+## New projects and ongoing updates
+
+After user-level installation, run once in each new project:
+
 ```text
-use medium/heavy route. Continue ongoing work.
+codex_workflow --install
 ```
-> Codex stays on the selected route until you change it
 
----------------
-> **⭐ Recommendation:** Assign very large and complex tasks to the `heavy route` to make the most of its capabilities and maximize token usage savings. Don't hesitate to choose Sol xhigh / Astra high for this route. Using much lower reasoning efforts will not actually save tokens and will severely reduce its coordination capabilities.
+Then no route prefix is required. Supported lifecycle commands remain
+`--personal`, `--check-update`, `--update`, `--disable`, `--enable`, and `--remove`.
+They are Codex prompt commands; deterministic script entry points remain in
+`~/.codex/codex_workflow/runtime/workflow.py`.
 
-### Coordinating architecture 
-> Read on if you want to learn more about how things work.
+Release discovery points ONLY to `7Eterius/codex_workflow`. Until a fork release
+with a matching universal ZIP and `SHA256SUMS` is published, `--check-update` and
+`--update` report that no usable release is available. They must not fall back
+to upstream. Source adoption works without a published release.
 
-| Role | Model | Primary Responsibility | Quantity  |
-|---|---|---|---:|
-| **Main Agent** | Session-selected model | **Primary orchestrator.** Owns the core task context, makes high-level decisions, coordinates the workflow, and distributes the knowledge required by specialized subagents. | 1 |
-| **Companion** | Luna · xhigh | **Persistent secretary and context assistant.** Reduces context pressure and operational overhead on the Main Agent by handling supporting context, organizing information, consolidating reports, and taking care of lightweight auxiliary work. | 1 |
-| **Investigator** | Luna · xhigh | **Research and investigation specialist.** Searches for clues, technical evidence, documentation, prior art, and potential solutions, including information available on the Internet. Investigators can operate in parallel across independent research lanes. | As needed |
-| **Default Executor** | Luna · max | **Default implementation worker.** Handles normal production tasks delegated by the Main Agent, including coding, modifications, integration work, and other routine implementation activities. Multiple Default Executors may work in parallel when tasks can be safely decomposed. | As needed |
-| **Senior Executor** | Sol · medium | **High-capability implementation specialist.** Reserved for exceptionally difficult or high-impact work where stronger reasoning is justified, such as project-core changes, complex algorithms, architectural modifications, or mathematically demanding tasks. | 1 maximum |
-| **Tester** | Luna · max | **Independent verification specialist.** Designs, implements, and runs tests; validates requirements and acceptance criteria; identifies regressions or defects; and provides verification evidence before work is accepted. | As needed |
-| **Archivist** | Luna · xhigh | **Documentation and closure specialist.** Handles assigned documentation outside the three main-owned deployment-state documents, performs the read-only Git handoff, and produces the end-of-deployment token report. | 1 per substantive deployment, plus as needed |
+The legacy ownership IDs and install paths intentionally remain compatible.
+They are not update-source settings and do not make this the upstream edition.
+Do not run two installers against the same managed paths or automatically sync
+upstream over the fork. Review upstream changes and run fork validation first.
 
-![Heavy Route structure](heavy_route_structure.png)
+## Validation and release
 
-> `doc-writer` and `closure_steward` have been merged into single role `archivist` since 1.1.14 version.
+`python3 scripts/test_fork.py -v` runs the inherited functional/safety suite,
+replacing its one upstream-specific policy-text test with native policy,
+worker-integrity, release-source and adoption tests. The old text test asserts
+superseded routing/intake/closure contracts; it is not silently treated as a pass.
+The unchanged worker files are checked by Git blob hash as well as TOML parsing.
+All other inherited tests and the token-report suite remain required.
 
-What's special about the system:
+The Quality Economy CI builds and verifies a universal package without publishing
+a release. Release publication is separate; see `RELEASING.md`. A CI pass validates
+software contracts, not LLM adherence, visual judgment or real allowance savings.
 
-- Flexibility: The system doesn't force the main agent into a rigid process: requiring coordination in this way, that way... It provides it with resources and power (specialized agents) and fine-tuning and guidance based on hundreds of trials.
-- Fine-tuned balance: Main agent's control <---> costs & task completion capabilities. based on analysis and observation, not on feeling. 
-- Knowledge distribution: Each task package from the main agent to the workers includes a task completion guide.
-- Batching guidelines prevent excessive main agent rollout.
-- The **Senior Executor** serves as a fallback for exceptionally difficult problems where stronger reasoning is required.
-- Addresses the issue of the main agent waking up workers too often.
-- Built-in token report: End-of-session token statistics for each agent, allowing you to monitor how much each agent rolls out and how they use their tokens.
-......
-
-## Light benchmark
-**Batching guidelines** techniques(since 1.1.3 version) significantly reduce the main agent's rollout, which in turn reduces the main agent's cached input tokens, a major component of the operation cost, see **New workflow** below :
-
-![Light benchmark analysis](light_benchmark/analysis.png)
-
-## 3. More details 
-
-Send these exact commands to Codex from the relevant project directory:
-
-| Command | Purpose |
-| --- | --- |
-| `codex_workflow --install` | Install workflow in the current project and initialize its documentation framework. |
-| `codex_workflow --personal` | Add or update project-specific workflow preferences. |
-| `codex_workflow --check-update` | Check for a newer release without installing it. |
-| `codex_workflow --update` | Download, verify, and install the latest matching release. |
-| `codex_workflow --disable` / `codex_workflow --enable` | Disable or re-enable the workflow for the current project. |
-| `codex_workflow --remove` | Remove the installed workflow after a destructive dry-run and confirmation. |
-
-For the complete architecture, route, lifecycle, ownership, safety, and release
-analysis, see [workflow_breakdown.md](workflow_breakdown.md).
+See `workflow_breakdown.md` for the native behavior and
+`docs/quality_economy_migration.md` for migration boundaries and rollback.
