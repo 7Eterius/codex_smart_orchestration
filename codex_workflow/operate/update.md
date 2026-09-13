@@ -1,53 +1,30 @@
-# Workflow Update
+# Quality Economy Update
 
-Supported command forms:
+Supported prompt: `codex_workflow --update`.
+Use Python 3.11 or newer and the installed lifecycle CLI.
 
-    codex_workflow --update
-
-Use Python 3.11 or newer. Apply the validated update directly with the lifecycle
-CLI.
-
-## Source
-
-Use the script to query GitHub Releases, select the highest non-draft SemVer
-release containing both the universal ZIP and `SHA256SUMS`, verify the checksum,
-and extract it safely. Include prereleases and never clone the repository. Let
-the installed launcher delegate planning and application to the incoming CLI,
-which validates its package schema.
-
-## Update
-
-Run:
+Release source is ONLY `7Eterius/codex_workflow`. Query that fork's releases,
+select the highest usable non-draft SemVer release with a matching universal
+ZIP and `SHA256SUMS`, verify its checksum and extract safely. Include prereleases.
+If none exists or the network fails, report the error; never fetch upstream as
+fallback or install a historical `dist/` ZIP. Routine release updates do not
+clone repositories. Initial reviewed source adoption is a separate procedure.
 
 ```text
 python3 ~/.codex/codex_workflow/runtime/workflow.py update --project <project>
 ```
 
-When the installed package still stores `VERSION` at its root, run the incoming
-package's `runtime/workflow.py` instead of the installed launcher. The incoming
-runtime recognizes that historical layout and migrates it transactionally.
+The incoming CLI owns package validation. Preserve unrelated configuration,
+skills and workers, project documents, personalization, project-local rules,
+source backups and enabled/disabled state. Replace only workflow-managed release
+inputs through the inherited transaction and verified timestamped backup.
+Report the installed version, backup location and failures accurately.
 
-Let the script replace installed routes, worker TOMLs, and workflow-owned skills
-with the incoming release's fixed definitions. Expect it to preserve unrelated
-Codex settings and skills, project documents, personalization, project-local
-instructions, source backups, and the project's enabled/disabled state. For a
-project still using an older workflow version, expect the script to validate its
-managed region against that version's source backup. Expect it to remove
-obsolete workflow-owned files and the retired workflow-owned `agent_docs/`
-`.gitignore` rule, create a verified timestamped backup, and apply user/project
-state through one compensating transaction. Preserve an `agent_docs/` ignore
-rule that the user owns outside the workflow-managed block.
+Do not reset or reconstruct owner instructions automatically when drift is
+reported. Use the inherited `--legacy-local-instructions <reviewed-file>` option
+only after explicitly reviewing a legacy migration. `--allow-downgrade` requires
+an intentional reviewed downgrade. A partial or rolled-back update is not success.
 
-If a legacy project entry point contains merged local edits, expect the update
-to stop. Review and extract only the project-local instructions into a temporary
-file, then rerun with:
-
-```text
---legacy-local-instructions <reviewed-file>
-```
-
-Treat this as a one-time migration into the dedicated local region. Never infer
-the content automatically. Add `--allow-downgrade` for a downgrade.
-
-Report the installed version, backup location, and any failure.
-Do not describe a partial or rolled-back update as successful.
+A source takeover from upstream must run the incoming fork's reviewed adoption
+helper or incoming CLI, not rely on an old upstream launcher choosing this fork.
+The native Heavy/Quality Economy defaults require no extra personalization step.

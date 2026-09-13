@@ -1,0 +1,42 @@
+name: Quality Economy validation
+on:
+  pull_request:
+  push:
+    branches: [main, 'feat/quality-economy-default']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Functional, native policy and adoption tests
+        run: python -B scripts/test_fork.py -v
+      - name: Unchanged deployment token reporter
+        run: python -B scripts/test_deployment_token_report.py -v
+      - name: Validate and package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
+          version="$(cat codex_workflow/operate/VERSION)"
+          python -B scripts/package_release.py --release-tag "v${version}" --output-dir qe-dist
+          python -B scripts/package_release.py --verify "qe-dist/codex_workflow-${version}.zip" --version "$version"
+          git diff --check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-economy-${{ matrix.python-version }}
+          path: |
+            qe-dist/codex_workflow-*.zip
+            qe-dist/SHA256SUMS
