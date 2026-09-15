@@ -18,6 +18,7 @@ from unittest import mock
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'codex_workflow'
+CURRENT_VERSION=(PACKAGE/'operate/VERSION').read_text().strip()
 sys.path.insert(0,str(PACKAGE))
 from runtime import smart_install as install
 from runtime.smart_config import patch_config, SMART
@@ -174,7 +175,7 @@ class GlobalInstallTests(unittest.TestCase):
         status=install.status(self.home)
         self.assertTrue(status['global_bootstrap_present'])
         self.assertTrue(status['policy_present'])
-        self.assertEqual(status['version'],'1.3.0')
+        self.assertEqual(status['version'],CURRENT_VERSION)
         self.assertTrue((self.home/'agents/simple_executor.toml').is_file())
 
     def test_second_install_is_idempotent(self):
@@ -362,7 +363,7 @@ class GlobalInstallTests(unittest.TestCase):
         self.assertEqual(snapshot(old_backup),old_source)
         self.assertNotIn('Local Quality Economy global patch',global_entry.read_text())
         self.assertTrue(install.status(self.home)['global_bootstrap_present'])
-        self.assertEqual((self.home/'codex_workflow/operate/VERSION').read_text().strip(),'1.3.0')
+        self.assertEqual((self.home/'codex_workflow/operate/VERSION').read_text().strip(),CURRENT_VERSION)
 
     def test_cli_cannot_scan_repositories(self):
         with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit):
@@ -444,7 +445,7 @@ class PolicyTests(unittest.TestCase):
 
     def test_package_validates_and_version_matches(self):
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'1.3.0')
+        self.assertEqual(package.version,CURRENT_VERSION)
         self.assertIn('simple_executor',package.worker_names)
 
 

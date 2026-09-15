@@ -1,10 +1,10 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 1.3.0 -->
+<!-- codex-workflow-version: 1.3.1 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
 The globally installed workflow is **Smart Orchestration** from
-`7Eterius/codex_workflow`. No route phrase or per-repository installation is needed.
+`7Eterius/codex_smart_orchestration`. No route phrase or per-repository installation is needed.
 The main loads `~/.codex/codex_workflow/smart_orchestration.md` for substantive work.
 Role-assigned children follow their capsule instead of initializing orchestration.
 Repository product, data-safety and acceptance requirements remain binding.
