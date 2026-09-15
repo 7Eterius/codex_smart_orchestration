@@ -22,3 +22,7 @@ reproduction, attempted fix and the missing decision to the parent. Escalate
 immediately for unplanned security, financial, schema or destructive changes.
 Do not modify owner data or Git state without explicit current-task authority.
 """
+
+# No recursive delegation from a role-assigned child.
+[agents]
+enabled = false

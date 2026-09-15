@@ -92,8 +92,8 @@ class PackageLayout:
             path
             for path in self.root.rglob("*")
             if path.is_symlink()
-            and ".backups" not in path.parts
-            and ".source_backup" not in path.parts
+            and ".backups" not in path.relative_to(self.root).parts
+            and ".source_backup" not in path.relative_to(self.root).parts
         ]
         if symlinks:
             raise ValidationError(f"package contains symlinks: {symlinks[:3]}")
@@ -120,6 +120,11 @@ class PackageLayout:
                 "smart_orchestration.md",
                 "runtime/smart_install.py",
                 "runtime/smart_config.py",
+                "runtime/agent_defaults.py",
+                "runtime/smart_restore.py",
+                "runtime/doctor.py",
+                "verification.md",
+                "runtime/capture_check.py",
                 "heavy_route.md",
                 "medium_route.md",
                 "archivist.md",
