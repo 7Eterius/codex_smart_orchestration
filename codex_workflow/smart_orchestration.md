@@ -43,6 +43,23 @@ file. Use one production writer per shared boundary. Ordinary fan-out is 1-3 ope
 children, not a requirement to fill slots. Finished support agents must release
 slots before Archivist/escalation; preserve useful handoff before closing.
 
+## Design ownership
+
+For design-led tasks, main owns product, UX, interaction and visual authorship,
+not merely coordination or approval. From accepted references, define purpose,
+information hierarchy, composition, key states, interactions and visual direction
+before bounded implementation. Novel design is not cheap work because its diff is small.
+Executors implement that brief; ordinary details stay within agreed tokens/patterns.
+Proposals and unresolved design choices return to main; no unilateral hierarchy,
+navigation, visual-language or product-meaning changes. Preserve owner decisions.
+Main inspects an early running frame for new compositions, gives concrete critique,
+and directly reviews final evidence. Build/test success or worker prose is not visual
+acceptance; unavailable visuals remain unverified. Mockups are not running evidence.
+Keep behavior/accessibility verification independent from main design judgment and
+required owner approval. Batch related corrections; no extra designer or mandatory
+competition. Settled tweaks reuse direction. Design-only requests stop at the agreed
+concept, without unauthorized implementation or invented running evidence.
+
 ## Isolated, bounded delegation
 
 Every spawn explicitly sets `fork_turns="none"` where the tool supports it.
@@ -103,7 +120,6 @@ Broaden checks for changed dependencies or failures; unknown freshness requires 
 Reuse only known-applicable inputs/environment/evidence, including untracked work.
 Build once when valid, reuse correct servers, parallelize isolated native checks;
 serialize shared simulator, browser, build output and data. Debug is not Release.
-An early running frame can catch a wrong design; compilation is not visual proof.
 
 Fix acceptance violations and introduced regressions. Record unrelated findings,
 not speculative cleanup. Stop when agreed criteria and required evidence are met,
