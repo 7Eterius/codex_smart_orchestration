@@ -194,7 +194,10 @@ class GlobalInstallTests(unittest.TestCase):
         self.apply()
         data=tomllib.loads((self.home/'config.toml').read_text())
         data.pop('developer_instructions')
-        self.assertEqual(data,tomllib.loads(original))
+        expected=tomllib.loads(original)
+        expected['agents']['default_subagent_model']='gpt-5.6-luna'
+        expected['agents']['default_subagent_reasoning_effort']='medium'
+        self.assertEqual(data,expected)
         user=(self.home/'AGENTS.md').read_text()
         self.assertIn('Owner header',user)
         self.assertIn('Owner footer',user)
@@ -259,9 +262,12 @@ class GlobalInstallTests(unittest.TestCase):
         self.assertEqual(external.read_text(),'model="outside"')
 
     def test_symlink_in_worker_directory_is_refused(self):
-        (self.home/'agents').mkdir(parents=True)
-        (self.home/'agents/link').symlink_to(self.project,target_is_directory=True)
-        with self.assertRaisesRegex(ValidationError,'Symlink'):
+        target=self.home/'agents/simple_executor.toml'
+        target.parent.mkdir(parents=True)
+        outside=self.root/'outside-worker.toml'
+        outside.write_text('name=\"outside\"\n')
+        target.symlink_to(outside)
+        with self.assertRaisesRegex(ValidationError,'[Ss]ymlink'):
             self.prepare()
 
     def test_symlink_backup_parent_is_refused(self):

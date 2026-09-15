@@ -1,6 +1,6 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.3.2**, from
+One globally installed adaptive Codex workflow, version **1.5.0**, from
 `7Eterius/codex_smart_orchestration`. Main plans, decides and seriously audits;
 Luna workers execute bounded work with parent-controlled escalation. Archivist
 keeps concise permanent current state and meaningful dated history. No route
@@ -11,12 +11,13 @@ phrase, project-path argument or per-repository installation is needed.
 Simple Executor is Luna Medium; Routine Executor Luna High; difficult Default
 Executor Luna Max; Senior help Sol Medium; independent Tester Luna xhigh;
 conditional Companion Luna Medium and Investigator Luna High; Archivist Luna
-Medium. All eight role files are unchanged from 1.3.1. Main keeps the owner's
+Medium. v1.5 retains all eight role model/effort tiers and disables recursive
+delegation inside each child role. Main keeps the owner's
 selected model/effort. Known hard tasks can start stronger without cheap retries.
 The policy is adaptive instructions, not a deterministic scheduler or a quality
 or allowance guarantee. Main inspects decisive source and final actual UI images.
 
-## Change-aware verification in 1.3.2
+## Change-aware verification and orchestration hardening in 1.5
 
 Plan relevant checks for edit loops, stable-candidate acceptance and authorized
 merge/release checkpoints separately. Do not run an entire accessibility, device,
@@ -45,7 +46,7 @@ Use any Python 3.11+ interpreter elsewhere. No sudo, API key, repo search or
 shell-profile edit. Default without --apply previews; --check inspects disk
 configuration. CODEX_HOME is honored, otherwise ~/.codex is used.
 
-The installer is unchanged. It preserves parent model/effort/speed, permissions,
+The v1.5 installer preserves parent model/effort/speed, permissions,
 tools, unrelated configuration and surrounding owner instructions. Private backups
 and transactional rollback protect managed changes. Custom worker edits block
 replacement for review. Application source, stores, Git state and project memory
@@ -55,6 +56,12 @@ Profile/project/CLI overrides can change effective settings. Neither on-disk fil
 nor a model's self-reported name prove runtime role/model selection. Global startup
 supersedes only legacy workflow procedure, never project product/safety rules.
 No shorter context or global output cap, third-party gateway or summarizer is installed.
+
+When child defaults are absent, v1.5 installs a conservative three-thread cap
+with Luna Medium fallbacks while preserving explicit owner settings. Named child
+roles disable recursive delegation. `runtime/doctor.py` provides a read-only
+on-disk contract check, and named installation backups can be restored with the
+conflict-checked `smart_install.py --restore-backup <backup>` flow.
 
 ## Output capture
 
@@ -93,10 +100,11 @@ python3.11 -B scripts/test_fork.py -v
 python3.11 -B scripts/test_deployment_token_report.py -v
 python3.11 -B scripts/test_verification.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.3.2 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.3.2.zip --version 1.3.2
+python3.11 -B scripts/package_smart.py --release-tag v1.5.0 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.0.zip --version 1.5.0
 ```
 
 Source migration fixtures need full history; package installation needs no Git.
-Prior tests remain, with 30 new output-capture and verification-policy tests.
+Prior verification/capture tests remain; v1.5 adds dedicated defaults, recursion,
+doctor, rollback, source-history, and owner-preservation regression coverage.
 Software tests do not prove unchanged app quality or a five-day usage improvement.
