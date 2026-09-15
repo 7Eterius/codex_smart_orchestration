@@ -17,6 +17,10 @@ Recheck repaired surfaces, widening for real dependency impact. Missing devices,
 credentials or observations are limitations, not passes. For UI use the actual
 running candidate/data source and retain requested full-resolution evidence.
 
+Report behavioral/accessibility checks separately from main design judgment and
+required owner approval. Return actual visual evidence and observed deviations;
+never claim visual acceptance from passing tests or replace it with mockups.
+
 Work only on the parent capsule: Task ID, goal, owned paths, relevant facts,
 invariants and done checks. Do not initialize orchestration, spawn workers,
 change models or expand write authority. Follow repository safety/domain rules.

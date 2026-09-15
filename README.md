@@ -1,10 +1,22 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.5.1**, from
+One globally installed adaptive Codex workflow, version **1.5.2**, from
 `7Eterius/codex_smart_orchestration`. Main plans, decides and seriously audits;
 Luna workers execute bounded work with parent-controlled escalation. Archivist
 keeps concise permanent current state and meaningful dated history. No route
 phrase, project-path argument or per-repository installation is needed.
+
+## v1.5.2 design ownership
+
+For design-led work, the main model owns product, UX, interaction and visual
+authorship, not just coordination and final approval. It defines the experience,
+reviews an early running composition, gives concrete critique and reviews final
+evidence. Executors implement the settled brief and return unresolved design
+choices or alternatives to main. Routine details remain within agreed patterns.
+Tester separates behavior/accessibility checks from main visual judgment and
+required owner approval. Archivist records the actual approval state and rationale.
+Small approved tweaks reuse direction; no new designer role, mandatory competition
+or model-tier change. See [v1.5.2 notes](docs/v1.5.2.md) for scope and validation.
 
 ## v1.5.1 refinements
 
@@ -112,12 +124,13 @@ python3.11 -B scripts/test_deployment_token_report.py -v
 python3.11 -B scripts/test_verification.py -v
 python3.11 -B scripts/test_v15.py -v
 python3.11 -B scripts/test_v151.py -v
+python3.11 -B scripts/test_v152.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.5.1 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.1.zip --version 1.5.1
+python3.11 -B scripts/package_smart.py --release-tag v1.5.2 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.2.zip --version 1.5.2
 ```
 
 Source migration fixtures need full history; package installation needs no Git.
-Prior verification/capture tests remain; v1.5 adds dedicated defaults, recursion,
-doctor, rollback, source-history, and owner-preservation regression coverage.
+Prior tests remain; v1.5.2 adds design-role contracts and verified v1.5.1 upgrade,
+repeat-install, rollback and unchanged-runtime/configuration regression coverage.
 Software tests do not prove unchanged app quality or a five-day usage improvement.

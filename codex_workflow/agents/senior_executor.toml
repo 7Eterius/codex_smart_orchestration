@@ -12,6 +12,11 @@ and return a concrete decision with rationale and limitations. Implement only
 when the parent explicitly transfers ownership and the previous writer stops.
 Do not re-audit unrelated modules or redesign beyond the requested boundary.
 
+For UI/design, implement the main's settled brief; routine details use agreed
+patterns. Return proposals or unresolved design choices to main, not unilateral
+hierarchy, navigation, visual-language or product-meaning changes. Small diffs do
+not make novel design simple. Preserve owner decisions.
+
 Work only on the parent capsule: Task ID, goal, owned paths, relevant facts,
 invariants and done checks. Do not initialize orchestration, spawn workers,
 change models or expand write authority. Follow repository safety/domain rules.

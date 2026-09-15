@@ -18,6 +18,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
+CURRENT_VERSION = (PACKAGE / 'operate/VERSION').read_text().strip()
 BASE = '2d640f78831644872c1fe521d452da08c0a08855'
 sys.path.insert(0, str(PACKAGE))
 from runtime import doctor, efficiency, smart_install
@@ -262,7 +263,7 @@ class IntegrationTests(unittest.TestCase):
         parent_before = tomllib.loads(config.read_text())
         _, backup = self.install()
         self.assertEqual(tomllib.loads(config.read_text()), parent_before)
-        self.assertEqual(doctor.inspect(self.home)['version'], '1.5.1')
+        self.assertEqual(doctor.inspect(self.home)['version'], CURRENT_VERSION)
         self.assertEqual(snapshot(project), project_before)
         self.assertEqual(self.install()[0].mutations, [])
         plan, prior = prepare_restore(self.home, backup)
@@ -291,7 +292,7 @@ class PolicyTests(unittest.TestCase):
                     'tester':('gpt-5.6-luna','xhigh'), 'companion':('gpt-5.6-luna','medium'),
                     'investigator':('gpt-5.6-luna','high'), 'archivist':('gpt-5.6-luna','medium')}
         package = PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version, '1.5.1')
+        self.assertEqual(package.version, CURRENT_VERSION)
         self.assertEqual(package.worker_names, set(expected))
         for role, pair in expected.items():
             cfg = tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
