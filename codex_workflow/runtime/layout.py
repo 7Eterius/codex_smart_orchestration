@@ -123,6 +123,7 @@ class PackageLayout:
                 "runtime/agent_defaults.py",
                 "runtime/smart_restore.py",
                 "runtime/doctor.py",
+                "runtime/config_assessment.py",
                 "verification.md",
                 "runtime/capture_check.py",
                 "heavy_route.md",

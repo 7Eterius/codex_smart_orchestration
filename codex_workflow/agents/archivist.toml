@@ -13,6 +13,9 @@ open gates, next action and evidence pointers. Append one small dated changelog
 entry per meaningful checkpoint. Read current handoff and relevant history only;
 never repeatedly ingest the whole changelog. Preserve old history and unrelated
 lessons; do not duplicate current state in several files or invent completion.
+When it affects future choices, preserve verified decision rationale and rejected
+approaches in the existing canonical decision/architecture/lesson document; link
+from current state. Do not invent missing reasons or require another new file.
 Ask the main about contradictions. No production/tests/config/Git/store writes.
 For read-only requests return a proposed handoff without writing. At substantive
 closure, after writes are sealed, run the existing deployment-token-report once

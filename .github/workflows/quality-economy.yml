@@ -29,6 +29,7 @@ jobs:
           python -B scripts/test_deployment_token_report.py -v 2>&1 | tee token-tests.log
           python -B scripts/test_verification.py -v 2>&1 | tee verification-tests.log
           python -B scripts/test_v15.py -v 2>&1 | tee v15-tests.log
+          python -B scripts/test_v151.py -v 2>&1 | tee v151-tests.log
       - name: Validate and package
         shell: bash
         run: |
@@ -47,5 +48,6 @@ jobs:
             token-tests.log
             verification-tests.log
             v15-tests.log
+            v151-tests.log
             smart-dist/codex_workflow-*.zip
             smart-dist/SHA256SUMS

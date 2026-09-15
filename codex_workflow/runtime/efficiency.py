@@ -91,7 +91,7 @@ def settings(home: Path) -> dict:
         raise ValueError("Config is symlinked; inspect it explicitly instead")
     cfg = tomllib.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
     result = {"configured_parent": {key: cfg.get(key) for key in
-              ("model", "model_reasoning_effort", "service_tier")}, "workers": [], "warnings": []}
+              ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier")}, "workers": [], "warnings": []}
     for role in ROLES:
         path = home / "agents" / f"{role}.toml"
         if path.is_symlink():
@@ -106,11 +106,12 @@ def settings(home: Path) -> dict:
     if isinstance(profiles, dict):
         for name, profile in profiles.items():
             if isinstance(profile, dict) and any(key in profile for key in
-                    ("model", "model_reasoning_effort", "service_tier", "developer_instructions")):
+                    ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier", "developer_instructions")):
                 # Do not print arbitrary owner profile strings or instruction contents.
                 result["warnings"].append("A profile can override model/effort/speed/bootstrap; verify the selected profile.")
                 break
     result["observation"] = "On-disk configuration only. Null is unknown/inherited, not verified Standard speed. " \
+                            "Unset Plan effort uses its built-in preset, not an inferred normal effort. " \
                             "Project, profile, CLI or spawn overrides may change actual settings. No live usage was read."
     return result
 

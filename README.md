@@ -1,10 +1,21 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.5.0**, from
+One globally installed adaptive Codex workflow, version **1.5.1**, from
 `7Eterius/codex_smart_orchestration`. Main plans, decides and seriously audits;
 Luna workers execute bounded work with parent-controlled escalation. Archivist
 keeps concise permanent current state and meaningful dated history. No route
 phrase, project-path argument or per-repository installation is needed.
+
+## v1.5.1 refinements
+
+Context expands with uncertainty, not every task. Executors keep routine diagnosis
+local; the parent resolves material decisions. The existing Tester can identify
+failure cases early on risky work, then independently verify the result. Archivist
+preserves decision rationale in existing canonical documents. Installer and doctor
+now share configuration assessment with separate errors, warnings and unverified
+runtime state, including distinct normal and Plan-mode effort. All model tiers and
+parent settings remain unchanged. See [v1.5.1 notes](docs/v1.5.1.md) for exact scope,
+legacy-flag handling, regression coverage and unexecuted manual behavior scenarios.
 
 ## Capabilities
 
@@ -99,9 +110,11 @@ Canonical checks:
 python3.11 -B scripts/test_fork.py -v
 python3.11 -B scripts/test_deployment_token_report.py -v
 python3.11 -B scripts/test_verification.py -v
+python3.11 -B scripts/test_v15.py -v
+python3.11 -B scripts/test_v151.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.5.0 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.0.zip --version 1.5.0
+python3.11 -B scripts/package_smart.py --release-tag v1.5.1 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.1.zip --version 1.5.1
 ```
 
 Source migration fixtures need full history; package installation needs no Git.

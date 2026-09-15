@@ -19,9 +19,11 @@ change models or expand write authority. Follow repository safety/domain rules.
 Use targeted source reads; request missing decisive context instead of guessing.
 Return Task ID, outcome, evidence/checks and unresolved risks concisely. Preserve
 full diagnostics locally. Never claim unrun checks passed or hide uncertainty.
-If a focused repair fails materially, stop and send expected/observed behavior,
-reproduction, attempted fix and the missing decision to the parent. Escalate
-immediately for unplanned security, financial, schema or destructive changes.
+Diagnose ordinary compiler/test defects locally while new evidence advances the
+assigned contract. If progress stalls or a material decision is needed, send
+expected/observed behavior, reproduction, attempted fix and the missing fact/decision.
+No blind retries or parent interruption for each failed command. Escalate immediately
+for unplanned security, financial, schema or destructive changes.
 Do not modify owner data or Git state without explicit current-task authority.
 """
 
