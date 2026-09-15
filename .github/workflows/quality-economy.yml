@@ -27,6 +27,7 @@ jobs:
           set -euo pipefail
           python -B scripts/test_fork.py -v 2>&1 | tee smart-tests.log
           python -B scripts/test_deployment_token_report.py -v 2>&1 | tee token-tests.log
+          python -B scripts/test_verification.py -v 2>&1 | tee verification-tests.log
       - name: Validate and package
         shell: bash
         run: |
@@ -43,5 +44,6 @@ jobs:
           path: |
             smart-tests.log
             token-tests.log
+            verification-tests.log
             smart-dist/codex_workflow-*.zip
             smart-dist/SHA256SUMS

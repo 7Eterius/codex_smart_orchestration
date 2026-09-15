@@ -62,6 +62,11 @@ to finish safely, not the whole chat. Follow-ups contain deltas. A worker may re
 adjacent dependencies, but must not expand write scope or spawn other agents.
 Give exact paths/symbols and applicable acceptance rules, not repository dumps.
 Preserve stable instructions; keep logs/generated assets out of ordinary context.
+Use path/symbol-scoped search, widening for dependencies; GitHub permission scope
+is not a context filter. Prefer structured/native quiet reports or the optional
+`runtime/capture_check.py` raw-log wrapper over a lossy proxy. It records command
+status, not test success; inspect full evidence when needed. No new LLM summarizer,
+auto-routing gateway, global output cutoff or forced cache-breaking compaction.
 Reuse the owning worker for related repairs; use a fresh task with an Archivist
 handoff for an unrelated milestone rather than accumulating one endless thread.
 Do not reset useful context after every edit or shrink context windows to save quota.
@@ -88,9 +93,12 @@ evidence; it must not rubber-stamp worker prose or outsource its final audit.
 Workers own commands, implementation and routine repair. Keep logs in artifacts;
 report exit status and actionable diagnostics, never conceal a failure by trimming.
 
-Define checks before coding. Run affected checks during implementation; the Tester
-independently verifies the stable result. Broaden tests for changed dependencies
-or actual failures. Reuse prior evidence only with known unchanged scope, inputs,
+Define checks before coding. For validation-bearing work consult `verification.md`
+beside this policy once: edit-loop checks, stable-candidate acceptance and authorized
+release gates are different checkpoints, not a full suite after every task.
+Target accessibility to changed UI; never silently waive a repository gate.
+Run affected checks during implementation; the Tester independently verifies the
+stable result. Broaden tests for changed dependencies or actual failures. Reuse prior evidence only with known unchanged scope, inputs,
 environment and applicability; unknown freshness requires a check. Account for
 uncommitted/untracked changes, not only HEAD. Never weaken a required gate.
 For UI, inspect an early running frame when useful and final requested screenshots;

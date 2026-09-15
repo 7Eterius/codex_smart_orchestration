@@ -1,99 +1,102 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.3.1**, from
-`7Eterius/codex_smart_orchestration`. No Heavy/Medium route selection and no
-per-repository install. Main plans, makes architecture decisions and seriously
-audits the result. Workers execute bounded assignments; Archivist keeps concise
-permanent project state and meaningful dated history.
+One globally installed adaptive Codex workflow, version **1.3.2**, from
+`7Eterius/codex_smart_orchestration`. Main plans, decides and seriously audits;
+Luna workers execute bounded work with parent-controlled escalation. Archivist
+keeps concise permanent current state and meaningful dated history. No route
+phrase, project-path argument or per-repository installation is needed.
 
-## Capability and quality
+## Capabilities
 
-| Role | Model / effort | Assignment |
-| --- | --- | --- |
-| simple_executor | Luna Medium | Clear, reversible low-risk edits with decisive checks |
-| routine_executor | Luna High | Bounded feature work with settled contracts |
-| default_executor | Luna Max | Difficult implementation or higher-effort Luna help |
-| senior_executor | Sol Medium | Named hard decisions, advice or transferred ownership |
-| tester | Luna xhigh | Independent verification, not production repair |
-| companion | Luna Medium | Conditional relevant-context discovery |
-| investigator | Luna High | Conditional unresolved evidence question |
-| archivist | Luna Medium | Verified current handoff and concise changelog |
+Simple Executor is Luna Medium; Routine Executor Luna High; difficult Default
+Executor Luna Max; Senior help Sol Medium; independent Tester Luna xhigh;
+conditional Companion Luna Medium and Investigator Luna High; Archivist Luna
+Medium. All eight role files are unchanged from 1.3.1. Main keeps the owner's
+selected model/effort. Known hard tasks can start stronger without cheap retries.
+The policy is adaptive instructions, not a deterministic scheduler or a quality
+or allowance guarantee. Main inspects decisive source and final actual UI images.
 
-The parent retains its selected model and effort. Sol Low is a practical baseline
-for an owner already succeeding with it; Astra remains available for harder
-planning/audit. No model is guaranteed best on every task. Known hard work starts
-stronger, not after a forced cheap-model failure. Parent supplies missing context,
-requests senior advice or transfers ownership after stopping the old writer.
+## Change-aware verification in 1.3.2
 
-Main directly audits decisive source and final running-product screenshots.
-Independent testing, financial/security truth, data safety, owner scope and open
-acceptance gates remain intact. Lower effort is not a license to weaken checks.
-The adaptive allocation is an instruction policy, not a deterministic scheduler.
+Plan relevant checks for edit loops, stable-candidate acceptance and authorized
+merge/release checkpoints separately. Do not run an entire accessibility, device,
+locale or screenshot matrix for every worker task. Target changed UI/interaction,
+expand for shared-impact changes or unknown dependencies, and keep explicit
+owner/repository gates. Do not disable rules or mark deferred checks passed.
+`codex_workflow/verification.md` is read only for validation-bearing planning.
+
+Reuse valid incremental builds, confirmed test servers and applicable evidence;
+never guess freshness from HEAD alone or cache a command as proof of acceptance.
+Run independent native checks in parallel only when shared state is isolated.
+Keep meaningful Archivist checkpoints and independent acceptance. The new local
+capture helper retains raw logs while limiting routine output in model context.
+It never summarizes with another model, calls a proxy, skips a command, or infers
+that exit zero means tests actually ran. See docs/verification-1.3.2.md.
 
 ## One global install
 
-Quit Codex. From a reviewed extracted package, run:
+Quit Codex. From a reviewed extracted package:
 
 ```bash
 /opt/homebrew/bin/python3.11 codex_workflow/runtime/smart_install.py --apply
 ```
 
-Use another Python 3.11+ interpreter elsewhere. No project argument, repository
-search, sudo, new API key or shell-profile change. Without --apply it previews;
---check verifies disk configuration. CODEX_HOME is honored, defaulting to ~/.codex.
+Use any Python 3.11+ interpreter elsewhere. No sudo, API key, repo search or
+shell-profile edit. Default without --apply previews; --check inspects disk
+configuration. CODEX_HOME is honored, otherwise ~/.codex is used.
 
-The unchanged installer preserves parent model/effort/speed, permissions, tools,
-unrelated configuration and surrounding owner instructions. It replaces only
-managed global/runtime files with private backups and transactional rollback.
-It refuses custom worker edits for review instead of silently overwriting them.
-Project source, stores, Git state and memory are not installation targets.
+The installer is unchanged. It preserves parent model/effort/speed, permissions,
+tools, unrelated configuration and surrounding owner instructions. Private backups
+and transactional rollback protect managed changes. Custom worker edits block
+replacement for review. Application source, stores, Git state and project memory
+are not installation targets. Restart Codex after a successful application.
 
-Restart Codex. A substantive task should identify **Smart Orchestration**.
-A name or on-disk file does not prove actual runtime role selection; inspect
-observable metadata when available. Project/profile/CLI overrides can change
-effective global settings and are not silently removed. The owned bootstrap
-supersedes only legacy workflow procedure, never repository product/safety rules.
+Profile/project/CLI overrides can change effective settings. Neither on-disk files
+nor a model's self-reported name prove runtime role/model selection. Global startup
+supersedes only legacy workflow procedure, never project product/safety rules.
+No shorter context or global output cap, third-party gateway or summarizer is installed.
 
-Prefer Standard speed for allowance efficiency; use /fast off where supported.
-Installation does not silently alter your speed selection. The new read-only
-runtime/efficiency.py can show configured tiers, dated base-credit comparisons
-and pacing arithmetic. It does not read account limits or estimate weekly quota
-from tokens. See docs/efficiency-1.3.1.md for sources and limitations.
+## Output capture
 
-## Memory
+Prefer existing structured reporters. For a verbose finite check:
 
-Use existing canonical project handoff/changelog. At meaningful authorized
-completed/paused/blocked checkpoints, Archivist updates current goal, done and
-in-progress work, blockers/open gates, next action and evidence references,
-then appends a concise dated delta. Do not repeatedly ingest the whole changelog
-or duplicate current state across files. Preserve old decisions and history.
-Read-only tasks forbid memory writes. Missing persistence is reported honestly.
+```bash
+python3.11 ~/.codex/codex_workflow/runtime/capture_check.py --timeout 600 -- command args
+```
 
-## Updates, rollback and verification
+Runs exact argv with no implicit shell and no retry. Returns actual command exit,
+duration, raw-log path/hash and bounded heuristic excerpts. Logs and JSON receipt
+are private under a unique temporary directory, or an existing --artifacts parent.
+No environment dump. Logs/arguments may contain secrets: do not publish them.
+Failure, timeout or zero-tests ambiguity requires original evidence/native reports.
+This wrapper is for authorized noninteractive checks, not watchers, servers,
+interactive approvals or detached daemons. Timeout kills its process group on
+POSIX; Windows only kills the immediate process and reports that limitation.
+No automatic deletion of evidence or claim that the excerpt finds every issue.
 
-runtime/smart_install.py --update --apply uses checksummed releases from this
-renamed fork only. No usable release means an explicit error, not an upstream
-fallback. A CI ZIP is not a published release. Use the Smart installer, not
-legacy per-project lifecycle commands. Old route files are compatibility
-redirects to smart_orchestration.md, not alternative workflows.
+## Memory, updates and testing
 
-Private backups live under ~/.codex/.smart-orchestration-backups/ and record
-changed paths and hashes. Before restoration, quit agents and compare current
-files to the manifest; reconcile newer owner edits rather than overwrite an
-entire old Codex home. Persistent disable/uninstall still requires a reviewed
-owned-block removal, not the legacy recursive removal command.
+Use existing canonical handoff/changelog. Read current state, not all history;
+append meaningful checkpoint deltas without inventing completion. Read-only tasks
+forbid memory writes. Missing persistence is reported, not guessed into app-data.
 
-Canonical source checks:
+`runtime/smart_install.py --update --apply` consumes checksummed releases from
+this fork only. A CI ZIP is not a published release. No upstream fallback.
+Backups live at ~/.codex/.smart-orchestration-backups/ with changed-path/hash
+manifests. Reconcile newer owner edits before restoration. Persistent removal
+requires reviewed owned-block removal, not legacy recursive uninstall.
+
+Canonical checks:
 
 ```bash
 python3.11 -B scripts/test_fork.py -v
 python3.11 -B scripts/test_deployment_token_report.py -v
+python3.11 -B scripts/test_verification.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.3.1 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.3.1.zip --version 1.3.1
+python3.11 -B scripts/package_smart.py --release-tag v1.3.2 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.3.2.zip --version 1.3.2
 ```
 
-Full history is required only for the source suite's baseline migration fixture;
-the global installable package needs no Git. See docs/smart_orchestration.md for
-baseline contracts and docs/efficiency-1.3.1.md for this revision. No measured
-savings, equal-quality guarantee or five-day work-capacity guarantee is claimed.
+Source migration fixtures need full history; package installation needs no Git.
+Prior tests remain, with 30 new output-capture and verification-policy tests.
+Software tests do not prove unchanged app quality or a five-day usage improvement.

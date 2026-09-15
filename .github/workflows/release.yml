@@ -38,6 +38,7 @@ jobs:
           version="${tag#v}"
           python -B scripts/test_fork.py -v
           python -B scripts/test_deployment_token_report.py -v
+          python -B scripts/test_verification.py -v
           python -B scripts/package_smart.py --release-tag "$tag" --output-dir smart-dist
           python -B scripts/package_smart.py --verify "smart-dist/codex_workflow-${version}.zip" --version "$version"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
