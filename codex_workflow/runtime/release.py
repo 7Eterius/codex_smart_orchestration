@@ -16,7 +16,7 @@ from pathlib import Path, PurePosixPath
 from .errors import ValidationError
 
 
-RELEASE_REPOSITORY = "7Eterius/codex_workflow"
+RELEASE_REPOSITORY = "7Eterius/codex_smart_orchestration"
 # Fork releases only. Never silently fall back to the upstream release stream.
 RELEASES_URL = f"https://api.github.com/repos/{RELEASE_REPOSITORY}/releases?per_page=100"
 

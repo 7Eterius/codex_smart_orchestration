@@ -21,7 +21,8 @@ needs independent ownership, not merely an opportunity to finish sooner.
 | Role | Configured capability | Use |
 | --- | --- | --- |
 | simple_executor | Luna Medium | Clear, reversible, low-risk edits following an established pattern |
-| default_executor | Luna Max | Nontrivial implementation, diagnosis or promotion from a simple task |
+| routine_executor | Luna High | Bounded feature work with settled contracts and objective checks |
+| default_executor | Luna Max | Difficult implementation, complex diagnosis or higher-effort Luna escalation |
 | senior_executor | Sol Medium | Ambiguous/cross-cutting work, hard failure, financial/security/migration risk |
 | tester | Luna xhigh | Independent verification and assigned tests; no production repair |
 | companion | Luna Medium | Optional bounded discovery or context consolidation |
@@ -39,19 +40,38 @@ an appropriate Executor and independent Tester; context/research roles are
 conditional. Pure audit/plan work stays with the main, optionally supported by
 read-only evidence workers. Never assign code work simply to fill a team.
 
+For settled feature contracts, try routine_executor rather than automatically
+using Max. simple_executor requires low risk AND a clear pattern AND decisive
+checks. Missing tests, novel shared state, security/financial/schema boundaries,
+or broad uncertainty rule out the simple tier. Known hard work starts stronger;
+Luna is not presumed competent merely because it is cheap. Tester stays independent.
+
+Concentrate parent work at planning, material decisions and final audit, not each
+shell result. Delegate bulk discovery, builds and routine repair to the assigned
+worker. Audit decisive source directly, opening more when evidence is insufficient.
+Batch related findings into one decision-ready report; do not create coordination
+turns for unchanged status. This is not a hard limit on necessary parent reasoning.
+Prefer Standard speed for the five-day allowance goal. Warn on observed Fast mode;
+do not silently change parent settings or assume workers cannot inherit speed.
+
 ## Capsules and escalation
 
 Send: `Task ID; goal; owned paths; relevant facts/references; invariants; done
 checks`. Start with `fork_turns="none"` where supported. Transfer enough context
 to finish safely, not the whole chat. Follow-ups contain deltas. A worker may read
 adjacent dependencies, but must not expand write scope or spawn other agents.
+Give exact paths/symbols and applicable acceptance rules, not repository dumps.
+Preserve stable instructions; keep logs/generated assets out of ordinary context.
+Reuse the owning worker for related repairs; use a fresh task with an Archivist
+handoff for an unrelated milestone rather than accumulating one endless thread.
+Do not reset useful context after every edit or shrink context windows to save quota.
 
 Workers return outcome, changed paths, completed checks, evidence and unresolved
 risk. Escalation reports add expected/observed behavior, smallest reproduction,
 attempted fix, and the missing fact or decision. No confidence percentage needed.
 After one materially unsuccessful focused repair, the main diagnoses the blocker:
 missing context -> supply that context; demonstrated capability gap -> promote to
-higher-effort Luna or Sol; unavailable environment/authority -> report the blocker.
+routine_executor/default_executor or Sol; unavailable environment/authority -> report the blocker.
 Escalate immediately for unplanned trust/financial/schema boundary changes. Never
 require a cheap worker to fail first on a known hard task, or loop blindly.
 
@@ -118,3 +138,9 @@ stash, clean, migration, release or production promotion beyond task authority.
 Batch independent operations; no status-only polling, duplicate broad summaries,
 fixed team ceremony or arbitrary context limits. Quality comes before raw token
 minimization; measure complete accepted tasks, including rework.
+For the five-workday goal, use observed remaining allowance at milestone boundaries,
+not guessed tokens-to-weekly-percent. Reserve 15% for repairs when practical; do not
+skip gates to meet it. If the pace is too high, narrow the NEXT authorized package
+or suggest Sol instead of Astra; never mark unfinished work complete. Optional
+`runtime/efficiency.py` reports dated base-rate comparisons, configuration and pace
+without model calls. It is not a quota meter; do not run it repeatedly as ceremony.

@@ -13,6 +13,7 @@ sys.path.insert(0,str(ROOT/'scripts'))
 import package_smart
 import test_workflow_runtime as upstream
 import test_smart as smart
+import test_efficiency as efficiency
 
 SUPERSEDED='test_workflow_runtime.MarkerTests.test_operational_policies_are_compact_and_knowledge_aware'
 SETTINGS='test_workflow_runtime.PlatformSettingsTests.test_fixed_route_and_worker_need_no_settings_rendering'
@@ -64,6 +65,7 @@ def load_tests(loader,standard_tests,pattern):
                  HISTORY:SmartHistoryTest('test_projects_update_against_their_recorded_historical_sources')}
     suite=unittest.TestSuite(replacement.get(case.id(),case) for case in inherited if case.id()!=SUPERSEDED)
     suite.addTests(loader.loadTestsFromModule(smart))
+    suite.addTests(loader.loadTestsFromModule(efficiency))
     return suite
 
 if __name__=='__main__':

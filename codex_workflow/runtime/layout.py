@@ -27,6 +27,7 @@ USER_STATE = "install_state.json"
 BUILTIN_WORKERS = frozenset(
     {
         "simple_executor",
+        "routine_executor",
         "default_executor",
         "senior_executor",
         "tester",
