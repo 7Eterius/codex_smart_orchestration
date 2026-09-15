@@ -1,122 +1,106 @@
-# Codex Workflow - Quality Economy
+# Smart Orchestration
 
-Native **Heavy-by-default** edition of `7Eterius/codex_workflow`, based on
-`viettran-edgeAI/codex_workflow` at `6d9b06f73bee7f899001b0bb102c70529a24313f`.
+One globally installed adaptive Codex workflow, version **1.3.0**. No Heavy,
+Medium or Light route selection and no per-repository setup. The main model
+plans, makes architectural decisions, seriously audits the result and accepts
+it. Narrow workers execute; the Archivist keeps permanent concise project memory.
 
-Describe the work. No `use Heavy route` prefix, opt-in profile, or per-prompt
-activation is needed in an initialized project. Quality Economy is built into
-the installed project and route instructions, not appended personalization.
+## How it works
 
-## Behavior
+Clear low-risk tasks can use `simple_executor` (Luna Medium). Nontrivial work uses
+`default_executor` (Luna Max). A named hard problem can go straight to
+`senior_executor` (Sol Medium). After a focused failure, main distinguishes missing
+context, capability gaps and environment blockers. It can obtain read-only senior
+advice for the original worker or transfer ownership. It does not blindly retry,
+force cheap workers to fail on known hard tasks, or pretend to switch an existing
+worker's model. Main keeps its owner-selected model and effort.
 
-Substantive work keeps the capable parent, configured Luna production workers,
-independent Tester, persistent Companion and recoverable Archivist handoff.
-One coherent production owner is the default; additional workers need a concrete
-reason. Quality, correct semantics, safety, independent evidence and visual
-acceptance come before speed. Worker models and reasoning are unchanged.
+The independent Tester stays Luna xhigh. Companion (Luna Medium) and Investigator
+(Luna High) are conditional. Archivist (Luna Medium) updates a concise current
+handoff and dated changelog at meaningful completed, paused or blocked checkpoints.
+It does not ingest all history every turn, duplicate current state across files,
+invent completion, delete old records or write during a read-only request.
 
-Complete questions and small bounded leaf requests use Heavy's worker-free
-fast path. They do not start a deployment ceremony. Explicit Light and Medium
-remain available; a new session defaults to Heavy. Existing deliberate project
-routing overrides are preserved and remain effective.
+Capsules contain Task ID, goal, owned paths, relevant facts, invariants and done
+checks. Follow-ups are deltas. Context is relevant, not arbitrarily truncated.
+The main directly inspects decisive diffs and running-product screenshots.
+Existing financial, security, permission, data, visual and acceptance constraints
+remain binding. No measured savings or equal-quality guarantee is implied.
 
-The main reads core project and owner documents, then relevant module contracts.
-Companion locates affected dependencies and cross-cutting constraints. Unknown
-impact broadens intake. Evidence is reused only when known applicable and fresh;
-changed shared code invalidates relevant prior checks. The main examines final
-running-product screenshots itself. Closing Archivists receive exact evidence
-and state references instead of an automatic 200-turn inherited transcript.
+## One global install
 
-No model-budget formula or equal-quality savings claim is implied. Measure
-complete accepted deployments, rework, token reports and account-allowance
-changes. Serial execution alone does not save tokens.
-
-## First adoption from source
-
-Use Python 3.11 or newer. Keep this checkout OUTSIDE application projects and
-stop their Codex agents before applying. Use a reviewed commit from a full-history
-Git checkout of this fork. The migration tests read the pinned upstream baseline
-from local Git history; an extracted source archive alone cannot run that suite.
-Do not install old ZIP files under `dist/`: those are historical upstream assets.
-
-From the root of the reviewed checkout, first validate and run tests:
+Quit Codex first. From the reviewed/extracted package, run:
 
 ```bash
-python3 -B scripts/test_fork.py -v
-python3 -B scripts/test_deployment_token_report.py -v
-python3 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
+/opt/homebrew/bin/python3.11 codex_workflow/runtime/smart_install.py --apply
 ```
 
-Preview adoption for the explicit project directories:
+Use another Python 3.11+ interpreter where appropriate. No project argument,
+source-repository search, `sudo`, shell-profile change or API key is needed.
+Without `--apply`, the installer previews. `--check` verifies disk configuration.
+The installer uses CODEX_HOME when set, otherwise `~/.codex`.
+
+It replaces the owned global instruction region and installs a small documented
+`developer_instructions` bootstrap. This handles only legacy workflow routing,
+intake and bookkeeping conflicts; it does not override repository product/safety
+rules or explicit owner requests. Named worker configs have their own concise
+instructions so child agents do not initialize another orchestration tree.
+
+Only Codex-home workflow surfaces are modified. Existing parent model, effort,
+speed, permissions, tools, unrelated configuration and owner instruction text are
+preserved. Private backups are outside the managed runtime at
+`~/.codex/.smart-orchestration-backups/`. A transaction rolls back failed writes.
+The installer rejects custom worker tuning/collisions for review instead of
+silently discarding it, rejects unsafe symlinks and has an installer lock. The
+lock does not stop active Codex agents: quit Codex before applying.
+
+Restart Codex after installation. A substantive task should identify itself as
+**Smart Orchestration**. On-disk settings and a self-reported name do not prove
+actual role/model selection; verify observable runtime metadata when available.
+Repository/CLI/profile configuration can override global configuration. Profile
+conflicts found in global config are reported, not silently rewritten. No claim
+is made that global AGENTS text magically outranks project guidance.
+
+Project memory remains project-specific, but is not an installation prerequisite.
+Existing canonical docs are reused. New current-state/changelog files are created
+only at an authorized meaningful checkpoint in an identified source workspace.
+An unavailable/read-only memory store is reported honestly; no app-data folders
+are used as guessed repository roots.
+
+## Updates and compatibility
+
+Updates use this fork only. `runtime/smart_install.py --update --apply` acquires a
+checksummed fork release and applies globally. No usable published release means
+an explicit error, not an upstream fallback. A CI artifact is not a release.
+The original runtime/lifecycle remains for historical compatibility; use the Smart
+installer rather than legacy per-project commands. Heavy/Medium files are short
+redirects to the one canonical `smart_orchestration.md`, not alternative workflows.
+The legacy marker/role names are compatibility identifiers, not the visible name.
+
+Backups preserve exact previous bytes and a path/hash manifest. For restoration,
+quit Codex, compare the manifest's post-install hashes with current target bytes,
+and restore only reviewed changed files. If newer edits differ, reconcile them
+rather than overwrite a whole old Codex home. Persistent uninstall/disable is not
+a new CLI feature in this revision; do not run legacy recursive removal as a
+substitute. An explicit no-agent request still disables orchestration for a task.
+
+## Validation
 
 ```bash
-python3 -B scripts/install_quality_economy.py \
-  --project "/absolute/path/to/Materia" \
-  --project "/absolute/path/to/RussianReading"
+python3.11 -B scripts/test_fork.py -v
+python3.11 -B scripts/test_deployment_token_report.py -v
+python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
+python3.11 -B scripts/package_smart.py --release-tag v1.3.0 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.3.0.zip --version 1.3.0
 ```
 
-Review the paths, warnings, preserved preferences and backup locations. To apply,
-repeat that command with `--apply --approve SHA_FROM_REVIEWED_PREVIEW`.
-The helper rejects changed preview inputs and uses the inherited compensating
-transaction for the combined plan. It does not run Git, change application
-source or touch live stores. Stop agents: approval hashing is not a file lock.
+The inherited functional/safety tests remain, apart from documented old-policy
+assertion replacements. Native tests cover role settings, escalation contracts,
+main audit, retained memory, TOML preservation, idempotence, failed-write rollback,
+unsafe paths, custom overrides, and a real v1.2 global takeover without modifying
+the project. Full-history checkout is needed for the baseline migration fixture;
+the installable package itself needs no Git. See `docs/smart_orchestration.md`.
 
-A healthy existing upstream install can be adopted in place. Uninstalling first
-is unnecessary and loses useful source-backup context. The helper preflights all
-explicit project targets, preserves local rules, personalization, disabled state
-and durable project documents, and takes lifecycle backups for an existing
-runtime. It supports adopting another older project after the shared runtime
-has already been updated. A malformed or unrecognized install must be repaired,
-not blindly overwritten. Never delete `~/.codex` or `agent_docs/` to force it.
-
-The earlier optional `### Quality Economy v1` personalization block, if present,
-must be removed through personalization before adoption to avoid duplicate or
-contradictory rules. Preserve unrelated preferences. Native defaults need no
-replacement profile.
-
-After application, inspect the JSON `agent_actions`. Fresh/unfinished project
-documentation must be initialized by Archivist as specified in
-`codex_workflow/operate/install.md`. An installer success alone does not mean
-project-context initialization has completed. Restart Codex, then describe work
-normally. The helper never selects your parent model or changes its speed.
-Sol Medium with Standard speed is a reasonable initial selection, not a
-model-quality guarantee or an enforced requirement.
-
-## New projects and ongoing updates
-
-After user-level installation, run once in each new project:
-
-```text
-codex_workflow --install
-```
-
-Then no route prefix is required. Supported lifecycle commands remain
-`--personal`, `--check-update`, `--update`, `--disable`, `--enable`, and `--remove`.
-They are Codex prompt commands; deterministic script entry points remain in
-`~/.codex/codex_workflow/runtime/workflow.py`.
-
-Release discovery points ONLY to `7Eterius/codex_workflow`. Until a fork release
-with a matching universal ZIP and `SHA256SUMS` is published, `--check-update` and
-`--update` report that no usable release is available. They must not fall back
-to upstream. Source adoption works without a published release.
-
-The legacy ownership IDs and install paths intentionally remain compatible.
-They are not update-source settings and do not make this the upstream edition.
-Do not run two installers against the same managed paths or automatically sync
-upstream over the fork. Review upstream changes and run fork validation first.
-
-## Validation and release
-
-`python3 scripts/test_fork.py -v` runs the inherited functional/safety suite,
-replacing its one upstream-specific policy-text test with native policy,
-worker-integrity, release-source and adoption tests. The old text test asserts
-superseded routing/intake/closure contracts; it is not silently treated as a pass.
-The unchanged worker files are checked by Git blob hash as well as TOML parsing.
-All other inherited tests and the token-report suite remain required.
-
-The Quality Economy CI builds and verifies a universal package without publishing
-a release. Release publication is separate; see `RELEASING.md`. A CI pass validates
-software contracts, not LLM adherence, visual judgment or real allowance savings.
-
-See `workflow_breakdown.md` for the native behavior and
-`docs/quality_economy_migration.md` for migration boundaries and rollback.
+This is a prompt/configuration orchestrator, not a hard deterministic scheduler.
+Tests validate software and contracts; real-task quality, routing adherence and
+allowance savings still require representative deployments.
