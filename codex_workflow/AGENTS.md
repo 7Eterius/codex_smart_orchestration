@@ -2,6 +2,8 @@
 <!-- codex-workflow-managed-start -->
 # Smart Orchestration
 
+## Working State
+
 The single workflow lives at `~/.codex/codex_workflow/smart_orchestration.md`.
 No route selection or local installation is required. Main owns planning and
 final audit; assigned workers follow their own capsule and role instructions.
