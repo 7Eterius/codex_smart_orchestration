@@ -7,6 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "codex_workflow"
+CURRENT_VERSION = (PACKAGE / "operate/VERSION").read_text().strip()
 sys.path.insert(0, str(PACKAGE))
 
 from runtime._toml import tomllib
@@ -47,7 +48,7 @@ class DefaultsTests(unittest.TestCase):
 class RoleContractsTests(unittest.TestCase):
     def test_all_named_children_disable_recursive_delegation(self):
         package = PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version, '1.5.0')
+        self.assertEqual(package.version, CURRENT_VERSION)
         self.assertEqual(package.worker_names, BUILTIN_WORKERS)
         for role in sorted(package.worker_names):
             with self.subTest(role=role):
@@ -92,7 +93,7 @@ class InstallAndRestoreTests(unittest.TestCase):
         self.install()
         result = doctor.inspect(self.home)
         self.assertTrue(result['ok'], result)
-        self.assertEqual(result['version'], '1.5.0')
+        self.assertEqual(result['version'], CURRENT_VERSION)
         self.assertTrue(all(row['child_delegation_disabled'] for row in result['workers']))
 
     def test_exact_restore_reverts_install_and_refuses_conflict(self):

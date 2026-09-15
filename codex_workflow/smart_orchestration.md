@@ -12,6 +12,11 @@ contracts and source needed. Use AGENTS as a map; keep global rules universal,
 project knowledge local, and widen discovery when dependencies are unclear.
 Do not reopen accepted decisions or rewrite a complete owner brief. Define the
 outcome, invariants, verification and stop point before assigning implementation.
+Before writing an unfamiliar module, identify its callers, dependencies, invariants
+and tests in one bounded discovery pass. Resolve assumptions that could change the
+contract, ownership or acceptance before dispatch; conflicting docs or cross-boundary
+risk need parent decisions. A whole-system audit requires broad evidence, not a narrow
+scan labelled complete. Familiar, settled work needs no new project survey.
 
 | Role | Model/effort | Work |
 | --- | --- | --- |
@@ -68,9 +73,13 @@ use structured reporters or `runtime/capture_check.py`, not lossy audit proxies.
 The helper's zero exit is command evidence, not acceptance. Read full evidence
 when needed; never rerun just to recover saved logs. Secrets do not belong in logs.
 
-After one materially unsuccessful focused repair, diagnose the blocker:
-missing context -> supply that context; capability gap -> stronger Luna/Sol;
-unavailable environment/authority -> report the blocker. Escalate immediately
+The owning Executor diagnoses compiler errors and ordinary defects; Tester sends
+focused reproductions back to it, then verifies repairs. Keep progressing locally
+while new evidence advances the assigned contract. Stalled or repeated evidence-free
+repairs require a compact escalation: expected/observed, reproduction, attempted fix,
+and missing fact/decision. No rigid retry quota or parent turn per failed command.
+Parent handles missing context -> supply that context; capability gap -> stronger
+Luna/Sol; unavailable environment/authority -> report the blocker. Escalate immediately
 for unexpected trust, financial, schema or destructive impact. Main may obtain
 read-only advice and return a precise delta, or transfer ownership. Stop the old
 writer first. Promotion uses a new configured role, not a pretend in-place model
@@ -86,6 +95,9 @@ warn on observed Fast mode without changing the owner's settings.
 
 For validation-bearing work consult `verification.md` once. Edit-loop checks,
 independent stable-candidate acceptance, and authorized release gates differ.
+For novel/high-impact changes, reuse the same Tester early to identify invariant,
+denied and failure cases; parent resolves gaps before implementation. Settled low-risk
+edits need no early review ceremony. Early advice does not replace final verification.
 Target accessibility to changed UI and exposed states. Never weaken a required gate.
 Broaden checks for changed dependencies or failures; unknown freshness requires a check.
 Reuse only known-applicable inputs/environment/evidence, including untracked work.
@@ -106,6 +118,10 @@ tiny status change. Read current state next session, not the entire changelog.
 Reuse canonical docs; otherwise `agent_docs/project_progress.md` holds goal,
 done/in-progress, blockers/open gates, next action and evidence references, while
 `agent_docs/project_changelog.md` holds append-only dated meaningful deltas.
+Keep durable decision rationale and rejected approaches in their existing canonical
+architecture/decision/lesson document when they affect future implementation choices;
+link from the handoff, do not copy everywhere or mandate a new file. Reuse relevant
+rationale before reopening a settled choice. Do not invent undocumented reasons.
 Avoid duplicate active handoffs or whole-history summaries. Preserve older decisions
 and interrupted work. Archivist must not invent a resolution or mark pending work done.
 No secrets, raw transcripts or private archives in memory. Read-only/no-write requests forbid memory writes.

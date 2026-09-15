@@ -28,6 +28,7 @@ from runtime.runtime_ops import plan_runtime_files
 from runtime.smart_config import patch_config, SMART
 from runtime.transaction import Mutation
 from runtime.agent_defaults import configure, parse as parse_config
+from runtime.config_assessment import assess_configuration
 
 
 def safe_path(path: Path, home: Path) -> None:
@@ -105,8 +106,9 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
     current_config = runtime.config_toml.read_text() if runtime.config_toml.is_file() else ''
     from runtime._toml import tomllib
     parsed = parse_config(current_config)
-    if parsed.get('agents', {}).get('enabled') is False or parsed.get('features', {}).get('multi_agent') is False or parsed.get('features', {}).get('multi_agent_v2') is False:
-        raise ValidationError('Subagents are explicitly disabled in config.toml; enable them deliberately before installing')
+    assessment = assess_configuration(parsed)
+    if assessment['errors']:
+        raise ValidationError('; '.join(assessment['errors']))
     # Never replace an unowned worker or silently erase an owner's worker tuning.
     for name in package.worker_names:
         target = runtime.agents / f'{name}.toml'
@@ -160,7 +162,8 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
         mode = path.stat().st_mode & 0o777 if path.exists() else 0o600
         changed.append(Mutation(path, mutation.content, mode))
         before_by_path[str(path)] = before
-    warnings = list(default_warnings)
+    assessment = assess_configuration(parse_config(rendered_config))
+    warnings = list(dict.fromkeys(default_warnings + assessment['warnings']))
     if preserved_deletions:
         warnings.append(f"Preserved {len(preserved_deletions)} extra installed file(s); no automatic cleanup.")
     if (home / 'AGENTS.override.md').is_file():
@@ -172,6 +175,7 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
     plan = OperationPlan('install-smart-global', changed, warnings, [], {
         'workflow':'Smart Orchestration', 'version':package.version, 'scope':str(home),
         'project_mutations':0, 'parent_settings':'preserved', 'child_defaults_added': defaults_added,
+        'configuration_assessment': assessment,
     })
     return plan, before_by_path
 
@@ -236,7 +240,8 @@ def status(home: Path) -> dict:
     block_ok = False
     if isinstance(instructions,str) and SMART.start in instructions and SMART.end in instructions:
         block_ok = bool(extract(instructions, SMART))
-    return {'workflow':'Smart Orchestration', 'global_bootstrap_present':block_ok,
+    return {'workflow':'Smart Orchestration', 'configuration_assessment':assess_configuration(cfg),
+            'global_bootstrap_present':block_ok,
             'policy_present':policy.is_file(), 'version':version.read_text().strip() if version.is_file() else None,
             'agents': {key: cfg.get('agents', {}).get(key) for key in ('max_concurrent_threads_per_session', 'max_threads', 'default_subagent_model', 'default_subagent_reasoning_effort')},
             'note':'Disk configuration verified only; restart Codex and verify effective role/model settings in a live task.'}
