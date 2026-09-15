@@ -26,6 +26,7 @@ PROJECT_STATE = "state.json"
 USER_STATE = "install_state.json"
 BUILTIN_WORKERS = frozenset(
     {
+        "simple_executor",
         "default_executor",
         "senior_executor",
         "tester",
@@ -115,6 +116,9 @@ class PackageLayout:
         if not allow_legacy:
             required = [
                 "runtime/workflow.py",
+                "smart_orchestration.md",
+                "runtime/smart_install.py",
+                "runtime/smart_config.py",
                 "heavy_route.md",
                 "medium_route.md",
                 "archivist.md",

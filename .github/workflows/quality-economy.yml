@@ -1,8 +1,8 @@
-name: Quality Economy validation
+name: Smart Orchestration validation
 on:
   pull_request:
   push:
-    branches: [main, 'feat/quality-economy-default']
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,22 +21,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Functional, native policy and adoption tests
-        run: python -B scripts/test_fork.py -v
-      - name: Unchanged deployment token reporter
-        run: python -B scripts/test_deployment_token_report.py -v
+      - name: Functional, policy and global-adoption tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B scripts/test_fork.py -v 2>&1 | tee smart-tests.log
+          python -B scripts/test_deployment_token_report.py -v 2>&1 | tee token-tests.log
       - name: Validate and package
         shell: bash
         run: |
           set -euo pipefail
           python -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
           version="$(cat codex_workflow/operate/VERSION)"
-          python -B scripts/package_release.py --release-tag "v${version}" --output-dir qe-dist
-          python -B scripts/package_release.py --verify "qe-dist/codex_workflow-${version}.zip" --version "$version"
+          python -B scripts/package_smart.py --release-tag "v${version}" --output-dir smart-dist
+          python -B scripts/package_smart.py --verify "smart-dist/codex_workflow-${version}.zip" --version "$version"
           git diff --check
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: quality-economy-${{ matrix.python-version }}
+          name: smart-orchestration-${{ matrix.python-version }}
           path: |
-            qe-dist/codex_workflow-*.zip
-            qe-dist/SHA256SUMS
+            smart-tests.log
+            token-tests.log
+            smart-dist/codex_workflow-*.zip
+            smart-dist/SHA256SUMS

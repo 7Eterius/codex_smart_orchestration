@@ -1,87 +1,59 @@
-name: Build and publish release
-
+name: Build and publish Smart Orchestration
 on:
   push:
-    tags:
-      - "v*"
+    tags: ['v*']
   workflow_dispatch:
     inputs:
       tag:
-        description: "Semantic release tag, for example v1.2.0"
+        description: Matching version tag
         required: true
         type: string
       prerelease:
-        description: "Publish as a GitHub prerelease"
+        description: Publish as a prerelease
         required: true
         default: true
         type: boolean
-
 permissions:
   contents: write
-
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the tagged source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
           fetch-depth: 0
           persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
-      - name: Resolve and package the release
+          python-version: '3.11'
+      - name: Verify and package
         id: package
         env:
           MANUAL_TAG: ${{ inputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            release_tag="$GITHUB_REF_NAME"
-          else
-            release_tag="$MANUAL_TAG"
-          fi
-          release_version="${release_tag#v}"
-          release_archive="dist/codex_workflow-${release_version}.zip"
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then tag="$GITHUB_REF_NAME"; else tag="$MANUAL_TAG"; fi
+          version="${tag#v}"
           python -B scripts/test_fork.py -v
           python -B scripts/test_deployment_token_report.py -v
-          python -B codex_workflow/runtime/workflow.py validate \
-            --package-root codex_workflow \
-            --json
-          python scripts/package_release.py \
-            --release-tag "$release_tag" \
-            --output-dir dist
-          python scripts/package_release.py \
-            --verify "$release_archive" \
-            --version "$release_version"
-          source_sha="$(git rev-parse HEAD)"
-          echo "tag=$release_tag" >> "$GITHUB_OUTPUT"
-          echo "sha=$source_sha" >> "$GITHUB_OUTPUT"
-          echo "archive=$release_archive" >> "$GITHUB_OUTPUT"
-
-      - name: Publish the GitHub Release
+          python -B scripts/package_smart.py --release-tag "$tag" --output-dir smart-dist
+          python -B scripts/package_smart.py --verify "smart-dist/codex_workflow-${version}.zip" --version "$version"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "archive=smart-dist/codex_workflow-${version}.zip" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Publish reviewed release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.package.outputs.tag }}
-          RELEASE_SHA: ${{ steps.package.outputs.sha }}
           RELEASE_ARCHIVE: ${{ steps.package.outputs.archive }}
+          RELEASE_SHA: ${{ steps.package.outputs.sha }}
           MANUAL_PRERELEASE: ${{ inputs.prerelease }}
         shell: bash
         run: |
           set -euo pipefail
-          release_options=(--generate-notes)
-          if [[ "$GITHUB_EVENT_NAME" == "push" || "$MANUAL_PRERELEASE" != "false" ]]; then
-            release_options+=(--prerelease)
-          fi
-          gh release create "$RELEASE_TAG" \
-            "$RELEASE_ARCHIVE" \
-            dist/SHA256SUMS \
-            --title "Quality Economy $RELEASE_TAG" \
-            --target "$RELEASE_SHA" \
-            "${release_options[@]}"
+          options=(--generate-notes)
+          if [[ "$GITHUB_EVENT_NAME" == "push" || "$MANUAL_PRERELEASE" != "false" ]]; then options+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" "$RELEASE_ARCHIVE" smart-dist/SHA256SUMS \
+            --title "Smart Orchestration $RELEASE_TAG" --target "$RELEASE_SHA" "${options[@]}"

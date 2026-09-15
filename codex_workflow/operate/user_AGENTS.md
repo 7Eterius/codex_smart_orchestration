@@ -1,28 +1,18 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 1.2.0 -->
+<!-- codex-workflow-version: 1.3.0 -->
 <!-- codex-workflow-user-managed-start -->
-# Quality Economy - lifecycle commands
+# Smart Orchestration
 
-This installation is 7Eterius/codex_workflow. The legacy ownership marker is
-retained for lifecycle compatibility. Release discovery uses this fork only.
-Route behavior is defined by installed project instructions, not imposed on
-uninitialized or explicitly disabled projects.
+The globally installed workflow is **Smart Orchestration** from
+`7Eterius/codex_workflow`. No route phrase or per-repository installation is needed.
+The main loads `~/.codex/codex_workflow/smart_orchestration.md` for substantive work.
+Role-assigned children follow their capsule instead of initializing orchestration.
+Repository product, data-safety and acceptance requirements remain binding.
 
-When the user's trimmed message matches one of these forms, read and follow
-the guide. Forms without placeholders must match exactly.
-
-- codex_workflow --install
-  Guide: ~/.codex/codex_workflow/operate/install.md.
-- codex_workflow --update
-  Guide: ~/.codex/codex_workflow/operate/update.md.
-- codex_workflow --check-update
-  Guide: ~/.codex/codex_workflow/operate/check_update.md.
-- codex_workflow --remove
-  Guide: ~/.codex/codex_workflow/operate/remove.md.
-- codex_workflow --personal
-  Guide: ~/.codex/codex_workflow/operate/personalization_guide.md.
-- codex_workflow --disable
-  Guide: ~/.codex/codex_workflow/operate/disable.md.
-- codex_workflow --enable
-  Guide: ~/.codex/codex_workflow/operate/enable.md.
+For `codex_workflow --install`, `codex_workflow --update`,
+`codex_workflow --check-update`, `codex_workflow --remove`,
+`codex_workflow --disable`, `codex_workflow --enable`, or
+`codex_workflow --personal`, read
+`~/.codex/codex_workflow/operate/smart_install.md` first. Do not run legacy
+per-project lifecycle mutations or silently restore retired routing.
 <!-- codex-workflow-user-managed-end -->
