@@ -1,38 +1,39 @@
 ---
 name: deployment-token-report
-description: Compile per-agent rollout counts and cached-input, input, and output token totals from Codex local session JSONL after a substantive workflow deployment. Use only for the workflow's required post-deployment usage handoff, not for direct-fast-path work or live cost estimation.
+description: On explicit request only, report scoped local Codex usage with cumulative-counter reconciliation. Not an automatic task-closure step, live quota meter, or reason to spawn an extra agent.
 ---
 
 # Deployment Token Report
 
 <!-- codex-workflow-skill: deployment-token-report -->
 
-Use this skill only as Archivist for an assigned deployment closure, after all
-assigned documentation updates, compact checks, and Git inspection are complete.
-Treat that closure state as sealed;
-the repository and closure evidence remain unchanged after reporting starts.
+Optional diagnostics, independent from Archivist project memory. Do not invoke
+merely because work finished. An explicit reporting request is required; never
+spawn an agent just to print a table. Do not upload raw sessions or use an LLM to
+summarize them. The bundled Python reads local JSONL without model/network calls.
 
-Confirm that the main agent placed this exact hidden comment in its first
-commentary message for the deployment, using the supplied unique lowercase
-underscore-safe ID:
+Main can invoke directly using its known root thread and existing entry marker:
 
-```text
-<!-- codex-workflow-deployment-start: <deployment_id> -->
+```sh
+python3 -B <skill-path>/scripts/report_tokens.py \
+  --root-session-id "$CODEX_THREAD_ID" --deployment-id <known_id> --format json
 ```
 
-Run the bundled `scripts/report_tokens.py` with `--deployment-id` and
-`--format markdown`. Let it use `CODEX_THREAD_ID` to identify this Archivist
-rollout, resolve its parent main-agent thread, find the exact marker in
-assistant message text there, and read only metadata and token-count fields
-beneath `~/.codex/sessions/`. Accept the marker when surrounded by Markdown or
-explanatory prose. Exclude guardian sessions.
+Use the actual supported Python path. An existing Archivist may instead supply
+its caller session ID (or CODEX_THREAD_ID); the script resolves the parent. Other
+worker roles are not an automatic reporting path. Honor CODEX_HOME and tool
+permissions. Never infer IDs, pick the newest session, or change access settings.
 
-Return only the script's six-column Markdown table verbatim to the main agent,
-with no pricing, estimates, inferred usage, or additional statistics. Treat a
-script failure or incomplete-evidence warning as the report result and return
-the limitation verbatim.
+The marker is `<!-- codex-workflow-deployment-start: <deployment_id> -->`.
+An explicit --start-time/--end-time window is supported with a known root; it is
+not a whole-account/daily report. Windows use usage-notification timestamps,
+not task start/duration or billing timestamps. Default cutoff is script startup.
+Do not sum overlapping windows. Reporting and later final responses are not fully
+captured. Missing boundary/data is a limitation, not permission to scan prose for
+an approximate replacement or retry identical inputs. Failure does not block
+product acceptance or project-memory handoff.
 
-The required table template is exactly:
+The compatibility table remains:
 
 ```text
 | Agent | Quantity | Rollouts | Cached input | Input | Output |
@@ -40,10 +41,18 @@ The required table template is exactly:
 | <agent role> | <count> | <count> | <tokens> | <tokens> | <tokens> |
 ```
 
-Keep the columns exactly as shown and preserve every data row emitted by the
-script, including its final `main agent` row.
+Return its scope and accounting notes with the table, not just naked totals.
+`Input` includes cached input; output is not added to reasoning output again.
+`Rollouts` now counts reconciled cumulative usage updates, not guaranteed unique
+API requests, user messages or the old raw event count. Equal cumulative snapshots
+are ignored even with fresh timestamps. Distinct equal-sized requests are retained
+when cumulative counters advance. Missing counters, resets, or ambiguous deltas
+fail without a fabricated table; counters from before the window seed its baseline.
+Copied pre-creation history is not charged again to a child session.
 
-Interpret `Input` as total input tokens, including the cached-input subset, and
-`Rollouts` as model generations with a `last_token_usage` record. Stop totals
-when the script starts, excluding Archivist's post-tool final response
-and the main agent's later final response.
+JSON includes per-session notification/update counts, duplicate snapshots and
+recorded model/effort context when available. Those contexts are log observations,
+not independent proof of server billing or role configuration. Roles do not imply
+models. Never apply prices, calculate weekly-percent usage, back-correct old reports
+by a fixed multiplier, or present raw event totals as model calls. Some unsupported
+or missing telemetry can prevent reporting; leave that uncertainty explicit.

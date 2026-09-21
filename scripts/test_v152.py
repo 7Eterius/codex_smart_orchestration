@@ -18,6 +18,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
+CURRENT_VERSION = (PACKAGE / 'operate/VERSION').read_text().strip()
 BASE = '80a85b62833578cef792338a2875dac6b79c7616'
 BASE_TREE = '93e80770b0a0fb740179e29c9320d1eed2c3298c'
 sys.path.insert(0, str(PACKAGE))
@@ -167,8 +168,8 @@ class DesignContractTests(unittest.TestCase):
             self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), tier)
             self.assertIs(cfg['agents']['enabled'], False)
             self.assertLess(len(cfg['developer_instructions'].split()), 300)
-        self.assertEqual(text('operate/VERSION'), '1.5.2\n')
-        self.assertIn('version: 1.5.2', text('operate/user_AGENTS.md'))
+        self.assertEqual(text('operate/VERSION'), CURRENT_VERSION + '\n')
+        self.assertIn('version: ' + CURRENT_VERSION, text('operate/user_AGENTS.md'))
 
 
 class InstalledDesignTests(unittest.TestCase):
@@ -196,8 +197,20 @@ class InstalledDesignTests(unittest.TestCase):
         return plan, smart_install.apply_plan(plan, before, self.home)
 
     def test_runtime_and_configuration_settings_are_unchanged(self):
-        for relative in ('runtime', 'resources', 'skills'):
+        for relative in ('runtime', 'resources'):
             self.assertEqual(snapshot(PACKAGE / relative), snapshot(self.baseline / relative))
+        # v1.5.3 intentionally changes only these reporting-skill files. All
+        # other skill bytes, runtime/config defaults and role settings stay fixed.
+        previous_skills = snapshot(self.baseline / 'skills')
+        current_skills = snapshot(PACKAGE / 'skills')
+        for changed in ('deployment-token-report/SKILL.md',
+                        'deployment-token-report/agents/openai.yaml',
+                        'deployment-token-report/scripts/report_tokens.py'):
+            self.assertIn(changed, previous_skills)
+            self.assertIn(changed, current_skills)
+            previous_skills.pop(changed)
+            current_skills.pop(changed)
+        self.assertEqual(current_skills, previous_skills)
         self.assertEqual(text('verification.md'), (self.baseline / 'verification.md').read_text())
         for role in TIERS:
             old = tomllib.loads((self.baseline / f'agents/{role}.toml').read_text())
@@ -218,7 +231,7 @@ class InstalledDesignTests(unittest.TestCase):
         for key, value in before.items():
             self.assertEqual(cfg[key], value)
         self.assertEqual(snapshot(self.project), self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'], '1.5.2')
+        self.assertEqual(doctor.inspect(self.home)['version'], CURRENT_VERSION)
         self.assertIn('## Design ownership', (self.home / 'codex_workflow/smart_orchestration.md').read_text())
         for role in EXECUTORS:
             self.assertIn("main's settled brief", (self.home / f'agents/{role}.toml').read_text())
@@ -247,7 +260,7 @@ class InstalledDesignTests(unittest.TestCase):
         before = snapshot(self.home)
         parent_before = (self.home / 'config.toml').read_bytes()
         _, backup = self.apply()
-        self.assertEqual(doctor.inspect(self.home)['version'], '1.5.2')
+        self.assertEqual(doctor.inspect(self.home)['version'], CURRENT_VERSION)
         self.assertEqual((self.home / 'config.toml').read_bytes(), parent_before)
         self.assertEqual(self.apply()[0].mutations, [])
         plan, prior = prepare_restore(self.home, backup)

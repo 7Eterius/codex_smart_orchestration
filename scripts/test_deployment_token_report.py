@@ -131,6 +131,18 @@ class DeploymentTokenReportTests(unittest.TestCase):
         incomplete_tail: bool = False,
     ) -> None:
         path = self.sessions / f"rollout-2026-08-23T10-00-00-{session_id}.jsonl"
+        # Production telemetry includes cumulative snapshots. Keep all existing
+        # scoping/expected-total assertions, but provide a reconcilable fixture.
+        cumulative = dict(input_tokens=0, cached_input_tokens=0, output_tokens=0)
+        for record in records:
+            payload = record.get("payload", {})
+            if record.get("type") == "event_msg" and payload.get("type") == "token_count":
+                info = payload["info"]
+                last = info["last_token_usage"]
+                cumulative["input_tokens"] += last["input_tokens"]
+                cumulative["output_tokens"] += last["output_tokens"]
+                cumulative["cached_input_tokens"] += last.get("cached_input_tokens", last.get("input_tokens_details", {}).get("cached_tokens", 0))
+                info["total_token_usage"] = dict(cumulative)
         rendered = "".join(json.dumps(record) + "\n" for record in records)
         if incomplete_tail:
             rendered += '{"timestamp":'

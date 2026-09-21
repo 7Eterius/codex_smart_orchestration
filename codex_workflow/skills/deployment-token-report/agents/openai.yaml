@@ -1,4 +1,6 @@
 interface:
   display_name: "Deployment Token Report"
-  short_description: "Compile per-agent rollout token usage"
-  default_prompt: "Use $deployment-token-report to compile the current deployment token totals."
+  short_description: "On-demand local usage accounting"
+  default_prompt: "Use $deployment-token-report for the explicitly requested task/window. Preserve accounting warnings."
+policy:
+  allow_implicit_invocation: false

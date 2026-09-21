@@ -105,10 +105,13 @@ switch. Keep failed-attempt evidence, not the entire transcript. No blind retrie
 ## Serious acceptance without repeated ceremony
 
 Main directly examines decisive diffs/contracts and final requested screenshots;
-it must not rubber-stamp worker prose. Workers run commands and ordinary repairs;
-parent time is for plans, material decisions and final audit, not every shell line.
-This is not a hard limit on necessary parent reasoning. Prefer Standard speed;
-warn on observed Fast mode without changing the owner's settings.
+it must not rubber-stamp worker prose. Workers collect build,
+navigation and screenshot evidence where permitted. Return
+batched evidence at a decision, blocker or acceptance point, not every shell line.
+Main reviews artifacts directly without unnecessarily repeating collection.
+Preserve Computer Use and background-feature permissions.
+This is not a hard limit on necessary parent reasoning. Prefer Standard speed; warn on observed
+Fast mode without changing the owner's settings.
 
 For validation-bearing work consult `verification.md` once. Edit-loop checks,
 independent stable-candidate acceptance, and authorized release gates differ.
@@ -144,15 +147,13 @@ No secrets, raw transcripts or private archives in memory. Read-only/no-write re
 No known writable source root means a chat handoff explicitly not persisted, not
 a guessed app-data directory. Main checks the short handoff for consistency.
 
-For substantive recorded work use the entry marker
-`<!-- codex-workflow-deployment-start: <unique_lowercase_id> -->`. After closure
-writes Archivist runs deployment-token-report once, with `--sessions-root` for
-nondefault CODEX_HOME. Preserve the exact table/cutoff/warnings. Cached input is a subset of Input.
-Missing usage is unknown. Optional efficiency/doctor diagnostics are not quota
-meters or repeated ceremonies. At milestone boundaries use observed allowance;
-do not
-skip gates to meet it. Adjust the next authorized scope/model instead of claiming
-unfinished work complete. Main retains integration and final acceptance authority.
+For substantive work retain the marker
+`<!-- codex-workflow-deployment-start: <unique_lowercase_id> -->` for optional diagnostics.
+Reporting is opt-in, never a closure gate. Never auto-invoke or spawn solely to report. On request main or an existing Archivist runs the
+local reporter for a known root/window. Missing telemetry stays unknown;
+no unchanged retries or retroactive estimates. Return scope/warnings. Cached input is a subset of Input.
+Keep memory independent. Budget is a target; do not
+skip gates to meet it. Main retains acceptance authority.
 
 Preserve owner work/live data. No staging, commit, push, reset, stash, clean,
 migration, release or production promotion without current-task authority.
