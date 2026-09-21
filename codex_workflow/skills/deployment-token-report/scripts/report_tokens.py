@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Compile deployment-scoped Codex rollout token usage without reading prose."""
+"""On-demand local usage accounting. No network or model calls.
+
+Read cumulative counters in file order, use pre-window baselines, and reject
+ambiguous/missing evidence instead of summing stale last_token_usage snapshots.
+The Rollouts compatibility label means reconciled usage updates, not API requests.
+"""
 
 from __future__ import annotations
 
@@ -31,6 +36,7 @@ class Session:
     parent_id: str | None
     task_name: str | None
     role: str | None
+    forked_from_id: str | None = None
 
 
 @dataclass
@@ -122,7 +128,8 @@ def session_from_path(path: Path, warnings: list[str]) -> Session | None:
                     parent_id = _optional_string(spawn.get("parent_thread_id"))
                     task_name = _optional_string(spawn.get("agent_path"))
                     role = _optional_string(spawn.get("agent_role"))
-        return Session(session_id, path, timestamp, parent_id, task_name, role)
+        return Session(session_id, path, timestamp, parent_id, task_name, role,
+                       _optional_string(payload.get("forked_from_id")))
     return None
 
 
@@ -232,35 +239,24 @@ def _token_integer(value: Any, *, field: str, path: Path) -> int:
     return value
 
 
-def usage_from_record(record: dict[str, Any], path: Path) -> Usage | None:
-    if record.get("type") != "event_msg":
-        return None
-    payload = record.get("payload")
-    if not isinstance(payload, dict) or payload.get("type") != "token_count":
-        return None
-    info = payload.get("info")
-    if not isinstance(info, dict):
-        return None
-    usage = info.get("last_token_usage")
-    if not isinstance(usage, dict):
-        return None
-    input_tokens = _token_integer(
-        usage.get("input_tokens"), field="input token count", path=path
-    )
-    output_tokens = _token_integer(
-        usage.get("output_tokens"), field="output token count", path=path
-    )
-    cached = usage.get("cached_input_tokens")
-    if cached is None:
-        details = usage.get("input_tokens_details")
-        if isinstance(details, dict):
-            cached = details.get("cached_tokens")
-    cached_tokens = _token_integer(
-        cached, field="cached-input token count", path=path
-    )
-    if cached_tokens > input_tokens:
+
+def usage_values(raw: Any, path: Path, field: str) -> Usage:
+    if not isinstance(raw, dict):
+        raise ReportError(f"missing {field} in {path.name}; usage cannot be reconciled")
+    incoming = _token_integer(raw.get("input_tokens"), field="input count", path=path)
+    outgoing = _token_integer(raw.get("output_tokens"), field="output count", path=path)
+    cached = raw.get("cached_input_tokens")
+    if cached is None and isinstance(raw.get("input_tokens_details"), dict):
+        cached = raw["input_tokens_details"].get("cached_tokens")
+    cached = _token_integer(cached, field="cached-input count", path=path)
+    if cached > incoming:
         raise ReportError(f"cached-input tokens exceed input tokens in {path.name}")
-    return Usage(1, cached_tokens, input_tokens, output_tokens)
+    # reasoning_output_tokens is a subset of output_tokens, never an extra charge.
+    return Usage(0, cached, incoming, outgoing)
+
+
+def vector(usage: Usage) -> tuple[int, int, int]:
+    return usage.input_tokens, usage.cached_input_tokens, usage.output_tokens
 
 
 def aggregate_session(
@@ -268,15 +264,97 @@ def aggregate_session(
     start: datetime,
     end: datetime,
     warnings: list[str],
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> Usage:
     total = Usage()
+    previous: Usage | None = None
+    previous_time: datetime | None = None
+    notifications = duplicates = 0
+    context: tuple[str | None, str | None] = (None, None)
+    observed_contexts: set[tuple[str | None, str | None]] = set()
+    # Replayed parent entries retain their timestamps. They can seed a counter
+    # baseline, but are never charged to a child before that child's creation.
+    lower = max(start, session.timestamp)
     for record in iter_jsonl(session.path, warnings):
-        usage = usage_from_record(record, session.path)
-        if usage is None:
+        payload = record.get("payload")
+        if record.get("type") == "turn_context" and isinstance(payload, dict):
+            timestamp = record_time(record, path=session.path)
+            if session.timestamp <= timestamp <= end:
+                context = (_optional_string(payload.get("model")),
+                           _optional_string(payload.get("effort")) or
+                           _optional_string(payload.get("model_reasoning_effort")))
+            continue
+        if record.get("type") != "event_msg" or not isinstance(payload, dict) or payload.get("type") != "token_count":
             continue
         timestamp = record_time(record, path=session.path)
-        if start <= timestamp <= end:
-            total.add(usage)
+        if timestamp > end:
+            continue  # Freeze cutoff before any indexing/reporting work.
+        info = payload.get("info")
+        if info is None:
+            continue  # Rate-limit-only event without a usage snapshot.
+        if not isinstance(info, dict):
+            raise ReportError(f"malformed token usage info in {session.path.name}")
+        inside = lower <= timestamp <= end
+        if inside:
+            notifications += 1
+        cumulative_raw = info.get("total_token_usage")
+        if cumulative_raw is None:
+            if inside:
+                raise ReportError(f"missing cumulative counters in {session.path.name}; "
+                                  "last_token_usage alone cannot safely distinguish repeated notifications")
+            previous = previous_time = None
+            continue
+        current = usage_values(cumulative_raw, session.path, "total_token_usage")
+        if previous_time is not None and timestamp < previous_time:
+            raise ReportError(f"out-of-order usage timestamps in {session.path.name}; scope is ambiguous")
+        if not inside:
+            previous, previous_time = current, timestamp
+            continue
+        if previous is not None and vector(current) == vector(previous):
+            duplicates += 1
+            previous_time = timestamp
+            continue
+        if previous is None:
+            # A first snapshot may contain inherited/earlier consumption. Only a
+            # fresh cumulative==last sample or explicit zero establishes its origin.
+            if vector(current) == (0, 0, 0):
+                previous, previous_time = current, timestamp
+                continue
+            last = usage_values(info.get("last_token_usage"), session.path, "last_token_usage")
+            if session.forked_from_id or vector(last) != vector(current):
+                raise ReportError(f"missing pre-window/inherited baseline in {session.path.name}; "
+                                  "refusing to count a historical cumulative total")
+            delta = current
+        else:
+            values = tuple(c - p for c, p in zip(vector(current), vector(previous)))
+            if any(value < 0 for value in values):
+                raise ReportError(f"cumulative counter regression in {session.path.name}; "
+                                  "reset/rebase requires a narrower verified window")
+            delta = Usage(0, values[1], values[0], values[2])
+            if delta.cached_input_tokens > delta.input_tokens:
+                raise ReportError(f"inconsistent cached-input delta in {session.path.name}")
+            last = usage_values(info.get("last_token_usage"), session.path, "last_token_usage")
+            if vector(delta) != vector(last):
+                raise ReportError(f"cumulative delta does not match last usage in {session.path.name}; "
+                                  "missing events, synthetic adjustment or window boundary is ambiguous")
+        previous, previous_time = current, timestamp
+        if vector(delta) != (0, 0, 0):
+            delta.rollouts = 1
+            total.add(delta)
+            observed_contexts.add(context)
+    if diagnostics is not None:
+        diagnostics.append({
+            "session_id": session.session_id,
+            "role": session.role or ("main agent" if session.parent_id is None else "unclassified"),
+            "usage_notifications": notifications,
+            "unchanged_snapshots_ignored": duplicates,
+            "reconciled_usage_updates": total.rollouts,
+            "recorded_turn_contexts": [
+                {"model": model, "reasoning_effort": effort}
+                for model, effort in sorted(observed_contexts, key=lambda c: (c[0] or "", c[1] or ""))
+            ],
+            "model_attribution": "Recorded turn context, not independent server/billing evidence; missing values are unknown.",
+        })
     return total
 
 
@@ -286,18 +364,21 @@ def compile_rows(
     start: datetime,
     end: datetime,
     warnings: list[str],
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> list[Row]:
     grouped_usage: dict[str, Usage] = defaultdict(Usage)
     grouped_tasks: dict[str, set[str]] = defaultdict(set)
     first_activity: dict[str, datetime] = {}
 
     for child in descendants(root.session_id, index):
-        usage = aggregate_session(child, start, end, warnings)
+        usage = aggregate_session(child, start, end, warnings, diagnostics)
         spawned_in_window = start <= child.timestamp <= end
-        if not spawned_in_window and usage.rollouts == 0:
+        if usage.rollouts == 0:
+            if spawned_in_window:
+                warnings.append(f"no reconciled usage for spawned session {child.session_id}; omitted, not assumed free")
             continue
         role = child.role or "unclassified"
-        task_name = child.task_name or f"session:{child.session_id}"
+        task_name = child.session_id  # Count distinct threads, not repeated role/task labels.
         grouped_usage[role].add(usage)
         grouped_tasks[role].add(task_name)
         activity = max(start, child.timestamp)
@@ -308,7 +389,10 @@ def compile_rows(
         for role, usage in grouped_usage.items()
     ]
     rows.sort(key=lambda row: (row.first_activity, row.agent))
-    rows.append(Row("main agent", 1, aggregate_session(root, start, end, warnings), start))
+    root_usage = aggregate_session(root, start, end, warnings, diagnostics)
+    if root_usage.rollouts == 0:
+        raise ReportError("no reconciled main-agent usage in the requested window")
+    rows.append(Row("main agent", 1, root_usage, start))
     return rows
 
 
@@ -338,9 +422,10 @@ def json_output(
     end: datetime,
     rows: list[Row],
     warnings: list[str],
+    diagnostics: list[dict[str, Any]] | None = None,
 ) -> str:
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "deployment_id": deployment_id,
         "root_session_id": root.session_id,
         "window": {"start": start.isoformat(), "end": end.isoformat()},
@@ -356,6 +441,16 @@ def json_output(
             for row in rows
         ],
         "warnings": sorted(set(warnings)),
+        "accounting": {
+            "method": "cumulative_delta_reconciled_with_last_usage",
+            "rollouts_semantics": "reconciled usage updates, not guaranteed unique model requests",
+            "cached_input_semantics": "subset of input_tokens",
+            "window_semantics": "usage notification timestamps, inclusive; not account billing time",
+            "coverage": "partial" if warnings else "reconciled_available_records",
+            "weekly_allowance_percent": None,
+            "limitation": "Local logs are not a billing API. Absent sessions/schema or unlogged usage cannot be inferred.",
+        },
+        "sessions": diagnostics or [],
     }
     return json.dumps(payload, indent=2, sort_keys=True)
 
@@ -366,7 +461,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument(
         "--sessions-root",
         type=Path,
-        default=Path.home() / ".codex" / "sessions",
+        default=Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "sessions",
     )
     result.add_argument("--caller-session-id")
     result.add_argument("--root-session-id")
@@ -378,25 +473,29 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    invoked_at = datetime.now(timezone.utc)
     try:
         if not DEPLOYMENT_ID.fullmatch(args.deployment_id):
             raise ReportError(
                 "deployment ID must be lowercase, underscore-safe, and at most 64 characters"
             )
-        if (args.root_session_id is None) != (args.start_time is None):
-            raise ReportError("--root-session-id and --start-time must be used together")
+        if args.start_time is not None and args.root_session_id is None:
+            raise ReportError("--start-time requires --root-session-id")
         warnings: list[str] = []
         index = build_index(args.sessions_root.expanduser().resolve(), warnings)
         end = (
             parse_time(args.end_time, field="end time")
             if args.end_time
-            else datetime.now(timezone.utc)
+            else invoked_at
         )
         if args.root_session_id:
             root = index.get(args.root_session_id)
             if root is None:
                 raise ReportError(f"root session was not found: {args.root_session_id}")
-            start = parse_time(args.start_time, field="start time")
+            if root.parent_id is not None:
+                raise ReportError("--root-session-id must identify a root, not a worker")
+            start = (parse_time(args.start_time, field="start time") if args.start_time
+                     else find_boundary(root, args.deployment_id, warnings))
         else:
             caller_id = args.caller_session_id or os.environ.get("CODEX_THREAD_ID")
             if not caller_id:
@@ -416,11 +515,18 @@ def main(argv: list[str] | None = None) -> int:
             start = find_boundary(root, args.deployment_id, warnings)
         if start > end:
             raise ReportError("deployment start is after report cutoff")
-        rows = compile_rows(root, index, start, end, warnings)
+        diagnostics: list[dict[str, Any]] = []
+        rows = compile_rows(root, index, start, end, warnings, diagnostics)
         if args.format == "json":
-            print(json_output(args.deployment_id, root, start, end, rows, warnings))
+            print(json_output(args.deployment_id, root, start, end, rows, warnings, diagnostics))
         else:
             print(markdown(rows))
+            print(f"Report window: {start.isoformat()} to {end.isoformat()} (notification times). "
+                  "Rollouts = reconciled usage updates, not guaranteed unique requests. "
+                  "Cached input is a subset of Input. Local logs are not a quota/billing ledger.", file=sys.stderr)
+            ignored = sum(item["unchanged_snapshots_ignored"] for item in diagnostics)
+            if ignored:
+                print(f"Accounting: ignored {ignored} unchanged cumulative snapshots.", file=sys.stderr)
             for warning in sorted(set(warnings)):
                 print(f"Warning: {warning}", file=sys.stderr)
         return 0
