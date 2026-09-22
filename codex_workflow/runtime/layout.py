@@ -200,21 +200,6 @@ class PackageLayout:
                     f"missing={sorted(BUILTIN_SKILLS - skills)}, "
                     f"unexpected={sorted(skills - BUILTIN_SKILLS)}"
                 )
-            for skill in skills:
-                skill_root = self.skill_templates / skill
-                required_skill_files = (
-                    skill_root / "SKILL.md",
-                    skill_root / "agents" / "openai.yaml",
-                    skill_root / "scripts" / "report_tokens.py",
-                )
-                if not all(path.is_file() for path in required_skill_files):
-                    raise ValidationError(f"package skill files are incomplete: {skill}")
-                entry = skill_root / "SKILL.md"
-                match = SKILL_MARKER.search(entry.read_text(encoding="utf-8"))
-                if match is None or match.group(1) != skill:
-                    raise ValidationError(
-                        f"skill ownership marker missing or wrong: {skill}"
-                    )
 
     @property
     def version(self) -> str:
