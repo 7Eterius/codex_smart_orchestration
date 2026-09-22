@@ -70,6 +70,13 @@ is never automatic; it is an explicit owner choice.
 
 Source: https://developers.openai.com/codex/pricing
 
+### Pro usage context
+
+OpenAI currently estimates roughly **1,750-14,000 GPT-6 Luna** local messages per
+five-hour window on Pro 5x, versus **70-700 GPT-6 Sol**. Pro 20x estimates are
+7,000-56,000 Luna versus 300-3,000 Sol. These are broad ranges, not guaranteed task
+counts; context, reasoning and tools change actual usage, and weekly limits may apply.
+
 ## Senior Sol is advisory-first
 
 Senior Sol normally receives a **small decision capsule**, not implementation
