@@ -36,7 +36,7 @@ BUILTIN_WORKERS = frozenset(
         "investigator",
     }
 )
-BUILTIN_SKILLS = frozenset({"deployment-token-report"})
+BUILTIN_SKILLS = frozenset()
 
 
 @dataclass(frozen=True)

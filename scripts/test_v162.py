@@ -13,6 +13,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'codex_workflow'
+CURRENT_VERSION=(PACKAGE/'operate/VERSION').read_text().strip()
 BASE_COMMIT='d40a6e91cf36a0d2882c2b59b205f77a6147194c'
 BASE_TREE='012653dd15e21b8eb83de6023c1277407d1f8e0d'
 sys.path.insert(0,str(PACKAGE))
@@ -35,7 +36,7 @@ EXPECTED={
 
 class CreditAndReadmeContracts(unittest.TestCase):
     def test_version_and_worker_map_unchanged(self):
-        self.assertEqual((PACKAGE/'operate/VERSION').read_text(),'1.6.2\n')
+        self.assertEqual((PACKAGE/'operate/VERSION').read_text(),CURRENT_VERSION+'\n')
         for role,expected in EXPECTED.items():
             cfg=tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
             self.assertEqual((cfg['model'],cfg['model_reasoning_effort']),expected)
@@ -68,7 +69,7 @@ class CreditAndReadmeContracts(unittest.TestCase):
 
     def test_readme_is_current_architecture_not_release_stack(self):
         readme=(ROOT/'README.md').read_text()
-        for phrase in ('Smart Orchestration v1.6.2','How it works','Current model ladder',
+        for phrase in ('Smart Orchestration v1.6.3','How it works','Current model ladder',
                        'Why Luna-first','Pro limits are generous, not unlimited',
                        'Main-model ownership','Cache, context and tools',
                        'Standard speed is the cost baseline','20×','100×'):
@@ -134,7 +135,7 @@ class UpgradeTests(unittest.TestCase):
         self.assertTrue(backup.is_dir())
         self.assertEqual((self.home/'config.toml').read_bytes(),before_config)
         self.assertEqual(snapshot(self.project),self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.2')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
         for role,expected in EXPECTED.items():
             cfg=tomllib.loads((self.home/'agents'/f'{role}.toml').read_text())
             self.assertEqual((cfg['model'],cfg['model_reasoning_effort']),expected)
@@ -156,7 +157,7 @@ class UpgradeTests(unittest.TestCase):
         for key,value in original.items():
             self.assertEqual(after[key],value)
         self.assertEqual(snapshot(self.project),self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.2')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
 
 
 if __name__=='__main__':

@@ -9,8 +9,9 @@ from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'codex_workflow'))
-from runtime.layout import BUILTIN_WORKERS
+from runtime.layout import BUILTIN_WORKERS, BUILTIN_SKILLS
 import package_release
 package_release.BUILTIN_WORKERS=BUILTIN_WORKERS
+package_release.BUILTIN_SKILLS=BUILTIN_SKILLS
 if __name__=='__main__':
     raise SystemExit(package_release.main())

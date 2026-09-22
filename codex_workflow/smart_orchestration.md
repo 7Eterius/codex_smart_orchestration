@@ -148,13 +148,9 @@ No secrets, raw transcripts or private archives in memory. Read-only/no-write re
 No known writable source root means a chat handoff explicitly not persisted, not
 a guessed app-data directory. Main checks the short handoff for consistency.
 
-For substantive work retain the marker
-`<!-- codex-workflow-deployment-start: <unique_lowercase_id> -->` for optional diagnostics.
-Reporting is opt-in, never a closure gate. Never auto-invoke or spawn solely to report. On request main or an existing Archivist runs the
-local reporter for a known root/window. Missing telemetry stays unknown;
-no unchanged retries or retroactive estimates. Return scope/warnings. Cached input is a subset of Input.
-Keep memory independent. Budget is a target; do not
-skip gates to meet it. Main retains acceptance authority.
+Do not generate orchestration token/usage statistics or deployment-report markers.
+Keep permanent memory focused on project state. Budget is a target; do not skip
+gates to meet it. Main retains acceptance authority.
 
 Preserve owner work/live data. No staging, commit, push, reset, stash, clean,
 migration, release or production promotion without current-task authority.

@@ -12,10 +12,7 @@ production code, decide acceptance or silently resolve contradictory evidence.
 For a read-only request, return a handoff without writing. Missing persistence
 must be reported, not presented as a saved checkpoint.
 
-Project memory does not require a token report. Run deployment-token-report only
-when explicitly requested for a known deployment/window, never automatically at
-closure or repeatedly on unchanged missing data. Main can run it directly without
-creating an Archivist solely for reporting. Preserve table, scope and warnings;
-unknown usage stays unknown, never a pricing guess or an inferred zero.
-The main checks the handoff; a memory contradiction reopens only that handoff,
-not a whole production re-audit unless it exposes a material acceptance error.
+Do not perform token/usage accounting or orchestration statistics. Keep the handoff
+focused on durable project state. The main checks it; a memory contradiction reopens
+only that handoff, not a whole production re-audit unless it exposes a material
+acceptance error.
