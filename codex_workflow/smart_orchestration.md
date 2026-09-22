@@ -103,7 +103,7 @@ then verifies repairs. unknown freshness requires a check. Main directly examine
 Reuse applicable builds/evidence; parallelize only isolated native checks and
 serialize shared simulator/browser/build/data state. Debug is not Release.
 Fix acceptance violations and introduced regressions; record unrelated findings.
-Deferred gates remain OPEN.
+deferred gates remain OPEN.
 
 ## Context lifecycle and permanent memory
 
