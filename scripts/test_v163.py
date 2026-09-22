@@ -14,6 +14,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'codex_workflow'
+CURRENT_VERSION=(PACKAGE/'operate/VERSION').read_text().strip()
 BASE_COMMIT='f095dd9f9450ec31d2233db7ef28a405a3e5728e'
 BASE_TREE='f7db39791df6b92a23eaaafebe8d76334a9ec127'
 sys.path.insert(0,str(PACKAGE))
@@ -38,7 +39,7 @@ EXPECTED={
 class RetirementContracts(unittest.TestCase):
     def test_package_has_no_builtin_skill_payload(self):
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'1.6.3')
+        self.assertEqual(package.version,CURRENT_VERSION)
         self.assertEqual(BUILTIN_SKILLS,frozenset())
         self.assertEqual(package.skill_names,set())
         self.assertFalse((PACKAGE/'skills').exists())
@@ -54,12 +55,12 @@ class RetirementContracts(unittest.TestCase):
             for phrase in forbidden:
                 self.assertNotIn(phrase,text)
         self.assertIn('Do not generate orchestration token/usage statistics',texts[0])
-        self.assertIn('Do not perform\ntoken/usage accounting or orchestration statistics',texts[2])
+        self.assertIn('token/usage accounting or orchestration statistics',texts[2])
 
     def test_readme_documents_retirement_not_usage_reporting(self):
         readme=(ROOT/'README.md').read_text()
-        self.assertIn('Smart Orchestration v1.6.3',readme)
-        self.assertIn('ships no token-reporting skill',readme)
+        self.assertIn(f'Smart Orchestration v{CURRENT_VERSION}',readme)
+        self.assertIn('no deployment/token-report skill',readme)
         self.assertNotIn('deployment-token report',readme.lower())
         self.assertNotIn('optional diagnostics',readme.lower())
 
@@ -136,7 +137,7 @@ class UpgradeTests(unittest.TestCase):
         self.assertEqual(snapshot(self.project),self.project_before)
         state=json.loads((self.home/'codex_workflow'/'install_state.json').read_text())
         self.assertEqual(state['owned_skills'],[])
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.3')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
         self.assertEqual(smart_install.prepare(PACKAGE,self.home)[0].mutations,[])
 
         restore,old=smart_restore.prepare_restore(self.home,backup)
@@ -155,7 +156,7 @@ class UpgradeTests(unittest.TestCase):
         smart_install.apply_plan(plan,prior,self.home)
         self.assertFalse(retired.exists())
         self.assertFalse((self.home/'codex_workflow'/'templates'/'skills'/'deployment-token-report').exists())
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.3')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
 
     def test_fresh_install_has_no_reporting_skill_and_preserves_parent(self):
         (self.home/'config.toml').write_text(

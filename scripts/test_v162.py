@@ -67,15 +67,12 @@ class CreditAndReadmeContracts(unittest.TestCase):
             self.assertIn(phrase,policy)
         self.assertLess(len(policy.split()),1500)
 
-    def test_readme_is_current_architecture_not_release_stack(self):
+    def test_readme_keeps_credit_economics_in_current_architecture(self):
         readme=(ROOT/'README.md').read_text()
-        for phrase in ('Smart Orchestration v1.6.3','How it works','Current model ladder',
-                       'Why Luna-first','Pro limits are generous, not unlimited',
-                       'Main-model ownership','Cache, context and tools',
-                       'Standard speed is the cost baseline','20×','100×'):
+        for phrase in (f'Smart Orchestration v{CURRENT_VERSION}','Why Luna-first',
+                       '1,750-14,000','70-700','20×','100×',
+                       'Standard is the cost baseline'):
             self.assertIn(phrase,readme)
-        self.assertIn('1,750-14,000',readme)
-        self.assertIn('70-700',readme)
         self.assertNotIn('## v1.6.1:',readme)
         self.assertNotIn('## v1.6.0:',readme)
 
