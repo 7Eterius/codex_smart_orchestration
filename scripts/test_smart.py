@@ -195,7 +195,7 @@ class GlobalInstallTests(unittest.TestCase):
         data=tomllib.loads((self.home/'config.toml').read_text())
         data.pop('developer_instructions')
         expected=tomllib.loads(original)
-        expected['agents']['default_subagent_model']='gpt-5.6-luna'
+        expected['agents']['default_subagent_model']='gpt-6-luna'
         expected['agents']['default_subagent_reasoning_effort']='medium'
         self.assertEqual(data,expected)
         user=(self.home/'AGENTS.md').read_text()
