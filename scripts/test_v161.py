@@ -16,7 +16,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
 BASE_COMMIT = '21db3b6f3eb24c691b62d95b3ddfdff80add6073'
-BASE_TREE = '36e28cb38708c974adfe8d04c8842461e07e3c1a'
+BASE_TREE = '47016d61d8138cf8e13842b8578b391e753b13d8'
 sys.path.insert(0, str(PACKAGE))
 
 from runtime import doctor, smart_install, smart_restore
@@ -57,7 +57,7 @@ class LaunchBenchmarkContracts(unittest.TestCase):
 
     def test_cache_policy_no_longer_freezes_tools_or_effort_for_cache(self):
         policy=(PACKAGE/'smart_orchestration.md').read_text()
-        self.assertIn('GPT-6 preserves earlier prompt-cache',policy)
+        self.assertIn('GPT-6 preserves\nearlier prompt-cache',policy)
         self.assertIn('reasoning-effort and tool-availability changes',policy)
         self.assertIn('never weaken permissions',policy)
         self.assertNotIn('tools/MCP, sandbox and approvals stable within a task',policy)
@@ -66,7 +66,7 @@ class LaunchBenchmarkContracts(unittest.TestCase):
     def test_launch_evidence_is_documented_without_quota_claim(self):
         notes=(ROOT/'docs/v1.6.1.md').read_text()
         for phrase in ('AutomationBench','33.2%','DeepSWE','66.6%','OSWorld','60.5%',
-                       'one tenth its cost','not a promise'):
+                       'one tenth its cost','not a forecast'):
             self.assertIn(phrase,notes)
         self.assertIn('No parent model/effort is automatically rewritten',notes)
 
