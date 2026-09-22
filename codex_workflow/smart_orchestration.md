@@ -28,8 +28,8 @@ Keep the owner's selected main model/effort. Questions or trivial complete edits
 Simple requires low risk AND a clear pattern AND decisive
 checks. Missing tests, novel shared state, or security/financial/schema boundaries exclude it.
 Settled bounded features start Routine. Hard bounded implementation uses Default Luna Max.
-Known Sol-shaped work may start Senior; no forced Luna failure. Sol escalation is
-for a judgment/capability gap, not difficulty
+Known Sol-shaped work may start Senior; no forced Luna failure. Senior Sol xhigh is only for
+a judgment/capability gap or inherently judgment-heavy/high-impact work, not difficulty
 alone.
 
 Senior is **advisory-first**. Give it the smallest decisive evidence set and request
