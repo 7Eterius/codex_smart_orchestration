@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Read-only Smart Orchestration cost reference, configuration and pacing tools.
+"""Read-only Smart Orchestration API price reference, configuration and pacing tools.
 
-No network, model calls, transcript access or writes. Published base credit rates
-are NOT the conversion from tokens to a personal plan's included weekly quota.
+No network, model calls, transcript access or writes. API token prices are only a
+relative economics reference; they are NOT a conversion to ChatGPT/Codex plan quota.
 """
 from __future__ import annotations
 
@@ -14,23 +14,27 @@ from pathlib import Path
 import sys
 import tomllib
 
-AS_OF = "2026-09-15"
-RATE_SOURCE = "https://learn.chatgpt.com/docs/pricing"
-SPEED_SOURCE = "https://learn.chatgpt.com/docs/agent-configuration/speed"
-# Credits per million tokens, Standard base rate, NOT an included-plan allowance.
+AS_OF = "2026-09-22"
+RATE_SOURCE = "https://developers.openai.com/api/docs/models/compare"
+MODEL_SELECTION_SOURCE = "https://developers.openai.com/api/docs/guides/model-selection"
+# Standard API text-token rates per million for requests at <=272K input tokens.
+# Cache-write, regional, tool-call and service-tier costs are intentionally omitted.
 RATES = {
-    "gpt-5.6-luna": (Decimal("5"), Decimal("0.5"), Decimal("30")),
-    "gpt-5.6-terra": (Decimal("50"), Decimal("5"), Decimal("300")),
-    "gpt-5.6-sol": (Decimal("100"), Decimal("10"), Decimal("500")),
-    "gpt-6-astra": (Decimal("250"), Decimal("25"), Decimal("1250")),
+    "gpt-6-luna": (Decimal("0.10"), Decimal("0.01"), Decimal("0.50")),
+    "gpt-6-sol": (Decimal("2.00"), Decimal("0.20"), Decimal("10.00")),
+    "gpt-6-astra": (Decimal("10.00"), Decimal("1.00"), Decimal("50.00")),
+    # Legacy comparison points for migration economics only.
+    "gpt-5.6-luna": (Decimal("0.20"), Decimal("0.02"), Decimal("1.20")),
+    "gpt-5.6-sol": (Decimal("4.00"), Decimal("0.40"), Decimal("20.00")),
 }
 ROLES = ("simple_executor", "routine_executor", "default_executor", "senior_executor",
          "tester", "companion", "investigator", "archivist")
 DISCLAIMER = (
-    "Dated Standard BASE-CREDIT comparison, not a bill or weekly-quota estimate. "
-    "Excluded: Fast mode, long-context adjustments, tools and other applicable charges. "
-    "Sol's purchased-credit promotion does not change included plan limits. "
-    "Verify rates again before using this snapshot for later decisions."
+    "Dated Standard API short-context token-price reference, not a bill or a "
+    "ChatGPT/Codex weekly-quota estimate. It excludes cache writes, tool charges, "
+    "regional processing and service-tier multipliers. Requests above 272K input "
+    "tokens use different full-request multipliers, so aggregated session tokens "
+    "cannot be repriced safely without request boundaries. Verify rates before later use."
 )
 
 
@@ -50,7 +54,7 @@ def count(value: int, name: str) -> None:
 
 
 def reference(model: str, total_input: int, cached_input: int, output: int) -> dict:
-    """Input includes cached tokens, matching the existing deployment reporter."""
+    """Input includes cached tokens, matching the deployment reporter contract."""
     for value, label in ((total_input, "input"), (cached_input, "cached input"), (output, "output")):
         count(value, label)
     if cached_input > total_input:
@@ -58,12 +62,20 @@ def reference(model: str, total_input: int, cached_input: int, output: int) -> d
     if model not in RATES:
         raise ValueError("Unknown model; no inferred rate or fallback")
     input_rate, cache_rate, output_rate = RATES[model]
-    result = (Decimal(total_input - cached_input) * input_rate
-              + Decimal(cached_input) * cache_rate + Decimal(output) * output_rate) / Decimal(1_000_000)
-    return {"model": model, "standard_base_credit_reference": str(result),
-            "input_tokens_including_cached": total_input, "cached_input_tokens": cached_input,
-            "output_tokens": output, "rate_as_of": AS_OF, "rate_source": RATE_SOURCE,
-            "included_weekly_allowance_percent": None, "limitation": DISCLAIMER}
+    usd = (Decimal(total_input - cached_input) * input_rate
+           + Decimal(cached_input) * cache_rate
+           + Decimal(output) * output_rate) / Decimal(1_000_000)
+    return {
+        "model": model,
+        "api_standard_short_context_usd_reference": str(usd),
+        "input_tokens_including_cached": total_input,
+        "cached_input_tokens": cached_input,
+        "output_tokens": output,
+        "rate_as_of": AS_OF,
+        "rate_source": RATE_SOURCE,
+        "included_weekly_allowance_percent": None,
+        "limitation": DISCLAIMER,
+    }
 
 
 def pace(remaining: Decimal, workdays_left: int, reserve: Decimal) -> dict:
@@ -74,7 +86,8 @@ def pace(remaining: Decimal, workdays_left: int, reserve: Decimal) -> dict:
         raise ValueError("workdays_left must be a positive integer")
     spendable = max(Decimal(0), remaining - reserve)
     return {
-        "observed_remaining_percent": str(remaining), "reserve_percent": str(reserve),
+        "observed_remaining_percent": str(remaining),
+        "reserve_percent": str(reserve),
         "workdays_left": workdays_left,
         "daily_percentage_point_budget": str((spendable / workdays_left).quantize(Decimal("0.01"))),
         "reserve_shortfall_percentage_points": str(max(Decimal(0), reserve - remaining)),
@@ -90,40 +103,54 @@ def settings(home: Path) -> dict:
     if path.is_symlink():
         raise ValueError("Config is symlinked; inspect it explicitly instead")
     cfg = tomllib.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
-    result = {"configured_parent": {key: cfg.get(key) for key in
-              ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier")}, "workers": [], "warnings": []}
+    result = {
+        "configured_parent": {key: cfg.get(key) for key in
+            ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier")},
+        "workers": [],
+        "warnings": [],
+    }
     for role in ROLES:
         path = home / "agents" / f"{role}.toml"
         if path.is_symlink():
             raise ValueError(f"Worker configuration is symlinked: {role}")
         worker = tomllib.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
-        result["workers"].append({"role": role, "file_present": path.is_file(),
-                                  **{key: worker.get(key) for key in
-                                     ("model", "model_reasoning_effort", "service_tier")}})
+        result["workers"].append({
+            "role": role,
+            "file_present": path.is_file(),
+            **{key: worker.get(key) for key in ("model", "model_reasoning_effort", "service_tier")},
+        })
     if cfg.get("service_tier") in {"fast", "priority"}:
-        result["warnings"].append("Fast mode configured; /fast off is the recommended cost-saving setting.")
+        result["warnings"].append("Fast mode configured; Standard is the workflow's cost-conscious baseline.")
     profiles = cfg.get("profiles", {})
     if isinstance(profiles, dict):
-        for name, profile in profiles.items():
+        for profile in profiles.values():
             if isinstance(profile, dict) and any(key in profile for key in
-                    ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier", "developer_instructions")):
-                # Do not print arbitrary owner profile strings or instruction contents.
-                result["warnings"].append("A profile can override model/effort/speed/bootstrap; verify the selected profile.")
+                    ("model", "model_reasoning_effort", "plan_mode_reasoning_effort",
+                     "service_tier", "developer_instructions")):
+                result["warnings"].append(
+                    "A profile can override model/effort/speed/bootstrap; verify the selected profile."
+                )
                 break
-    result["observation"] = "On-disk configuration only. Null is unknown/inherited, not verified Standard speed. " \
-                            "Unset Plan effort uses its built-in preset, not an inferred normal effort. " \
-                            "Project, profile, CLI or spawn overrides may change actual settings. No live usage was read."
+    result["observation"] = (
+        "On-disk configuration only. Null is unknown/inherited, not verified Standard speed. "
+        "Unset Plan effort uses its built-in preset, not an inferred normal effort. "
+        "Project, profile, CLI or spawn overrides may change actual settings. No live usage was read."
+    )
     return result
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("rates", help="Print the dated Standard base-credit reference")
-    comparison = sub.add_parser("compare", help="Compare one identical token workload; not a weekly quota estimate")
+    sub.add_parser("rates", help="Print the dated Standard API short-context price reference")
+    comparison = sub.add_parser(
+        "compare",
+        help="Compare one identical short-context token workload; not a plan-quota estimate",
+    )
     comparison.add_argument("--input-tokens", type=int, required=True, help="Total input INCLUDING cached subset")
     comparison.add_argument("--cached-input-tokens", type=int, required=True)
-    comparison.add_argument("--output-tokens", type=int, required=True, help="Recorded total output, including reasoning where applicable")
+    comparison.add_argument("--output-tokens", type=int, required=True,
+                            help="Recorded output; reasoning output is already included where applicable")
     comparison.add_argument("--model", choices=tuple(RATES), action="append")
     pacing = sub.add_parser("pace", help="Budget an observed remaining WEEKLY percentage over working days")
     pacing.add_argument("--remaining-percent", type=number, required=True)
@@ -134,12 +161,24 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.command == "rates":
-            result = {"as_of": AS_OF, "source": RATE_SOURCE, "units": "credits per 1M tokens",
-                      "rates": {model: dict(zip(("uncached_input", "cached_input", "output"), map(str, rates)))
-                                for model, rates in RATES.items()}, "limitation": DISCLAIMER}
+            result = {
+                "as_of": AS_OF,
+                "source": RATE_SOURCE,
+                "model_selection_source": MODEL_SELECTION_SOURCE,
+                "units": "USD per 1M text tokens, Standard API, <=272K request input",
+                "rates": {
+                    model: dict(zip(("uncached_input", "cached_input", "output"), map(str, rates)))
+                    for model, rates in RATES.items()
+                },
+                "limitation": DISCLAIMER,
+            }
         elif args.command == "compare":
-            result = {"comparisons": [reference(model, args.input_tokens, args.cached_input_tokens, args.output_tokens)
-                                      for model in dict.fromkeys(args.model or RATES)]}
+            result = {
+                "comparisons": [
+                    reference(model, args.input_tokens, args.cached_input_tokens, args.output_tokens)
+                    for model in dict.fromkeys(args.model or RATES)
+                ]
+            }
         elif args.command == "pace":
             result = pace(args.remaining_percent, args.workdays_left, args.reserve_percent)
         else:

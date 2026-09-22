@@ -19,6 +19,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
+CURRENT_VERSION = (PACKAGE / 'operate/VERSION').read_text().strip()
 SCRIPT = PACKAGE / 'skills/deployment-token-report/scripts/report_tokens.py'
 sys.path.insert(0, str(PACKAGE))
 from runtime import smart_install, smart_restore, doctor
@@ -253,7 +254,7 @@ class PolicyAndInstallTests(unittest.TestCase):
             (home/'config.toml').write_text('model="owner"\nmodel_reasoning_effort="low"\n')
             before=(home/'config.toml').read_bytes()
             plan,prior=smart_install.prepare(PACKAGE,home);backup=smart_install.apply_plan(plan,prior,home)
-            self.assertEqual(doctor.inspect(home)['version'],'1.5.3')
+            self.assertEqual(doctor.inspect(home)['version'],CURRENT_VERSION)
             self.assertIn('allow_implicit_invocation: false',(home/'skills/deployment-token-report/agents/openai.yaml').read_text())
             self.assertEqual(smart_install.prepare(PACKAGE,home)[0].mutations,[])
             plan,prior=smart_restore.prepare_restore(home,backup);smart_install.apply_plan(plan,prior,home)
@@ -294,7 +295,7 @@ class PublishedUpgradeTests(unittest.TestCase):
             before=snapshot(home)
             plan,prior=smart_install.prepare(PACKAGE,home);backup=smart_install.apply_plan(plan,prior,home)
             self.assertEqual((home/'config.toml').read_bytes(),before['config.toml'])
-            self.assertEqual(doctor.inspect(home)['version'],'1.5.3')
+            self.assertEqual(doctor.inspect(home)['version'],CURRENT_VERSION)
             self.assertEqual(smart_install.prepare(PACKAGE,home)[0].mutations,[])
             report=home/'skills/deployment-token-report/scripts/report_tokens.py'
             original=report.read_bytes();report.write_bytes(original+b'\n# Owner tuning\n')

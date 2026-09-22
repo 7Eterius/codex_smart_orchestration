@@ -20,17 +20,17 @@ scan labelled complete. Familiar, settled work needs no new project survey.
 
 | Role | Model/effort | Work |
 | --- | --- | --- |
-| simple_executor | Luna Medium | Low-risk established-pattern changes |
-| routine_executor | Luna High | Bounded features with settled contracts |
-| default_executor | Luna Max | Difficult implementation or diagnosis |
+| simple_executor | Luna Low | Low-risk established-pattern changes |
+| routine_executor | Luna Medium | Bounded features with settled contracts |
+| default_executor | Luna xhigh | Difficult implementation or diagnosis |
 | senior_executor | Sol Medium | Hard decisions, advice or transferred ownership |
 | tester | Luna xhigh | Independent verification, not production repair |
 | companion | Luna Medium | Optional relevant-context discovery |
-| investigator | Luna High | Optional unresolved evidence question |
+| investigator | Luna xhigh | Optional unresolved evidence question |
 | archivist | Luna Medium | Verified current handoff and meaningful history |
 
 Keep the owner's selected main model/effort. For settled features start with
-Routine rather than Max. Simple requires low risk AND a clear pattern AND decisive
+Routine rather than Default. Simple requires low risk AND a clear pattern AND decisive
 checks. Missing tests, novel shared state, security/financial/schema boundaries
 exclude that tier. A known hard task starts stronger: no forced cheap failure.
 Quality is evaluated on accepted work including rework, not the model's price.

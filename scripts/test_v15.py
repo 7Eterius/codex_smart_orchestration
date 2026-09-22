@@ -28,7 +28,7 @@ class DefaultsTests(unittest.TestCase):
         self.assertEqual(data['model_reasoning_effort'], 'low')
         self.assertEqual(data['service_tier'], 'standard')
         self.assertEqual(data['agents']['max_concurrent_threads_per_session'], 3)
-        self.assertEqual(data['agents']['default_subagent_model'], 'gpt-5.6-luna')
+        self.assertEqual(data['agents']['default_subagent_model'], 'gpt-6-luna')
         self.assertEqual(data['agents']['default_subagent_reasoning_effort'], 'medium')
         self.assertEqual(set(added), {'max_concurrent_threads_per_session', 'default_subagent_model', 'default_subagent_reasoning_effort'})
         self.assertEqual(warnings, [])
