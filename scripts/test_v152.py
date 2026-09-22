@@ -31,9 +31,9 @@ from runtime._toml import tomllib
 EXECUTORS = ('simple_executor', 'routine_executor', 'default_executor', 'senior_executor')
 TIERS = {
     'simple_executor': ('gpt-6-luna', 'low'),
-    'routine_executor': ('gpt-6-luna', 'medium'),
-    'default_executor': ('gpt-6-luna', 'xhigh'),
-    'senior_executor': ('gpt-6-sol', 'medium'),
+    'routine_executor': ('gpt-6-luna', 'high'),
+    'default_executor': ('gpt-6-luna', 'max'),
+    'senior_executor': ('gpt-6-sol', 'xhigh'),
     'tester': ('gpt-6-luna', 'xhigh'),
     'companion': ('gpt-6-luna', 'medium'),
     'investigator': ('gpt-6-luna', 'xhigh'),

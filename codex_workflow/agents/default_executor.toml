@@ -1,8 +1,8 @@
 # codex-workflow-worker: default_executor
 name = "default_executor"
-description = "Luna xhigh for difficult implementation and diagnosis with clear constraints."
+description = "Luna Max for difficult implementation and diagnosis with clear constraints."
 model = "gpt-6-luna"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """

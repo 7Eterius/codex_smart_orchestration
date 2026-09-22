@@ -422,9 +422,9 @@ class PolicyTests(unittest.TestCase):
 
     def test_role_tiers_are_actual_configs(self):
         expected={'simple_executor':('gpt-6-luna','low'),
-                  'routine_executor':('gpt-6-luna','medium'),
-                  'default_executor':('gpt-6-luna','xhigh'),
-                  'senior_executor':('gpt-6-sol','medium'),
+                  'routine_executor':('gpt-6-luna','high'),
+                  'default_executor':('gpt-6-luna','max'),
+                  'senior_executor':('gpt-6-sol','xhigh'),
                   'tester':('gpt-6-luna','xhigh'),
                   'companion':('gpt-6-luna','medium'),
                   'investigator':('gpt-6-luna','xhigh'),
