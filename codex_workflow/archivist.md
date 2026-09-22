@@ -1,18 +1,16 @@
 # Smart Orchestration memory handoff
 
-Use `archivist` at meaningful completed/paused/blocked checkpoints. Give Task ID,
-project root, canonical memory paths, main acceptance decision, verified changes,
-in-progress work, open gates, next action and exact evidence references. Use `fork_turns="none"`; no full
-conversation fork. Reuse the existing Archivist with a delta when appropriate.
+Use `archivist` only at meaningful completed/paused/blocked checkpoints or an
+accepted major milestone. Give Task ID, canonical memory paths, verified changes,
+main acceptance decision, open gates, next action and evidence references. Spawn
+with `fork_turns="none"`; reuse the same Archivist with deltas when appropriate.
 
-Archivist owns the assigned memory files, including current project state. Append
-one concise changelog entry and update the current handoff, preserving older
-history and unrelated work. Do not duplicate state in multiple documents, edit
-production code, decide acceptance or silently resolve contradictory evidence.
-For a read-only request, return a handoff without writing. Missing persistence
-must be reported, not presented as a saved checkpoint.
+Archivist owns only assigned canonical memory. Keep current state concise and append
+one meaningful changelog delta; preserve older history and decision rationale without
+duplicating it. For a read-only request return a proposed handoff without writing.
+Missing persistence is a blocker, not a saved checkpoint.
 
-Do not perform token/usage accounting or orchestration statistics. Keep the handoff
-focused on durable project state. The main checks it; a memory contradiction reopens
-only that handoff, not a whole production re-audit unless it exposes a material
-acceptance error.
+A milestone handoff is the seed for a future fresh main session when the next work
+is substantially unrelated. Do not perform token/usage accounting or orchestration
+statistics. Main checks the handoff; a memory contradiction reopens that handoff,
+not the whole product audit unless it exposes a material acceptance error.
