@@ -40,7 +40,7 @@ or a material Luna capability gap remains. Stop the old
 writer first; promotion uses a new configured role, not a pretend in-place switch.
 Main retains acceptance.
 
-Context/research roles are
+context/research roles are
 conditional. One production writer owns each mutable boundary. Normal fan-out is
 1-3 children and only for genuinely independent work; do not duplicate the same
 question unless competing hypotheses are useful. Finish support agents before
@@ -98,8 +98,7 @@ Never weaken a required gate or repository-specific verification rule.
 For novel/high-impact work, reuse the same Tester early to identify invariant,
 denied and failure cases; Early advice does not replace final verification.
 Tester reads production for diagnosis but sends focused reproductions to the writer,
-then verifies repairs. Unknown freshness requires a check. Main directly examines
-decisive diffs/contracts and must not rubber-stamp worker prose.
+then verifies repairs. unknown freshness requires a check. Main directly examines decisive diffs/contracts and must not rubber-stamp worker prose.
 
 Reuse applicable builds/evidence; parallelize only isolated native checks and
 serialize shared simulator/browser/build/data state. Debug is not Release.
