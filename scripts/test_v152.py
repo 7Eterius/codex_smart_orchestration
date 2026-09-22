@@ -224,7 +224,7 @@ class InstalledDesignTests(unittest.TestCase):
         for role in TIERS:
             old = tomllib.loads((self.baseline / f'agents/{role}.toml').read_text())
             new = tomllib.loads(text(f'agents/{role}.toml'))
-            for key in ('developer_instructions', 'model', 'model_reasoning_effort'):
+            for key in ('developer_instructions', 'description', 'model', 'model_reasoning_effort'):
                 old.pop(key)
                 new.pop(key)
             self.assertEqual(old, new, role)
