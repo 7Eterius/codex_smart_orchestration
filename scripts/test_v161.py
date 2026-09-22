@@ -148,7 +148,7 @@ class UpgradeTests(unittest.TestCase):
         for key,value in original.items():
             self.assertEqual(cfg[key],value)
         self.assertEqual(snapshot(self.project),self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.1')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
 
 
 if __name__=='__main__':
