@@ -399,7 +399,8 @@ class PolicyTests(unittest.TestCase):
         self.assertIn('widen discovery when dependencies are unclear',self.policy)
 
     def test_no_mandatory_low_tier_failure(self):
-        self.assertIn('known hard task',self.policy)
+        self.assertIn('Known Sol-shaped work may start Senior',self.policy)
+        self.assertIn('no forced Luna failure',self.policy)
         self.assertIn('Escalate immediately',self.policy)
         self.assertIn('missing context -> supply that context',self.policy)
         self.assertIn('unavailable environment/authority -> report the blocker',self.policy)

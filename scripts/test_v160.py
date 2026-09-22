@@ -74,14 +74,14 @@ class ModelRoutingTests(unittest.TestCase):
         self.assertIn("Keep the owner's selected main model/effort", policy)
         self.assertLess(len(policy.split()), 1500)
 
-    def test_api_reference_prices_are_current_migration_points(self):
-        self.assertEqual(efficiency.RATES['gpt-6-luna'], (
-            efficiency.Decimal('0.10'), efficiency.Decimal('0.01'), efficiency.Decimal('0.50')))
-        self.assertEqual(efficiency.RATES['gpt-6-sol'], (
-            efficiency.Decimal('2.00'), efficiency.Decimal('0.20'), efficiency.Decimal('10.00')))
-        self.assertEqual(efficiency.RATES['gpt-6-sol'][0] / efficiency.RATES['gpt-6-luna'][0], 20)
-        self.assertEqual(efficiency.RATES['gpt-6-sol'][1] / efficiency.RATES['gpt-6-luna'][1], 20)
-        self.assertEqual(efficiency.RATES['gpt-6-sol'][2] / efficiency.RATES['gpt-6-luna'][2], 20)
+    def test_current_credit_reference_preserves_gpt6_economics(self):
+        self.assertEqual(efficiency.CREDIT_RATES['gpt-6-luna'], (
+            efficiency.Decimal('2.5'), efficiency.Decimal('0.25'), efficiency.Decimal('12.5')))
+        self.assertEqual(efficiency.CREDIT_RATES['gpt-6-sol'], (
+            efficiency.Decimal('50'), efficiency.Decimal('5'), efficiency.Decimal('250')))
+        for idx in range(3):
+            self.assertEqual(efficiency.CREDIT_RATES['gpt-6-sol'][idx] /
+                             efficiency.CREDIT_RATES['gpt-6-luna'][idx], 20)
 
     def test_docs_do_not_invent_gpt6_benchmark_scores(self):
         notes = (ROOT / 'docs/v1.6.0.md').read_text()

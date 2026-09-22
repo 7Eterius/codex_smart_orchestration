@@ -15,6 +15,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
+CURRENT_VERSION = (PACKAGE / 'operate/VERSION').read_text().strip()
 BASE_COMMIT = '21db3b6f3eb24c691b62d95b3ddfdff80add6073'
 BASE_TREE = '47016d61d8138cf8e13842b8578b391e753b13d8'
 sys.path.insert(0, str(PACKAGE))
@@ -37,7 +38,7 @@ EXPECTED = {
 
 class LaunchBenchmarkContracts(unittest.TestCase):
     def test_version_and_three_effort_changes(self):
-        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), '1.6.1\n')
+        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), CURRENT_VERSION+'\n')
         for role, expected in EXPECTED.items():
             cfg=tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
             self.assertEqual((cfg['model'],cfg['model_reasoning_effort']),expected)
@@ -124,7 +125,7 @@ class UpgradeTests(unittest.TestCase):
         self.assertTrue(backup.is_dir())
         self.assertEqual((self.home/'config.toml').read_bytes(),before_config)
         self.assertEqual(snapshot(self.project),self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.1')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
         for role,expected in EXPECTED.items():
             cfg=tomllib.loads((self.home/'agents'/f'{role}.toml').read_text())
             self.assertEqual((cfg['model'],cfg['model_reasoning_effort']),expected)
@@ -147,7 +148,7 @@ class UpgradeTests(unittest.TestCase):
         for key,value in original.items():
             self.assertEqual(cfg[key],value)
         self.assertEqual(snapshot(self.project),self.before_project)
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.6.1')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
 
 
 if __name__=='__main__':

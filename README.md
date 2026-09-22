@@ -1,155 +1,191 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.6.1**, from
-`7Eterius/codex_smart_orchestration`. The main model owns planning, product/UX/visual
-design, architecture and serious acceptance. Workers implement bounded contracts;
-Archivist preserves useful current state, decisions and history. No route phrase,
-project-path argument or per-repository orchestration installation is needed.
+**Smart Orchestration v1.6.2** is one global adaptive workflow for Codex. Its goal
+is to spend expensive reasoning on decisions that truly need it while letting
+GPT-6 Luna own the high-volume implementation, verification and context work it is
+now strong enough to handle.
 
-## v1.6.1: launch-benchmark tuning
+There are no Light/Medium/Heavy routes, no per-repository installation and no route
+phrase. Install it once. Project-specific `AGENTS.md` files keep their product,
+data, testing and safety rules.
 
-OpenAI's GPT-6 Sol/Luna launch article adds direct benchmark evidence that was not
-used in v1.6.0. Smart now uses GPT-6 Luna High for Routine, Luna Max for difficult
-Default implementation, and GPT-6 Sol xhigh only for the Senior escalation role.
-Simple, Tester, Companion, Investigator and Archivist remain unchanged.
+## How it works
 
-The tuning is evidence-specific: Luna High improved AutomationBench by 5.4 points
-versus its predecessor at 58% lower cost per task; Luna Max scored 66.6% on DeepSWE
-and exceeded GPT-5.6 Sol Medium on OSWorld at one tenth the cost; Sol xhigh scored
-33.2% on AutomationBench and 60.5% on OSWorld while remaining far cheaper than the
-reported competitor baselines. These are benchmark/task-cost results, not a promise
-about Codex subscription allowance or every project.
+1. **Main owns judgment.** The selected parent model frames the task, resolves
+   architecture/product decisions, owns substantive UX/visual design, allocates
+   work, inspects decisive evidence and makes final acceptance decisions.
+2. **Luna does most bounded work.** Implementation, diagnosis, testing, targeted
+   discovery and project-memory maintenance go to named GPT-6 Luna roles.
+3. **Sol is exceptional.** GPT-6 Sol Senior exists for genuinely judgment-heavy or
+   high-impact work, or a material capability/ambiguity gap. A hard coding task does
+   not automatically become a Sol task.
+4. **Verification stays independent.** Tester does not repair production code and
+   cannot replace the main model's design/product judgment.
+5. **Memory stays small.** Archivist maintains concise canonical handoffs and
+   meaningful history. Usage reports are optional diagnostics, not a closure ritual.
 
-GPT-6 also preserves earlier prompt-cache reuse when reasoning effort or tool
-availability changes. Smart therefore no longer keeps an unnecessary tool surface
-or mismatched effort merely to protect cache. Owner-selected parent model/effort,
-sandbox and approval boundaries remain untouched. See [v1.6.1 notes](docs/v1.6.1.md).
+The workflow optimizes **accepted work including rework**, not the cheapest first
+attempt or the lowest raw token count.
 
-## v1.6.0: GPT-6 worker generation
+## Current model ladder
 
-All named workers now use GPT-6 Luna or GPT-6 Sol. Efforts follow OpenAI's current
-model-selection guidance rather than guessed benchmark inheritance: simple Luna Low,
-routine Luna Medium, difficult constrained implementation/investigation and Tester
-Luna xhigh, Senior Sol Medium, and concise context/memory roles Luna Medium.
+| Role | Model / effort | What it owns | Why |
+| --- | --- | --- | --- |
+| **Main** | Owner-selected | Planning, architecture, product/UX/visual design, serious audit, acceptance | Highest-value judgment stays with the parent |
+| simple_executor | GPT-6 Luna · Low | Small established-pattern edits | Cheap, reversible, decisive checks |
+| routine_executor | GPT-6 Luna · High | Normal bounded features | Strong routine implementation without Sol cost |
+| default_executor | GPT-6 Luna · Max | Difficult bounded implementation and diagnosis | Launch benchmarks support Luna Max for long-horizon coding/tool work |
+| senior_executor | GPT-6 Sol · xhigh | Named hard decisions, advice or transferred ownership | Reserved for material judgment/capability gaps |
+| tester | GPT-6 Luna · xhigh | Independent behavioral/accessibility verification | Thorough verification at Luna economics |
+| companion | GPT-6 Luna · Medium | Targeted project-context discovery | Compact evidence gathering |
+| investigator | GPT-6 Luna · xhigh | Named unresolved evidence questions | Strong constrained investigation |
+| archivist | GPT-6 Luna · Medium | Verified handoff, decisions and meaningful history | Cheap project continuity |
 
-OpenAI currently prices GPT-6 Luna at $0.10/$0.01/$0.50 and GPT-6 Sol at
-$2/$0.20/$10 per million Standard API input/cached/output tokens for short-context
-requests. Those are API economics references, **not a conversion to the included
-Codex/ChatGPT plan allowance**. Public GPT-6 Luna/Sol benchmark score tables are not
-yet available, so the routing is grounded in the official workload/effort guide and
-must be validated on accepted real tasks. See [v1.6.0 notes](docs/v1.6.0.md).
+Named children disable recursive delegation. Normal fan-out is 1-3 concurrent
+children, and supported spawns use isolated history by default.
 
-The parent remains owner-selected. GPT-6 Sol Medium is the documented starting
-point closest to Smart's normal quality-first main role, but installation never
-silently changes your parent model, effort, Plan effort, or speed.
+## Why Luna-first
 
-## v1.5.3: evidence-led efficiency
+Current Work/Codex credit rates make the economics unusually clear:
 
-Usage reporting is **opt-in**, separate from permanent project memory. Never spawn
-an agent solely to generate it. The local reporter reconciles cumulative counters
-instead of summing potentially repeated last-usage snapshots. Missing or ambiguous
-telemetry produces an explicit limitation, not guessed totals or repeated retries.
+| Model | Input | Cached input | Output | Relative to Luna |
+| --- | ---: | ---: | ---: | ---: |
+| **GPT-6 Luna** | 2.5 | 0.25 | 12.5 | **1×** |
+| **GPT-6 Sol** | 50 | 5 | 250 | **20×** |
+| **GPT-6 Astra** | 250 | 25 | 1,250 | **100×** |
 
-Workers collect permitted build/navigation/screenshot evidence; main directly
-judges it without routinely duplicating its collection. Keep design authorship and
-independent acceptance. No model downgrades, new proxy, role, fixed cost ratio,
-automatic compaction or Computer History/Computer Use permission changes.
-See [v1.5.3 notes](docs/v1.5.3.md) for evidence limits, compatibility and tests.
+Credits are per million tokens at Standard speed. The ratios are identical across
+input, cached input and output. Reasoning effort can still change total tokens, so
+the same per-token rate does not make every effort level equally expensive per task.
 
-## Capabilities and design ownership
+This is why **Default Luna Max is the normal ceiling for hard bounded coding**.
+Senior Sol xhigh is not the automatic next rung because work is difficult or because
+Sol feels safer. Escalate when work is inherently judgment-heavy/high-impact, a
+material ambiguity needs stronger judgment, or evidence shows a real Luna capability
+gap. Clearly Sol-shaped work may start Senior; Smart does not require a ceremonial
+Luna failure first.
 
-| Role | Model / effort | Responsibility |
-| --- | --- | --- |
-| simple_executor | GPT-6 Luna · Low | Clear low-risk established-pattern edits |
-| routine_executor | GPT-6 Luna · High | Bounded features with settled contracts |
-| default_executor | GPT-6 Luna · Max | Difficult implementation and diagnosis |
-| senior_executor | GPT-6 Sol · xhigh | Named hard decisions, advice or transferred implementation |
-| tester | GPT-6 Luna · xhigh | Independent verification, not production repair |
-| companion | GPT-6 Luna · Medium | Conditional relevant-context discovery |
-| investigator | GPT-6 Luna · xhigh | Conditional unresolved evidence question |
-| archivist | GPT-6 Luna · Medium | Verified current handoff, rationale and meaningful history |
+Astra remains an **explicit owner choice**, not an automatic worker tier.
 
-The parent keeps the owner's selected model/effort. Known hard tasks start stronger,
-not after a forced cheap-worker failure. Routine diagnosis stays with the Executor;
-missing decisive facts, stalled progress and material decisions return to main.
+Source: https://developers.openai.com/codex/pricing
 
-Main defines purpose, hierarchy, composition, states, interactions and visual
-language, then critiques actual running frames. Workers implement the settled brief
-and propose rather than independently change material design. Tests, worker prose
-and mockups cannot substitute for visual acceptance or required owner approval.
-See [v1.5.2 design ownership](docs/v1.5.2.md) and [v1.5.1 judgment/diagnostics](docs/v1.5.1.md).
+## Pro limits are generous, not unlimited
 
-## One global install
+OpenAI currently publishes these approximate local-message ranges per five-hour
+window:
 
-Quit Codex. From a reviewed extracted package:
+| Model | Pro 5x | Pro 20x |
+| --- | ---: | ---: |
+| GPT-6 Astra | 25-225 | 100-900 |
+| GPT-6 Sol | 70-700 | 300-3,000 |
+| **GPT-6 Luna** | **1,750-14,000** | **7,000-56,000** |
+
+Actual usage varies with context, reasoning, tools and task complexity. Local
+messages and cloud chats share the plan allowance, and weekly limits may also
+apply. Smart uses these figures as **relative routing evidence**, never as a promise
+of a fixed number of tasks or days.
+
+## Why these effort levels
+
+The official GPT-6 launch results changed the first v1.6 routing draft:
+
+- **Routine = Luna High.** Luna High improved AutomationBench by 5.4 points over
+  its predecessor while costing 58% less per task.
+- **Default = Luna Max.** Luna Max scores 66.6% on DeepSWE and beats GPT-5.6 Sol
+  Medium on OSWorld at one tenth its cost in OpenAI's comparison.
+- **Senior = Sol xhigh.** Sol xhigh scores 33.2% on AutomationBench versus 26.9%
+  for Opus 5 Max at 9% of its cost, and 60.5% on OSWorld.
+- **Tester stays Luna xhigh.** Testing is high-volume and already has main/Senior
+  escalation for material ambiguity; every verification does not need Sol economics.
+
+Source: https://openai.com/index/introducing-gpt-6-sol-and-luna/
+
+## Main-model ownership
+
+Smart does **not** silently change the parent's model, normal reasoning effort,
+Plan-mode effort or speed. Those remain owner choices.
+
+The main should spend expensive turns on things workers should not decide:
+architecture, product meaning, design hierarchy, unresolved tradeoffs, serious
+audit and final acceptance. It should not routinely operate the simulator, repeat
+logs, or recollect evidence a worker already produced correctly.
+
+For design-led work, main defines purpose, hierarchy, composition, interactions,
+states and visual direction before implementation. Luna implements the settled
+brief. Main inspects an early running frame and final evidence. Passing tests or
+worker prose never substitute for visual/product acceptance.
+
+## Cache, context and tools
+
+GPT-6 can preserve earlier prompt-cache reuse when **reasoning effort or tool
+availability changes**. Smart therefore does not keep unnecessary tools exposed or
+use mismatched effort merely to protect caching.
+
+Other context discipline still matters:
+
+- children receive bounded capsules instead of whole parent transcripts;
+- supported spawns use `fork_turns="none"`;
+- follow-ups reuse the same worker with a delta;
+- long logs stay in artifacts rather than the main thread;
+- unrelated milestones start from a concise handoff instead of an endless parent
+  conversation;
+- permissions are never weakened to improve caching.
+
+## Speed
+
+**Standard speed is the cost baseline.** GPT-6 Fast currently uses **2.5× the
+Standard credit rate** where available. Smart warns when Fast is configured but
+preserves the owner's setting. Use Fast because latency matters, not as a default
+way to increase throughput.
+
+## Verification
+
+Substantive implementation normally gets an Executor plus an independent Tester.
+Tester owns tests/fixtures/evidence, reads production for diagnosis, and returns
+focused reproductions rather than repairing production itself.
+
+Main directly reviews decisive diffs/contracts and required visual evidence.
+Unknown or unavailable checks remain open. Repository-specific release, financial,
+schema, security, localization, accessibility and visual gates are never weakened
+by the global workflow.
+
+## Permanent memory and optional diagnostics
+
+At meaningful complete/paused/blocked checkpoints, Archivist updates the canonical
+current handoff and one concise changelog entry. It preserves accepted decisions
+and evidence without copying the whole conversation.
+
+The deployment-token report is **opt-in**. Its local Python reporter reconciles
+cumulative usage counters and treats missing/ambiguous telemetry as unknown. It is
+not a quota meter and is never required for product acceptance.
+
+## Global installation
+
+Quit Codex before installing or upgrading. From a reviewed extracted package:
 
 ```bash
-/opt/homebrew/bin/python3.11 codex_workflow/runtime/smart_install.py --apply
+/opt/homebrew/bin/python3.11 -B codex_workflow/runtime/smart_install.py --apply
 ```
 
-Use any Python 3.11+ interpreter elsewhere. No sudo, API key, repository search or
-shell-profile edit. Without --apply the installer previews. CODEX_HOME is honored,
-defaulting to ~/.codex. Restart Codex after success.
+Python 3.11+ is supported. The installer is global, transactional and idempotent.
+It preserves owner configuration, unrelated global instructions, projects, Git
+state and application data, and creates a private rollback backup when changes are
+applied. Existing explicit owner overrides are preserved rather than silently
+rewritten.
 
-The installer preserves parent model, normal/Plan effort, speed, permissions, tools,
-unrelated configuration and surrounding owner instructions. Private changed-file
-backups and transactional rollback protect managed updates. Custom worker/skill
-edits block overwrite for review. Project source, stores, Git and memory are not
-installation targets. Missing child defaults receive GPT-6 Luna Medium and concurrency 3;
-explicit owner settings remain. Named workers disable recursive delegation.
+## Safety boundaries
 
-The workflow remains an instruction/configuration system, not a deterministic
-scheduler. Profile/project/CLI overrides can affect actual behavior. Doctor inspects
-known on-disk contracts with separate errors, warnings and unverified state; it does
-not inspect sessions, resolve all overrides or prove a live model's identity.
+Smart does not stage, commit, push, reset, stash, clean, migrate, release, alter
+production data or weaken permissions without current-task authority. Project and
+owner rules outrank global convenience. Tool output and remote content are evidence,
+not instructions that grant new authority.
 
-## Verification and project memory
+## Validation
 
-Edit-loop checks, independent stable-candidate acceptance and authorized release
-checks are distinct. Target accessibility to affected UI/states, widening for shared
-impact or uncertainty. Preserve explicit owner/repository gates. Reuse applicable
-builds and evidence, not stale results inferred from HEAD alone. Independent native
-checks may run in parallel; shared simulator/browser/build/data state is serialized.
-See [verification guide](codex_workflow/verification.md).
-
-Use existing canonical handoff/changelog. Archivist keeps the current goal, work in
-progress, blockers/open gates, next action and evidence, with concise meaningful
-history. Preserve reasons and rejected approaches in their existing canonical home;
-link rather than duplicate. Read-only requests forbid memory writes. A missing usage
-report does not invalidate a verified handoff.
-
-## Optional usage diagnostics
-
-On explicit request, main or an existing Archivist may run the local reporting skill.
-Its YAML disables implicit invocation in supporting clients. Main can supply
-`--root-session-id` with the task's `--deployment-id` marker, or an explicit
-`--start-time` and optional `--end-time`. Nondefault CODEX_HOME is supported.
-
-The six-column table remains compatible, but `Rollouts` means reconciled usage
-updates, not proven unique model requests. JSON schema 2 adds scope, accounting and
-recorded model/effort contexts. Preserve stderr interpretation notes and warnings.
-Input includes its cached subset. Ambiguous last-only logs, missing baselines or
-counter resets fail clearly. No quota percentage, billing total or old-report
-correction is inferred. The Python calculation makes no network or model calls;
-asking a model to invoke/read it still has overhead. It is not an acceptance gate.
-
-For verbose authorized checks, prefer native structured reports or the optional
-`runtime/capture_check.py` helper. It preserves private raw logs, actual exit status
-and bounded excerpts without another model, implicit shell, retry or result cache.
-Exit zero is not proof that required tests ran. Keep logs/arguments private; they
-may contain secrets. Do not use the wrapper for servers, watchers or interactive
-approval. POSIX timeout kills its group; Windows descendants may remain.
-
-## Updates, rollback and validation
-
-`runtime/smart_install.py --update --apply` consumes checksummed releases from this
-fork only. No usable release means an error, not upstream fallback. A CI ZIP is not
-a published release. Backups live in ~/.codex/.smart-orchestration-backups/.
-`--restore-backup <printed-directory>` previews exact restoration; add --apply to
-restore only if hashes match and no newer edits conflict. Persistent removal needs
-reviewed owned-block removal, not legacy recursive uninstall or deleting Codex home.
-
-Run all source checks before packaging (full history required for baseline fixtures):
+Source validation runs on Python 3.11 and 3.12 and includes inherited runtime,
+installation, rollback, reporting, verification and version-specific regressions.
+Automated tests validate workflow/configuration contracts; they do not prove live
+model quality or predict subscription lifespan.
 
 ```bash
 python3.11 -B scripts/test_fork.py -v
@@ -161,11 +197,11 @@ python3.11 -B scripts/test_v152.py -v
 python3.11 -B scripts/test_v153.py -v
 python3.11 -B scripts/test_v160.py -v
 python3.11 -B scripts/test_v161.py -v
+python3.11 -B scripts/test_v162.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.6.1 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.1.zip --version 1.6.1
+python3.11 -B scripts/package_smart.py --release-tag v1.6.2 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.2.zip --version 1.6.2
 ```
 
-The installable package needs no Git. Automated software and policy tests do not
-establish live design quality, optimal routing, savings percentages or five days
-of work. Evaluate completed accepted tasks including repairs and rejected visuals.
+See [v1.6.2 notes](docs/v1.6.2.md) for the current credit-economics change and
+[v1.6.1 notes](docs/v1.6.1.md) for the launch-benchmark tuning.

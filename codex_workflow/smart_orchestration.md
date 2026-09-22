@@ -29,18 +29,18 @@ scan labelled complete. Familiar, settled work needs no new project survey.
 | investigator | Luna xhigh | Optional unresolved evidence question |
 | archivist | Luna Medium | Verified current handoff and meaningful history |
 
-Keep the owner's selected main model/effort. Settled features start with Routine.
+Keep the owner's selected main model/effort. Settled features start Routine.
 Simple requires low risk AND a clear pattern AND decisive
 checks. Missing tests, novel shared state, or security/financial/schema boundaries exclude it.
-A known hard task starts stronger: no forced cheap failure. Judge accepted work
-including rework, not model price.
+Hard bounded implementation uses Default Luna Max. Senior Sol xhigh is only for
+judgment-heavy/high-impact work or material capability/ambiguity gap, not difficulty
+alone. Known Sol-shaped work may start Senior; no forced Luna failure.
 
 Questions or trivial complete edits need no team. Substantive implementation gets
-an appropriate Executor and independent Tester; context/research roles are
-conditional. Main keeps serious audit/plan work, using evidence help only where
-needed. Batch coherent changes, not unrelated epics or one agent per file. One
-production writer owns each shared boundary. Normal fan-out is 1-3 open children.
-Finish support agents before Archivist/escalation; preserve useful handoff.
+an Executor and independent Tester; context/research roles are
+conditional. Main keeps serious audit/plan work. Batch coherent changes, not
+unrelated epics or agents per file. One writer owns each shared boundary. Normal
+fan-out is 1-3 children. Finish support agents before Archivist/escalation.
 
 ## Design ownership
 
@@ -110,9 +110,9 @@ it must not rubber-stamp worker prose. Workers collect build,
 navigation and screenshot evidence where permitted. Return
 batched evidence at a decision, blocker or acceptance point, not every shell line.
 Main reviews artifacts directly without unnecessarily repeating collection.
-Preserve Computer Use and background-feature permissions.
-This is not a hard limit on necessary parent reasoning. Prefer Standard speed; warn on observed
-Fast mode without changing the owner's settings.
+Preserve Computer Use and background-feature permissions. Parent reasoning is
+not capped. Standard is baseline; GPT-6 Fast uses 2.5x credits, so reserve it for
+latency-sensitive work. Warn without changing the owner's speed.
 
 For validation-bearing work consult `verification.md` once. Edit-loop checks,
 independent stable-candidate acceptance, and authorized release gates differ.
