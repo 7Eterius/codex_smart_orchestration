@@ -547,7 +547,7 @@ class MarkerTests(unittest.TestCase):
             ):
                 PackageLayout.resolve(root)
 
-    def test_package_requires_builtin_skill(self) -> None:
+    def test_package_rejects_unexpected_builtin_skill(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "codex_workflow"
             shutil.copytree(
@@ -555,7 +555,9 @@ class MarkerTests(unittest.TestCase):
                 root,
                 ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
             )
-            shutil.rmtree(root / "skills" / "deployment-token-report")
+            unexpected = root / "skills" / "unexpected-skill"
+            unexpected.mkdir(parents=True)
+            (unexpected / "SKILL.md").write_text("# unexpected\n", encoding="utf-8")
             with self.assertRaisesRegex(ValidationError, "package skill set"):
                 PackageLayout.resolve(root)
 
@@ -1016,23 +1018,9 @@ class LifecycleIntegrationTests(unittest.TestCase):
         self.assertFalse((self.runtime.agents / "executor_terra.toml").exists())
         self.assertTrue((self.runtime.agents / "archivist.toml").is_file())
         self.assertTrue((self.runtime.agents / "companion.toml").is_file())
-        self.assertTrue(
-            (
-                self.runtime.skills
-                / "deployment-token-report"
-                / "scripts"
-                / "report_tokens.py"
-            ).is_file()
-        )
-        self.assertTrue(
-            (
-                self.runtime.runtime
-                / "templates"
-                / "skills"
-                / "deployment-token-report"
-                / "SKILL.md"
-            ).is_file()
-        )
+        self.assertEqual(self.package.skill_names, set())
+        if self.runtime.skills.is_dir():
+            self.assertEqual(list(self.runtime.skills.iterdir()), [])
         self.assertNotIn(
             "max_concurrent_threads_per_session",
             self.runtime.config_toml.read_text(encoding="utf-8"),
@@ -1068,15 +1056,12 @@ class LifecycleIntegrationTests(unittest.TestCase):
             set(repeated.agent_actions[0]["framework"]),
         )
 
-    def test_bootstrap_rejects_unowned_skill_collision(self) -> None:
-        collision = self.runtime.skills / "deployment-token-report"
-        collision.mkdir(parents=True)
-        (collision / "SKILL.md").write_text(
-            "---\nname: deployment-token-report\ndescription: local\n---\n",
-            encoding="utf-8",
-        )
-        with self.assertRaisesRegex(ValidationError, "unowned skill directory"):
-            plan_bootstrap(self.package, self.runtime, self.project)
+    def test_bootstrap_preserves_unrelated_user_skill(self) -> None:
+        unrelated = self.runtime.skills / "owner-skill"
+        unrelated.mkdir(parents=True)
+        (unrelated / "SKILL.md").write_text("# owner skill\n", encoding="utf-8")
+        plan_bootstrap(self.package, self.runtime, self.project).apply()
+        self.assertEqual((unrelated / "SKILL.md").read_text(encoding="utf-8"), "# owner skill\n")
 
     def test_bootstrap_cleans_staging_and_keeps_agent_docs_trackable(self) -> None:
         staging = self.project_root / "Codex_Workflow"
@@ -1292,13 +1277,7 @@ class LifecycleIntegrationTests(unittest.TestCase):
         self.assertNotIn("agent_docs/", updated_gitignore)
         self.assertIn(".codex_workflow_hidden_resources/", updated_gitignore)
         self.assertIn("AGENTS.md", updated_gitignore)
-        installed_skill = self.runtime.skills / "deployment-token-report"
-        self.assertEqual(
-            (installed_skill / "SKILL.md").read_text(encoding="utf-8"),
-            (PACKAGE / "skills" / "deployment-token-report" / "SKILL.md").read_text(
-                encoding="utf-8"
-            ),
-        )
+        self.assertEqual(incoming.skill_names, set())
         self.assertTrue(any((self.runtime.runtime / ".backups").iterdir()))
 
     def test_update_removes_retired_orchestration_guides(self) -> None:
@@ -1324,36 +1303,28 @@ class LifecycleIntegrationTests(unittest.TestCase):
         for relative in retired:
             self.assertFalse((self.runtime.runtime / relative).exists())
 
-    def test_update_restores_owned_skill_and_removes_stale_skill_files(self) -> None:
+    def test_update_removes_retired_owned_skill_and_backs_it_up(self) -> None:
         self.bootstrap()
-        installed_skill = self.runtime.skills / "deployment-token-report"
+        installed_skill = self.runtime.skills / "legacy-workflow-skill"
+        installed_skill.mkdir(parents=True)
         (installed_skill / "SKILL.md").write_text(
-            (installed_skill / "SKILL.md")
-            .read_text(encoding="utf-8")
-            .replace("Compile per-agent", "Locally changed per-agent"),
+            "<!-- codex-workflow-skill: legacy-workflow-skill -->\n",
             encoding="utf-8",
         )
         stale = installed_skill / "stale.txt"
         stale.write_text("stale", encoding="utf-8")
-        incoming = self.incoming_package("skill-update-incoming", "1.2.0")
+        state_path = self.runtime.runtime / "install_state.json"
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        state["owned_skills"] = ["legacy-workflow-skill"]
+        state_path.write_text(json.dumps(state) + "\n", encoding="utf-8")
+
+        incoming = self.incoming_package("skill-retirement-incoming", "1.2.0")
         plan = plan_update(incoming, self.runtime, self.project)
         backup = Path(plan.details["backup"])
         plan.apply()
-        self.assertEqual(
-            (installed_skill / "SKILL.md").read_text(encoding="utf-8"),
-            (incoming.skill_templates / "deployment-token-report" / "SKILL.md").read_text(
-                encoding="utf-8"
-            ),
-        )
-        self.assertFalse(stale.exists())
+        self.assertFalse(installed_skill.exists())
         self.assertTrue(
-            (
-                backup
-                / "user"
-                / "skills"
-                / "deployment-token-report"
-                / "SKILL.md"
-            ).is_file()
+            (backup / "user" / "skills" / "legacy-workflow-skill" / "SKILL.md").is_file()
         )
 
     def test_projects_update_against_their_recorded_historical_sources(self) -> None:

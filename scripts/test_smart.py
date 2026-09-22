@@ -438,11 +438,12 @@ class PolicyTests(unittest.TestCase):
                 self.assertIn('Task ID',cfg['developer_instructions'])
                 self.assertNotIn('danger-full-access',cfg.get('sandbox_mode',''))
 
-    def test_preserves_six_column_reporting_and_marker(self):
-        skill=(PACKAGE/'skills/deployment-token-report/SKILL.md').read_text()
-        self.assertIn('| Agent | Quantity | Rollouts | Cached input | Input | Output |',skill)
-        self.assertIn('codex-workflow-deployment-start:',self.policy)
-        self.assertIn('Cached input is a subset of Input',self.policy)
+    def test_no_builtin_token_reporting_surface(self):
+        self.assertEqual(PackageLayout.resolve(PACKAGE).skill_names,set())
+        self.assertFalse((PACKAGE/'skills').exists())
+        self.assertNotIn('deployment-token-report',self.policy)
+        self.assertNotIn('codex-workflow-deployment-start:',self.policy)
+        self.assertIn('Do not generate orchestration token/usage statistics',self.policy)
 
     def test_instruction_lengths_stay_bounded(self):
         self.assertLess(len(self.policy.split()),1500)

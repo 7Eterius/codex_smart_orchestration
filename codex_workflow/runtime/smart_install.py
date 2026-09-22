@@ -22,7 +22,7 @@ if str(PACKAGE) not in sys.path:
 from runtime.errors import ValidationError, WorkflowError
 from runtime.layout import PackageLayout, RuntimePaths, USER_STATE
 from runtime.markers import USER_MANAGED, extract
-from runtime.plan import OperationPlan, read_json, json_mutation
+from runtime.plan import OperationPlan, read_json, read_string_list, resolve_owned_runtime_path, json_mutation
 from runtime.release import parse_semver, acquire, select_latest
 from runtime.runtime_ops import plan_runtime_files
 from runtime.smart_config import patch_config, SMART
@@ -120,7 +120,33 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
         known = template.read_bytes() if template.is_file() else None
         if before != incoming and (known is None or before != known):
             raise ValidationError(f'Custom/unowned worker requires review before replacement: {target}')
-    mutations, owned, _cleanup = plan_runtime_files(package, runtime)
+    mutations, owned, cleanup_dirs = plan_runtime_files(package, runtime)
+
+    # Retired workflow-owned skills are the one deletion class the global installer
+    # may apply automatically. Unknown user files remain preserved. This lets a
+    # reviewed release retire a managed skill instead of silently reinstalling or
+    # leaving it behind.
+    current_state = read_json(runtime.runtime / USER_STATE, default={})
+    previous_owned_skills = set(read_string_list(current_state, 'owned_skills'))
+    retired_skills = previous_owned_skills - package.skill_names
+    retired_skill_roots = tuple(runtime.skills / skill for skill in sorted(retired_skills))
+    retired_template_paths: set[Path] = set()
+    if retired_skills:
+        template_root = runtime.runtime / 'templates' / 'skills'
+        for relative in read_string_list(current_state, 'owned_runtime_files'):
+            parts = Path(relative).parts
+            if len(parts) < 3 or parts[:2] != ('templates', 'skills') or parts[2] not in retired_skills:
+                continue
+            target = resolve_owned_runtime_path(runtime.runtime, relative)
+            mutations.append(Mutation(target, None))
+            retired_template_paths.add(target)
+            cursor = target.parent
+            while cursor.is_relative_to(template_root):
+                cleanup_dirs.append(cursor)
+                if cursor == template_root:
+                    break
+                cursor = cursor.parent
+
     # Preserve every unrelated TOML value, including parent model/effort/speed,
     # tool permissions, agent limits and existing developer instructions.
     rendered_config = patch_config(current_config, home)
@@ -130,10 +156,15 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
     for mutation in mutations:
         safe_path(mutation.path, home)
         if mutation.content is None:
-            # Unknown extra files are not garbage merely because a new package
-            # does not ship them. Never remove owner additions during adoption.
-            preserved_deletions.append(str(mutation.path))
-            continue
+            retired_owned_skill = (
+                any(mutation.path.is_relative_to(root) for root in retired_skill_roots)
+                or mutation.path in retired_template_paths
+            )
+            if not retired_owned_skill:
+                # Unknown extra files are not garbage merely because a new package
+                # does not ship them. Never remove owner additions during adoption.
+                preserved_deletions.append(str(mutation.path))
+                continue
         if mutation.path == runtime.config_toml:
             mutation = Mutation(mutation.path, rendered_config.encode(), 0o600)
         elif mutation.path == runtime.user_agents:
@@ -176,7 +207,8 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
         'workflow':'Smart Orchestration', 'version':package.version, 'scope':str(home),
         'project_mutations':0, 'parent_settings':'preserved', 'child_defaults_added': defaults_added,
         'configuration_assessment': assessment,
-    })
+        'retired_owned_skills': sorted(retired_skills),
+    }, cleanup_dirs=cleanup_dirs)
     return plan, before_by_path
 
 

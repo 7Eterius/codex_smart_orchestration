@@ -201,7 +201,7 @@ class InstalledDesignTests(unittest.TestCase):
         # efficiency price reference. Every other runtime/resource byte stays fixed.
         previous_runtime = snapshot(self.baseline / 'runtime')
         current_runtime = snapshot(PACKAGE / 'runtime')
-        for changed in ('agent_defaults.py', 'efficiency.py'):
+        for changed in ('agent_defaults.py', 'efficiency.py', 'layout.py', 'smart_install.py'):
             self.assertIn(changed, previous_runtime)
             self.assertIn(changed, current_runtime)
             previous_runtime.pop(changed)
@@ -209,17 +209,9 @@ class InstalledDesignTests(unittest.TestCase):
         self.assertEqual(current_runtime, previous_runtime)
         self.assertEqual(snapshot(PACKAGE / 'resources'), snapshot(self.baseline / 'resources'))
 
-        # v1.5.3 intentionally changed only these reporting-skill files.
-        previous_skills = snapshot(self.baseline / 'skills')
-        current_skills = snapshot(PACKAGE / 'skills')
-        for changed in ('deployment-token-report/SKILL.md',
-                        'deployment-token-report/agents/openai.yaml',
-                        'deployment-token-report/scripts/report_tokens.py'):
-            self.assertIn(changed, previous_skills)
-            self.assertIn(changed, current_skills)
-            previous_skills.pop(changed)
-            current_skills.pop(changed)
-        self.assertEqual(current_skills, previous_skills)
+        # Current Smart intentionally ships no built-in skill payload.
+        self.assertTrue(snapshot(self.baseline / 'skills'))
+        self.assertEqual(snapshot(PACKAGE / 'skills'), {})
         self.assertEqual(text('verification.md'), (self.baseline / 'verification.md').read_text())
         for role in TIERS:
             old = tomllib.loads((self.baseline / f'agents/{role}.toml').read_text())

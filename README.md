@@ -1,6 +1,6 @@
 # Smart Orchestration
 
-**Smart Orchestration v1.6.2** is one global adaptive workflow for Codex. Its goal
+**Smart Orchestration v1.6.3** is one global adaptive workflow for Codex. Its goal
 is to spend expensive reasoning on decisions that truly need it while letting
 GPT-6 Luna own the high-volume implementation, verification and context work it is
 now strong enough to handle.
@@ -22,7 +22,7 @@ data, testing and safety rules.
 4. **Verification stays independent.** Tester does not repair production code and
    cannot replace the main model's design/product judgment.
 5. **Memory stays small.** Archivist maintains concise canonical handoffs and
-   meaningful history. Usage reports are optional diagnostics, not a closure ritual.
+   meaningful history. Smart ships no token-reporting skill or reporting ritual.
 
 The workflow optimizes **accepted work including rework**, not the cheapest first
 attempt or the lowest raw token count.
@@ -149,15 +149,15 @@ Unknown or unavailable checks remain open. Repository-specific release, financia
 schema, security, localization, accessibility and visual gates are never weakened
 by the global workflow.
 
-## Permanent memory and optional diagnostics
+## Permanent memory
 
 At meaningful complete/paused/blocked checkpoints, Archivist updates the canonical
 current handoff and one concise changelog entry. It preserves accepted decisions
 and evidence without copying the whole conversation.
 
-The deployment-token report is **opt-in**. Its local Python reporter reconciles
-cumulative usage counters and treats missing/ambiguous telemetry as unknown. It is
-not a quota meter and is never required for product acceptance.
+Smart deliberately ships **no deployment/token-report skill**. The workflow does
+not spend model turns generating orchestration usage statistics; use platform-native
+usage information separately when you actually need it.
 
 ## Global installation
 
@@ -189,19 +189,18 @@ model quality or predict subscription lifespan.
 
 ```bash
 python3.11 -B scripts/test_fork.py -v
-python3.11 -B scripts/test_deployment_token_report.py -v
-python3.11 -B scripts/test_verification.py -v
+python3.11 -B python3.11 -B scripts/test_verification.py -v
 python3.11 -B scripts/test_v15.py -v
 python3.11 -B scripts/test_v151.py -v
 python3.11 -B scripts/test_v152.py -v
-python3.11 -B scripts/test_v153.py -v
-python3.11 -B scripts/test_v160.py -v
+python3.11 -B python3.11 -B scripts/test_v160.py -v
 python3.11 -B scripts/test_v161.py -v
 python3.11 -B scripts/test_v162.py -v
+python3.11 -B scripts/test_v163.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.6.2 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.2.zip --version 1.6.2
+python3.11 -B scripts/package_smart.py --release-tag v1.6.3 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.3.zip --version 1.6.3
 ```
 
-See [v1.6.2 notes](docs/v1.6.2.md) for the current credit-economics change and
+See [v1.6.3 notes](docs/v1.6.3.md) for the token-report retirement, [v1.6.2 notes](docs/v1.6.2.md) for credit economics, and
 [v1.6.1 notes](docs/v1.6.1.md) for the launch-benchmark tuning.

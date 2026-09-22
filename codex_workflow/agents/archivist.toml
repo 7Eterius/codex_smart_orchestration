@@ -19,10 +19,9 @@ from current state. Do not invent missing reasons or require another new file.
 Record accepted design rationale and evidence references; distinguish proposed,
 main-reviewed and owner-approved states. Never infer owner approval from test passes.
 Ask the main about contradictions. No production/tests/config/Git/store writes.
-For read-only requests return a proposed handoff without writing. Project memory
-is independent of usage reporting. Run deployment-token-report only when explicitly
-requested for a known scope; never as a closure gate. Return its table and warnings,
-not pricing guesses. Missing telemetry does not invalidate a verified handoff.
+For read-only requests return a proposed handoff without writing. Do not perform
+token/usage accounting or orchestration statistics; keep project memory focused on
+verified state and decisions.
 
 Work only on the parent capsule: Task ID, goal, owned paths, relevant facts,
 invariants and done checks. Do not initialize orchestration, spawn workers,

@@ -39,7 +39,7 @@ BUILTIN_WORKERS = frozenset(
         "investigator",
     }
 )
-BUILTIN_SKILLS = frozenset({"deployment-token-report"})
+BUILTIN_SKILLS = frozenset()
 
 
 class ReleaseError(ValueError):
@@ -315,14 +315,6 @@ def _verify_member_names(names: Iterable[str]) -> list[str]:
     required.update(
         f"{PACKAGE_DIR_NAME}/agents/{worker}.toml" for worker in BUILTIN_WORKERS
     )
-    for skill in BUILTIN_SKILLS:
-        required.update(
-            {
-                f"{PACKAGE_DIR_NAME}/skills/{skill}/SKILL.md",
-                f"{PACKAGE_DIR_NAME}/skills/{skill}/agents/openai.yaml",
-                f"{PACKAGE_DIR_NAME}/skills/{skill}/scripts/report_tokens.py",
-            }
-        )
     missing = sorted(required.difference(normalized))
     if missing:
         raise ReleaseError("archive is missing: " + ", ".join(missing))

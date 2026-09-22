@@ -37,15 +37,14 @@ jobs:
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then tag="$GITHUB_REF_NAME"; else tag="$MANUAL_TAG"; fi
           version="${tag#v}"
           python -B scripts/test_fork.py -v
-          python -B scripts/test_deployment_token_report.py -v
           python -B scripts/test_verification.py -v
           python -B scripts/test_v15.py -v
           python -B scripts/test_v151.py -v
           python -B scripts/test_v152.py -v
-          python -B scripts/test_v153.py -v
           python -B scripts/test_v160.py -v
           python -B scripts/test_v161.py -v
           python -B scripts/test_v162.py -v
+          python -B scripts/test_v163.py -v
           python -B scripts/package_smart.py --release-tag "$tag" --output-dir smart-dist
           python -B scripts/package_smart.py --verify "smart-dist/codex_workflow-${version}.zip" --version "$version"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
