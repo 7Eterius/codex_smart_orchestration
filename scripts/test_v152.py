@@ -30,14 +30,14 @@ from runtime._toml import tomllib
 
 EXECUTORS = ('simple_executor', 'routine_executor', 'default_executor', 'senior_executor')
 TIERS = {
-    'simple_executor': ('gpt-5.6-luna', 'medium'),
-    'routine_executor': ('gpt-5.6-luna', 'high'),
-    'default_executor': ('gpt-5.6-luna', 'max'),
-    'senior_executor': ('gpt-5.6-sol', 'medium'),
-    'tester': ('gpt-5.6-luna', 'xhigh'),
-    'companion': ('gpt-5.6-luna', 'medium'),
-    'investigator': ('gpt-5.6-luna', 'high'),
-    'archivist': ('gpt-5.6-luna', 'medium'),
+    'simple_executor': ('gpt-6-luna', 'low'),
+    'routine_executor': ('gpt-6-luna', 'medium'),
+    'default_executor': ('gpt-6-luna', 'xhigh'),
+    'senior_executor': ('gpt-6-sol', 'medium'),
+    'tester': ('gpt-6-luna', 'xhigh'),
+    'companion': ('gpt-6-luna', 'medium'),
+    'investigator': ('gpt-6-luna', 'xhigh'),
+    'archivist': ('gpt-6-luna', 'medium'),
 }
 
 
@@ -197,10 +197,19 @@ class InstalledDesignTests(unittest.TestCase):
         return plan, smart_install.apply_plan(plan, before, self.home)
 
     def test_runtime_and_configuration_settings_are_unchanged(self):
-        for relative in ('runtime', 'resources'):
-            self.assertEqual(snapshot(PACKAGE / relative), snapshot(self.baseline / relative))
-        # v1.5.3 intentionally changes only these reporting-skill files. All
-        # other skill bytes, runtime/config defaults and role settings stay fixed.
+        # v1.6 intentionally changes the anonymous child fallback and the dated
+        # efficiency price reference. Every other runtime/resource byte stays fixed.
+        previous_runtime = snapshot(self.baseline / 'runtime')
+        current_runtime = snapshot(PACKAGE / 'runtime')
+        for changed in ('agent_defaults.py', 'efficiency.py'):
+            self.assertIn(changed, previous_runtime)
+            self.assertIn(changed, current_runtime)
+            previous_runtime.pop(changed)
+            current_runtime.pop(changed)
+        self.assertEqual(current_runtime, previous_runtime)
+        self.assertEqual(snapshot(PACKAGE / 'resources'), snapshot(self.baseline / 'resources'))
+
+        # v1.5.3 intentionally changed only these reporting-skill files.
         previous_skills = snapshot(self.baseline / 'skills')
         current_skills = snapshot(PACKAGE / 'skills')
         for changed in ('deployment-token-report/SKILL.md',
@@ -215,8 +224,9 @@ class InstalledDesignTests(unittest.TestCase):
         for role in TIERS:
             old = tomllib.loads((self.baseline / f'agents/{role}.toml').read_text())
             new = tomllib.loads(text(f'agents/{role}.toml'))
-            old.pop('developer_instructions')
-            new.pop('developer_instructions')
+            for key in ('developer_instructions', 'description', 'model', 'model_reasoning_effort'):
+                old.pop(key)
+                new.pop(key)
             self.assertEqual(old, new, role)
 
     def test_fresh_global_install_preserves_parent_and_project(self):

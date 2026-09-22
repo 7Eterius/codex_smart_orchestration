@@ -287,10 +287,10 @@ class PolicyTests(unittest.TestCase):
         self.assertLess(len(policy.split()), 1500)
 
     def test_capabilities_and_recursion_guards_unchanged(self):
-        expected = {'simple_executor':('gpt-5.6-luna','medium'), 'routine_executor':('gpt-5.6-luna','high'),
-                    'default_executor':('gpt-5.6-luna','max'), 'senior_executor':('gpt-5.6-sol','medium'),
-                    'tester':('gpt-5.6-luna','xhigh'), 'companion':('gpt-5.6-luna','medium'),
-                    'investigator':('gpt-5.6-luna','high'), 'archivist':('gpt-5.6-luna','medium')}
+        expected = {'simple_executor':('gpt-6-luna','low'), 'routine_executor':('gpt-6-luna','medium'),
+                    'default_executor':('gpt-6-luna','xhigh'), 'senior_executor':('gpt-6-sol','medium'),
+                    'tester':('gpt-6-luna','xhigh'), 'companion':('gpt-6-luna','medium'),
+                    'investigator':('gpt-6-luna','xhigh'), 'archivist':('gpt-6-luna','medium')}
         package = PackageLayout.resolve(PACKAGE)
         self.assertEqual(package.version, CURRENT_VERSION)
         self.assertEqual(package.worker_names, set(expected))

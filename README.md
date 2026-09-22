@@ -1,10 +1,28 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.5.3**, from
+One globally installed adaptive Codex workflow, version **1.6.0**, from
 `7Eterius/codex_smart_orchestration`. The main model owns planning, product/UX/visual
 design, architecture and serious acceptance. Workers implement bounded contracts;
 Archivist preserves useful current state, decisions and history. No route phrase,
 project-path argument or per-repository orchestration installation is needed.
+
+## v1.6.0: GPT-6 worker generation
+
+All named workers now use GPT-6 Luna or GPT-6 Sol. Efforts follow OpenAI's current
+model-selection guidance rather than guessed benchmark inheritance: simple Luna Low,
+routine Luna Medium, difficult constrained implementation/investigation and Tester
+Luna xhigh, Senior Sol Medium, and concise context/memory roles Luna Medium.
+
+OpenAI currently prices GPT-6 Luna at $0.10/$0.01/$0.50 and GPT-6 Sol at
+$2/$0.20/$10 per million Standard API input/cached/output tokens for short-context
+requests. Those are API economics references, **not a conversion to the included
+Codex/ChatGPT plan allowance**. Public GPT-6 Luna/Sol benchmark score tables are not
+yet available, so the routing is grounded in the official workload/effort guide and
+must be validated on accepted real tasks. See [v1.6.0 notes](docs/v1.6.0.md).
+
+The parent remains owner-selected. GPT-6 Sol Medium is the documented starting
+point closest to Smart's normal quality-first main role, but installation never
+silently changes your parent model, effort, Plan effort, or speed.
 
 ## v1.5.3: evidence-led efficiency
 
@@ -23,14 +41,14 @@ See [v1.5.3 notes](docs/v1.5.3.md) for evidence limits, compatibility and tests.
 
 | Role | Model / effort | Responsibility |
 | --- | --- | --- |
-| simple_executor | Luna Medium | Clear low-risk established-pattern edits |
-| routine_executor | Luna High | Bounded features with settled contracts |
-| default_executor | Luna Max | Difficult implementation and diagnosis |
-| senior_executor | Sol Medium | Named hard decisions, advice or transferred implementation |
-| tester | Luna xhigh | Independent verification, not production repair |
-| companion | Luna Medium | Conditional relevant-context discovery |
-| investigator | Luna High | Conditional unresolved evidence question |
-| archivist | Luna Medium | Verified current handoff, rationale and meaningful history |
+| simple_executor | GPT-6 Luna · Low | Clear low-risk established-pattern edits |
+| routine_executor | GPT-6 Luna · Medium | Bounded features with settled contracts |
+| default_executor | GPT-6 Luna · xhigh | Difficult implementation and diagnosis |
+| senior_executor | GPT-6 Sol · Medium | Named hard decisions, advice or transferred implementation |
+| tester | GPT-6 Luna · xhigh | Independent verification, not production repair |
+| companion | GPT-6 Luna · Medium | Conditional relevant-context discovery |
+| investigator | GPT-6 Luna · xhigh | Conditional unresolved evidence question |
+| archivist | GPT-6 Luna · Medium | Verified current handoff, rationale and meaningful history |
 
 The parent keeps the owner's selected model/effort. Known hard tasks start stronger,
 not after a forced cheap-worker failure. Routine diagnosis stays with the Executor;
@@ -58,7 +76,7 @@ The installer preserves parent model, normal/Plan effort, speed, permissions, to
 unrelated configuration and surrounding owner instructions. Private changed-file
 backups and transactional rollback protect managed updates. Custom worker/skill
 edits block overwrite for review. Project source, stores, Git and memory are not
-installation targets. Missing child defaults receive Luna Medium and concurrency 3;
+installation targets. Missing child defaults receive GPT-6 Luna Medium and concurrency 3;
 explicit owner settings remain. Named workers disable recursive delegation.
 
 The workflow remains an instruction/configuration system, not a deterministic
@@ -122,9 +140,10 @@ python3.11 -B scripts/test_v15.py -v
 python3.11 -B scripts/test_v151.py -v
 python3.11 -B scripts/test_v152.py -v
 python3.11 -B scripts/test_v153.py -v
+python3.11 -B scripts/test_v160.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.5.3 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.5.3.zip --version 1.5.3
+python3.11 -B scripts/package_smart.py --release-tag v1.6.0 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.0.zip --version 1.6.0
 ```
 
 The installable package needs no Git. Automated software and policy tests do not

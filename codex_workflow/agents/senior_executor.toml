@@ -1,7 +1,7 @@
 # codex-workflow-worker: senior_executor
 name = "senior_executor"
 description = "Sol Medium for difficult decisions, advice or transferred implementation."
-model = "gpt-5.6-sol"
+model = "gpt-6-sol"
 model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 

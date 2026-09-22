@@ -1,8 +1,8 @@
 # codex-workflow-worker: investigator
 name = "investigator"
-description = "Optional Luna High investigation of a named unresolved evidence gap."
-model = "gpt-5.6-luna"
-model_reasoning_effort = "high"
+description = "Optional Luna xhigh investigation of a named unresolved evidence gap."
+model = "gpt-6-luna"
+model_reasoning_effort = "xhigh"
 sandbox_mode = "read-only"
 
 developer_instructions = """

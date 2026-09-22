@@ -1,7 +1,7 @@
 # codex-workflow-worker: archivist
 name = "archivist"
 description = "Luna Medium permanent project memory and concise verified changelog."
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 

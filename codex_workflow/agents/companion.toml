@@ -1,7 +1,7 @@
 # codex-workflow-worker: companion
 name = "companion"
 description = "Optional Luna Medium targeted context discovery and consolidation."
-model = "gpt-5.6-luna"
+model = "gpt-6-luna"
 model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
