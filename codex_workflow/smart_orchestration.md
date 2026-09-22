@@ -21,9 +21,9 @@ scan labelled complete. Familiar, settled work needs no new project survey.
 | Role | Model/effort | Work |
 | --- | --- | --- |
 | simple_executor | Luna Low | Low-risk established-pattern changes |
-| routine_executor | Luna Medium | Bounded features with settled contracts |
-| default_executor | Luna xhigh | Difficult implementation or diagnosis |
-| senior_executor | Sol Medium | Hard decisions, advice or transferred ownership |
+| routine_executor | Luna High | Bounded features with settled contracts |
+| default_executor | Luna Max | Difficult implementation or diagnosis |
+| senior_executor | Sol xhigh | Hard decisions, advice or transferred ownership |
 | tester | Luna xhigh | Independent verification, not production repair |
 | companion | Luna Medium | Optional relevant-context discovery |
 | investigator | Luna xhigh | Optional unresolved evidence question |
@@ -76,9 +76,12 @@ Capsule: `Task ID; goal; owned paths; facts/references; invariants; done checks;
 return format`. Self-contained does not mean a repository dump. Use exact paths,
 symbols and decisive evidence. Follow-ups contain deltas and reuse the same owner
 via the available follow-up tool (for example `followup_task`), not reviewer-2.
-Keep the parent model, cwd, tools/MCP, sandbox and approvals stable within a task;
-never weaken permissions to improve caching. Native compaction is not a reason
-to reset useful context after each edit. Begin unrelated milestones with a concise
+Keep the owner-selected parent model, cwd, sandbox and approvals stable unless the
+task or owner requires a change. Do not keep unnecessary tools or a mismatched
+reasoning effort merely for cache continuity: GPT-6 preserves earlier prompt-cache
+reuse across reasoning-effort and tool-availability changes. Change those controls
+only when the platform supports it and task needs justify it; never weaken permissions
+for caching. Native compaction is not a reason to reset useful context after each edit. Begin unrelated milestones with a concise
 Archivist handoff rather than accumulate an endless parent thread. Do not shrink
 context windows or silently disable needed tools. Permission scope is not retrieval.
 

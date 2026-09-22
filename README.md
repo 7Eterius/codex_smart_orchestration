@@ -1,10 +1,29 @@
 # Smart Orchestration
 
-One globally installed adaptive Codex workflow, version **1.6.0**, from
+One globally installed adaptive Codex workflow, version **1.6.1**, from
 `7Eterius/codex_smart_orchestration`. The main model owns planning, product/UX/visual
 design, architecture and serious acceptance. Workers implement bounded contracts;
 Archivist preserves useful current state, decisions and history. No route phrase,
 project-path argument or per-repository orchestration installation is needed.
+
+## v1.6.1: launch-benchmark tuning
+
+OpenAI's GPT-6 Sol/Luna launch article adds direct benchmark evidence that was not
+used in v1.6.0. Smart now uses GPT-6 Luna High for Routine, Luna Max for difficult
+Default implementation, and GPT-6 Sol xhigh only for the Senior escalation role.
+Simple, Tester, Companion, Investigator and Archivist remain unchanged.
+
+The tuning is evidence-specific: Luna High improved AutomationBench by 5.4 points
+versus its predecessor at 58% lower cost per task; Luna Max scored 66.6% on DeepSWE
+and exceeded GPT-5.6 Sol Medium on OSWorld at one tenth the cost; Sol xhigh scored
+33.2% on AutomationBench and 60.5% on OSWorld while remaining far cheaper than the
+reported competitor baselines. These are benchmark/task-cost results, not a promise
+about Codex subscription allowance or every project.
+
+GPT-6 also preserves earlier prompt-cache reuse when reasoning effort or tool
+availability changes. Smart therefore no longer keeps an unnecessary tool surface
+or mismatched effort merely to protect cache. Owner-selected parent model/effort,
+sandbox and approval boundaries remain untouched. See [v1.6.1 notes](docs/v1.6.1.md).
 
 ## v1.6.0: GPT-6 worker generation
 
@@ -42,9 +61,9 @@ See [v1.5.3 notes](docs/v1.5.3.md) for evidence limits, compatibility and tests.
 | Role | Model / effort | Responsibility |
 | --- | --- | --- |
 | simple_executor | GPT-6 Luna · Low | Clear low-risk established-pattern edits |
-| routine_executor | GPT-6 Luna · Medium | Bounded features with settled contracts |
-| default_executor | GPT-6 Luna · xhigh | Difficult implementation and diagnosis |
-| senior_executor | GPT-6 Sol · Medium | Named hard decisions, advice or transferred implementation |
+| routine_executor | GPT-6 Luna · High | Bounded features with settled contracts |
+| default_executor | GPT-6 Luna · Max | Difficult implementation and diagnosis |
+| senior_executor | GPT-6 Sol · xhigh | Named hard decisions, advice or transferred implementation |
 | tester | GPT-6 Luna · xhigh | Independent verification, not production repair |
 | companion | GPT-6 Luna · Medium | Conditional relevant-context discovery |
 | investigator | GPT-6 Luna · xhigh | Conditional unresolved evidence question |
@@ -141,9 +160,10 @@ python3.11 -B scripts/test_v151.py -v
 python3.11 -B scripts/test_v152.py -v
 python3.11 -B scripts/test_v153.py -v
 python3.11 -B scripts/test_v160.py -v
+python3.11 -B scripts/test_v161.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.6.0 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.0.zip --version 1.6.0
+python3.11 -B scripts/package_smart.py --release-tag v1.6.1 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.6.1.zip --version 1.6.1
 ```
 
 The installable package needs no Git. Automated software and policy tests do not

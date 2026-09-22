@@ -130,10 +130,10 @@ class EfficiencyTests(unittest.TestCase):
     def test_role_map_matches_official_workload_guidance(self):
         expected={
             'simple_executor':('gpt-6-luna','low'),
-            'routine_executor':('gpt-6-luna','medium'),
-            'default_executor':('gpt-6-luna','xhigh'),
+            'routine_executor':('gpt-6-luna','high'),
+            'default_executor':('gpt-6-luna','max'),
             'tester':('gpt-6-luna','xhigh'),
-            'senior_executor':('gpt-6-sol','medium'),
+            'senior_executor':('gpt-6-sol','xhigh'),
             'companion':('gpt-6-luna','medium'),
             'investigator':('gpt-6-luna','xhigh'),
             'archivist':('gpt-6-luna','medium'),

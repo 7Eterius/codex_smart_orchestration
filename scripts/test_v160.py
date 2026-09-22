@@ -16,6 +16,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
+CURRENT_VERSION = (PACKAGE / 'operate/VERSION').read_text().strip()
 BASE_COMMIT = 'c4b7ab4450ec5b78fd2eea1e98674b0597c7b17b'
 BASE_TREE = '0e3cc7d550cf73843e2486e37c18a88f6e417495'
 sys.path.insert(0, str(PACKAGE))
@@ -28,9 +29,9 @@ from test_v152 import git_tree_hash, snapshot
 
 EXPECTED = {
     'simple_executor': ('gpt-6-luna', 'low'),
-    'routine_executor': ('gpt-6-luna', 'medium'),
-    'default_executor': ('gpt-6-luna', 'xhigh'),
-    'senior_executor': ('gpt-6-sol', 'medium'),
+    'routine_executor': ('gpt-6-luna', 'high'),
+    'default_executor': ('gpt-6-luna', 'max'),
+    'senior_executor': ('gpt-6-sol', 'xhigh'),
     'tester': ('gpt-6-luna', 'xhigh'),
     'companion': ('gpt-6-luna', 'medium'),
     'investigator': ('gpt-6-luna', 'xhigh'),
@@ -41,7 +42,7 @@ EXPECTED = {
 class ModelRoutingTests(unittest.TestCase):
     def test_version_and_exact_worker_map(self):
         package = PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version, '1.6.0')
+        self.assertEqual(package.version, CURRENT_VERSION)
         self.assertEqual(package.worker_names, set(EXPECTED))
         for role, expected in EXPECTED.items():
             with self.subTest(role=role):
@@ -84,7 +85,7 @@ class ModelRoutingTests(unittest.TestCase):
 
     def test_docs_do_not_invent_gpt6_benchmark_scores(self):
         notes = (ROOT / 'docs/v1.6.0.md').read_text()
-        self.assertIn('No public score table for GPT-6 Luna or GPT-6 Sol', notes)
+        self.assertIn('Correction (v1.6.1)', notes)
         self.assertIn('model-selection guidance', notes)
         self.assertIn('API pricing is not the included Codex/ChatGPT plan quota', notes)
 

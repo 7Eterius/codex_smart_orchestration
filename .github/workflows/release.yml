@@ -44,6 +44,7 @@ jobs:
           python -B scripts/test_v152.py -v
           python -B scripts/test_v153.py -v
           python -B scripts/test_v160.py -v
+          python -B scripts/test_v161.py -v
           python -B scripts/package_smart.py --release-tag "$tag" --output-dir smart-dist
           python -B scripts/package_smart.py --verify "smart-dist/codex_workflow-${version}.zip" --version "$version"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
