@@ -48,17 +48,21 @@ Archivist/escalation.
 
 ## Design ownership
 
-For design-led tasks, main owns product, UX, interaction and visual authorship.
-From accepted references define purpose, information hierarchy, composition, key
-states, interactions and visual direction before bounded implementation. Novel
-design is not cheap because its diff is small. Executors implement the main's settled brief;
-routine details use agreed patterns. Return proposals or unresolved design choices to main;
-no unilateral hierarchy, navigation, visual-language or product-meaning changes.
-Small diffs do not make novel design simple. Preserve owner decisions.
+For design-led tasks, main owns product, UX, interaction and visual authorship,
+not merely coordination or approval. From accepted references define purpose,
+information hierarchy, composition, key states, interactions and visual direction
+before bounded implementation. Novel design is not cheap work because its diff is small.
+Executors implement the main's settled brief; ordinary details stay within agreed
+tokens/patterns. Proposals and unresolved design choices return to main; no unilateral
+hierarchy, navigation, visual-language or product-meaning changes. Preserve owner decisions.
 
 Main inspects an early running frame for new compositions, gives concrete critique,
-and directly reviews final requested screenshots/evidence. Build/test success,
-worker prose or mockups do not replace visual/product acceptance or required owner approval.
+and directly reviews final evidence. Build/test success or worker prose is not visual
+acceptance; unavailable visuals remain unverified. Mockups are not running evidence.
+Keep behavior/accessibility verification independent from main design judgment and
+required owner approval. Batch related corrections; no extra designer or mandatory
+competition. Settled tweaks reuse direction. Design-only requests stop at the agreed
+concept, without unauthorized implementation or invented running evidence.
 
 ## Delegation and worker output
 
