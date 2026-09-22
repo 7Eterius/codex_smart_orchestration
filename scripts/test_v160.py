@@ -64,9 +64,9 @@ class ModelRoutingTests(unittest.TestCase):
         policy = (PACKAGE / 'smart_orchestration.md').read_text()
         for phrase in (
             '| simple_executor | Luna Low |',
-            '| routine_executor | Luna Medium |',
-            '| default_executor | Luna xhigh |',
-            '| senior_executor | Sol Medium |',
+            '| routine_executor | Luna High |',
+            '| default_executor | Luna Max |',
+            '| senior_executor | Sol xhigh |',
             '| tester | Luna xhigh |',
             '| investigator | Luna xhigh |',
         ):
@@ -154,7 +154,7 @@ class InstallAndUpgradeTests(unittest.TestCase):
             cfg = tomllib.loads((self.home / 'agents' / f'{role}.toml').read_text())
             self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), expected)
         self.assertEqual(snapshot(self.project), self.project_before)
-        self.assertEqual(doctor.inspect(self.home)['version'], '1.6.0')
+        self.assertEqual(doctor.inspect(self.home)['version'], CURRENT_VERSION)
         self.assertEqual(plan.details['project_mutations'], 0)
 
     def test_v153_upgrade_updates_named_roles_preserves_explicit_old_fallback(self):
