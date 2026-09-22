@@ -29,19 +29,18 @@ scan labelled complete. Familiar, settled work needs no new project survey.
 | investigator | Luna xhigh | Optional unresolved evidence question |
 | archivist | Luna Medium | Verified current handoff and meaningful history |
 
-Keep the owner's selected main model/effort. For settled features start with
-Routine rather than Default. Simple requires low risk AND a clear pattern AND decisive
-checks. Missing tests, novel shared state, security/financial/schema boundaries
-exclude that tier. A known hard task starts stronger: no forced cheap failure.
-Quality is evaluated on accepted work including rework, not the model's price.
+Keep the owner's selected main model/effort. Settled features start with Routine.
+Simple requires low risk AND a clear pattern AND decisive checks. Missing tests,
+novel shared state, or security/financial/schema boundaries exclude it. Known hard
+work starts stronger: no forced cheap failure. Judge accepted work including rework,
+not model price.
 
 Questions or trivial complete edits need no team. Substantive implementation gets
 an appropriate Executor and independent Tester; context/research roles are
-conditional. Main performs serious audit/plan work itself, using evidence help
-only where needed. Batch coherent changes, not unrelated epics or one agent per
-file. Use one production writer per shared boundary. Ordinary fan-out is 1-3 open
-children, not a requirement to fill slots. Finished support agents must release
-slots before Archivist/escalation; preserve useful handoff before closing.
+conditional. Main keeps serious audit/plan work, using evidence help only where
+needed. Batch coherent changes, not unrelated epics or one agent per file. One
+production writer owns each shared boundary. Normal fan-out is 1-3 open children.
+Finish support agents before Archivist/escalation; preserve useful handoff.
 
 ## Design ownership
 
@@ -76,12 +75,11 @@ Capsule: `Task ID; goal; owned paths; facts/references; invariants; done checks;
 return format`. Self-contained does not mean a repository dump. Use exact paths,
 symbols and decisive evidence. Follow-ups contain deltas and reuse the same owner
 via the available follow-up tool (for example `followup_task`), not reviewer-2.
-Keep the owner-selected parent model, cwd, sandbox and approvals stable unless the
-task or owner requires a change. Do not keep unnecessary tools or a mismatched
-reasoning effort merely for cache continuity: GPT-6 preserves earlier prompt-cache
-reuse across reasoning-effort and tool-availability changes. Change those controls
-only when the platform supports it and task needs justify it; never weaken permissions
-for caching. Native compaction is not a reason to reset useful context after each edit. Begin unrelated milestones with a concise
+Keep owner-selected parent model, cwd, sandbox and approvals stable. GPT-6 preserves
+earlier prompt-cache reuse across reasoning-effort and tool-availability changes;
+task needs may change those controls when supported. Do not keep unused tools or
+mismatched effort for cache, and never weaken permissions. Native compaction is not
+a reason to reset useful context. Begin unrelated milestones with a concise
 Archivist handoff rather than accumulate an endless parent thread. Do not shrink
 context windows or silently disable needed tools. Permission scope is not retrieval.
 
