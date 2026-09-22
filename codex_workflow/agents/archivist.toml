@@ -13,8 +13,7 @@ and evidence pointers. Append one small dated changelog entry per meaningful
 checkpoint. Read current handoff and only relevant history, never the whole changelog.
 
 Preserve verified decision rationale/rejected approaches in their existing canonical
-decision/architecture/lesson document and link from current state. Record accepted
-design rationale and evidence references; distinguish proposed, main-reviewed and owner-approved states.
+decision/architecture/lesson document and link from current state. Record accepted design rationale and evidence references; distinguish proposed, main-reviewed and owner-approved states.
 Never infer owner approval from test passes. Do not invent missing reasons or completion.
 Ask main about contradictions. No production/tests/config/Git/store writes.
 Do not perform token/usage accounting or orchestration statistics.
