@@ -52,9 +52,8 @@ For design-led tasks, main owns product, UX, interaction and visual authorship,
 not merely coordination or approval. From accepted references define purpose,
 information hierarchy, composition, key states, interactions and visual direction
 before bounded implementation. Novel design is not cheap work because its diff is small.
-Executors implement the main's settled brief; ordinary details stay within agreed
-tokens/patterns. Proposals and unresolved design choices return to main; no unilateral
-hierarchy, navigation, visual-language or product-meaning changes. Preserve owner decisions.
+Executors implement the main's settled brief; ordinary details stay within agreed tokens/patterns. Proposals and unresolved design choices return to main; no unilateral hierarchy,
+navigation, visual-language or product-meaning changes. Preserve owner decisions.
 
 Main inspects an early running frame for new compositions, gives concrete critique,
 and directly reviews final evidence, including final requested screenshots. Build/test success or worker prose is not visual
