@@ -57,7 +57,7 @@ tokens/patterns. Proposals and unresolved design choices return to main; no unil
 hierarchy, navigation, visual-language or product-meaning changes. Preserve owner decisions.
 
 Main inspects an early running frame for new compositions, gives concrete critique,
-and directly reviews final evidence. Build/test success or worker prose is not visual
+and directly reviews final evidence, including final requested screenshots. Build/test success or worker prose is not visual
 acceptance; unavailable visuals remain unverified. Mockups are not running evidence.
 Keep behavior/accessibility verification independent from main design judgment and
 required owner approval. Batch related corrections; no extra designer or mandatory
