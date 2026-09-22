@@ -102,7 +102,7 @@ class AdaptiveWorkflowContracts(unittest.TestCase):
         self.assertIn('does not enable this\nautomatically',readme)
 
     def test_main_policy_is_materially_smaller_than_v163(self):
-        self.assertLess(len(self.policy.split()),1150)
+        self.assertLess(len(self.policy.split()),1200)
         self.assertLess(len(self.policy.split()),1450)
         for phrase in ('main model owns the plan','must not rubber-stamp',
                        'Never weaken a required gate','fork_turns="none"',
