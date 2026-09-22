@@ -87,8 +87,8 @@ Main may obtain read-only advice and return a precise delta.
 
 ## Risk-adaptive verification
 
-For verification-bearing work consult `verification.md` once. Never weaken a
-required gate or repository-specific verification rule.
+For verification-bearing work consult `verification.md` once. Never weaken a required gate
+or repository-specific verification rule.
 
 - **Simple:** self-check the decisive local behavior; no independent Tester by default.
 - **Routine:** add independent Tester when behavior/state/integration/UI/accessibility,
