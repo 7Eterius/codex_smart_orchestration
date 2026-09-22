@@ -30,8 +30,8 @@ scan labelled complete. Familiar, settled work needs no new project survey.
 | archivist | Luna Medium | Verified current handoff and meaningful history |
 
 Keep the owner's selected main model/effort. Settled features start with Routine.
-Simple requires low risk AND a clear pattern AND decisive checks.
-Missing tests, novel shared state, or security/financial/schema boundaries exclude it.
+Simple requires low risk AND a clear pattern AND decisive
+checks. Missing tests, novel shared state, or security/financial/schema boundaries exclude it.
 A known hard task starts stronger: no forced cheap failure. Judge accepted work
 including rework, not model price.
 
