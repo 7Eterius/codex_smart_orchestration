@@ -41,11 +41,11 @@ Unrelated logic changes need no new UI audit only when UI impact is demonstrably
 ## Browser and Computer Use
 
 Prefer deterministic evidence before screenshots. For local web work, inspect
-source/tests and Browser DOM, console and network state. Use Computer Use for native
+source/tests and Browser DOM, console and network. Use Computer Use for native
 or GUI-only behavior, simulators, system settings and multi-app journeys. The capsule
 states start state, journey and expected result.
 
-Batch GUI checks around a stable candidate; reuse valid sessions and serialize shared
+Batch GUI checks around a stable candidate; reuse sessions and serialize shared
 GUI state. Screenshots prove visible state only, not hidden logic, accessibility,
 persistence or network correctness. Main owns visual judgment. Astra may be
 owner-selected for difficult screenshot/spatial judgment; ordinary Computer Use does
