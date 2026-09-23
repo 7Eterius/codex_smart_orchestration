@@ -133,7 +133,7 @@ fresh main session seeded by that handoff; use platform-native compaction if ava
 
 Use one Archivist at meaningful checkpoints. Read current state next session, not the entire changelog.
 Canonical state records goal, progress, open gates, next action and evidence; changelog
-holds append-only dated meaningful deltas. Keep durable rationale in the existing
+holds append-only dated meaningful deltas. Keep durable decision rationale in the existing
 decision/architecture/lesson document. Do not invent undocumented reasons.
 Archivist must not invent a resolution or mark pending work done. No secrets or raw
 transcripts. Read-only/no-write requests forbid memory writes.
