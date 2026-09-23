@@ -19,7 +19,7 @@ Smart installer.
 Change permission to **Approve for me** or **Full access**. Then send:
 
 ```text
-Download the latest non-draft Smart Orchestration release from https://github.com/7Eterius/codex_smart_orchestration/releases. Download both codex_workflow-<version>.zip and SHA256SUMS. Verify the ZIP against SHA256SUMS, extract it to a temporary directory, then read the bundled codex_workflow/operate/smart_install.md and follow it to complete the global installation. Use Python 3.11 or newer and runtime/smart_install.py --apply. Preserve my existing Codex configuration and project files. If no usable release exists, checksum verification fails, or the installer reports a conflict, stop and report it instead of falling back to source files, historical dist archives, or another repository.
+Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md, validate the extracted package with Python 3.11 or newer using codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json, then install it globally using codex_workflow/runtime/smart_install.py --package-root codex_workflow --apply. Preserve my existing Codex configuration and all project files. If download, extraction, validation, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed.
 ```
 
 > ⭐ **Recommended:** use **GPT-6 Luna xhigh** for installation.
@@ -30,17 +30,14 @@ Smart Orchestration is installed once globally under `~/.codex/`. You do not nee
 to install it separately for each project. Open any project normally and Smart will
 load automatically while that project's own `AGENTS.md` rules remain in force.
 
-For future releases, send one of these commands to Codex:
+### Updating
 
-```text
-codex_workflow --check-update
-codex_workflow --update
-```
+Until formal GitHub Releases are used, **`main` is the distribution channel**.
+To update Smart Orchestration, run the same installation prompt again. It resolves the
+newest `main` commit and reapplies only workflow-managed changes transactionally.
 
-The updater verifies the release package and applies the update transactionally while
-preserving owner configuration and project files. Do not uninstall as a routine
-upgrade step. If an update reports customized managed files or configuration drift,
-review that conflict instead of forcing replacement.
+Do not uninstall before updating. If the installer reports customized managed files
+or configuration drift, review that conflict instead of forcing replacement.
 
 > Requires **Python 3.11 or newer** for deterministic lifecycle operations.
 
