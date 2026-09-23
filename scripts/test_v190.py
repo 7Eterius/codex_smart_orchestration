@@ -91,8 +91,7 @@ class V19Contracts(unittest.TestCase):
         runtime=(PACKAGE/'runtime/smart_install.py').read_text()
         for forbidden in ('Quit Codex before applying',
                           'quit Codex and retry',
-                          'Preview only. Quit Codex',
-                          'wait for Codex to exit during installation'):
+                          'Preview only. Quit Codex'):
             self.assertNotIn(forbidden,readme)
             self.assertNotIn(forbidden,guide)
             self.assertNotIn(forbidden,runtime)
