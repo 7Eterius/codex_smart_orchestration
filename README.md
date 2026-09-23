@@ -1,9 +1,9 @@
 # Smart Orchestration
 
-**Smart Orchestration v1.8.0** is a global adaptive Codex workflow optimized for
+**Smart Orchestration v1.9.0** is a global adaptive Codex workflow optimized for
 high-quality accepted work with GPT-6 economics. The main model owns judgment;
 GPT-6 Luna performs bounded work; GPT-6 Sol handles parent judgment and rare advisory
-escalation. v1.8 adds runtime-aware effort, stronger grounding and Computer Use discipline.
+escalation. v1.9 separates cheap GUI operation from expensive design judgment and removes Max from automatic routing.
 
 Install once globally. There are no Light/Medium/Heavy routes and no per-repository
 setup. Project `AGENTS.md` rules remain authoritative for product, safety and
@@ -18,7 +18,7 @@ acceptance requirements.
               ┌────────────┼────────────┐
               │            │            │
          Simple Luna   Routine Luna   Default Luna
-            Low           High            Max
+            Low           High           xhigh
                                            │
                                   hard judgment gap?
                                      │          │
@@ -32,7 +32,7 @@ acceptance requirements.
                                                 │
                                            Luna continues
 
-                    Tester Luna xhigh when risk warrants
+                    Tester Luna High when risk warrants
                     Archivist Luna Medium at milestones
 ```
 
@@ -44,11 +44,11 @@ attempt or the lowest raw token count.
 | Role | Model / effort | Default responsibility |
 | --- | --- | --- |
 | **Main** | Owner-selected | Plan, architecture, product/UX/visual design, serious audit, acceptance |
-| simple_executor | GPT-6 Luna · Low | Small established-pattern edits |
+| simple_executor | GPT-6 Luna · Low | Small edits; mechanical Browser/Computer operation; explicit checks |
 | routine_executor | GPT-6 Luna · High | Primary lane for normal bounded implementation |
-| default_executor | GPT-6 Luna · Max | Rare deep bounded implementation/diagnosis |
+| default_executor | GPT-6 Luna · xhigh | Deep bounded implementation/diagnosis |
 | senior_executor | GPT-6 Sol · xhigh | Advisory hard judgment; transferred implementation only when justified |
-| tester | GPT-6 Luna · xhigh | Independent verification when risk warrants |
+| tester | GPT-6 Luna · High | Independent judgment-bearing verification when risk warrants |
 | companion | GPT-6 Luna · Medium | Targeted project-context discovery |
 | investigator | GPT-6 Luna · xhigh | One unresolved evidence question |
 | archivist | GPT-6 Luna · Medium | Concise milestone handoff and meaningful history |
@@ -65,10 +65,10 @@ Current Work/Codex Standard credit rates per million tokens are:
 | GPT-6 Sol | 50 | 5 | 250 | 20× |
 | GPT-6 Astra | 250 | 25 | 1,250 | 100× |
 
-Most settled implementation stays with **Luna High**. **Luna Max** is reserved for
-genuinely deep bounded work, not anything merely difficult. Sol is not an automatic
-next rung because "stronger must be safer." Astra is never automatic; it is an
-explicit owner choice.
+Most settled implementation stays with **Luna High**. **Luna xhigh** handles deep
+bounded work. Max is intentionally absent from automatic routing; use it only when
+your own evaluations show a material gain over xhigh. Sol is for judgment/capability
+gaps, and Astra remains an explicit owner choice.
 
 Source: https://developers.openai.com/codex/pricing
 
@@ -106,7 +106,7 @@ Independent testing is valuable when it adds information, not as ceremony.
 | --- | --- |
 | Simple Luna Low | **No by default**; executor runs decisive local check |
 | Routine Luna High | **Conditional** for behavior/state/integration/UI/accessibility/shared-contract or cross-boundary impact |
-| Default Luna Max | **Yes by default** |
+| Default Luna xhigh | **Yes by default** |
 | Senior-transferred implementation | **Yes by default** |
 
 Repository rules always override this matrix. A financial/security/schema/release
@@ -123,10 +123,9 @@ The parent keeps the owner's selected model, normal/Plan effort and speed. Smart
 does not silently switch the main model.
 
 For a manually selected GPT-6 Sol parent, **GPT-6 Sol Medium** is the normal
-cost/quality baseline. Raise effort only for a named hard judgment. GPT-6 can preserve
-the earlier cached prefix across supported in-session effort changes, but Smart uses
-that only when the active runtime exposes a safe mechanism. It does not invent Codex
-TOML keys or rewrite owner configuration.
+cost/quality baseline. Raise to High/xhigh for hard architecture, product, UX or design
+judgment when the active runtime safely supports in-session effort updates, then lower
+it. Smart does not invent Codex TOML keys or rewrite owner configuration.
 
 Main spends its expensive turns on architecture, product meaning, design hierarchy,
 unresolved tradeoffs, serious audit and final acceptance. Workers collect routine
@@ -141,23 +140,23 @@ visual/product acceptance.
 ### Optional Luna-parent pilot
 
 For an **implementation-only session** where architecture, product behavior and
-design are already settled, the owner may deliberately select GPT-6 Luna Max as
+design are already settled, the owner may deliberately select GPT-6 Luna xhigh as
 the parent and use Senior Sol as advisory escalation. Smart does not enable this
-automatically and does not claim Luna Max is equivalent to Sol for ambiguous
+automatically and does not claim Luna xhigh is equivalent to Sol for ambiguous
 architecture/product/design work. Evaluate accepted output and rework before making
 it a personal default.
 
 ## Browser and Computer Use
 
-For local web work, prefer source/tests plus Browser DOM, console and network evidence
-before repeated screenshots. Use the built-in Browser for normal local verification.
-Use Computer Use for native or GUI-only behavior, simulators, system settings and
-multi-app journeys, and batch those journeys around a stable candidate.
+Smart separates **operator work** from **judgment**. Simple Luna Low handles mechanical
+web lookup, known Browser/Computer flows, explicit development configuration through
+a GUI, DOM/console/network inspection, screenshots and checks against stated observable
+criteria. Several mechanical tool turns should normally leave the expensive parent;
+one or two trivial actions may stay there to avoid delegation overhead.
 
-The main still owns final product and visual acceptance. GPT-6 Astra can be useful for
-difficult screenshot or spatial visual judgment, but Smart never auto-selects it for
-ordinary Computer Use. Current Codex credit rates make Astra 5× Sol and 100× Luna, so
-that escalation should buy a real visual-capability gain.
+The main or Senior Sol handles UX, interaction, hierarchy and visual critique. Astra
+is owner-selected only when difficult spatial/visual judgment itself needs stronger
+intelligence. A screenshot or Computer Use task alone never triggers Astra or Tester.
 
 ## Compact worker handoffs
 
@@ -258,9 +257,10 @@ python3.11 -B scripts/test_v162.py -v
 python3.11 -B scripts/test_v163.py -v
 python3.11 -B scripts/test_v170.py -v
 python3.11 -B scripts/test_v180.py -v
+python3.11 -B scripts/test_v190.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.8.0 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.8.0.zip --version 1.8.0
+python3.11 -B scripts/package_smart.py --release-tag v1.9.0 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.9.0.zip --version 1.9.0
 ```
 
-See [v1.8.0 notes](docs/v1.8.0.md).
+See [v1.9.0 notes](docs/v1.9.0.md).

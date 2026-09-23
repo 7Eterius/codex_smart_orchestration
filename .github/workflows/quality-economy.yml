@@ -36,6 +36,7 @@ jobs:
           python -B scripts/test_v163.py -v 2>&1 | tee v163-tests.log
           python -B scripts/test_v170.py -v 2>&1 | tee v170-tests.log
           python -B scripts/test_v180.py -v 2>&1 | tee v180-tests.log
+          python -B scripts/test_v190.py -v 2>&1 | tee v190-tests.log
       - name: Validate and package
         shell: bash
         run: |
@@ -61,5 +62,6 @@ jobs:
             v163-tests.log
             v170-tests.log
             v180-tests.log
+            v190-tests.log
             smart-dist/codex_workflow-*.zip
             smart-dist/SHA256SUMS

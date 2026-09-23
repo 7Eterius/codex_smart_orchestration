@@ -25,9 +25,9 @@ from test_v152 import git_tree_hash,snapshot
 EXPECTED={
     'simple_executor':('gpt-6-luna','low'),
     'routine_executor':('gpt-6-luna','high'),
-    'default_executor':('gpt-6-luna','max'),
+    'default_executor':('gpt-6-luna','xhigh'),
     'senior_executor':('gpt-6-sol','xhigh'),
-    'tester':('gpt-6-luna','xhigh'),
+    'tester':('gpt-6-luna','high'),
     'companion':('gpt-6-luna','medium'),
     'investigator':('gpt-6-luna','xhigh'),
     'archivist':('gpt-6-luna','medium'),
@@ -99,7 +99,7 @@ class AdaptiveWorkflowContracts(unittest.TestCase):
     def test_optional_luna_parent_is_documented_not_automatic(self):
         readme=(ROOT/'README.md').read_text()
         self.assertIn('Optional Luna-parent pilot',readme)
-        self.assertIn('owner may deliberately select GPT-6 Luna Max',readme)
+        self.assertIn('owner may deliberately select GPT-6 Luna xhigh',readme)
         self.assertIn('does not enable this\nautomatically',readme)
 
     def test_main_policy_is_materially_smaller_than_v163(self):

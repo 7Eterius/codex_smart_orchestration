@@ -32,9 +32,9 @@ EXECUTORS = ('simple_executor', 'routine_executor', 'default_executor', 'senior_
 TIERS = {
     'simple_executor': ('gpt-6-luna', 'low'),
     'routine_executor': ('gpt-6-luna', 'high'),
-    'default_executor': ('gpt-6-luna', 'max'),
+    'default_executor': ('gpt-6-luna', 'xhigh'),
     'senior_executor': ('gpt-6-sol', 'xhigh'),
-    'tester': ('gpt-6-luna', 'xhigh'),
+    'tester': ('gpt-6-luna', 'high'),
     'companion': ('gpt-6-luna', 'medium'),
     'investigator': ('gpt-6-luna', 'xhigh'),
     'archivist': ('gpt-6-luna', 'medium'),

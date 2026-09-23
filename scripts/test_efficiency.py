@@ -148,8 +148,8 @@ class EfficiencyTests(unittest.TestCase):
         expected={
             'simple_executor':('gpt-6-luna','low'),
             'routine_executor':('gpt-6-luna','high'),
-            'default_executor':('gpt-6-luna','max'),
-            'tester':('gpt-6-luna','xhigh'),
+            'default_executor':('gpt-6-luna','xhigh'),
+            'tester':('gpt-6-luna','high'),
             'senior_executor':('gpt-6-sol','xhigh'),
             'companion':('gpt-6-luna','medium'),
             'investigator':('gpt-6-luna','xhigh'),
@@ -166,7 +166,7 @@ class EfficiencyTests(unittest.TestCase):
                        'Never weaken a required gate','independent Tester','No secrets',
                        'read-only advice','Stop the old\nwriter','one Archivist',
                        'Missing tests, novel shared state','low risk AND a clear pattern AND decisive\nchecks',
-                       'Hard bounded implementation uses Default Luna Max',
+                       'Hard bounded implementation uses Default Luna xhigh',
                        'not difficulty\nalone','no forced Luna failure'):
             self.assertIn(phrase,policy)
         self.assertLess(len(policy.split()),1500)

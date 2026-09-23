@@ -1,56 +1,51 @@
 # Smart Orchestration engineering notes
 
-## v1.8 operating model
+## v1.9 operating model
 
-The canonical parent workflow is `codex_workflow/smart_orchestration.md`. Global
-activation remains a small validated bootstrap; project product, safety and acceptance
-rules stay authoritative.
+The canonical parent policy is `codex_workflow/smart_orchestration.md`. v1.9 keeps
+the eight named roles and changes effort allocation, not the runtime architecture.
 
-v1.8 keeps the eight named GPT-6 roles. Routine Luna High is the primary bounded
-implementation lane. Default Luna Max is a rare deep-work lane. Senior Sol xhigh stays
-advisory-first and takes production ownership only when hard judgment and implementation
-cannot be separated. The installer never rewrites the owner's parent model, effort,
-speed, approvals or tool permissions.
+Simple Luna Low now owns low-risk mechanical Browser/Computer operation as well as
+small established-pattern edits. Routine Luna High remains the primary implementation
+lane. Default Luna moves from Max to xhigh. Tester moves from xhigh to High and is
+reserved for independent verification that adds judgment, not deterministic GUI
+navigation. Senior Sol xhigh remains advisory-first.
 
-For manually selected GPT-6 Sol parents, Medium is the documented cost/quality
-baseline. Supported runtimes may raise reasoning effort around one hard decision and
-then lower it while retaining the earlier cached prefix. Smart does not emulate this
-with undocumented Codex configuration.
+The installer still preserves the owner's parent model, effort, speed, approvals and
+tool permissions. For a manually selected Sol parent, Medium is the normal baseline.
+When the runtime exposes safe in-session effort updates, hard architecture, product,
+UX or design decisions may temporarily use High/xhigh and then return to Medium.
+
+## Operator versus judge
+
+Browser/Computer Use is split by cognitive job, not by tool. Mechanical navigation,
+web lookup, explicit GUI configuration, DOM/console/network inspection, screenshot
+collection and checks against explicit criteria are operator work and should normally
+use Simple Luna Low when they require several tool turns.
+
+Product/UX/design interpretation remains main/Senior work. Astra is owner-selected
+only for difficult spatial or visual judgment. Computer Use alone is never a reason
+to escalate to a stronger model.
 
 ## Context and tools
 
-Workers receive bounded capsules with `fork_turns="none"` and follow-ups send deltas.
+Workers receive bounded capsules with `fork_turns="none"`; follow-ups send deltas.
 Companion, Investigator and Archivist distinguish sourced facts, inference and unknown
-evidence.
-
-When available, deferred tool loading/tool search is preferred to carrying irrelevant
-schemas. Async slow I/O can replace a waiting worker, but GPT-6 multi-agent mode must
-not combine async tools with parallel tool calls. These are runtime capabilities, not
-new static TOML keys in this package.
-
-## Browser and Computer Use
-
-Local web verification starts with source/tests and Browser DOM, console and network
-evidence. Computer Use is for native or GUI-only behavior, simulators, system settings
-and multi-app journeys. GUI checks are batched around stable candidates. The main owns
-visual/product acceptance. Astra remains owner-selected for genuinely difficult
-screenshot or spatial visual judgment, not a default Computer Use model.
+evidence. Deferred tool loading/tool search and async I/O are used only when exposed
+by the runtime; Smart does not invent configuration keys.
 
 ## Installation and safety
 
-`smart_install.py` performs user-level adoption only and never scans or mutates
-project roots. Existing owner configuration is preserved. Backups contain changed
-files only, installation is idempotent, and custom managed-worker edits require
-review rather than forced replacement.
+`smart_install.py` remains global, transactional and project-safe. Existing owner
+configuration is preserved. Automated tests validate package, migration and policy
+contracts, not live model quality or subscription lifespan.
 
-Automated tests validate package, migration and policy contracts, not live model
-quality or subscription lifespan.
+## Primary references
 
-## Primary configuration references
-
-- https://developers.openai.com/codex/subagents/
-- https://developers.openai.com/codex/guides/agents-md/
-- https://developers.openai.com/codex/config-reference/
-- https://developers.openai.com/codex/app/browser
-- https://developers.openai.com/codex/app/computer-use
 - https://developers.openai.com/api/docs/guides/model-selection
+- https://developers.openai.com/api/docs/guides/latest-model
+- https://developers.openai.com/api/docs/guides/prompt-caching
+- https://developers.openai.com/api/docs/guides/tools-computer-use
+- https://developers.openai.com/api/docs/models/gpt-6-luna
+- https://developers.openai.com/api/docs/models/gpt-6-sol
+- https://www.orcarouter.ai/blog/gpt-6-luna-vs-gpt-6-sol

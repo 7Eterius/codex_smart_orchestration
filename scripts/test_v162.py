@@ -25,9 +25,9 @@ from test_v152 import git_tree_hash,snapshot
 EXPECTED={
     'simple_executor':('gpt-6-luna','low'),
     'routine_executor':('gpt-6-luna','high'),
-    'default_executor':('gpt-6-luna','max'),
+    'default_executor':('gpt-6-luna','xhigh'),
     'senior_executor':('gpt-6-sol','xhigh'),
-    'tester':('gpt-6-luna','xhigh'),
+    'tester':('gpt-6-luna','high'),
     'companion':('gpt-6-luna','medium'),
     'investigator':('gpt-6-luna','xhigh'),
     'archivist':('gpt-6-luna','medium'),
@@ -58,7 +58,7 @@ class CreditAndReadmeContracts(unittest.TestCase):
 
     def test_policy_is_luna_first_sol_exceptional(self):
         policy=(PACKAGE/'smart_orchestration.md').read_text()
-        for phrase in ('Hard bounded implementation uses Default Luna Max',
+        for phrase in ('Hard bounded implementation uses Default Luna xhigh',
                        'Senior Sol xhigh is only for',
                        'not difficulty\nalone',
                        'Known Sol-shaped work may start Senior',
