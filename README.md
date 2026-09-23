@@ -259,8 +259,8 @@ python3.11 -B scripts/test_v163.py -v
 python3.11 -B scripts/test_v170.py -v
 python3.11 -B scripts/test_v180.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.7.0 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.7.0.zip --version 1.7.0
+python3.11 -B scripts/package_smart.py --release-tag v1.8.0 --output-dir smart-dist
+python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.8.0.zip --version 1.8.0
 ```
 
 See [v1.8.0 notes](docs/v1.8.0.md).
