@@ -196,6 +196,36 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse(legacy.exists())
         self.assertFalse(skill.exists())
 
+    def test_migrates_legacy_state_without_hashes_using_source_cache(self):
+        self.install()
+        runtime = RuntimePaths(self.home)
+
+        legacy = runtime.runtime / "heavy_route.md"
+        legacy.write_text("legacy route\n")
+        generated = runtime.runtime / "templates" / "AGENTS.md"
+        generated.parent.mkdir(parents=True, exist_ok=True)
+        generated.write_text("legacy project template\n")
+
+        source = runtime.runtime / ".source_backup" / "1.9.0"
+        source.mkdir(parents=True)
+        (source / "heavy_route.md").write_text("legacy route\n")
+        (source / "AGENTS.md").write_text("legacy project template\n")
+
+        state_path = runtime.runtime / "install_state.json"
+        state = json.loads(state_path.read_text())
+        state["schema_version"] = 1
+        state.pop("owned_runtime_hashes", None)
+        state["owned_runtime_files"].extend(
+            ["heavy_route.md", "templates/AGENTS.md"]
+        )
+        state_path.write_text(json.dumps(state, indent=2) + "\n")
+
+        plan, before = smart_install.prepare(PACKAGE, self.home)
+        smart_install.apply_plan(plan, before, self.home)
+        self.assertFalse(legacy.exists())
+        self.assertFalse(generated.exists())
+        self.assertFalse((runtime.runtime / ".source_backup").exists())
+
     def test_locally_modified_retired_file_is_preserved(self):
         self.install()
         runtime = RuntimePaths(self.home)
