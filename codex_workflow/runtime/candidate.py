@@ -15,6 +15,8 @@ import re
 import stat
 import sys
 
+MAX_BATCH = 16
+MAX_BATCH_PREVIEW_PATHS = 20
 MAX_FILES = 5000
 MAX_BYTES = 64 * 1024 * 1024
 MAX_MANIFEST_BYTES = 4 * 1024 * 1024
@@ -197,6 +199,45 @@ def write_manifest(manifest: dict, output: Path) -> None:
         stream.write(content)
 
 
+def verify_many(manifests: list[Path]) -> dict:
+    """Fresh independent reads in one call, never acceptance or a shared result cache.
+
+    Preserve every manifest outcome. A malformed/unavailable scope is an error, not
+    a pass, and cannot hide drift in another scope. Bound the whole delta preview.
+    """
+    if not isinstance(manifests, list) or not manifests or len(manifests) > MAX_BATCH:
+        raise CandidateError(f"Supply 1-{MAX_BATCH} explicit manifests")
+    if not all(isinstance(path, Path) for path in manifests):
+        raise CandidateError("Manifest inputs must be paths")
+    paths = [path.expanduser().absolute() for path in manifests]
+    identities = [os.path.normcase(os.path.normpath(str(path))) for path in paths]
+    if len(set(identities)) != len(paths):
+        raise CandidateError("Duplicate manifest paths are not separate evidence")
+    results, remaining = [], MAX_BATCH_PREVIEW_PATHS
+    counts = {"matched": 0, "drift": 0, "error": 0}
+    for path in paths:
+        try:
+            result = verify(read_manifest(path))
+            result["status"] = "matched" if result["matched"] else "drift"
+            result["counts"] = {key: len(result[key]) for key in ("added", "removed", "changed")}
+            truncated = False
+            for key in result["counts"]:
+                preview = result[key][:remaining]
+                truncated |= len(preview) < result["counts"][key]
+                remaining -= len(preview)
+                result[key] = preview
+            result["truncated"] = truncated
+        except (OSError, ValueError) as error:
+            result = {"status": "error", "matched": False, "error": str(error), "limitation": LIMITATION}
+        result["manifest"] = str(path)
+        counts[result["status"]] += 1
+        results.append(result)
+    code = 2 if counts["error"] else 1 if counts["drift"] else 0
+    return {"all_matched": code == 0, "exit_code": code, "counts": counts,
+            "results": results, "limitation": LIMITATION,
+            "consistency": "Independent sequential observations, not an atomic cross-candidate snapshot."}
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -206,8 +247,14 @@ def main(argv=None) -> int:
     take.add_argument("--output", type=Path, required=True)
     check = sub.add_parser("verify")
     check.add_argument("--manifest", type=Path, required=True)
+    batch = sub.add_parser("verify-many")
+    batch.add_argument("--manifest", type=Path, action="append", required=True, dest="manifests")
     args = parser.parse_args(argv)
     try:
+        if args.command == "verify-many":
+            result = verify_many(args.manifests)
+            print(json.dumps(result, sort_keys=True))
+            return result["exit_code"]
         if args.command == "snapshot":
             manifest = snapshot(args.root, args.paths)
             write_manifest(manifest, args.output)

@@ -1,138 +1,135 @@
 # Smart Orchestration
 
-**Smart Orchestration 2.0.0** is a standalone global Codex workflow for quality per
-accepted task, not maximum agents or minimum first-attempt tokens. It keeps expensive
-product/design judgment separate from high-volume implementation and GUI operation.
+**Smart Orchestration 2.1.0** is a standalone global Codex workflow for quality at lower
+accepted-work cost. Strong models own consequential judgment; inexpensive models handle
+bounded implementation and mechanical tool work. Extra coordination must earn its cost.
 
-## Install or update from main
+Normal remains the default. Coordinated mode adds a bounded Luna lead for suitable
+qualified runs, not every feature, webpage or verification task. The nine roles and
+model/effort map are unchanged from 2.0. The installer preserves owner configuration.
 
-Open Codex CLI or the app in any project. Use permissions that allow the requested
-global configuration writes; installation does not require blanket full access.
-Send:
+## Installation and updates
 
-```text
-Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration.
-Resolve the current HEAD commit SHA of main and download/extract that exact source
-snapshot into a temporary directory. Do not use GitHub Releases or old dist archives.
-Read codex_workflow/operate/smart_install.md from that snapshot. With Python 3.11+,
-run codex_workflow/runtime/smart_install.py --package-root codex_workflow without
---apply first and inspect the preview. If clean, run the same command with --apply
-in this session, then run the extracted installer with --check. Preserve unrelated
-Codex settings and every project file. Stop on conflicts; do not force replacement.
-Do not quit or relaunch Codex or wait for it to exit. Report version, exact commit,
-package fingerprint, backup and verification. Tell me to restart Codex manually.
-```
-
-Install once globally under `~/.codex/`, or your existing `CODEX_HOME`. Restart manually
-only after successful installation. Update with the same prompt; no releases or uninstall
-step. Existing project `AGENTS.md` rules remain binding. Installation preserves explicit
-models, effort, speed, tool permissions and thread limits.
-
-## Two modes, not two permanent hierarchies
-
-**Normal is the default** for a question, bounded feature, fix, design task or mechanical
-browsing. Main works directly where that is cheaper, otherwise uses the existing leaves
-and independent testing when required. Several files or tool calls alone do not justify
-an extra lead.
-
-**Coordinated is conditional** for longer authorized runs with coherent chunks and settled
-contracts. One fresh Luna lead owns each chunk's investigation, actual-diff review,
-corrections and delegated local acceptance. Main handles dependencies, consequential
-judgment, exceptions and final milestone acceptance without repeating every local review.
+Open Codex in your project. Use permissions sufficient for the reviewed global install;
+do not disable safeguards or select Full access solely to reduce approval overhead.
+Paste this prompt:
 
 ```text
-Normal                           Coordinated, after live qualification
-Main                             Main: schedule, judgment, final acceptance
-  -> Executor                      -> fresh Chunk Lead for one coherent chunk
-  -> Tester when required               -> one Executor
-                                         -> independent Tester when required
-                                    <- candidate, verdict, evidence, open gates
-                                  -> fresh lead for the next accepted dependency
+Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md. Use Python 3.11 or newer. From the extracted repository root, run python3 -B codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If it is clean, run the same command with --apply in this current Codex session, then run it with --check instead of --apply to verify the installed disk state. Do not quit, close, relaunch, or wait for Codex to exit. Preserve my existing Codex configuration and all project files. Stop on conflicts or errors instead of forcing changes. Report the installed source commit SHA, version, backup path and check result, then tell me to restart Codex manually. Do not claim live nested-agent qualification from a disk check.
 ```
 
-The new lead is not a license for recursive teams. Only `chunk_lead` has delegation
-enabled; it may use only Simple, Routine, Default and Tester. The eight leaves keep
-delegation disabled. Permitted child roles and ownership rules are instructions, not
-a claimed native allowlist or a replacement for sandbox permissions.
+Select an installed Python 3.11+ executable if `python3` is older. Restart Codex manually
+only after success. Reuse the same prompt to update from `main`, without uninstalling.
+`CODEX_HOME` is honored; the default global location is `~/.codex`. No project bootstrap,
+release assets, API key or external orchestration service is needed.
 
-One lead plus its writer and Tester fits the existing default of three spawned threads
-excluding main **if the actual backend supports that nesting/accounting**. Do not raise
-limits automatically. Reuse a valid live qualification or run the bundled
-[qualification trial](codex_workflow/qualification.md) before consequential coordinated
-execution. Structural tests do not prove nested behavior. Normal remains available when
-nesting is unsupported; an explicitly coordinated-only request stays blocked.
+## Choose the team for this assignment
 
-## Models and responsibilities
+| Assignment | Smallest suitable structure |
+| --- | --- |
+| Question or trivial complete edit | Main directly |
+| Mechanical browsing, extraction, explicit low-risk GUI change | Main -> Simple |
+| Standalone verification gate | Main -> Tester; no writer or lead by default |
+| Normal implementation | Main -> one Executor; Tester when risk requires |
+| Bounded investigation/review/repair loop in a qualified run | Main -> Chunk Lead -> required leaves |
+| Closely related, pre-approved chunks sharing a contract/setup | One bounded lead for exact named members; each keeps its gates |
+| Architecture, product, UX or visual direction | Main/Senior; operator collects evidence cheaply |
 
-| Role | Model / effort | Purpose |
+Do not create a lead just to forward a result. Grouping never permits an open-ended
+checklist, concealed failed member or bypassed approval. Reuse useful correction context;
+start a fresh lead after the assigned coherent boundary, not after every tiny step.
+
+```text
+Main: authority, dependencies, architecture/design, final milestone acceptance
+  |
+  +-- Simple: bounded mechanical work
+  +-- Tester: validation-only gate
+  |
+  +-- Chunk Lead: one chunk or exact coherent group, only when justified
+        +-- one Executor: implementation and self-check
+        +-- Tester: independent required verification
+```
+
+## Role map
+
+| Role | Model / effort | Responsibility |
 | --- | --- | --- |
-| Main | Owner-selected; Sol Medium recommended | Architecture, product, UX/design and final acceptance |
-| Simple | Luna Low | Low-risk edits, mechanical browsing/GUI and explicit observations |
-| Routine | Luna High | Settled bounded implementation |
-| Default | Luna xhigh | Deep bounded implementation and diagnosis |
-| Chunk Lead | Luna xhigh | One coordinated chunk's review/correction/local acceptance |
-| Senior | Sol xhigh | Advisory hard judgment; exceptional explicitly transferred writing |
-| Tester | Luna High | Independent behavior/contract verification |
-| Companion | Luna Medium | Targeted context discovery |
-| Investigator | Luna xhigh | One unresolved evidence question |
-| Archivist | Luna Medium | Grounded durable milestone handoff |
+| Main | Owner-selected; Sol Medium recommended baseline | Consequential judgment, scheduling and final acceptance |
+| simple_executor | GPT-6 Luna Low | Low-risk edits, mechanical Browser/Computer operation |
+| routine_executor | GPT-6 Luna High | Settled bounded implementation |
+| default_executor | GPT-6 Luna xhigh | Deep bounded implementation/debugging |
+| chunk_lead | GPT-6 Luna xhigh | Scoped actual-diff review, corrections, delegated local acceptance |
+| senior_executor | GPT-6 Sol xhigh | Advisory hard judgment; exceptional explicit writing transfer |
+| tester | GPT-6 Luna High | Independent behavior/contract verification |
+| companion | GPT-6 Luna Medium | Targeted discovery |
+| investigator | GPT-6 Luna xhigh | Unresolved evidence question |
+| archivist | GPT-6 Luna Medium | Verified checkpoint memory |
 
-Max and Astra are not automatic escalation tiers. Astra remains an owner choice.
-The model names/efforts are package defaults, not proof of account availability.
-Changing parent effort mid-session is used only through the actual runtime's supported
-mechanism; the installer does not rewrite it. Standard speed is preferred over paying
-for latency the task does not need.
+Max is not an automatic tier. Astra remains owner-selected for exceptional judgment,
+not triggered by screenshots. Only `chunk_lead` enables delegation. Its allowed child
+roles are a behavioral contract, not a native security allowlist. No additional roles,
+model downgrades, capacity increases or undocumented configuration keys are introduced.
 
-## Operator work versus judgment
+## What 2.1 changes
 
-Simple handles known page navigation, exact factual extraction, explicit low-risk GUI
-settings, screenshots and checks against stated observations. Main/Senior decides product
-meaning, hierarchy, interaction design and visual quality. A screenshot does not make a
-task intelligent, and an easy click does not make a billing/security/production action safe.
+**Assignment-level routing and coherent groups.** Skip unnecessary layers for operation
+and validation-only work. Group explicit related members when this avoids cold setup,
+while retaining every requirement, acceptance level and stop point.
 
-For web work use structured evidence or a connector when sufficient, real browser flows
-when user experience is under test, and Computer Use where a GUI is necessary. Reuse
-verified sessions, batch predictable actions, collect only useful visual states and keep
-per-action failures visible. Never replace a required browser journey with API-only checks.
+**Continuation without chatter.** Worker final handoffs end their assignment, not the
+coordinator's run. Status replies use commentary and do not end authorized execution.
+A fresh status can request one coalesced active-owner snapshot without cascading tests
+or worker polls. A real pause still propagates immediately.
 
-## Fewer expensive turns, stronger evidence
+**Reuse setup, not stale verdicts.** Fresh lead context does not require a fresh browser,
+login, dependency installation or server. Transfer verified target identity, ownership,
+consumers and release conditions. Reuse one canonical requirement/gate map after checking
+applicability; no duplicated checklists or per-worker report machinery.
 
-Communication is event-driven: completion, material blockers and decisions. No repetitive
-polling, acknowledgements, or fresh GUI/test runs merely to answer a progress question.
-Keep corrections inside the same chunk and send deltas. New chunks get new leads, not old
-investigation transcripts. Stable instructions stay stable; task-specific guides load on demand.
+**Recoverable acceptance.** Record acceptance/candidate basis before an authorized commit
+or consequential external mutation and observed outcome afterward. On interruption,
+inspect actual state before retrying. Stale attempt results cannot advance current work.
+Local acceptance, commit, integration and release remain separate facts.
 
-Independent validation holds the relevant candidate and running target steady. The writer
-stops until the hold is released; changed inputs require renewed applicable evidence.
-Source, untracked files, config and build identity matter, not just HEAD or a URL.
+**Selective verification.** Preserve independent and required fresh checks, but reopen
+only affected gates/dependents when the contract or candidate changes. Unknown impact
+widens verification. Functional assertions, browser interaction and visual critique have
+complementary jobs, not three redundant copies of each assertion.
 
-An optional deterministic helper makes scoped input identity cheap to inspect:
+## Browser and design quality
+
+Simple is the **operator** for known navigation, exact webpage facts, explicit low-risk
+settings and observable checks. Main/Senior is the **judge** for hierarchy, interaction
+and visual quality. A trivial permission, billing or production click is not low risk.
+
+Use the least expensive sufficient evidence channel, not a mandatory tool sequence.
+Follow actual browser/computer tool skills, preserve required rendered journeys and
+manual accessibility, and use full-resolution final evidence where required. A success
+toast alone does not prove persistence. Never blindly retry an uncertain write.
+
+## Optional scoped identity checks
+
+The existing `candidate.py` helper snapshots explicitly chosen source inputs, including
+untracked additions inside watched directories. A matching fingerprint is **not** a test
+verdict, dependency graph, runtime proof or signature. Holds and complete scope still matter.
 
 ```bash
-python3 -B codex_workflow/runtime/candidate.py snapshot \
-  --root /path/to/project --path src --path package.json --path package-lock.json \
-  --output /path/to/evidence/candidate-before.json
-python3 -B codex_workflow/runtime/candidate.py verify \
-  --manifest /path/to/evidence/candidate-before.json
+python3 -B ~/.codex/codex_workflow/runtime/candidate.py snapshot \
+  --root /path/to/project --path src --path package-lock.json \
+  --output /existing/private/evidence/candidate.json
+
+python3 -B ~/.codex/codex_workflow/runtime/candidate.py verify \
+  --manifest /existing/private/evidence/candidate.json
+
+python3 -B ~/.codex/codex_workflow/runtime/candidate.py verify-many \
+  --manifest /existing/private/evidence/reader.json \
+  --manifest /existing/private/evidence/signup.json
 ```
 
-Choose real relevant input paths; output must be outside the watched scope and not
-already exist. The helper reads source without changing it, detects scoped additions,
-removals/content/mode changes, and prints bounded results. It is **not** a test verdict,
-a dependency graph, a lock, proof of a deployed build or authentication of evidence.
-No mandatory inventory, new reporting database or per-command fingerprints are introduced.
-
-## Quality and authority
-
-Risk-based independent testing remains. Normal main reviews decisive diffs; Coordinated
-leads perform detailed local review while main verifies candidate/evidence completeness
-and high-risk exceptions. Main retains final visual/product acceptance. Tests do not imply
-owner approval, a commit does not imply integration, and local PASS does not imply release.
-
-Pauses stop new dispatch and propagate to descendants. Resume checks actual files,
-operations, holds and evidence before retrying uncertain writes. Preserve unique unfinished
-work and original failures on durable storage. Cleanup requires exact ownership and released
-consumers. No implicit commit, push, merge, deploy, migration or permission-change authority.
+Use `verify-many` only for already-useful evidence scopes: at most 16 manifests, fresh
+independent reads, one bounded report retaining every result. Exit 0 means all listed
+inputs match; 1 means drift without errors; 2 means an error occurred, even alongside
+drift. This is not a cross-candidate atomic snapshot or an automatic acceptance decision.
 
 ## Validation and limits
 
@@ -141,11 +138,14 @@ python3 -B -m unittest discover -s scripts -p 'test_*.py' -v
 python3 -m compileall -q codex_workflow scripts
 ```
 
-CI includes the preserved current tests, new v2 contracts, filesystem/candidate failures,
-configuration preservation and an actual archived v1.9 -> v2 -> rollback regression.
-An isolated file/test pass does not establish live Codex qualification or cost savings.
-Use the bundled trial and representative accepted tasks before broadly adopting Coordinated.
+CI uses full Git history on Ubuntu Python 3.11/3.12 and macOS Python 3.12. Existing
+2.0 tests remain; additional tests cover batch outcomes and an exact archived 2.0 ->
+2.1 -> idempotent reapply -> rollback. Tests validate code and policy contracts, not
+live orchestration quality. The exact history-dependent migrations require Git objects.
 
-See [architecture](docs/smart_orchestration.md), [v2 decisions and sources](docs/v2.0.md),
-[operating policy](codex_workflow/smart_orchestration.md) and
-[coordinated contract](codex_workflow/coordinated.md).
+Use [qualification](codex_workflow/qualification.md) in the actual client before
+consequential nested use. Reuse applicable prior observations and requalify only changed
+mechanics with a stated basis. Static checks cannot prove model availability or savings.
+
+See [engineering notes](docs/smart_orchestration.md), [2.1 design decisions](docs/v2.1.md)
+and [2.0 background](docs/v2.0.md). Git history retains older implementation eras.
