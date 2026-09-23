@@ -85,9 +85,9 @@ class RuntimeAwareContracts(unittest.TestCase):
             self.assertIn(phrase,self.flat_policy)
 
     def test_browser_and_computer_use_are_evidence_first(self):
-        for phrase in ('browser DOM/console/network evidence','Computer Use',
-                       'stable candidate','Astra is owner-selected only',
-                       'never auto-escalate'):
+        for phrase in ('Browser/Computer Use has two lanes','inspect DOM/console/network',
+                       'one or two trivial actions may stay main','Astra is owner-selected only',
+                       'screenshots prove visible state only'):
             self.assertIn(phrase,self.flat_policy)
         self.assertIn('## Browser and Computer Use',self.verify)
         tester=tomllib.loads((PACKAGE/'agents/tester.toml').read_text())['developer_instructions']

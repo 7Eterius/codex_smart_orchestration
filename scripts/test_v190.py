@@ -56,14 +56,14 @@ class V19Contracts(unittest.TestCase):
                        'DOM/console/network','A GUI is not itself a reason to escalate',
                        'Do not judge product/UX/design quality'):
             self.assertIn(phrase,simple)
-        for phrase in ('Operator: Simple Luna Low','It does not judge design quality',
+        for phrase in ('**Operator:** Simple Luna Low','It does not judge design quality',
                        'one or two trivial actions may stay main'):
             self.assertIn(phrase,self.flat)
 
     def test_design_intelligence_stays_expensive(self):
         for phrase in ('GPT-6 Sol Medium is the parent baseline',
                        'High/xhigh for hard architecture/product/UX/design judgment',
-                       'Judge: main/Senior Sol','Astra is owner-selected only'):
+                       '**Judge:** main/Senior Sol','Astra is owner-selected only'):
             self.assertIn(phrase,self.flat)
         senior=tomllib.loads((PACKAGE/'agents/senior_executor.toml').read_text())['developer_instructions']
         self.assertIn('product/UX/design judgment',senior)
