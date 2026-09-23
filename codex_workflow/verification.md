@@ -38,6 +38,19 @@ criteria or shared-impact changes. Never disable rules or exclude new violations
 for speed. Automation and screenshots do not replace manual accessibility checks.
 Unrelated logic changes need no new UI audit only when UI impact is demonstrably absent.
 
+## Browser and Computer Use
+
+Prefer deterministic evidence before screenshots. Explicit mechanical Browser/Computer
+steps are Simple Luna Low operator work: inspect source/tests/DOM/console/network,
+navigate known flows, change development settings and collect evidence. Use Computer
+Use for native/GUI-only behavior, simulators, system settings and multi-app journeys.
+The capsule states start state, journey and expected result; operator does not judge
+design quality.
+
+Batch GUI checks around a stable candidate; reuse sessions and serialize shared GUI
+state. Screenshots prove visible state only, not hidden correctness. Main/Senior owns
+design judgment. Astra may be owner-selected for difficult spatial/visual judgment.
+
 ## Keep evidence usable
 
 Reuse only known-applicable evidence: covered behavior, complete relevant inputs,

@@ -12,6 +12,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'codex_workflow'
+CURRENT_VERSION=(PACKAGE/'operate/VERSION').read_text().strip()
 BASE_COMMIT='e0a544fc97740e546f800843a89a5b3ac30c6da1'
 BASE_TREE='ffc1ed3a440ce9a4c36a66355b966ba8fe5fd128'
 sys.path.insert(0,str(PACKAGE))
@@ -24,9 +25,9 @@ from test_v152 import git_tree_hash,snapshot
 EXPECTED={
     'simple_executor':('gpt-6-luna','low'),
     'routine_executor':('gpt-6-luna','high'),
-    'default_executor':('gpt-6-luna','max'),
+    'default_executor':('gpt-6-luna','xhigh'),
     'senior_executor':('gpt-6-sol','xhigh'),
-    'tester':('gpt-6-luna','xhigh'),
+    'tester':('gpt-6-luna','high'),
     'companion':('gpt-6-luna','medium'),
     'investigator':('gpt-6-luna','xhigh'),
     'archivist':('gpt-6-luna','medium'),
@@ -39,7 +40,7 @@ class AdaptiveWorkflowContracts(unittest.TestCase):
 
     def test_version_and_model_map_unchanged(self):
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'1.7.0')
+        self.assertEqual(package.version,CURRENT_VERSION)
         self.assertEqual(package.worker_names,set(EXPECTED))
         for role,expected in EXPECTED.items():
             cfg=tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
@@ -98,7 +99,7 @@ class AdaptiveWorkflowContracts(unittest.TestCase):
     def test_optional_luna_parent_is_documented_not_automatic(self):
         readme=(ROOT/'README.md').read_text()
         self.assertIn('Optional Luna-parent pilot',readme)
-        self.assertIn('owner may deliberately select GPT-6 Luna Max',readme)
+        self.assertIn('owner may deliberately select GPT-6 Luna xhigh',readme)
         self.assertIn('does not enable this\nautomatically',readme)
 
     def test_main_policy_is_materially_smaller_than_v163(self):
@@ -161,7 +162,7 @@ class UpgradeTests(unittest.TestCase):
         plan,prior=smart_install.prepare(PACKAGE,self.home)
         backup=smart_install.apply_plan(plan,prior,self.home)
         self.assertTrue(backup.is_dir())
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.7.0')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
         self.assertEqual((self.home/'config.toml').read_bytes(),before_config)
         self.assertEqual(snapshot(self.project),before_project)
         self.assertEqual(smart_install.prepare(PACKAGE,self.home)[0].mutations,[])
