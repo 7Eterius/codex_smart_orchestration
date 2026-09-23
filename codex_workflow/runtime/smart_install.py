@@ -2,7 +2,8 @@
 """Install Smart Orchestration globally. Preview by default; --apply writes.
 
 No project paths, repository scanning, source/store edits, model calls or Git.
-Python 3.11+. Quit Codex before applying. Backups live outside the managed runtime.
+Python 3.11+. Apply may complete in an active Codex session; restart afterward.
+Backups live outside the managed runtime.
 """
 from __future__ import annotations
 import argparse
@@ -234,7 +235,7 @@ def apply_plan(plan: OperationPlan, before: dict[str, bytes | None], home: Path)
             path = mutation.path
             safe_path(path, home)
             if _read(path) != before[str(path)]:
-                raise ValidationError(f'File changed during preparation; quit Codex and retry: {path}')
+                raise ValidationError(f'File changed during preparation; stop and report the conflict: {path}')
             cursor = path.parent
             while cursor != home and not cursor.exists():
                 created_dirs.add(cursor)
@@ -329,9 +330,9 @@ def main(argv=None) -> int:
             result = {'workflow':'Smart Orchestration', 'version':plan.details['version'],
                       'applied':True, 'changed_files':len(plan.mutations),
                       'backup':str(backup) if backup else None, 'warnings':plan.warnings,
-                      'status':('Backup restored. Restart Codex.' if args.restore_backup else 'Installed globally. Restart Codex.') if backup else 'Already installed; no writes.'}
+                      'status':('Backup restored. Restart Codex manually after this command finishes.' if args.restore_backup else 'Installed globally. Restart Codex manually after this command finishes.') if backup else 'Already installed; no writes.'}
         else:
-            result['status']='Preview only. Quit Codex, then use --apply.'
+            result['status']='Preview only. Re-run with --apply in this session; restart Codex manually after a successful apply.'
         print(json.dumps(result,indent=2,sort_keys=True))
         return 0
     except (OSError,ValueError,WorkflowError) as exc:

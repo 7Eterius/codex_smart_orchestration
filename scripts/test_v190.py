@@ -85,6 +85,20 @@ class V19Contracts(unittest.TestCase):
                        'Luna xhigh','Max is intentionally absent','v1.9.0 notes'):
             self.assertIn(phrase,readme)
 
+    def test_in_app_install_never_requires_self_quit(self):
+        readme=(ROOT/'README.md').read_text()
+        guide=(PACKAGE/'operate/smart_install.md').read_text()
+        runtime=(PACKAGE/'runtime/smart_install.py').read_text()
+        for forbidden in ('Quit Codex before applying',
+                          'quit Codex and retry',
+                          'Preview only. Quit Codex'):
+            self.assertNotIn(forbidden,readme)
+            self.assertNotIn(forbidden,guide)
+            self.assertNotIn(forbidden,runtime)
+        self.assertIn('Do not quit, close, relaunch, or wait for Codex to exit',readme)
+        self.assertIn('must\nnot quit, relaunch or wait for Codex to exit',guide)
+        self.assertIn('restart codex manually after this command finishes',runtime.lower())
+
 class UpgradeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

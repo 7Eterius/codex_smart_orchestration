@@ -19,12 +19,12 @@ Smart installer.
 Change permission to **Approve for me** or **Full access**. Then send:
 
 ```text
-Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md, validate the extracted package with Python 3.11 or newer using codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json, then install it globally using codex_workflow/runtime/smart_install.py --package-root codex_workflow --apply. Preserve my existing Codex configuration and all project files. If download, extraction, validation, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed.
+Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md, validate the extracted package with Python 3.11 or newer using codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json, then install it globally in this current Codex session using codex_workflow/runtime/smart_install.py --package-root codex_workflow --apply. Do not quit, close, relaunch, or wait for Codex to exit as part of installation. Let the installer finish first. Preserve my existing Codex configuration and all project files. If download, extraction, validation, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed and tell me to restart Codex manually.
 ```
 
 > ⭐ **Recommended:** use **GPT-6 Luna xhigh** for installation.
 
-🔄 **Restart Codex after installation.**
+🔄 **After the installer reports success, restart Codex manually.**
 
 Smart Orchestration is installed once globally under `~/.codex/`. You do not need
 to install it separately for each project. Open any project normally and Smart will
