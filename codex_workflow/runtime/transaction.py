@@ -114,7 +114,7 @@ def _rollback(snapshots: list[_Snapshot], created: list[Path]) -> list[str]:
                 _atomic_write(
                     snapshot.path,
                     snapshot.content or b"",
-                    snapshot.mode or 0o644,
+                    snapshot.mode if snapshot.mode is not None else 0o644,
                 )
             elif snapshot.path.exists():
                 snapshot.path.unlink()

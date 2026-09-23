@@ -17,6 +17,7 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
     warnings: list[str] = []
     unverified = [
         "Live agent availability, selected child models and history isolation were not observed.",
+        "Nested chunk_lead delegation, capacity reuse and pause propagation were not observed.",
         "Profile, project, command-line and per-spawn overrides were not resolved.",
     ]
     tables: dict[str, dict[str, Any]] = {}

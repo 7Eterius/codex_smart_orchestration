@@ -1,56 +1,96 @@
-# Smart Orchestration engineering notes
+# Smart Orchestration 2.0 architecture
 
-## v1.9 operating model
+## Two execution shapes
 
-The canonical parent policy is `codex_workflow/smart_orchestration.md`. Smart has
-eight named roles and one global installation surface. There is no project bootstrap,
-route selector, release updater, token reporter or inherited documentation framework.
+Normal is the default: main owns a bounded task, delegates to existing leaves when
+useful and retains actual-diff and acceptance responsibility. Coordinated is an
+optional native-agent policy for longer, settled runs: main schedules one fresh
+`chunk_lead` per coherent chunk; the lead owns detailed investigation, review,
+correction and explicitly delegated local acceptance.
 
-Simple Luna Low owns low-risk mechanical Browser/Computer operation as well as small
-established-pattern edits. Routine Luna High is the primary implementation lane.
-Default Luna xhigh handles deep bounded implementation/diagnosis. Tester Luna High is
-reserved for independent verification that adds judgment. Senior Sol xhigh remains
-advisory-first.
+Main still owns architecture, product meaning, UX/visual direction, serious risk
+judgment, integration/release decisions and final milestone acceptance. It verifies
+that a returned candidate exists, evidence is applicable and gates are satisfied,
+without automatically repeating the lead's complete local review.
 
-The installer preserves the owner's parent model, effort, speed, approvals, tools,
-unrelated configuration and every project file.
+Only `chunk_lead` enables delegation. It may spawn Simple, Routine, Default and Tester;
+all eight leaves disable delegation. This child-role restriction is a behavioral
+contract, not a new native tool allowlist. No guessed maximum-depth configuration,
+external scheduler, plugin dependency or root permission change is introduced.
 
-## Operator versus judge
+## Admission, capacity and lifecycle
 
-Browser/Computer Use is split by cognitive job, not by tool. Mechanical navigation,
-web lookup, explicit GUI configuration, DOM/console/network inspection, screenshot
-collection and checks against explicit criteria are operator work and normally belong
-to Simple Luna Low when they require several tool turns.
+Coordinated admission requires coherent boundaries, settled contracts, run authority
+and a relevant live qualification. The bundled [trial](../codex_workflow/qualification.md)
+checks nesting, actual models/efforts, bounded context, permissions, candidate holds,
+independent validation, pause/recovery and two successive complete worker groups.
+Static Python tests do not substitute for it.
 
-Product/UX/design interpretation remains main/Senior work. Astra is owner-selected
-only for difficult spatial or visual judgment.
+One lead plus at most two leaves uses the existing three-child budget when supported
+by actual backend accounting. Other live work still consumes capacity. Preserve owner
+limits; do not raise caps or remove validation to fit. Normal is the disclosed fallback
+before execution unless the user explicitly requires coordinated-only work.
 
-## Context and tools
+A lead stays through its same-chunk correction loop. A new accepted chunk gets a new
+lead and scoped capsule, not a copy of prior investigations. Completion includes the
+candidate, applicable gates, evidence, remaining obligations and resource handoff.
+A finished worker need not receive acknowledgement chatter. Runtime thread closure,
+turn interruption and process/resource release are distinct.
 
-Workers receive bounded capsules with `fork_turns="none"`; follow-ups send deltas.
-Companion, Investigator and Archivist distinguish sourced facts, inference and unknown
-evidence. Deferred tool loading/tool search and async I/O are used only when exposed
-by the runtime.
+## Evidence and browser operation
 
-## Installation and safety
+Independent testing freezes relevant source, tests, configuration, build inputs and
+runtime targets. The writer stops until release; a repair establishes a new candidate
+and reruns affected checks. Requirements, not implementation-derived expectations,
+are the validation oracle. Local acceptance, commit, integration and release are
+separate states.
 
-`smart_install.py` is global, transactional, conflict-checked and safe to complete in
-an active Codex session. The user restarts Codex manually after a successful apply.
+The optional [candidate helper](../codex_workflow/runtime/candidate.py) fingerprints
+explicit scoped inputs including untracked additions. It reads no repository-wide
+history and performs no Git/network/model calls. It has bounded input/output and
+refuses symlinks, traversal and overwriting existing evidence. Identity equality is
+not a test pass, a dependency graph, a concurrency lock or a trusted signature.
 
-Current `main` is the distribution channel. The installer previews before writing,
-tracks hashes for workflow-owned runtime files, retires unchanged legacy-owned files,
-preserves locally modified retired files, and creates an exact rollback backup.
+Simple Luna Low operates known low-risk browser/GUI flows and collects exact evidence.
+Sol remains the product/design judge. Structured tools and deterministic batches are
+preferred when sufficient, but never replace an explicitly required real browser
+journey. The [browser guide](../codex_workflow/browser.md) adds target verification,
+read-back after uncertain writes, reusable sessions and selective screenshots.
 
-Automated tests validate the current package, routing contracts, configuration
-preservation, installation, cleanup, rollback and conflict behavior. Historical
-migration eras remain in Git history rather than the active source tree.
+## Context and communication
 
-## Primary references
+Main loads the core policy once for substantive work. Coordinated and browser details
+are on-demand documents, not always-loaded monolithic prompts. The lead receives exact
+role/guide paths from one bundle. Follow-ups append deltas; stable instructions are not
+rewritten for each turn.
 
-- https://developers.openai.com/api/docs/guides/model-selection
-- https://developers.openai.com/api/docs/guides/latest-model
-- https://developers.openai.com/api/docs/guides/prompt-caching
-- https://developers.openai.com/api/docs/guides/tools-computer-use
-- https://developers.openai.com/api/docs/models/gpt-6-luna
-- https://developers.openai.com/api/docs/models/gpt-6-sol
-- https://www.orcarouter.ai/blog/gpt-6-luna-vs-gpt-6-sol
+Notifications and supported waits replace repetitive status polling. User progress
+updates report last-known facts with uncertainty, not a new round of descendant
+queries, tests or screenshot collection. Material blockers, safety issues and explicit
+fresh-investigation requests still trigger work.
+
+## Installation and migration
+
+The distribution channel remains pinned `main` source. Preview and apply use the same
+package validation; `--check` separately verifies installed hashes, the worker copies
+and managed activation blocks. The installer respects `CODEX_HOME`, preserves owner
+configuration, never touches projects and never quits its host app. Manual restart
+occurs only after successful installation.
+
+The package declares its exact installable inputs and content fingerprint. That
+fingerprint identifies bytes, not an authenticated Git commit. Current managed runtime
+and template edits now block replacement, not just worker TOML edits. Retirement is
+byte-proven; unverified local files, historical source caches and rollback backups
+are preserved. Transactions use atomic per-file replacement and compensating rollback,
+not global multi-file reader isolation. Avoid concurrent configuration writers.
+
+Legacy ownership marker strings remain deliberately stable to update existing global
+blocks without duplication. No old project lifecycle or release machinery returns.
+
+## Validation boundary
+
+Automated tests cover nine-role configuration, policy boundaries and size budgets,
+source validation, current install/update/check/rollback behavior, path and retirement
+safety, source identity and the exact archived v1.9 upgrade. CI includes Linux and
+macOS. The [v2 decision record](v2.0.md) distinguishes implementation from live-runtime
+qualification and measured economic outcomes.

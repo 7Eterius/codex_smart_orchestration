@@ -1,181 +1,151 @@
 # Smart Orchestration
 
-**Smart Orchestration v1.9.0** is a standalone global Codex workflow optimized for
-high-quality accepted work with GPT-6 economics. The main model owns judgment;
-GPT-6 Luna performs bounded work; GPT-6 Sol handles parent judgment and rare advisory
-escalation.
+**Smart Orchestration 2.0.0** is a standalone global Codex workflow for quality per
+accepted task, not maximum agents or minimum first-attempt tokens. It keeps expensive
+product/design judgment separate from high-volume implementation and GUI operation.
 
-There are no Light/Medium/Heavy routes, no per-repository bootstrap, and no inherited
-project-documentation framework. Install once globally. Each project's own
-`AGENTS.md` remains authoritative for its product, safety and acceptance rules.
+## Install or update from main
 
-## Installation
-
-### Open Codex CLI / Codex app from any project directory
-
-Change permission to **Approve for me** or **Full access**, then send:
+Open Codex CLI or the app in any project. Use permissions that allow the requested
+global configuration writes; installation does not require blanket full access.
+Send:
 
 ```text
-Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md. Run codex_workflow/runtime/smart_install.py with --package-root codex_workflow without --apply first and inspect the preview. If the preview is clean, run the same command with --apply in this current Codex session. Use Python 3.11 or newer. Do not quit, close, relaunch, or wait for Codex to exit as part of installation. Preserve my existing Codex configuration and all project files. If download, extraction, preview, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed and tell me to restart Codex manually.
+Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration.
+Resolve the current HEAD commit SHA of main and download/extract that exact source
+snapshot into a temporary directory. Do not use GitHub Releases or old dist archives.
+Read codex_workflow/operate/smart_install.md from that snapshot. With Python 3.11+,
+run codex_workflow/runtime/smart_install.py --package-root codex_workflow without
+--apply first and inspect the preview. If clean, run the same command with --apply
+in this session, then run the extracted installer with --check. Preserve unrelated
+Codex settings and every project file. Stop on conflicts; do not force replacement.
+Do not quit or relaunch Codex or wait for it to exit. Report version, exact commit,
+package fingerprint, backup and verification. Tell me to restart Codex manually.
 ```
 
-> ⭐ **Recommended:** use **GPT-6 Luna xhigh** for installation.
+Install once globally under `~/.codex/`, or your existing `CODEX_HOME`. Restart manually
+only after successful installation. Update with the same prompt; no releases or uninstall
+step. Existing project `AGENTS.md` rules remain binding. Installation preserves explicit
+models, effort, speed, tool permissions and thread limits.
 
-🔄 **After the installer reports success, restart Codex manually.**
+## Two modes, not two permanent hierarchies
 
-Smart Orchestration is installed under `~/.codex/`. To update while `main` is the
-distribution channel, run the same prompt again. Do not uninstall first.
+**Normal is the default** for a question, bounded feature, fix, design task or mechanical
+browsing. Main works directly where that is cheaper, otherwise uses the existing leaves
+and independent testing when required. Several files or tool calls alone do not justify
+an extra lead.
 
-> Requires **Python 3.11 or newer**.
-
-## Architecture
+**Coordinated is conditional** for longer authorized runs with coherent chunks and settled
+contracts. One fresh Luna lead owns each chunk's investigation, actual-diff review,
+corrections and delegated local acceptance. Main handles dependencies, consequential
+judgment, exceptions and final milestone acceptance without repeating every local review.
 
 ```text
-                         MAIN
-       planning · architecture · design · acceptance
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-         Simple Luna   Routine Luna   Default Luna
-            Low           High           xhigh
-                                           │
-                                  hard judgment gap?
-                                     │          │
-                                     no         yes
-                                     │           │
-                                Luna writes   Senior Sol
-                                               xhigh
-                                            advisory-first
-                                                │
-                                          decision delta
-                                                │
-                                           Luna continues
-
-                    Tester Luna High when risk warrants
-                    Archivist Luna Medium at milestones
+Normal                           Coordinated, after live qualification
+Main                             Main: schedule, judgment, final acceptance
+  -> Executor                      -> fresh Chunk Lead for one coherent chunk
+  -> Tester when required               -> one Executor
+                                         -> independent Tester when required
+                                    <- candidate, verdict, evidence, open gates
+                                  -> fresh lead for the next accepted dependency
 ```
 
-The workflow optimizes **accepted work including rework**, not the cheapest first
-attempt or the lowest raw token count.
+The new lead is not a license for recursive teams. Only `chunk_lead` has delegation
+enabled; it may use only Simple, Routine, Default and Tester. The eight leaves keep
+delegation disabled. Permitted child roles and ownership rules are instructions, not
+a claimed native allowlist or a replacement for sandbox permissions.
 
-## Model ladder
+One lead plus its writer and Tester fits the existing default of three spawned threads
+excluding main **if the actual backend supports that nesting/accounting**. Do not raise
+limits automatically. Reuse a valid live qualification or run the bundled
+[qualification trial](codex_workflow/qualification.md) before consequential coordinated
+execution. Structural tests do not prove nested behavior. Normal remains available when
+nesting is unsupported; an explicitly coordinated-only request stays blocked.
 
-| Role | Model / effort | Default responsibility |
+## Models and responsibilities
+
+| Role | Model / effort | Purpose |
 | --- | --- | --- |
-| **Main** | Owner-selected | Plan, architecture, product/UX/visual design, serious audit, acceptance |
-| simple_executor | GPT-6 Luna · Low | Small edits; mechanical Browser/Computer operation; explicit checks |
-| routine_executor | GPT-6 Luna · High | Primary lane for normal bounded implementation |
-| default_executor | GPT-6 Luna · xhigh | Deep bounded implementation/diagnosis |
-| senior_executor | GPT-6 Sol · xhigh | Advisory hard judgment; transferred implementation only when justified |
-| tester | GPT-6 Luna · High | Independent judgment-bearing verification when risk warrants |
-| companion | GPT-6 Luna · Medium | Targeted project-context discovery |
-| investigator | GPT-6 Luna · xhigh | One unresolved evidence question |
-| archivist | GPT-6 Luna · Medium | Concise milestone handoff and meaningful history |
+| Main | Owner-selected; Sol Medium recommended | Architecture, product, UX/design and final acceptance |
+| Simple | Luna Low | Low-risk edits, mechanical browsing/GUI and explicit observations |
+| Routine | Luna High | Settled bounded implementation |
+| Default | Luna xhigh | Deep bounded implementation and diagnosis |
+| Chunk Lead | Luna xhigh | One coordinated chunk's review/correction/local acceptance |
+| Senior | Sol xhigh | Advisory hard judgment; exceptional explicitly transferred writing |
+| Tester | Luna High | Independent behavior/contract verification |
+| Companion | Luna Medium | Targeted context discovery |
+| Investigator | Luna xhigh | One unresolved evidence question |
+| Archivist | Luna Medium | Grounded durable milestone handoff |
 
-Named children cannot recursively delegate.
+Max and Astra are not automatic escalation tiers. Astra remains an owner choice.
+The model names/efforts are package defaults, not proof of account availability.
+Changing parent effort mid-session is used only through the actual runtime's supported
+mechanism; the installer does not rewrite it. Standard speed is preferred over paying
+for latency the task does not need.
 
-## Why Luna-first
+## Operator work versus judgment
 
-Current Work/Codex Standard credit rates per million tokens are:
+Simple handles known page navigation, exact factual extraction, explicit low-risk GUI
+settings, screenshots and checks against stated observations. Main/Senior decides product
+meaning, hierarchy, interaction design and visual quality. A screenshot does not make a
+task intelligent, and an easy click does not make a billing/security/production action safe.
 
-| Model | Input | Cached input | Output | Relative to Luna |
-| --- | ---: | ---: | ---: | ---: |
-| GPT-6 Luna | 2.5 | 0.25 | 12.5 | 1× |
-| GPT-6 Sol | 50 | 5 | 250 | 20× |
-| GPT-6 Astra | 250 | 25 | 1,250 | 100× |
+For web work use structured evidence or a connector when sufficient, real browser flows
+when user experience is under test, and Computer Use where a GUI is necessary. Reuse
+verified sessions, batch predictable actions, collect only useful visual states and keep
+per-action failures visible. Never replace a required browser journey with API-only checks.
 
-Most settled implementation stays with **Luna High**. **Luna xhigh** handles deep
-bounded work. Max is intentionally absent from automatic routing; use it only when
-your own evaluations show a material gain over xhigh. Sol is for judgment/capability
-gaps, and Astra remains an explicit owner choice.
+## Fewer expensive turns, stronger evidence
 
-Source: https://developers.openai.com/codex/pricing
+Communication is event-driven: completion, material blockers and decisions. No repetitive
+polling, acknowledgements, or fresh GUI/test runs merely to answer a progress question.
+Keep corrections inside the same chunk and send deltas. New chunks get new leads, not old
+investigation transcripts. Stable instructions stay stable; task-specific guides load on demand.
 
-## Senior Sol is advisory-first
+Independent validation holds the relevant candidate and running target steady. The writer
+stops until the hold is released; changed inputs require renewed applicable evidence.
+Source, untracked files, config and build identity matter, not just HEAD or a URL.
 
-Senior Sol normally receives a small decision capsule rather than implementation
-ownership:
-
-```text
-Decision
-Rationale
-Constraints
-Next action
-```
-
-The existing Luna writer then implements that decision. Production ownership moves to
-Senior only when implementation is inseparable from the hard judgment or a material
-Luna capability gap remains.
-
-## Risk-adaptive verification
-
-| Implementation | Independent Tester |
-| --- | --- |
-| Simple Luna Low | **No by default**; executor runs decisive local check |
-| Routine Luna High | **Conditional** for behavior/state/integration/UI/accessibility/shared-contract or cross-boundary impact |
-| Default Luna xhigh | **Yes by default** |
-| Senior-transferred implementation | **Yes by default** |
-
-Repository rules always override this matrix. Financial/security/schema/release gates
-cannot be skipped because Smart classifies a change as small.
-
-## Main ownership and design
-
-The parent keeps the owner's selected model, normal/Plan effort and speed. Smart does
-not silently switch the main model. For a manually selected GPT-6 Sol parent,
-**GPT-6 Sol Medium** is the normal cost/quality baseline. Raise effort only for a named
-hard architecture, product, UX or design judgment when the runtime safely supports it.
-
-For design-led work, main defines purpose, hierarchy, composition, interactions,
-states and visual direction. Luna implements the settled brief. Main reviews running
-product evidence. Passing tests never substitute for visual/product acceptance.
-
-## Browser and Computer Use
-
-Smart separates **operator work** from **judgment**. Simple Luna Low handles mechanical
-web lookup, known Browser/Computer flows, explicit development configuration through
-a GUI, DOM/console/network inspection, screenshots and checks against stated observable
-criteria.
-
-The main or Senior Sol handles UX, interaction, hierarchy and visual critique. Astra
-is owner-selected only when difficult spatial/visual judgment itself needs stronger
-intelligence. A screenshot or Computer Use task alone never triggers Astra or Tester.
-
-## Compact handoffs and context
-
-Workers return only `Outcome; Changed; Checks; Risks` with exact evidence. Long logs
-stay in artifacts. One production writer owns each mutable boundary. Smart opens
-multiple children only for genuinely independent work.
-
-Keep a coherent feature in one parent context. At an accepted major milestone,
-Archivist writes a compact canonical handoff. For a substantially unrelated next
-milestone, prefer a fresh main session seeded by that handoff.
-
-## Safety
-
-Smart never weakens repository gates, permissions or owner constraints to save
-credits. It does not stage, commit, push, reset, stash, clean, migrate, release or
-alter production/live data without current-task authority. Unknown checks remain
-unknown.
-
-The global installer is transactional, conflict-checked and project-safe. It preserves
-unrelated Codex configuration and project files, and creates a reversible backup for
-every successful change.
-
-## Repository scope
-
-This repository now contains only the standalone Smart runtime, the eight worker
-definitions, current policy/verification documentation, and current-state tests.
-Historical upstream artifacts and old migration implementations remain available in
-Git history instead of the active tree.
-
-## Validation
+An optional deterministic helper makes scoped input identity cheap to inspect:
 
 ```bash
-python3.11 -B scripts/test_current.py -v
-python3.12 -B scripts/test_current.py -v
-python3.11 -m compileall -q codex_workflow
+python3 -B codex_workflow/runtime/candidate.py snapshot \
+  --root /path/to/project --path src --path package.json --path package-lock.json \
+  --output /path/to/evidence/candidate-before.json
+python3 -B codex_workflow/runtime/candidate.py verify \
+  --manifest /path/to/evidence/candidate-before.json
 ```
 
-See [engineering notes](docs/smart_orchestration.md) and
-[v1.9.0 notes](docs/v1.9.0.md).
+Choose real relevant input paths; output must be outside the watched scope and not
+already exist. The helper reads source without changing it, detects scoped additions,
+removals/content/mode changes, and prints bounded results. It is **not** a test verdict,
+a dependency graph, a lock, proof of a deployed build or authentication of evidence.
+No mandatory inventory, new reporting database or per-command fingerprints are introduced.
+
+## Quality and authority
+
+Risk-based independent testing remains. Normal main reviews decisive diffs; Coordinated
+leads perform detailed local review while main verifies candidate/evidence completeness
+and high-risk exceptions. Main retains final visual/product acceptance. Tests do not imply
+owner approval, a commit does not imply integration, and local PASS does not imply release.
+
+Pauses stop new dispatch and propagate to descendants. Resume checks actual files,
+operations, holds and evidence before retrying uncertain writes. Preserve unique unfinished
+work and original failures on durable storage. Cleanup requires exact ownership and released
+consumers. No implicit commit, push, merge, deploy, migration or permission-change authority.
+
+## Validation and limits
+
+```bash
+python3 -B -m unittest discover -s scripts -p 'test_*.py' -v
+python3 -m compileall -q codex_workflow scripts
+```
+
+CI includes the preserved current tests, new v2 contracts, filesystem/candidate failures,
+configuration preservation and an actual archived v1.9 -> v2 -> rollback regression.
+An isolated file/test pass does not establish live Codex qualification or cost savings.
+Use the bundled trial and representative accepted tasks before broadly adopting Coordinated.
+
+See [architecture](docs/smart_orchestration.md), [v2 decisions and sources](docs/v2.0.md),
+[operating policy](codex_workflow/smart_orchestration.md) and
+[coordinated contract](codex_workflow/coordinated.md).
