@@ -66,8 +66,9 @@ class V19Contracts(unittest.TestCase):
                        '**Judge:** main/Senior Sol','Astra is owner-selected only'):
             self.assertIn(phrase,self.flat)
         senior=tomllib.loads((PACKAGE/'agents/senior_executor.toml').read_text())['developer_instructions']
-        self.assertIn('product/UX/design judgment',senior)
-        self.assertIn('visual direction',senior)
+        flat_senior=' '.join(senior.split())
+        self.assertIn('product/UX/design judgment',flat_senior)
+        self.assertIn('visual direction',flat_senior)
 
     def test_max_is_not_automatic_and_tester_is_high(self):
         self.assertNotIn('| default_executor | Luna Max |',self.policy)
