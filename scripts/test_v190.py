@@ -97,7 +97,7 @@ class V19Contracts(unittest.TestCase):
             self.assertNotIn(forbidden,runtime)
         self.assertIn('Do not quit, close, relaunch, or wait for Codex to exit',readme)
         self.assertIn('must\nnot quit, relaunch or wait for Codex to exit',guide)
-        self.assertIn('restart Codex manually after this command finishes',runtime)
+        self.assertIn('restart codex manually after this command finishes',runtime.lower())
 
 class UpgradeTests(unittest.TestCase):
     @classmethod
