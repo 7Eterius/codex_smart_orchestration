@@ -16,7 +16,7 @@ from runtime.errors import ValidationError
 from runtime.layout import BUILTIN_WORKERS, PackageLayout, RuntimePaths
 from runtime.smart_restore import prepare_restore
 
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 EXPECTED = {
     "simple_executor": ("gpt-6-luna", "low"),
     "routine_executor": ("gpt-6-luna", "high"),

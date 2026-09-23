@@ -1,103 +1,107 @@
 # Coordinated mode
 
-Load only for an authorized multi-chunk run that benefits from separating long-lived
-coordination from bounded investigation. Main retains global product/architecture/design
-judgment and final milestone acceptance. This is a policy using Codex's native agents,
-not a separate scheduler or guaranteed autonomous service.
+Load only for a suitable authorized run. This is native-agent policy, not a separate
+scheduler. Main owns dependencies, architecture/product/design and final acceptance.
+Lead owns bounded investigation, actual-diff review, corrections and delegated local
+acceptance. No repeated main review merely because coordination adds another layer.
 
-## Admission
+## Admission and assignment shape
 
-Prefer Normal for one coherent feature, a tangled task without safe boundaries,
-mechanical browsing, or work where delegation setup outweighs avoided parent turns.
-Choose chunks by coherent acceptance contracts, not arbitrary token or time limits.
+Use Normal for a coherent task without useful boundaries or when lead setup costs more
+than avoided parent turns. Route each assignment by its job, even inside a long run:
+mechanical-only -> Simple; validation-only -> Tester with main acceptance; substantive
+review/correction loop -> lead and needed leaves. No implementer for validation-only work.
+Main may use a lead for a complex validation gate, never just to forward its verdict.
 
-Before consequential coordinated work, reuse an applicable recorded qualification or
-run the disposable fixture in `qualification.md` from this installed bundle.
-Require observed main -> chunk_lead -> named leaf spawning, correct models/efforts,
-scoped history, inherited permissions, inspectable edits, independent Tester, stop
-propagation and two successive complete groups with usable capacity. Match qualification
-to the active client/backend, model settings and workflow bundle; repeat only changed
-mechanics after relevant updates. File validation does not establish live qualification.
-Do not read or rewrite unrelated projects or install a new external runner to qualify.
+A fresh lead normally receives one acceptance boundary. Main may instead name a coherent
+group with exact ordered member IDs, shared frozen contract/setup and per-member gates.
+Group only when repeated setup would dominate and isolation/rollback boundaries remain
+clear. Do not group across unresolved product decisions, independent approval points or
+unrelated modules. The lead cannot choose more members. Reuse it through assigned repairs;
+retire at the named stop. Do not reset useful context mid-correction or keep a lead for
+an open-ended checklist. Evaluate total accepted-work cost, not requests/hour alone.
 
-The existing default cap is three spawned threads excluding main: lead, writer, Tester.
-Use one lead and at most two leaves at once. An operator replaces a writer slot; it is
-not a fourth routine child. Check actual runtime accounting once, including other work.
-A lower owner cap is preserved. Sequential writer/Tester reuse is acceptable only if
-real slot reclamation and independent testing are qualified. Never disable a gate,
-raise caps, swap models or enable nested backend flags automatically to fit.
+Require applicable observed qualification from `qualification.md`: actual nested named
+roles, intended models/efforts, scoped context, inherited permissions, inspectable edits,
+independent Tester, stop propagation and two complete successive groups. Match evidence
+to active client/backend/config/bundle mechanisms. Requalify affected mechanics after
+change, not every harmless documentation edit. No static test proves live readiness.
 
-Without qualification choose Normal before work and state why. If the user requires
-coordinated-only execution, report the specific missing capability. A capacity failure
-mid-chunk holds dependent work: inspect actual states, use supported closure/reclamation,
-then retry only after a concrete state change. Do not wake every idle worker, send
-mailbox-only acknowledgements or assume that interrupting a turn frees a slot.
+Respect actual runtime accounting and owner cap. Existing default is three spawned
+threads excluding main: one lead and at most two leaves, not another budget per parent.
+An operator replaces a writer slot. Lower caps require qualified sequential reclamation;
+never raise caps, swap models or drop independent checks to fit. Without qualification
+choose disclosed Normal before work; coordinated-only requests remain blocked.
 
-## Assignment and local loop
+## Durable contract, not repeated discovery
 
-Main dispatches one ready chunk with:
+Use one existing plan/handoff, not a new database. Supply:
+`run/unit/attempt; members/stop; contract revision; prerequisite gates; owned/protected
+paths; candidate/build/target; gate IDs and acceptance level; authority; exact bundle
+paths; evidence/setup/resource references; delegated acceptance owner`.
 
-`ID/attempt; goal/stop; accepted dependencies; frozen contract/design;
-owned/protected paths; candidate and target; checks/gates; authority;
-workflow-guide paths; evidence location; local-acceptance delegation`
+Map logical attempts to actual workers once. Same-worker corrections retain identity;
+replacements increment attempt after prior writes stop. Stale/duplicate results cannot
+advance the current assignment. Credentials are references. Preserve uncommitted owner
+inputs. Keep one verified setup note with relevant root, build/port/profile, commands,
+constraints and invalidators; descendants check applicability and changed inputs rather
+than recreating inventories. Pin relevant contract and bundle content, not version labels
+alone. Contract changes hold affected work and reopen dependent gates, not unrelated ones.
 
-Use the existing plan/handoff, not a new project scaffold or database. Map logical IDs
-to actual worker IDs once. Retain the ID for same-worker corrections; a replacement
-increments attempt after confirming prior writes stopped. Uncommitted owner work is
-part of the candidate, not disposable dirt. Credentials are references, never copied values.
+Main writes run scheduling; lead writes scoped acceptance; leaves write assigned source
+or evidence. Do not have multiple writers continually rewrite the same status record.
 
-The lead reads its supplied `coordinated.md` and `verification.md` paths from the same
-bundle, verifies scoped readiness and relevant callers/contracts, then dispatches a
-bounded implementation capsule. It may spawn only `simple_executor`, `routine_executor`,
-`default_executor` and `tester`. Never spawn main, another lead, Senior or support-agent
-layers. Main handles advice requiring Sol and consequential authority changes.
+## Local execution
 
-The lead reviews the actual diff and affected behavior, not only a worker summary.
-Before independent testing, identify the source/build/config/target and place a write
-hold on relevant inputs. Stop the writer's edits, use a separate Tester, and preserve
-original failures. A validation-only gate needs no implementer. Tester derives expected
-behavior from authoritative requirements, not the implementation's own claims.
+Lead reads the supplied coordinated/verification guides and verifies scoped requirements,
+callers and readiness. Spawn only Simple, Routine, Default and Tester. No lead recursion,
+Senior or support layers. Sol judgment goes through main. One production writer; no lead
+self-implementation/self-acceptance. Direct/manual alternatives must be explicit.
 
-For in-scope defects, release the hold, send one concrete correction packet to the same
-writer, then re-establish the candidate and rerun affected checks. Keep this loop local;
-main receives completion, missing judgment/authority or material cross-chunk risk, not
-every compiler error. Do not continue with equivalent failed attempts and no new evidence.
+Review actual diffs and affected behavior. Reuse canonical requirement IDs after checking
+coverage independently. Identify candidate including untracked inputs, build/config/target
+and relevant environment. Hold writer and target changes during independent validation;
+Tester uses authoritative expectations, not implementation-derived assertions. Preserve
+original failures. Release before a concrete repair packet to the same writer; then
+re-establish identity and rerun affected checks plus required fresh gates. Ordinary
+corrections stay local; main gets completion, missing authority/judgment or wider risk.
 
-The lead may record **local acceptance** only when main explicitly delegated it and
-all assigned local gates pass. Otherwise return ready-for-review, partial or blocked.
-It cannot approve new product/design choices or satisfy a later integration/release gate.
-Main reviews those judgments. No implicit Git authority: never stage, commit, push,
-merge, deploy or migrate unless the capsule explicitly grants that exact operation.
+Local acceptance needs explicit delegation and every assigned prerequisite satisfied.
+Failed, blocked or deferred required gates prevent that acceptance. Later device/release
+gates remain OPEN at their proper level. Accepted-uncommitted, committed-not-integrated
+and integrated are distinct. No inferred Git, deployment, billing or production authority.
 
-## Completion and next chunk
+## Handoff and continuation
 
-Return one packet using Outcome; Changed; Checks; Risks. Include the ID, candidate
-identity, scoped diff, local verdict and authority, fresh/reused/blocked gates with
-artifact pointers, commit/integration state, remaining obligations and resource/hold
-handoff. Empty optional fields need no prose. Normally <=220 words; preserve material risks.
+Return Outcome; Changed; Checks; Risks, normally <=220 words plus references. Include
+current assignment/candidate, per-member verdicts, gate dispositions/evidence, resolved
+findings, actual Git/integration state, remaining obligations and resource/hold handoff.
+Main verifies presence, identity, applicability and complete coverage, inspecting decisive
+risk/discrepancies without repeating the entire review. Repeated main re-review means
+revise the boundary or use Normal, not silently remove oversight.
 
-Main verifies the result exists and matches its candidate, required evidence is
-accessible/applicable, blocking findings are resolved and dependencies are truly ready.
-Inspect decisive/high-risk changes; do not duplicate the complete lead review or GUI
-journey without a discrepancy or explicit gate. Repeated full re-review is a failed
-cost/quality trial, not the default operating model. A concise packet is an index to
-proof, never proof by itself.
+Worker completion ends only its assignment. Main answers progress in commentary, then
+continues the authorized run or supported waiting. Use known state; an explicit fresh
+status permits one coalesced active-lead snapshot without investigations or leaf polling.
+Do not treat a status question as pause, final completion or permission for periodic pings.
 
-The lead stops descendants' assigned work and accounts for owned processes, holds and
-retained evidence before returning. Use supported closing or idle reclamation; worker
-completion does not imply server/browser cleanup. Main accepts the handoff, records the
-bounded result, and dispatches a fresh lead for the next ready chunk. Do not continue
-past the authorized run boundary or send a ceremonial acknowledgement to finished agents.
+Persist candidate/acceptance basis before an authorized commit or consequential external
+change; record the observed commit/readback immediately afterward. If interrupted between
+these stages, inspect actual state and reconcile, never replay blindly or infer acceptance
+from a commit. Keep records in existing evidence; no mandatory per-click journal.
 
-## Pause, recovery and evaluation
+## Resources, blocked work and recovery
 
-A user pause stops new dispatch and propagates promptly to active descendants; safely
-handle already-issued operations. Resume from actual candidate, agent and resource state,
-not just conversation memory. Uncertain mutation outcomes require inspection before
-retry. Preserve unfinished source and original failure evidence in durable locations.
+Context lifetime is not resource lifetime. A browser/server/build may outlive a lead when
+identity, owner, consumers and release conditions transfer explicitly. Reuse verified
+setup; do not reinstall dependencies or replay login just because a new lead starts.
+Keep unfinished source/backing Git and required evidence durable; temporary directories
+hold reproducible scratch only. Check headroom before substantial allocations, not every
+command. Cleanup requires exact run ownership, authority and released consumers.
 
-Compare Normal and Coordinated on representative accepted work with the same models,
-contracts and gates. Count all layers, cached/uncached input, output/reasoning where
-available, retries, rework and setup. Use existing telemetry only when evaluating,
-not a compulsory per-task reporting system. Lower requests/hour or a community saving
-percentage alone does not establish cheaper accepted outcomes or unchanged quality.
+A blocked unit may retire after handing off held candidate, failures and resources;
+it need not occupy a slot indefinitely. Main may advance unaffected ready work only
+within authorized scope and isolation. Pauses stop new dispatch and propagate promptly.
+Resume from real candidate/process/hold state. At actual capacity failure inspect states,
+use supported closure/reclamation and retry after a concrete change. No routine capacity
+probes, waking all idle workers, mailbox-only acknowledgements or assumed slot release.

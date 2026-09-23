@@ -395,7 +395,7 @@ class ActualV19Upgrade(unittest.TestCase):
             plan, prior = install.prepare(PACKAGE, home)
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)['disk_ok'])
-            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), '2.0.0\n')
+            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), (PACKAGE / 'operate/VERSION').read_text())
             self.assertTrue((home / 'agents/chunk_lead.toml').exists())
             self.assertEqual(tomllib.loads((home / 'config.toml').read_text())['agents']['max_threads'], 3)
             self.assertEqual(install.prepare(PACKAGE, home)[0].mutations, [])

@@ -1,96 +1,60 @@
-# Smart Orchestration 2.0 architecture
+# Smart Orchestration engineering notes
 
-## Two execution shapes
+## Current structure
 
-Normal is the default: main owns a bounded task, delegates to existing leaves when
-useful and retains actual-diff and acceptance responsibility. Coordinated is an
-optional native-agent policy for longer, settled runs: main schedules one fresh
-`chunk_lead` per coherent chunk; the lead owns detailed investigation, review,
-correction and explicitly delegated local acceptance.
+2.1 retains nine roles, existing model efforts, one optional nested level and the global
+installer. `smart_orchestration.md` is the core map. Load `coordinated.md` only for that
+mode, `verification.md` for validation, `browser.md` for multi-step operation, and
+`qualification.md` only for applicable live qualification work.
 
-Main still owns architecture, product meaning, UX/visual direction, serious risk
-judgment, integration/release decisions and final milestone acceptance. It verifies
-that a returned candidate exists, evidence is applicable and gates are satisfied,
-without automatically repeating the lead's complete local review.
+Routing is assignment-level. A long run can contain direct Simple visits, standalone
+Tester gates and bounded lead groups. Main owns consequential decisions and final
+acceptance; each delegated lead owns substantive scoped review, not another layer of
+routine duplicate review. Named groups must preserve every member's gates and stop.
 
-Only `chunk_lead` enables delegation. It may spawn Simple, Routine, Default and Tester;
-all eight leaves disable delegation. This child-role restriction is a behavioral
-contract, not a new native tool allowlist. No guessed maximum-depth configuration,
-external scheduler, plugin dependency or root permission change is introduced.
+There is no new scheduler, database, per-project scaffold or mandatory metrics system.
+The policy is enacted by the actual Codex runtime. Only a live mechanics trial can
+establish its observed behavior. Supported file configuration is not a permission
+allowlist, proof of loaded models or guaranteed nested capacity.
 
-## Admission, capacity and lifecycle
+## Continuity versus context
 
-Coordinated admission requires coherent boundaries, settled contracts, run authority
-and a relevant live qualification. The bundled [trial](../codex_workflow/qualification.md)
-checks nesting, actual models/efforts, bounded context, permissions, candidate holds,
-independent validation, pause/recovery and two successive complete worker groups.
-Static Python tests do not substitute for it.
+Reuse the same writer/Tester for corrections within the boundary. Start fresh leads at
+coherent boundaries, while explicitly transferring reusable browser/server/setup resources.
+A context reset is not a reason to reinstall dependencies. Keep one existing setup and
+gate map with identity, assumptions and invalidators instead of one inventory per worker.
 
-One lead plus at most two leaves uses the existing three-child budget when supported
-by actual backend accounting. Other live work still consumes capacity. Preserve owner
-limits; do not raise caps or remove validation to fit. Normal is the disclosed fallback
-before execution unless the user explicitly requires coordinated-only work.
+Ordinary status uses known state and continues execution; fresh status may request one
+active-owner snapshot without triggering leaf work. Worker final handoff is distinct
+from progress, parent completion, resource release and native thread-slot reclamation.
 
-A lead stays through its same-chunk correction loop. A new accepted chunk gets a new
-lead and scoped capsule, not a copy of prior investigations. Completion includes the
-candidate, applicable gates, evidence, remaining obligations and resource handoff.
-A finished worker need not receive acknowledgement chatter. Runtime thread closure,
-turn interruption and process/resource release are distinct.
+## Evidence and recovery
 
-## Evidence and browser operation
+Hold actual source/build/config/target during independent verification. Reuse evidence
+only for applicable requirements and inputs; mandatory fresh execution remains fresh.
+The verifier derives intended behavior independently from authoritative requirements.
+No result is accepted solely from prose, a URL, Git HEAD or an input hash.
 
-Independent testing freezes relevant source, tests, configuration, build inputs and
-runtime targets. The writer stops until release; a repair establishes a new candidate
-and reruns affected checks. Requirements, not implementation-derived expectations,
-are the validation oracle. Local acceptance, commit, integration and release are
-separate states.
+Persist acceptance basis before an authorized consequential mutation, then record the
+observed outcome. These are recoverable stages. On restart reconcile real state rather
+than duplicate a commit or dashboard write. Match task/attempt and candidate identities;
+stale results cannot advance the active assignment. Only affected dependencies reopen.
 
-The optional [candidate helper](../codex_workflow/runtime/candidate.py) fingerprints
-explicit scoped inputs including untracked additions. It reads no repository-wide
-history and performs no Git/network/model calls. It has bounded input/output and
-refuses symlinks, traversal and overwriting existing evidence. Identity equality is
-not a test pass, a dependency graph, a concurrency lock or a trusted signature.
+`runtime/candidate.py verify-many` batches existing input-identity checks without caching
+results or implying cross-candidate atomicity. It preserves all per-manifest outcomes,
+bounds the shared path preview and lets errors dominate drift in the process exit code.
+It does not select tests, infer acceptance or create a reporting requirement.
 
-Simple Luna Low operates known low-risk browser/GUI flows and collects exact evidence.
-Sol remains the product/design judge. Structured tools and deterministic batches are
-preferred when sufficient, but never replace an explicitly required real browser
-journey. The [browser guide](../codex_workflow/browser.md) adds target verification,
-read-back after uncertain writes, reusable sessions and selective screenshots.
+## Installation
 
-## Context and communication
+The reviewed global installer is unchanged in this refinement. It preserves explicit
+parent settings, approvals, tools, capacity, owner edits and every project file. It
+supports pinned-main preview/apply/check, managed-content fingerprints and exact rollback.
+Historical backups remain protected. Installation never quits its own host application.
 
-Main loads the core policy once for substantive work. Coordinated and browser details
-are on-demand documents, not always-loaded monolithic prompts. The lead receives exact
-role/guide paths from one bundle. Follow-ups append deltas; stable instructions are not
-rewritten for each turn.
+## Evidence status
 
-Notifications and supported waits replace repetitive status polling. User progress
-updates report last-known facts with uncertainty, not a new round of descendant
-queries, tests or screenshot collection. Material blockers, safety issues and explicit
-fresh-investigation requests still trigger work.
-
-## Installation and migration
-
-The distribution channel remains pinned `main` source. Preview and apply use the same
-package validation; `--check` separately verifies installed hashes, the worker copies
-and managed activation blocks. The installer respects `CODEX_HOME`, preserves owner
-configuration, never touches projects and never quits its host app. Manual restart
-occurs only after successful installation.
-
-The package declares its exact installable inputs and content fingerprint. That
-fingerprint identifies bytes, not an authenticated Git commit. Current managed runtime
-and template edits now block replacement, not just worker TOML edits. Retirement is
-byte-proven; unverified local files, historical source caches and rollback backups
-are preserved. Transactions use atomic per-file replacement and compensating rollback,
-not global multi-file reader isolation. Avoid concurrent configuration writers.
-
-Legacy ownership marker strings remain deliberately stable to update existing global
-blocks without duplication. No old project lifecycle or release machinery returns.
-
-## Validation boundary
-
-Automated tests cover nine-role configuration, policy boundaries and size budgets,
-source validation, current install/update/check/rollback behavior, path and retirement
-safety, source identity and the exact archived v1.9 upgrade. CI includes Linux and
-macOS. The [v2 decision record](v2.0.md) distinguishes implementation from live-runtime
-qualification and measured economic outcomes.
+Automated tests establish package, helper, migration and policy-text contracts. The
+new scenario checklist in `qualification.md` is not an executed live-agent evaluation.
+Do not claim a saving percentage or unchanged model quality without representative
+accepted-outcome evidence. See [2.1 rationale and sources](v2.1.md).

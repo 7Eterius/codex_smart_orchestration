@@ -1,81 +1,81 @@
 # Qualify coordinated mode
 
-This is an on-demand live mechanics and quality trial, not a per-task ritual. A Python
-test pass validates package/code contracts, not Codex's loaded agents, nested tools,
-model choices or actual savings. Until a relevant live trial passes, Normal remains
-available; consequential coordinated execution is not qualified.
+Use this on-demand trial for new or changed mechanics, not every task. Structural tests
+prove file/helper contracts, not actual nested Codex behavior, model quality or savings.
+Use Normal until relevant live qualification exists. Do not invent a passing trial.
 
-## Small disposable mechanics trial
+## Record once, invalidate selectively
 
-Use an explicitly authorized, isolated fixture with durable source/evidence. Do not
-use production services, real billing, credentials, irreversible actions or unique
-unfinished project work. The main agent performs this trial inside the actual Codex
-client, not by pretending a Python mock is native delegation.
+In existing evidence record client/backend identity, parent/leaf model and effort,
+permissions, capacity, bundle fingerprint/exact role paths and observed mechanics.
+Retain unknowns. Separate tested mechanics from task setup and quality/cost observations.
+A changed backend or delegation contract invalidates corresponding mechanics; an edited
+browser recipe reopens its applicable checks, not every prior qualification. Explain
+reuse from actual changes; a version number alone neither qualifies nor disqualifies.
 
-Record the client/backend identity available to you, parent and worker model/effort,
-workflow version/fingerprint, sandbox/permissions, effective capacity and exact role
-paths in one existing evidence record. Keep unavailable facts unknown. No new project
-framework, telemetry daemon or API subscription is needed.
+## Isolated mechanics trial
 
-1. Start main -> `chunk_lead` -> `routine_executor` and independent `tester` for a tiny
-   fixture change. Observe the actual custom roles/model settings, isolated capsules,
-   inspectable edits and unchanged permissions. Verify the leaf cannot delegate and
-   the lead never spawns another lead. A configured boolean is not proof of behavior.
-2. Introduce or retain a simple fixture defect. Tester must reject it against the
-   frozen requirement. Writer stops during validation; the same owner releases the
-   hold, repairs and revalidates. Do not create a new planning hierarchy for the defect.
-3. Complete the first chunk, hand off resources and dispatch a fresh lead for a second
-   dependent chunk with a separate writer/Tester cycle. Observe enough reclamation for
-   the complete second group, not just the lead. Spare capacity does not prove cleanup.
-4. Ask for a normal progress snapshot during work. It should report last-known state
-   without triggering a cascade of tests, GUI passes or descendant status requests.
-   Then pause safely and verify new dispatch stops and descendants honor the pause.
-5. Change a scoped fixture input after validation, including an untracked file or test
-   configuration. Completion must be held until identity/evidence is reconciled. Test
-   one missing prerequisite and preserve its dependent gate as OPEN. A validation-only
-   gate should not create an implementer.
-6. Resume after a controlled interruption. Check files/processes/holds/evidence before
-   replaying anything. Test accepted-but-uncommitted work under no-commit authority.
-   Do not interpret Git state as acceptance or convert local PASS into release approval.
+Main executes in the real client on an authorized durable fixture. No production, real
+billing, unique unfinished source, permission changes or external runner. Preserve the
+fixture's independent checks, including defects, rather than adjusting tests to pass.
 
-A step passes only with observed evidence. Report unavailable nesting, model, tool,
-permissions or capacity mechanics as unverified/blocked. Do not change settings or
-models just to make the trial pass. Restore or retain only the fixture resources
-covered by the trial's cleanup authority.
+1. Spawn main -> chunk_lead -> Routine and independent Tester. Observe named roles,
+   model/effort, scoped capsules, leaf nondelegation, permission inheritance and actual
+   edits. No nested lead. Verify real capacity accounting rather than relying on config.
+2. Seed an ordinary defect. Tester rejects against the frozen requirement, not the
+   writer's verdict. Hold relevant source/build/target; release for same-writer repair,
+   then revalidate. Do not wake main for every correctable local failure.
+3. Finish and hand off the first unit. Run a fresh lead and complete second leaf group;
+   show applicable slot reuse, not merely a successful second lead spawn. Confirm owned
+   processes are separately transferred/released; visible thread status is not cleanup.
+4. Test three assignment shapes: a mechanical-only visit goes to Simple; validation-only
+   has no writer; a named two-member coherent group reuses setup but retains separate
+   gates. A failed prerequisite holds its dependent member. The lead cannot add members.
+5. Ask ordinary and explicitly fresh status questions. Ordinary replies use known state;
+   a fresh status may request one active-owner snapshot with no leaf cascade. Replies
+   are commentary and execution continues. Final leaf/lead completion does not end main's
+   authorized run. An explicit pause must stop dispatch and propagate to descendants.
+6. Mutate scoped inputs/contract after evidence, including an untracked file. Reopen
+   affected gate/dependents and required fresh checks, retaining unrelated applicable
+   evidence. A stale/duplicate result from a replaced attempt cannot advance acceptance.
+7. Keep a dev server/browser across a lead replacement via explicit owner/consumer
+   handoff. Verify target/setup before reuse without repeating installation/login. Keep
+   source/backing Git and evidence durable; cleanup only authorized released resources.
+8. Simulate interruption between recorded acceptance basis and a consequential fixture
+   action's outcome receipt. Inspect actual state before retry; never infer acceptance
+   from a commit or duplicate a completed operation. Test accepted-uncommitted and
+   committed-not-integrated states. Unknown continuity requires affected revalidation.
 
-## Representative quality/cost trial
+Use fixtures, not real irreversible effects. A step passes only with observed evidence.
+Unavailable nesting/tool/model/capacity remains blocked or unverified. No cap increase,
+model substitution or safety bypass to make the trial pass. Reuse applicable previous
+steps; record only new observations and remaining limits.
 
-After mechanics pass, use a short real authorized sequence with settled requirements.
-Compare equivalent Normal and Coordinated outcomes, holding model tiers and mandatory
-gates constant as far as practical. Include one correction cycle and one browser-heavy
-chunk; retain a main-led design decision to check the operator/judge boundary.
+## Representative cost/quality trial
 
-Use existing platform usage records when available. Compare accepted task outcomes,
-main invocations, total work across every layer, cached/uncached input, output/reasoning,
-setup, repeated discovery, retries and review duplication. Track missed requirements
-and regressions, not just token totals. Do not equate API-equivalent dollars, raw
-requests/hour or elapsed time with subscription allowance or cost per accepted task.
-No universal percentage is promised by the community example or by Smart's tests.
+Compare equivalent accepted work in Normal, single-chunk Coordinated, and coherently
+grouped assignments where suitable. Hold model tiers, requirements and mandatory gates
+constant. Include a correction, browser-heavy work, a validation-only gate, and a main-led
+design decision. Do not attribute all gains to one change in an uncontrolled before/after.
 
-Keep Coordinated only where it preserves quality and lowers total accepted-work cost.
-If lead oversight requires repeated full main reviews, or fresh leads repeatedly
-rediscover the same contracts, adjust boundaries or return to Normal. Do not remove
-required review merely to improve a metric.
+Use existing usage records only when evaluating. Count all coordination layers and leaves,
+setup/rediscovery, cached and uncached input, output/reasoning, rework and omissions.
+Compare cost per accepted outcome and escaped defects, not merely requests/hour or raw
+tokens/hour; lower activity may also mean lower throughput. API-equivalent dollars are
+not subscription billing. No fixed saving percentage follows from the Reddit example.
 
-## Reuse qualification carefully
+Keep the extra layer only where the whole workflow remains cheaper at the same quality.
+Repeated full main re-review, duplicated inventories or cold-start setup mean revise the
+boundary or use Normal, not remove required review. Grouping must never hide a failed
+member, evade approval boundaries or become an unbounded long-lived lead.
 
-Keep a concise result with evidence links in the existing handoff: tested environment,
-observed role/tool behavior, two-group capacity, pause/recovery behavior, quality/cost
-findings and limitations. Reuse only while relevant client, configuration, workflow
-bundle and mechanisms remain applicable. A model or backend change invalidates the
-corresponding observations, not automatically every unrelated test.
-
-Suggested live request after installation:
+## Suggested request
 
 ```text
-Use the installed Smart Orchestration qualification.md to qualify coordinated mode
-in a small isolated fixture. Do not modify my project, permissions, model settings,
-Git history or production services. Show actual nested-role, candidate-hold,
-independent-verification, second-group capacity and pause/recovery evidence. Do not
-claim cost savings or production readiness from structural tests alone.
+Qualify the installed Smart Orchestration in an isolated durable fixture using
+qualification.md. Preserve my model settings, permissions, projects and Git history.
+Show actual nested roles, candidate holds, independent checks, second-group capacity,
+assignment-shape routing, progress continuation, stale-result rejection and recovery.
+Reuse applicable prior qualification and report unknowns. Do not claim savings or
+production readiness from structural tests alone.
 ```
