@@ -40,18 +40,16 @@ Unrelated logic changes need no new UI audit only when UI impact is demonstrably
 
 ## Browser and Computer Use
 
-Prefer deterministic evidence before screenshot-only diagnosis. For local web work,
-inspect source/tests and Browser DOM, console and network state when available. Use
-Computer Use for native or GUI-only behavior, simulators, system settings and multi-app
-journeys. Define the starting state, target journey and expected result in the capsule.
+Prefer deterministic evidence before screenshots. For local web work, inspect
+source/tests and Browser DOM, console and network state. Use Computer Use for native
+or GUI-only behavior, simulators, system settings and multi-app journeys. The capsule
+states start state, journey and expected result.
 
-Batch GUI checks around a stable candidate instead of replaying long journeys after
-every edit. Reuse the same valid browser/simulator session when safe, and serialize
-shared GUI state. Screenshots prove visible state only; they do not establish hidden
-logic, accessibility, persistence or network correctness. Main retains final product
-and visual judgment. For difficult screenshot or spatial visual judgment, GPT-6 Astra
-may be owner-selected when available; ordinary Computer Use does not justify automatic
-Astra escalation.
+Batch GUI checks around a stable candidate; reuse valid sessions and serialize shared
+GUI state. Screenshots prove visible state only, not hidden logic, accessibility,
+persistence or network correctness. Main owns visual judgment. Astra may be
+owner-selected for difficult screenshot/spatial judgment; ordinary Computer Use does
+not justify automatic escalation.
 
 ## Keep evidence usable
 
