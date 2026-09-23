@@ -25,7 +25,7 @@ class SmartSettingsTest(unittest.TestCase):
         default=(upstream.PACKAGE/'agents/default_executor.toml').read_text()
         self.assertNotIn('codex-workflow-effective-config',heavy)
         self.assertNotIn('Fixed Workflow Settings',heavy)
-        self.assertIn('model_reasoning_effort = "max"',default)
+        self.assertIn('model_reasoning_effort = "xhigh"',default)
         self.assertIn('fork_turns="none"',(upstream.PACKAGE/'archivist.md').read_text())
         self.assertNotIn('fork_turns="200"',(upstream.PACKAGE/'archivist.md').read_text())
 
