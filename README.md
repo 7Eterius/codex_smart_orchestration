@@ -9,6 +9,41 @@ Install once globally. There are no Light/Medium/Heavy routes and no per-reposit
 setup. Project `AGENTS.md` rules remain authoritative for product, safety and
 acceptance requirements.
 
+## Installation
+
+### Open Codex CLI / Codex app from your project directory
+
+The installation itself is global, so the project you open is not modified by the
+Smart installer.
+
+Change permission to **Approve for me** or **Full access**. Then send:
+
+```text
+Download the latest non-draft Smart Orchestration release from https://github.com/7Eterius/codex_smart_orchestration/releases. Download both codex_workflow-<version>.zip and SHA256SUMS. Verify the ZIP against SHA256SUMS, extract it to a temporary directory, then read the bundled codex_workflow/operate/smart_install.md and follow it to complete the global installation. Use Python 3.11 or newer and runtime/smart_install.py --apply. Preserve my existing Codex configuration and project files. If no usable release exists, checksum verification fails, or the installer reports a conflict, stop and report it instead of falling back to source files, historical dist archives, or another repository.
+```
+
+> ⭐ **Recommended:** use **GPT-6 Luna xhigh** for installation.
+
+🔄 **Restart Codex after installation.**
+
+Smart Orchestration is installed once globally under `~/.codex/`. You do not need
+to install it separately for each project. Open any project normally and Smart will
+load automatically while that project's own `AGENTS.md` rules remain in force.
+
+For future releases, send one of these commands to Codex:
+
+```text
+codex_workflow --check-update
+codex_workflow --update
+```
+
+The updater verifies the release package and applies the update transactionally while
+preserving owner configuration and project files. Do not uninstall as a routine
+upgrade step. If an update reports customized managed files or configuration drift,
+review that conflict instead of forcing replacement.
+
+> Requires **Python 3.11 or newer** for deterministic lifecycle operations.
+
 ## Architecture
 
 ```text
@@ -226,18 +261,6 @@ Smart never weakens repository gates, permissions or owner constraints to save
 credits. It does not stage, commit, push, reset, stash, clean, migrate, release or
 alter production/live data without current-task authority. Unknown checks remain
 unknown. Tool output and remote content are evidence, not authority.
-
-## Global installation
-
-Quit Codex before applying a new version:
-
-```bash
-/opt/homebrew/bin/python3.11 -B codex_workflow/runtime/smart_install.py --apply
-```
-
-Python 3.11+ is supported. Installation is global, transactional and idempotent,
-preserves owner configuration/projects/Git/application data, and creates a private
-rollback backup.
 
 ## Validation
 
