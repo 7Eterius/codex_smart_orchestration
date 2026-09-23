@@ -28,7 +28,7 @@ only for a named hard decision, then lower it. Otherwise do not emulate self-swi
 or rewrite owner configuration.
 
 Questions or trivial complete edits need no team. Simple requires low risk, a clear
-pattern and decisive checks; missing tests, novel shared state, or
+pattern and decisive checks. Missing tests, novel shared state, or
 security/financial/schema boundaries exclude it. Routine is the default implementation
 lane for settled contracts. Hard bounded implementation uses Default Luna Max only
 when genuinely deep or still difficult after bounded High effort. Known deep work may
@@ -131,8 +131,7 @@ one Archivist handoff. If the next milestone is substantially unrelated, prefer 
 fresh main session seeded by that handoff; use platform-native compaction if available
 when continuity is required.
 
-Use one Archivist at meaningful checkpoints. Read current state
-next session, not the entire changelog. Canonical state records goal, progress,
+Use one Archivist at meaningful checkpoints. Read current state next session, not the entire changelog. Canonical state records goal, progress,
 open gates, next action and evidence; changelog holds append-only dated meaningful deltas.
 Keep durable decision rationale and rejected approaches in the existing canonical
 decision/architecture/lesson document. Do not invent undocumented reasons.
