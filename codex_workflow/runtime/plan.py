@@ -75,8 +75,10 @@ def resolve_owned_runtime_path(runtime_root: Path, relative: str) -> Path:
         raise ValidationError(
             f"state field owned_runtime_files contains an unsafe path: {relative!r}"
         )
-    root = runtime_root.resolve()
-    candidate = (root / candidate_path).resolve(strict=False)
+    if candidate_path.parts and candidate_path.parts[0] in {".source_backup", ".backups", ".git"}:
+        raise ValidationError("State cannot retire protected backup/Git storage")
+    root = runtime_root.absolute()
+    candidate = root / candidate_path
     try:
         candidate.relative_to(root)
     except ValueError as error:

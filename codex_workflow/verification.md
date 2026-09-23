@@ -1,81 +1,75 @@
 # Change-aware verification
 
-Consult once while planning validation-bearing work. Main sends workers only the
-relevant scope/checkpoint and gates. No extra planning agent or mandatory report.
-Preserve explicit repository/owner gates. This guide narrows redundant timing,
-not required coverage, independent testing, security or accessibility obligations.
-A globally installed policy cannot silently amend a project's stricter test plan.
+Read once when planning validation-bearing work. Main or the bounded lead sends only
+relevant gates to workers. Preserve explicit repository/owner obligations; reducing
+redundant execution never reduces required coverage or independence.
 
-## Choose the checkpoint
+## Check at the right boundary
 
-- Edit loop: fastest checks that can invalidate this edit; no full matrix per worker.
-- Stable candidate: independent Tester verifies the combined change and affected
-  journeys; main audits decisive source and final running-product visual evidence.
-- Merge/release: complete applicable gates when that phase is actually authorized.
-  A candidate proof may stop with release gates explicitly OPEN, never called done.
+During edits use the narrowest checks that can invalidate the change. At a stable
+candidate, independently verify affected behavior when risk requires it. At an authorized
+integration/release boundary, complete that boundary's gates. Local PASS is not release
+acceptance. Deferred or unavailable gates remain OPEN with a reason.
 
-Batch closely related edits under one acceptance contract. Repaired behavior gets
-fresh affected checks. Shared dependencies, unknown impact or failures widen scope.
-An executed check is not an obligation to repeat it at every handoff. Conversely,
-Executor self-checks do not replace an owner-required independent execution.
+Batch coherent edits under one contract. Repaired behavior requires fresh affected checks.
+Widen for shared dependencies, failures or unknown impact. Do not repeat a valid check
+solely because another worker is available. Self-checks never replace required independent
+execution. Tests must derive intended behavior from authoritative contracts; changing an
+assertion merely to agree with the implementation is not a repair.
 
-## Trigger checks by what changed
-
-| Change | Needed evidence |
+| Change | Decisive evidence |
 | --- | --- |
-| Internal docs only | Document/link correctness; no UI audit unless behavior or executable config changed |
-| Pure domain/backend logic | Relevant unit/contracts; inspect UI consumers when data shape, errors or state behavior changed |
-| UI copy/localization | Required key/placeholder/plural integrity and affected text wrapping/accessibility names |
-| Layout/type/color/animation | Running changed screens, relevant contrast/target size/Dynamic Type or zoom/reduced motion |
-| Menus/forms/focus/navigation | Keyboard and focus/back continuity, labels/roles, relevant screen-reader state and targeted automated scan |
-| Shared theme/component/router | Broaden representative consuming journeys, both affected themes, inherited semantics |
-| Auth/entitlements/migration/financial truth | Boundary/invariant and regression checks; never classify solely by diff size |
+| Internal documentation | Accurate content, references and executable examples |
+| Domain/backend | Unit/contracts; inspect consumers when shape, errors or state change |
+| Copy/localization | Keys/placeholders/plurals and affected wrapping/accessibility names |
+| Layout/theme/components | Running affected screens, consuming journeys, relevant contrast/zoom/motion |
+| Forms/focus/navigation | Keyboard/focus/back continuity, roles/labels, relevant screen-reader states |
+| Auth/entitlements/schema/financial | Invariants, denied paths, persistence and regressions |
 
-No full accessibility/device/locale/screenshot matrix after every small task.
-Do targeted accessibility on a stable changed UI, including newly revealed states.
-Broader automated/manual accessibility belongs to applicable milestone/release
-criteria or shared-impact changes. Never disable rules or exclude new violations
-for speed. Automation and screenshots do not replace manual accessibility checks.
-Unrelated logic changes need no new UI audit only when UI impact is demonstrably absent.
+Use targeted accessibility and representative affected viewports at a stable candidate;
+retain any mandated device/theme/locale matrix. Do not disable rules or exclude violations.
+Screenshots and automation cannot replace required manual accessibility checks.
 
-## Browser and Computer Use
+## Candidate hold and identity
 
-Prefer deterministic evidence before screenshots. Explicit mechanical Browser/Computer
-steps are Simple Luna Low operator work: inspect source/tests/DOM/console/network,
-navigate known flows, change development settings and collect evidence. Use Computer
-Use for native/GUI-only behavior, simulators, system settings and multi-app journeys.
-The capsule states start state, journey and expected result; operator does not judge
-design quality.
+The validation owner identifies the actual workspace, source including staged/unstaged/
+untracked inputs, relevant harness/config/dependencies, running build, account/data and
+target. HEAD or a URL alone is insufficient. Hold relevant writer changes and target
+replacement while independent checks run; different owners may work only in isolated scope.
+On relevant change or uncertain continuity, invalidate affected evidence. Release the hold
+before correction, identify the repaired candidate, then revalidate. A hold is an ownership
+agreement, not a filesystem lock; external edits can still happen.
 
-Batch GUI checks around a stable candidate; reuse sessions and serialize shared GUI
-state. Screenshots prove visible state only, not hidden correctness. Main/Senior owns
-design judgment. Astra may be owner-selected for difficult spatial/visual judgment.
+For nontrivial holds, the optional `runtime/candidate.py` helper snapshots explicitly
+selected files/directories and compares them later. Include shared contracts, lockfiles,
+config and newly created files where relevant. It reads without modifying the candidate.
+It proves identity only for listed inputs, not test coverage, provenance of a served build,
+external state, or absence of changes between snapshots. A hash is not a dependency graph.
+Use existing trustworthy build/version evidence rather than creating duplicate inventories.
 
-## Keep evidence usable
+## Browser evidence
 
-Reuse only known-applicable evidence: covered behavior, complete relevant inputs,
-dependencies, toolchain/config, data, environment, viewport/theme/locale and scope.
-Include owner/untracked changes, not only HEAD. Record execution vs reuse vs
-not-applicable vs deferred vs blocked in the existing short handoff with rationale.
-No baseline/unknown applicability -> check, not an assumed pass. A file hash alone
-is not a test-dependency graph. No blind command-result cache or suppression of gates.
+Use `browser.md` for multi-step Browser/Computer work. Mechanical execution and evidence
+collection belong to Simple Luna Low; independent interpretation belongs to Tester where
+required, and visual/product judgment stays with main/Senior. A GUI alone triggers neither
+Tester nor expensive-model escalation. Never substitute API-only checks for a required
+real browser journey, nor screenshots for hidden persistence or authorization evidence.
 
-Reuse valid incremental build products and running test servers after confirming
-checkout/config/port identity. Clean only for demonstrated stale artifacts or an
-explicit clean-build gate. Build once for a stable candidate; run compatible tests
-against that build where supported. Debug checks do not prove Release behavior.
-Keep screenshots, deep performance runs and full device/locale matrices on-demand
-unless explicitly required. Never auto-approve visual snapshots.
+## Reuse and reporting
 
-Parallelize independent native checks only within CPU/memory and state isolation.
-Serialize shared simulator, browser, build-output, database and screenshot state.
-Do not create extra LLM agents merely to run two independent shell commands.
-Use failure traces where supported; preserve reproduction and relevant evidence.
+Reuse evidence only when covered behavior, complete relevant inputs, dependencies,
+toolchain/config, data/environment and viewport/theme/locale remain applicable. Record
+fresh, reused, failed, unrun, blocked and deferred distinctly. Unknown applicability
+requires a check. Reuse stable servers/incremental builds after confirming identity;
+clean rebuilds need a stale-artifact cause or explicit gate. Debug does not prove Release.
 
-For verbose commands prefer existing structured reporters or
-`runtime/capture_check.py -- <executable> <args...>`. It saves private raw logs and
-returns bounded excerpts plus real exit status; it does not assess test coverage,
-cache results or call a model. Read native reports/raw output for unknown or failing
-results; never rerun solely to recover output already saved. Keep artifacts out of
-version control; logs/argv may contain secrets. Do not compress decisive code diffs,
-security policies, migrations or visual evidence through a lossy summarizing proxy.
+Use native structured reporters or save stdout/stderr to a private artifact and preserve
+the underlying exit status. Filtering/piping must not hide failure, timeout, cancellation
+or incomplete collection. Read stored failures instead of rerunning to recover discarded
+output. No missing log becomes PASS. Keep artifacts out of source control; redact secrets
+from summaries. Do not lossily summarize decisive diffs, policies, migrations or visuals.
+
+Main reviews decisive diffs in Normal mode. In Coordinated mode the lead performs that
+review and main verifies the returned candidate, evidence, exceptions and final acceptance.
+Neither accepts worker prose without inspectable evidence. New risks can broaden review;
+cheap execution never buys permission to skip a gate.
