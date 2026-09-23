@@ -62,10 +62,10 @@ class RuntimeAwareContracts(unittest.TestCase):
         self.assertIn('genuinely deep bounded',default)
 
     def test_parent_effort_is_runtime_aware_not_rewritten(self):
-        for phrase in ('GPT-6 Sol Medium is the cost/quality',
-                       'runtime-supported in-session effort updates',
-                       'named hard decision',
-                       'do not emulate self-switching',
+        for phrase in ('GPT-6 Sol Medium is the parent baseline',
+                       'Supported runtimes may raise High/xhigh',
+                       'hard architecture/product/UX/design judgment',
+                       'Never emulate self-switching',
                        'rewrite owner configuration'):
             self.assertIn(phrase,self.flat_policy)
 
@@ -79,14 +79,14 @@ class RuntimeAwareContracts(unittest.TestCase):
     def test_tool_loading_async_and_cache_rules_are_bounded(self):
         for phrase in ('deferred tool loading/tool search',
                        'do not invent config keys',
-                       'async tool calls',
-                       'do not combine async tools with parallel',
+                       'async tools are exposed',
+                       'do not combine them with parallel',
                        'GPT-6 preserves earlier prompt-cache'):
             self.assertIn(phrase,self.flat_policy)
 
     def test_browser_and_computer_use_are_evidence_first(self):
         for phrase in ('browser DOM/console/network evidence','Computer Use',
-                       'stable candidate','GPT-6 Astra may be owner-selected',
+                       'stable candidate','Astra is owner-selected only',
                        'never auto-escalate'):
             self.assertIn(phrase,self.flat_policy)
         self.assertIn('## Browser and Computer Use',self.verify)
