@@ -86,7 +86,8 @@ class PackageContracts(unittest.TestCase):
         self.assertIn("without --apply first and inspect the preview", readme)
         self.assertIn("run the same command with --apply", readme)
         prompt = readme.split("```text", 2)[1]
-        self.assertNotIn("GitHub Releases", prompt)
+        self.assertIn("Do not use GitHub Releases", prompt)
+        self.assertNotIn("latest non-draft Smart Orchestration release", prompt)
         self.assertNotIn("workflow.py validate", readme)
         self.assertIn("restart Codex manually", readme)
 
