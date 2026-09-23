@@ -1,35 +1,47 @@
 #!/usr/bin/env python3
 """Install Smart Orchestration globally. Preview by default; --apply writes.
 
-No project paths, repository scanning, source/store edits, model calls or Git.
-Python 3.11+. Apply may complete in an active Codex session; restart afterward.
-Backups live outside the managed runtime.
+The installer touches only workflow-owned global Codex surfaces. It never scans or
+rewrites projects. Installation may complete in the active Codex session; restart
+Codex manually after a successful apply.
 """
 from __future__ import annotations
+
 import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 import uuid
 
 if sys.version_info < (3, 11):
-    raise SystemExit('Use Python 3.11+ (on this Mac: /opt/homebrew/bin/python3.11).')
+    raise SystemExit("Use Python 3.11 or newer.")
+
 PACKAGE = Path(__file__).resolve().parent.parent
 if str(PACKAGE) not in sys.path:
     sys.path.insert(0, str(PACKAGE))
-from runtime.errors import ValidationError, WorkflowError
-from runtime.layout import PackageLayout, RuntimePaths, USER_STATE
-from runtime.markers import USER_MANAGED, extract
-from runtime.plan import OperationPlan, read_json, read_string_list, resolve_owned_runtime_path, json_mutation
-from runtime.release import parse_semver, acquire, select_latest
-from runtime.runtime_ops import plan_runtime_files
-from runtime.smart_config import patch_config, SMART
-from runtime.transaction import Mutation
+
 from runtime.agent_defaults import configure, parse as parse_config
 from runtime.config_assessment import assess_configuration
+from runtime.errors import ValidationError, WorkflowError
+from runtime.layout import PackageLayout, RuntimePaths, USER_STATE
+from runtime.markers import extract
+from runtime.plan import (
+    OperationPlan,
+    json_mutation,
+    read_json,
+    read_string_list,
+    resolve_owned_runtime_path,
+)
+from runtime.runtime_ops import plan_runtime_files
+from runtime.smart_config import SMART, patch_config
+from runtime.transaction import Mutation
+
+
+_SKILL_MARKER = re.compile(r"^<!-- codex-workflow-skill: ([a-z0-9-]+) -->$", re.MULTILINE)
 
 
 def safe_path(path: Path, home: Path) -> None:
@@ -38,11 +50,11 @@ def safe_path(path: Path, home: Path) -> None:
     try:
         path.relative_to(home)
     except ValueError as exc:
-        raise ValidationError(f'Target outside Codex home: {path}') from exc
+        raise ValidationError(f"Target outside Codex home: {path}") from exc
     cursor = path
     while cursor != home.parent:
         if cursor.is_symlink():
-            raise ValidationError(f'Refusing symlink in target ancestry: {cursor}')
+            raise ValidationError(f"Refusing symlink in target ancestry: {cursor}")
         if cursor == home:
             break
         cursor = cursor.parent
@@ -54,188 +66,314 @@ def digest(data: bytes) -> str:
 
 def _read(path: Path) -> bytes | None:
     if path.exists() and not path.is_file():
-        raise ValidationError(f'Target is not a regular file: {path}')
+        raise ValidationError(f"Target is not a regular file: {path}")
     return path.read_bytes() if path.is_file() else None
+
+
+def _version_tuple(value: str) -> tuple[int, int, int]:
+    match = re.fullmatch(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", value.strip())
+    if match is None:
+        raise ValidationError(f"Invalid installed VERSION: {value!r}")
+    return tuple(int(match.group(index)) for index in range(1, 4))
+
+
+def _hash_map(state: dict) -> dict[str, str]:
+    value = state.get("owned_runtime_hashes", {})
+    if value == {}:
+        return {}
+    if not isinstance(value, dict) or not all(
+        isinstance(key, str)
+        and key
+        and isinstance(item, str)
+        and re.fullmatch(r"[0-9a-f]{64}", item)
+        for key, item in value.items()
+    ):
+        raise ValidationError("state field owned_runtime_hashes must map paths to SHA-256 hashes")
+    return dict(value)
+
+
+def _legacy_source_path(source_root: Path, relative: str) -> Path:
+    path = Path(relative)
+    parts = path.parts
+    if parts == ("templates", "AGENTS.md"):
+        return source_root / "AGENTS.md"
+    if len(parts) >= 3 and parts[:2] == ("templates", "project_docs"):
+        return source_root / "project_docs" / Path(*parts[2:])
+    if len(parts) >= 3 and parts[:2] == ("templates", "skills"):
+        return source_root / "skills" / Path(*parts[2:])
+    return source_root / path
+
+
+def _retired_runtime(
+    runtime: RuntimePaths,
+    state: dict,
+    incoming_hashes: dict[str, str],
+    installed_version: str | None,
+) -> tuple[list[Mutation], list[Path], list[str]]:
+    previous = set(read_string_list(state, "owned_runtime_files"))
+    hashes = _hash_map(state)
+    mutations: list[Mutation] = []
+    cleanup_dirs: list[Path] = []
+    warnings: list[str] = []
+    legacy_source = (
+        runtime.runtime / ".source_backup" / installed_version
+        if installed_version
+        else None
+    )
+
+    for relative in sorted(previous - set(incoming_hashes)):
+        target = resolve_owned_runtime_path(runtime.runtime, relative)
+        safe_path(target, runtime.codex_home)
+        current = _read(target)
+        if current is None:
+            continue
+
+        expected = hashes.get(relative)
+        known = expected is not None and digest(current) == expected
+        if not known and legacy_source is not None:
+            source = _legacy_source_path(legacy_source, relative)
+            safe_path(source, runtime.codex_home)
+            if source.is_file() and current == source.read_bytes():
+                known = True
+
+        if not known:
+            warnings.append(
+                f"Preserved retired managed file with unverified local edits: {target}"
+            )
+            continue
+
+        mutations.append(Mutation(target, None))
+        parent = target.parent
+        while parent != runtime.runtime:
+            cleanup_dirs.append(parent)
+            parent = parent.parent
+
+    return mutations, cleanup_dirs, warnings
+
+
+def _retire_source_cache(runtime: RuntimePaths) -> tuple[list[Mutation], list[Path]]:
+    root = runtime.runtime / ".source_backup"
+    safe_path(root, runtime.codex_home)
+    if not root.exists():
+        return [], []
+    if root.is_symlink() or not root.is_dir():
+        raise ValidationError(f"Legacy source cache is not a regular directory: {root}")
+    mutations: list[Mutation] = []
+    cleanup_dirs: list[Path] = [root]
+    for path in sorted(root.rglob("*")):
+        safe_path(path, runtime.codex_home)
+        if path.is_symlink():
+            raise ValidationError(f"Legacy source cache contains a symlink: {path}")
+        if path.is_file():
+            mutations.append(Mutation(path, None))
+        elif path.is_dir():
+            cleanup_dirs.append(path)
+    return mutations, cleanup_dirs
+
+
+def _retire_skills(runtime: RuntimePaths, state: dict) -> tuple[list[Mutation], list[Path], list[str]]:
+    mutations: list[Mutation] = []
+    cleanup_dirs: list[Path] = []
+    warnings: list[str] = []
+    for skill in sorted(set(read_string_list(state, "owned_skills"))):
+        if re.fullmatch(r"[a-z0-9-]+", skill) is None:
+            raise ValidationError(f"Unsafe owned skill name in state: {skill!r}")
+        root = runtime.skills / skill
+        safe_path(root, runtime.codex_home)
+        if not root.exists():
+            continue
+        entry = root / "SKILL.md"
+        if root.is_symlink() or not root.is_dir() or not entry.is_file():
+            warnings.append(f"Preserved retired skill with unverifiable ownership: {root}")
+            continue
+        match = _SKILL_MARKER.search(entry.read_text(encoding="utf-8"))
+        if match is None or match.group(1) != skill:
+            warnings.append(f"Preserved retired skill with unverifiable ownership: {root}")
+            continue
+        for path in sorted(root.rglob("*")):
+            safe_path(path, runtime.codex_home)
+            if path.is_symlink():
+                raise ValidationError(f"Retired workflow skill contains a symlink: {path}")
+            if path.is_file():
+                mutations.append(Mutation(path, None))
+            elif path.is_dir():
+                cleanup_dirs.append(path)
+        cleanup_dirs.append(root)
+    return mutations, cleanup_dirs, warnings
 
 
 def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, bytes | None]]:
     home = home.expanduser().absolute()
     safe_path(home, home)
     package = PackageLayout.resolve(package_root)
-    if not (package.root / 'smart_orchestration.md').is_file():
-        raise ValidationError('Not a Smart Orchestration package')
     runtime = RuntimePaths(home)
+
     if package.root == runtime.runtime.resolve():
-        # An installed runtime has generated templates/state. Reapply its pristine
-        # distribution, not a synthetic package assembled from runtime files.
-        source = runtime.runtime / '.source_backup' / package.version
-        safe_path(source, home)
-        package = PackageLayout.resolve(source)
-    installed_version = runtime.runtime / 'operate/VERSION'
-    safe_path(installed_version, home)
-    if installed_version.is_file() and parse_semver(installed_version.read_text().strip()) > parse_semver(package.version):
-        raise ValidationError('Refusing to downgrade a newer installation')
-    # Inspect only managed targets, not unrelated plugin/skill trees.
+        raise ValidationError(
+            "Install from an extracted source checkout/archive, not the already-installed runtime"
+        )
+
+    installed_version_path = runtime.runtime / "operate" / "VERSION"
+    safe_path(installed_version_path, home)
+    installed_version = (
+        installed_version_path.read_text(encoding="utf-8").strip()
+        if installed_version_path.is_file()
+        else None
+    )
+    if installed_version and _version_tuple(installed_version) > _version_tuple(package.version):
+        raise ValidationError("Refusing to downgrade a newer installation")
+
     for directory in (runtime.runtime, runtime.agents, runtime.skills):
         safe_path(directory, home)
         if directory.exists() and not directory.is_dir():
-            raise ValidationError(f'Expected a directory: {directory}')
-    for name in package.worker_names:
-        safe_path(runtime.agents / f'{name}.toml', home)
-        safe_path(runtime.runtime / 'templates/agents' / f'{name}.toml', home)
-    for skill in package.skill_names:
-        skill_root = runtime.skills / skill
-        safe_path(skill_root, home)
-        if skill_root.is_dir():
-            for target in skill_root.rglob('*'):
-                safe_path(target, home)
-        source_root = package.skill_templates / skill
-        for source in source_root.rglob('*'):
-            if source.is_file():
-                relative = source.relative_to(source_root)
-                target = skill_root / relative
-                template = runtime.runtime / 'templates/skills' / skill / relative
-                safe_path(target, home)
-                safe_path(template, home)
-                before_skill = _read(target)
-                known_skill = _read(template)
-                if before_skill is not None and before_skill != source.read_bytes() and before_skill != known_skill:
-                    raise ValidationError(f'Custom/unowned skill file requires review: {target}')
-    for path in (runtime.config_toml, runtime.user_agents):
-        safe_path(path, home)
-        _read(path)
-    current_config = runtime.config_toml.read_text() if runtime.config_toml.is_file() else ''
-    from runtime._toml import tomllib
-    parsed = parse_config(current_config)
-    assessment = assess_configuration(parsed)
-    if assessment['errors']:
-        raise ValidationError('; '.join(assessment['errors']))
-    # Never replace an unowned worker or silently erase an owner's worker tuning.
-    for name in package.worker_names:
-        target = runtime.agents / f'{name}.toml'
+            raise ValidationError(f"Expected a directory: {directory}")
+
+    for worker in package.worker_names:
+        target = runtime.agents / f"{worker}.toml"
+        safe_path(target, home)
         if not target.exists():
             continue
         before = target.read_bytes()
-        incoming = (package.agent_templates / f'{name}.toml').read_bytes()
-        template = runtime.runtime / 'templates/agents' / f'{name}.toml'
-        known = template.read_bytes() if template.is_file() else None
+        incoming = (package.agent_templates / f"{worker}.toml").read_bytes()
+        known_path = runtime.runtime / "templates" / "agents" / f"{worker}.toml"
+        known = known_path.read_bytes() if known_path.is_file() else None
         if before != incoming and (known is None or before != known):
-            raise ValidationError(f'Custom/unowned worker requires review before replacement: {target}')
-    mutations, owned, cleanup_dirs = plan_runtime_files(package, runtime)
+            raise ValidationError(
+                f"Custom/unowned worker requires review before replacement: {target}"
+            )
 
-    # Retired workflow-owned skills are the one deletion class the global installer
-    # may apply automatically. Unknown user files remain preserved. This lets a
-    # reviewed release retire a managed skill instead of silently reinstalling or
-    # leaving it behind.
-    current_state = read_json(runtime.runtime / USER_STATE, default={})
-    previous_owned_skills = set(read_string_list(current_state, 'owned_skills'))
-    retired_skills = previous_owned_skills - package.skill_names
-    retired_skill_roots = tuple(runtime.skills / skill for skill in sorted(retired_skills))
-    retired_template_paths: set[Path] = set()
-    if retired_skills:
-        template_root = runtime.runtime / 'templates' / 'skills'
-        for relative in read_string_list(current_state, 'owned_runtime_files'):
-            parts = Path(relative).parts
-            if len(parts) < 3 or parts[:2] != ('templates', 'skills') or parts[2] not in retired_skills:
-                continue
-            target = resolve_owned_runtime_path(runtime.runtime, relative)
-            mutations.append(Mutation(target, None))
-            retired_template_paths.add(target)
-            cursor = target.parent
-            while cursor.is_relative_to(template_root):
-                cleanup_dirs.append(cursor)
-                if cursor == template_root:
-                    break
-                cursor = cursor.parent
+    current_config = runtime.config_toml.read_text() if runtime.config_toml.is_file() else ""
+    parsed = parse_config(current_config)
+    assessment = assess_configuration(parsed)
+    if assessment["errors"]:
+        raise ValidationError("; ".join(assessment["errors"]))
 
-    # Preserve every unrelated TOML value, including parent model/effort/speed,
-    # tool permissions, agent limits and existing developer instructions.
     rendered_config = patch_config(current_config, home)
     rendered_config, default_warnings, defaults_added = configure(rendered_config)
-    chosen = {}
-    preserved_deletions = []
+
+    mutations, owned_hashes, cleanup_dirs = plan_runtime_files(package, runtime)
+    config_mode = (
+        runtime.config_toml.stat().st_mode & 0o777
+        if runtime.config_toml.is_file()
+        else 0o600
+    )
+    mutations.append(Mutation(runtime.config_toml, rendered_config.encode(), config_mode))
+
+    current_state = read_json(runtime.runtime / USER_STATE, default={})
+    retired, retired_cleanup, retirement_warnings = _retired_runtime(
+        runtime, current_state, owned_hashes, installed_version
+    )
+    mutations.extend(retired)
+    cleanup_dirs.extend(retired_cleanup)
+
+    cache_mutations, cache_cleanup = _retire_source_cache(runtime)
+    mutations.extend(cache_mutations)
+    cleanup_dirs.extend(cache_cleanup)
+
+    skill_mutations, skill_cleanup, skill_warnings = _retire_skills(runtime, current_state)
+    mutations.extend(skill_mutations)
+    cleanup_dirs.extend(skill_cleanup)
+
+    chosen: dict[Path, Mutation] = {}
     for mutation in mutations:
         safe_path(mutation.path, home)
-        if mutation.content is None:
-            retired_owned_skill = (
-                any(mutation.path.is_relative_to(root) for root in retired_skill_roots)
-                or mutation.path in retired_template_paths
-            )
-            if not retired_owned_skill:
-                # Unknown extra files are not garbage merely because a new package
-                # does not ship them. Never remove owner additions during adoption.
-                preserved_deletions.append(str(mutation.path))
-                continue
-        if mutation.path == runtime.config_toml:
-            mutation = Mutation(mutation.path, rendered_config.encode(), 0o600)
-        elif mutation.path == runtime.user_agents:
-            # Rewrite only the owned block, never surrounding owner instructions.
-            from runtime.markers import replace
-            entry = mutation.content.decode('utf-8')
-            body = extract(entry, USER_MANAGED).replace('~/.codex', str(home))
-            mutation = Mutation(mutation.path, replace(entry, USER_MANAGED, body).encode('utf-8'), 0o600)
         chosen[mutation.path] = mutation
+
     state = {
-        'schema_version': 1, 'version': package.version, 'workflow': 'Smart Orchestration',
-        'mode': 'global', 'owned_runtime_files': sorted(owned),
-        'owned_workers': sorted(package.worker_names), 'owned_skills': sorted(package.skill_names),
+        "schema_version": 2,
+        "version": package.version,
+        "workflow": "Smart Orchestration",
+        "mode": "global",
+        "owned_runtime_files": sorted(owned_hashes),
+        "owned_runtime_hashes": dict(sorted(owned_hashes.items())),
+        "owned_workers": sorted(package.worker_names),
+        "owned_skills": [],
     }
     state_mutation = json_mutation(runtime.runtime / USER_STATE, state)
     chosen[state_mutation.path] = state_mutation
-    changed = []
-    before_by_path = {}
+
+    changed: list[Mutation] = []
+    before_by_path: dict[str, bytes | None] = {}
     for path, mutation in chosen.items():
         safe_path(path, home)
         before = _read(path)
         if before == mutation.content:
             continue
-        if path.is_relative_to(runtime.runtime / '.source_backup') and before is not None:
-            raise ValidationError(f'Historical source collision; do not overwrite an existing version: {path}')
-        mode = path.stat().st_mode & 0o777 if path.exists() else 0o600
+        mode = path.stat().st_mode & 0o777 if path.exists() else mutation.mode
         changed.append(Mutation(path, mutation.content, mode))
         before_by_path[str(path)] = before
-    assessment = assess_configuration(parse_config(rendered_config))
-    warnings = list(dict.fromkeys(default_warnings + assessment['warnings']))
-    if preserved_deletions:
-        warnings.append(f"Preserved {len(preserved_deletions)} extra installed file(s); no automatic cleanup.")
-    if (home / 'AGENTS.override.md').is_file():
-        warnings.append('AGENTS.override.md is preserved; activation also uses developer_instructions.')
-    for name, profile in parsed.get('profiles', {}).items():
-        if isinstance(profile, dict) and 'developer_instructions' in profile:
-            warnings.append(f'Profile {name!r} overrides developer_instructions; verify effective activation when using it.')
-    warnings.append('Project config can override global config. Do not claim model/effort or activation without observable evidence.')
-    plan = OperationPlan('install-smart-global', changed, warnings, [], {
-        'workflow':'Smart Orchestration', 'version':package.version, 'scope':str(home),
-        'project_mutations':0, 'parent_settings':'preserved', 'child_defaults_added': defaults_added,
-        'configuration_assessment': assessment,
-        'retired_owned_skills': sorted(retired_skills),
-    }, cleanup_dirs=cleanup_dirs)
+
+    assessment_after = assess_configuration(parse_config(rendered_config))
+    warnings = list(
+        dict.fromkeys(
+            default_warnings
+            + assessment_after["warnings"]
+            + retirement_warnings
+            + skill_warnings
+        )
+    )
+    if (home / "AGENTS.override.md").is_file():
+        warnings.append(
+            "AGENTS.override.md is preserved; activation also uses developer_instructions."
+        )
+    for name, profile in parsed.get("profiles", {}).items():
+        if isinstance(profile, dict) and "developer_instructions" in profile:
+            warnings.append(
+                f"Profile {name!r} overrides developer_instructions; verify activation when using it."
+            )
+
+    plan = OperationPlan(
+        "install-smart-global",
+        changed,
+        warnings,
+        [],
+        {
+            "workflow": "Smart Orchestration",
+            "version": package.version,
+            "scope": str(home),
+            "project_mutations": 0,
+            "parent_settings": "preserved",
+            "child_defaults_added": defaults_added,
+            "retired_runtime_files": len(retired),
+            "retired_skills": len(set(read_string_list(current_state, "owned_skills"))),
+        },
+        cleanup_dirs=cleanup_dirs,
+    )
     return plan, before_by_path
 
 
-def apply_plan(plan: OperationPlan, before: dict[str, bytes | None], home: Path) -> Path | None:
+def apply_plan(
+    plan: OperationPlan, before: dict[str, bytes | None], home: Path
+) -> Path | None:
     home = home.expanduser().absolute()
     if not plan.mutations:
         return None
-    # A lock prevents concurrent installers, not concurrent Codex agents.
+
     home.mkdir(parents=True, exist_ok=True, mode=0o700)
-    lock = home / '.smart-orchestration-install.lock'
+    lock = home / ".smart-orchestration-install.lock"
     safe_path(lock, home)
     try:
         lock.mkdir(mode=0o700)
     except FileExistsError as exc:
-        raise ValidationError('Another installer or stale install lock exists; inspect it before retrying') from exc
+        raise ValidationError(
+            "Another installer or stale install lock exists; inspect it before retrying"
+        ) from exc
+
     try:
-        stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ') + '-' + uuid.uuid4().hex[:8]
-        backup = home / '.smart-orchestration-backups' / stamp
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
+        backup = home / ".smart-orchestration-backups" / stamp
         safe_path(backup, home)
-        records, backup_mutations = [], []
+        records: list[dict] = []
+        backup_mutations: list[Mutation] = []
         created_dirs: set[Path] = set()
+
         for mutation in plan.mutations:
             path = mutation.path
             safe_path(path, home)
             if _read(path) != before[str(path)]:
-                raise ValidationError(f'File changed during preparation; stop and report the conflict: {path}')
+                raise ValidationError(
+                    f"File changed during preparation; stop and report the conflict: {path}"
+                )
             cursor = path.parent
             while cursor != home and not cursor.exists():
                 created_dirs.add(cursor)
@@ -243,17 +381,47 @@ def apply_plan(plan: OperationPlan, before: dict[str, bytes | None], home: Path)
             relative = path.relative_to(home)
             previous = before[str(path)]
             if previous is not None:
-                backup_mutations.append(Mutation(backup / 'files' / relative, previous, 0o600))
-            records.append({'path':str(relative), 'existed':previous is not None,
-                            'before':digest(previous) if previous is not None else None,
-                            'after':digest(mutation.content) if mutation.content is not None else None,
-                            'mode':mutation.mode, 'before_mode': path.stat().st_mode & 0o777 if path.exists() else None})
-        manifest = json.dumps({'schema':1,'workflow':'Smart Orchestration','files':records,
-                               'created_dirs':[str(path.relative_to(home)) for path in sorted(created_dirs, key=lambda item: (len(item.parts), str(item)))]},
-                              indent=2).encode()
-        backup_mutations.append(Mutation(backup / 'manifest.json', manifest, 0o600))
+                backup_mutations.append(
+                    Mutation(backup / "files" / relative, previous, 0o600)
+                )
+            records.append(
+                {
+                    "path": str(relative),
+                    "existed": previous is not None,
+                    "before": digest(previous) if previous is not None else None,
+                    "after": digest(mutation.content)
+                    if mutation.content is not None
+                    else None,
+                    "mode": mutation.mode,
+                    "before_mode": path.stat().st_mode & 0o777
+                    if path.exists()
+                    else None,
+                }
+            )
+
+        manifest = json.dumps(
+            {
+                "schema": 1,
+                "workflow": "Smart Orchestration",
+                "files": records,
+                "created_dirs": [
+                    str(path.relative_to(home))
+                    for path in sorted(
+                        created_dirs, key=lambda item: (len(item.parts), str(item))
+                    )
+                ],
+            },
+            indent=2,
+        ).encode()
+        backup_mutations.append(Mutation(backup / "manifest.json", manifest, 0o600))
         backup.mkdir(parents=True, exist_ok=False, mode=0o700)
-        OperationPlan('backup-and-install-smart', backup_mutations + plan.mutations, [], [], cleanup_dirs=plan.cleanup_dirs).apply()
+        OperationPlan(
+            "backup-and-install-smart",
+            backup_mutations + plan.mutations,
+            [],
+            [],
+            cleanup_dirs=plan.cleanup_dirs,
+        ).apply()
         return backup
     finally:
         lock.rmdir()
@@ -261,87 +429,98 @@ def apply_plan(plan: OperationPlan, before: dict[str, bytes | None], home: Path)
 
 def status(home: Path) -> dict:
     home = home.expanduser().absolute()
-    config_path = home / 'config.toml'
+    runtime = RuntimePaths(home)
+    config_path = runtime.config_toml
     safe_path(config_path, home)
-    from runtime._toml import tomllib
     cfg = parse_config(config_path.read_text()) if config_path.is_file() else {}
-    instructions = cfg.get('developer_instructions', '')
-    policy = home / 'codex_workflow/smart_orchestration.md'
-    version = home / 'codex_workflow/operate/VERSION'
+    instructions = cfg.get("developer_instructions", "")
+    policy = runtime.runtime / "smart_orchestration.md"
+    version = runtime.runtime / "operate" / "VERSION"
     for path in (policy, version):
         safe_path(path, home)
+
     block_ok = False
-    if isinstance(instructions,str) and SMART.start in instructions and SMART.end in instructions:
+    if (
+        isinstance(instructions, str)
+        and SMART.start in instructions
+        and SMART.end in instructions
+    ):
         block_ok = bool(extract(instructions, SMART))
-    return {'workflow':'Smart Orchestration', 'configuration_assessment':assess_configuration(cfg),
-            'global_bootstrap_present':block_ok,
-            'policy_present':policy.is_file(), 'version':version.read_text().strip() if version.is_file() else None,
-            'agents': {key: cfg.get('agents', {}).get(key) for key in ('max_concurrent_threads_per_session', 'max_threads', 'default_subagent_model', 'default_subagent_reasoning_effort')},
-            'note':'Disk configuration verified only; restart Codex and verify effective role/model settings in a live task.'}
+
+    return {
+        "workflow": "Smart Orchestration",
+        "configuration_assessment": assess_configuration(cfg),
+        "global_bootstrap_present": block_ok,
+        "policy_present": policy.is_file(),
+        "version": version.read_text().strip() if version.is_file() else None,
+        "note": (
+            "Disk configuration only; restart Codex after changes and verify "
+            "effective role/model behavior in a live task."
+        ),
+    }
 
 
 def main(argv=None) -> int:
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--codex-home',type=Path,default=Path(os.environ.get('CODEX_HOME','~/.codex')))
-    parser.add_argument('--package-root',type=Path,default=PACKAGE)
-    parser.add_argument('--apply',action='store_true')
-    parser.add_argument('--check',action='store_true')
-    parser.add_argument('--update',action='store_true',help='Acquire a checksummed fork release, not upstream')
-    parser.add_argument('--restore-backup', type=Path, help='Exact, conflict-checked restoration of a named backup; preview unless --apply')
-    args=parser.parse_args(argv)
-    if args.restore_backup and args.update:
-        parser.error('--restore-backup and --update are mutually exclusive')
-    temporary=None
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--codex-home",
+        type=Path,
+        default=Path(os.environ.get("CODEX_HOME", "~/.codex")),
+    )
+    parser.add_argument("--package-root", type=Path, default=PACKAGE)
+    parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--restore-backup",
+        type=Path,
+        help="Exact conflict-checked restoration of one backup; preview unless --apply",
+    )
+    args = parser.parse_args(argv)
+
     try:
         if args.check:
-            if args.apply or args.update or args.restore_backup:
-                raise ValidationError('--check cannot be combined with --apply or --update')
-            print(json.dumps(status(args.codex_home),indent=2))
+            if args.apply or args.restore_backup:
+                raise ValidationError("--check cannot be combined with --apply/restore")
+            print(json.dumps(status(args.codex_home), indent=2, sort_keys=True))
             return 0
-        package_root=args.package_root
-        if args.update:
-            temporary,package_root=acquire(select_latest())
-            # The verified incoming release owns its schema and installer version.
-            # Never validate a newer role/resource set against the old launcher.
-            import subprocess
-            incoming = package_root / 'runtime/smart_install.py'
-            if incoming.is_symlink() or not incoming.is_file():
-                raise ValidationError('Verified release lacks a regular Smart installer')
-            command = [sys.executable, '-B', str(incoming), '--package-root', str(package_root),
-                       '--codex-home', str(args.codex_home.expanduser())]
-            if args.apply:
-                command.append('--apply')
-            return subprocess.run(command, check=False).returncode
+
         if args.restore_backup:
-            if args.update:
-                raise ValidationError('--restore-backup and --update are mutually exclusive')
             from runtime.smart_restore import prepare_restore
-            plan,before=prepare_restore(args.codex_home,args.restore_backup)
+
+            plan, before = prepare_restore(args.codex_home, args.restore_backup)
         else:
-            plan,before=prepare(package_root,args.codex_home)
-        result=plan.summary()
-        result['applied']=False
+            plan, before = prepare(args.package_root, args.codex_home)
+
+        result = plan.summary()
+        result["applied"] = False
         if not args.apply:
-            result['planned_files']=[str(m.path) for m in plan.mutations]
-        if args.apply:
-            backup=apply_plan(plan,before,args.codex_home)
-            result['applied']=True
-            result['backup']=str(backup) if backup else None
-            result = {'workflow':'Smart Orchestration', 'version':plan.details['version'],
-                      'applied':True, 'changed_files':len(plan.mutations),
-                      'backup':str(backup) if backup else None, 'warnings':plan.warnings,
-                      'status':('Backup restored. Restart Codex manually after this command finishes.' if args.restore_backup else 'Installed globally. Restart Codex manually after this command finishes.') if backup else 'Already installed; no writes.'}
+            result["planned_files"] = [str(mutation.path) for mutation in plan.mutations]
+            result["status"] = (
+                "Preview only. Re-run with --apply in this session; restart Codex "
+                "manually after a successful apply."
+            )
         else:
-            result['status']='Preview only. Re-run with --apply in this session; restart Codex manually after a successful apply.'
-        print(json.dumps(result,indent=2,sort_keys=True))
+            backup = apply_plan(plan, before, args.codex_home)
+            result = {
+                "workflow": "Smart Orchestration",
+                "version": plan.details["version"],
+                "applied": True,
+                "changed_files": len(plan.mutations),
+                "backup": str(backup) if backup else None,
+                "warnings": plan.warnings,
+                "status": (
+                    "Installed globally. Restart Codex manually after this command finishes."
+                    if backup
+                    else "Already installed; no writes."
+                ),
+            }
+
+        print(json.dumps(result, indent=2, sort_keys=True))
         return 0
-    except (OSError,ValueError,WorkflowError) as exc:
-        print(json.dumps({'applied':False,'error':str(exc)}),file=sys.stderr)
+    except (OSError, ValueError, WorkflowError) as exc:
+        print(json.dumps({"applied": False, "error": str(exc)}), file=sys.stderr)
         return 1
-    finally:
-        if temporary is not None:
-            temporary.cleanup()
 
 
-if __name__=='__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

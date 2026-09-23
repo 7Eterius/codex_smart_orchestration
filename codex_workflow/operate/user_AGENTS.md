@@ -4,15 +4,14 @@
 # Smart Orchestration
 
 The globally installed workflow is **Smart Orchestration** from
-`7Eterius/codex_smart_orchestration`. No route phrase or per-repository installation is needed.
-The main loads `~/.codex/codex_workflow/smart_orchestration.md` for substantive work.
-Role-assigned children follow their capsule instead of initializing orchestration.
-Repository product, data-safety and acceptance requirements remain binding.
+`7Eterius/codex_smart_orchestration`. No route phrase or per-repository installation
+is needed. Main sessions read
+`~/.codex/codex_workflow/smart_orchestration.md` once for substantive work.
+Role-assigned children follow their capsule and role instructions instead of
+initializing parent orchestration. Repository product, data-safety and acceptance
+requirements remain binding.
 
-For `codex_workflow --install`, `codex_workflow --update`,
-`codex_workflow --check-update`, `codex_workflow --remove`,
-`codex_workflow --disable`, `codex_workflow --enable`, or
-`codex_workflow --personal`, read
-`~/.codex/codex_workflow/operate/smart_install.md` first. Do not run legacy
-per-project lifecycle mutations or silently restore retired routing.
+For installation, updating from the current `main` source, diagnostics or rollback,
+read `~/.codex/codex_workflow/operate/smart_install.md`. Do not invoke retired
+project bootstrap, route-selection, release-update or token-report workflows.
 <!-- codex-workflow-user-managed-end -->
