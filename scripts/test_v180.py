@@ -37,6 +37,7 @@ EXPECTED={
 class RuntimeAwareContracts(unittest.TestCase):
     def setUp(self):
         self.policy=(PACKAGE/'smart_orchestration.md').read_text()
+        self.flat_policy=' '.join(self.policy.split())
         self.verify=(PACKAGE/'verification.md').read_text()
 
     def test_version_role_map_and_prompt_bound(self):
@@ -54,7 +55,7 @@ class RuntimeAwareContracts(unittest.TestCase):
                        'Hard bounded implementation uses Default Luna Max only',
                        'Known deep work may start Default; no ritual failure',
                        'Senior Sol xhigh is only for'):
-            self.assertIn(phrase,self.policy)
+            self.assertIn(phrase,self.flat_policy)
         routine=tomllib.loads((PACKAGE/'agents/routine_executor.toml').read_text())['developer_instructions']
         default=tomllib.loads((PACKAGE/'agents/default_executor.toml').read_text())['developer_instructions']
         self.assertIn('primary implementation lane',routine)
@@ -66,7 +67,7 @@ class RuntimeAwareContracts(unittest.TestCase):
                        'named hard decision',
                        'do not emulate self-switching',
                        'rewrite owner configuration'):
-            self.assertIn(phrase,self.policy)
+            self.assertIn(phrase,self.flat_policy)
 
     def test_research_and_memory_are_evidence_grounded(self):
         self.assertIn('Companion, Investigator and Archivist are evidence-grounded',self.policy)
@@ -80,14 +81,14 @@ class RuntimeAwareContracts(unittest.TestCase):
                        'do not invent config keys',
                        'async tool calls',
                        'do not combine async tools with parallel',
-                       'GPT-6 preserves\nearlier prompt-cache'):
-            self.assertIn(phrase,self.policy)
+                       'GPT-6 preserves earlier prompt-cache'):
+            self.assertIn(phrase,self.flat_policy)
 
     def test_browser_and_computer_use_are_evidence_first(self):
         for phrase in ('browser DOM/console/network evidence','Computer Use',
                        'stable candidate','GPT-6 Astra may be owner-selected',
                        'never auto-escalate'):
-            self.assertIn(phrase,self.policy)
+            self.assertIn(phrase,self.flat_policy)
         self.assertIn('## Browser and Computer Use',self.verify)
         tester=tomllib.loads((PACKAGE/'agents/tester.toml').read_text())['developer_instructions']
         self.assertIn('Computer Use',tester)
