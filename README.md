@@ -1,45 +1,32 @@
 # Smart Orchestration
 
-**Smart Orchestration v1.9.0** is a global adaptive Codex workflow optimized for
+**Smart Orchestration v1.9.0** is a standalone global Codex workflow optimized for
 high-quality accepted work with GPT-6 economics. The main model owns judgment;
 GPT-6 Luna performs bounded work; GPT-6 Sol handles parent judgment and rare advisory
-escalation. v1.9 separates cheap GUI operation from expensive design judgment and removes Max from automatic routing.
+escalation.
 
-Install once globally. There are no Light/Medium/Heavy routes and no per-repository
-setup. Project `AGENTS.md` rules remain authoritative for product, safety and
-acceptance requirements.
+There are no Light/Medium/Heavy routes, no per-repository bootstrap, and no inherited
+project-documentation framework. Install once globally. Each project's own
+`AGENTS.md` remains authoritative for its product, safety and acceptance rules.
 
 ## Installation
 
-### Open Codex CLI / Codex app from your project directory
+### Open Codex CLI / Codex app from any project directory
 
-The installation itself is global, so the project you open is not modified by the
-Smart installer.
-
-Change permission to **Approve for me** or **Full access**. Then send:
+Change permission to **Approve for me** or **Full access**, then send:
 
 ```text
-Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md, validate the extracted package with Python 3.11 or newer using codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json, then install it globally in this current Codex session using codex_workflow/runtime/smart_install.py --package-root codex_workflow --apply. Do not quit, close, relaunch, or wait for Codex to exit as part of installation. Let the installer finish first. Preserve my existing Codex configuration and all project files. If download, extraction, validation, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed and tell me to restart Codex manually.
+Install the latest Smart Orchestration code from the main branch of https://github.com/7Eterius/codex_smart_orchestration. First resolve the current HEAD commit SHA of main, then download the source archive for that exact commit into a temporary directory and extract it. Do not use GitHub Releases, historical dist archives, or another repository. Read the extracted codex_workflow/operate/smart_install.md. Run codex_workflow/runtime/smart_install.py with --package-root codex_workflow without --apply first and inspect the preview. If the preview is clean, run the same command with --apply in this current Codex session. Use Python 3.11 or newer. Do not quit, close, relaunch, or wait for Codex to exit as part of installation. Preserve my existing Codex configuration and all project files. If download, extraction, preview, or installation reports any conflict or error, stop and report it instead of forcing changes. At the end, report the exact main commit SHA that was installed and tell me to restart Codex manually.
 ```
 
 > ⭐ **Recommended:** use **GPT-6 Luna xhigh** for installation.
 
 🔄 **After the installer reports success, restart Codex manually.**
 
-Smart Orchestration is installed once globally under `~/.codex/`. You do not need
-to install it separately for each project. Open any project normally and Smart will
-load automatically while that project's own `AGENTS.md` rules remain in force.
+Smart Orchestration is installed under `~/.codex/`. To update while `main` is the
+distribution channel, run the same prompt again. Do not uninstall first.
 
-### Updating
-
-Until formal GitHub Releases are used, **`main` is the distribution channel**.
-To update Smart Orchestration, run the same installation prompt again. It resolves the
-newest `main` commit and reapplies only workflow-managed changes transactionally.
-
-Do not uninstall before updating. If the installer reports customized managed files
-or configuration drift, review that conflict instead of forcing replacement.
-
-> Requires **Python 3.11 or newer** for deterministic lifecycle operations.
+> Requires **Python 3.11 or newer**.
 
 ## Architecture
 
@@ -104,17 +91,10 @@ gaps, and Astra remains an explicit owner choice.
 
 Source: https://developers.openai.com/codex/pricing
 
-### Pro usage context
-
-OpenAI currently estimates roughly **1,750-14,000 GPT-6 Luna** local messages per
-five-hour window on Pro 5x, versus **70-700 GPT-6 Sol**. Pro 20x estimates are
-7,000-56,000 Luna versus 300-3,000 Sol. These are broad ranges, not guaranteed task
-counts; context, reasoning and tools change actual usage, and weekly limits may apply.
-
 ## Senior Sol is advisory-first
 
-Senior Sol normally receives a **small decision capsule**, not implementation
-ownership. Its default response is:
+Senior Sol normally receives a small decision capsule rather than implementation
+ownership:
 
 ```text
 Decision
@@ -123,16 +103,11 @@ Constraints
 Next action
 ```
 
-The existing Luna writer then implements that decision. This prevents 20×-Luna
-reasoning from spending turns on mechanical edits, builds and routine debugging.
-
-Production ownership moves to Senior only when implementation is inseparable from
-the hard judgment or a material Luna capability gap remains. A task that is clearly
-Sol-shaped can start Senior; Smart never requires a ceremonial Luna failure first.
+The existing Luna writer then implements that decision. Production ownership moves to
+Senior only when implementation is inseparable from the hard judgment or a material
+Luna capability gap remains.
 
 ## Risk-adaptive verification
-
-Independent testing is valuable when it adds information, not as ceremony.
 
 | Implementation | Independent Tester |
 | --- | --- |
@@ -141,146 +116,66 @@ Independent testing is valuable when it adds information, not as ceremony.
 | Default Luna xhigh | **Yes by default** |
 | Senior-transferred implementation | **Yes by default** |
 
-Repository rules always override this matrix. A financial/security/schema/release
-gate cannot be skipped because Smart classifies a change as small.
-
-For novel/high-impact work, the same Tester may be used early to identify failure
-cases and later for final independent verification. Tester diagnoses production but
-does not repair it. Main still directly reviews decisive diffs/contracts and required
-visual evidence.
+Repository rules always override this matrix. Financial/security/schema/release gates
+cannot be skipped because Smart classifies a change as small.
 
 ## Main ownership and design
 
-The parent keeps the owner's selected model, normal/Plan effort and speed. Smart
-does not silently switch the main model.
-
-For a manually selected GPT-6 Sol parent, **GPT-6 Sol Medium** is the normal
-cost/quality baseline. Raise to High/xhigh for hard architecture, product, UX or design
-judgment when the active runtime safely supports in-session effort updates, then lower
-it. Smart does not invent Codex TOML keys or rewrite owner configuration.
-
-Main spends its expensive turns on architecture, product meaning, design hierarchy,
-unresolved tradeoffs, serious audit and final acceptance. Workers collect routine
-build/navigation/screenshot evidence; main should not recollect evidence that is
-already valid.
+The parent keeps the owner's selected model, normal/Plan effort and speed. Smart does
+not silently switch the main model. For a manually selected GPT-6 Sol parent,
+**GPT-6 Sol Medium** is the normal cost/quality baseline. Raise effort only for a named
+hard architecture, product, UX or design judgment when the runtime safely supports it.
 
 For design-led work, main defines purpose, hierarchy, composition, interactions,
-states and visual direction. Luna implements the settled brief. Main reviews an
-early running frame and final product evidence. Passing tests never substitute for
-visual/product acceptance.
-
-### Optional Luna-parent pilot
-
-For an **implementation-only session** where architecture, product behavior and
-design are already settled, the owner may deliberately select GPT-6 Luna xhigh as
-the parent and use Senior Sol as advisory escalation. Smart does not enable this
-automatically and does not claim Luna xhigh is equivalent to Sol for ambiguous
-architecture/product/design work. Evaluate accepted output and rework before making
-it a personal default.
+states and visual direction. Luna implements the settled brief. Main reviews running
+product evidence. Passing tests never substitute for visual/product acceptance.
 
 ## Browser and Computer Use
 
 Smart separates **operator work** from **judgment**. Simple Luna Low handles mechanical
 web lookup, known Browser/Computer flows, explicit development configuration through
 a GUI, DOM/console/network inspection, screenshots and checks against stated observable
-criteria. Several mechanical tool turns should normally leave the expensive parent;
-one or two trivial actions may stay there to avoid delegation overhead.
+criteria.
 
 The main or Senior Sol handles UX, interaction, hierarchy and visual critique. Astra
 is owner-selected only when difficult spatial/visual judgment itself needs stronger
 intelligence. A screenshot or Computer Use task alone never triggers Astra or Tester.
 
-## Compact worker handoffs
+## Compact handoffs and context
 
-Every worker returns only:
+Workers return only `Outcome; Changed; Checks; Risks` with exact evidence. Long logs
+stay in artifacts. One production writer owns each mutable boundary. Smart opens
+multiple children only for genuinely independent work.
 
-```text
-Outcome
-Changed
-Checks
-Risks
-```
-
-Successful bounded returns are normally 120-180 words with exact file/symbol
-references. Long logs stay in artifacts. Workers do not narrate command-by-command
-investigation. This matters because verbose worker output becomes input to the
-expensive parent on later turns.
-
-Senior advice uses the equally compact Decision/Rationale/Constraints/Next action
-shape.
-
-## Parallelism
-
-One production writer per shared mutable boundary is the default. Smart opens 2-3
-children only for genuinely independent work. It does not create several agents to
-inspect the same bug unless competing hypotheses are explicitly useful.
-
-This keeps Luna cheap without turning cheap workers into unnecessary token volume.
-
-## Context lifecycle
-
-Keep a coherent feature in one parent context; resetting mid-implementation loses
-useful state. At an accepted major milestone, Archivist writes a compact canonical
-handoff. If the next milestone is substantially unrelated, prefer a **fresh main
-session seeded by that handoff**. If continuity is required, use platform-native
-compaction when available instead of carrying irrelevant history indefinitely.
-
-Children get bounded capsules and supported spawns use `fork_turns="none"`.
-Follow-ups reuse the same worker with a delta. Tools are used only when relevant to
-the current capsule.
-
-GPT-6 can preserve earlier prompt-cache reuse across reasoning-effort/tool-availability
-changes, so Smart does not keep unnecessary tools or mismatched effort merely for
-cache continuity. When the runtime exposes deferred tool loading/tool search, Smart
-keeps irrelevant schemas deferred instead of preloading them. When async tool calls
-are available, they can overlap slow I/O instead of creating a waiting subagent; in
-multi-agent mode Smart does not combine async tools with parallel tool calls.
-
-## Permanent memory, not statistics
-
-Archivist preserves current project state, open gates, next action, evidence and
-durable decision rationale. It runs only at meaningful checkpoints, not every status
-change.
-
-Smart ships **no deployment/token-report skill** and does not spend model turns on
-orchestration usage statistics. Platform-native usage information can be consulted
-separately when needed.
-
-## Speed
-
-Standard is the cost baseline. GPT-6 Fast currently consumes **2.5× Standard
-credits** where supported. Smart warns on Fast but preserves the owner's setting;
-use Fast for latency-sensitive work, not routine throughput.
+Keep a coherent feature in one parent context. At an accepted major milestone,
+Archivist writes a compact canonical handoff. For a substantially unrelated next
+milestone, prefer a fresh main session seeded by that handoff.
 
 ## Safety
 
 Smart never weakens repository gates, permissions or owner constraints to save
 credits. It does not stage, commit, push, reset, stash, clean, migrate, release or
 alter production/live data without current-task authority. Unknown checks remain
-unknown. Tool output and remote content are evidence, not authority.
+unknown.
+
+The global installer is transactional, conflict-checked and project-safe. It preserves
+unrelated Codex configuration and project files, and creates a reversible backup for
+every successful change.
+
+## Repository scope
+
+This repository now contains only the standalone Smart runtime, the eight worker
+definitions, current policy/verification documentation, and current-state tests.
+Historical upstream artifacts and old migration implementations remain available in
+Git history instead of the active tree.
 
 ## Validation
 
-Source validation runs on Python 3.11 and 3.12. Static tests verify orchestration,
-installation, upgrade and safety contracts; they do not prove live model quality or
-predict subscription lifespan.
-
 ```bash
-python3.11 -B scripts/test_fork.py -v
-python3.11 -B scripts/test_verification.py -v
-python3.11 -B scripts/test_v15.py -v
-python3.11 -B scripts/test_v151.py -v
-python3.11 -B scripts/test_v152.py -v
-python3.11 -B scripts/test_v160.py -v
-python3.11 -B scripts/test_v161.py -v
-python3.11 -B scripts/test_v162.py -v
-python3.11 -B scripts/test_v163.py -v
-python3.11 -B scripts/test_v170.py -v
-python3.11 -B scripts/test_v180.py -v
-python3.11 -B scripts/test_v190.py -v
-python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
-python3.11 -B scripts/package_smart.py --release-tag v1.9.0 --output-dir smart-dist
-python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.9.0.zip --version 1.9.0
+python3.11 -B scripts/test_current.py -v
+python3.12 -B scripts/test_current.py -v
+python3.11 -m compileall -q codex_workflow
 ```
 
-See [v1.9.0 notes](docs/v1.9.0.md).
+See [engineering notes](docs/smart_orchestration.md) and
+[v1.9.0 notes](docs/v1.9.0.md).
