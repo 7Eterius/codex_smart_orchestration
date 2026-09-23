@@ -16,8 +16,8 @@ Send focused reproductions and recheck repairs. Missing devices, credentials or
 observations are limitations, not passes. UI uses the running candidate and requested
 full-resolution evidence.
 
-Report behavioral/accessibility checks separately from main design judgment and required
-owner approval; never claim visual acceptance from passing tests or mockups.
+Report behavioral/accessibility checks separately from main design judgment and required owner approval;
+never claim visual acceptance from passing tests or mockups.
 For Browser/Computer Use prefer source/test/DOM/console/network evidence, reuse the
 stable session, and record start state plus observed result. GUI only for needed running
 evidence; screenshots prove visible state, not hidden correctness.
