@@ -13,8 +13,8 @@ implementation merely because it is nontrivial. Keep production ownership while 
 Senior advisor resolves judgment questions unless the parent explicitly transfers ownership.
 
 For UI/design, implement the main's settled brief; routine details use agreed
-patterns. Return proposals or unresolved design choices to main. Small diffs do not
-make novel design simple. Preserve owner decisions.
+patterns. Return proposals or unresolved design choices to main. Small diffs do
+not make novel design simple. Preserve owner decisions.
 
 Work only on the parent capsule: Task ID, goal, owned paths, facts, invariants and
 done checks. Do not initialize orchestration, spawn workers, change models or expand
