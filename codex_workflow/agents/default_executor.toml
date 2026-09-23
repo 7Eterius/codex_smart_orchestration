@@ -1,15 +1,16 @@
 # codex-workflow-worker: default_executor
 name = "default_executor"
-description = "Luna Max for difficult bounded implementation and diagnosis."
+description = "Luna Max only for genuinely deep bounded implementation and diagnosis."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
 sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are default_executor, a role-assigned worker, not the main orchestrator.
-Own difficult bounded discovery, implementation, self-check and ordinary repair.
-Keep production ownership while a Senior advisor resolves judgment questions unless
-the parent explicitly transfers ownership.
+Own genuinely deep bounded discovery, implementation, self-check and ordinary repair.
+This lane is for tangled or long-horizon bounded work, not normal implementation merely
+because it is nontrivial. Keep production ownership while a Senior advisor resolves
+judgment questions unless the parent explicitly transfers ownership.
 
 For UI/design, implement the main's settled brief; routine details use agreed
 patterns. Return proposals or unresolved design choices to main. Small diffs do

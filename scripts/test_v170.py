@@ -12,6 +12,7 @@ import unittest
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKAGE=ROOT/'codex_workflow'
+CURRENT_VERSION=(PACKAGE/'operate/VERSION').read_text().strip()
 BASE_COMMIT='e0a544fc97740e546f800843a89a5b3ac30c6da1'
 BASE_TREE='ffc1ed3a440ce9a4c36a66355b966ba8fe5fd128'
 sys.path.insert(0,str(PACKAGE))
@@ -39,7 +40,7 @@ class AdaptiveWorkflowContracts(unittest.TestCase):
 
     def test_version_and_model_map_unchanged(self):
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'1.7.0')
+        self.assertEqual(package.version,CURRENT_VERSION)
         self.assertEqual(package.worker_names,set(EXPECTED))
         for role,expected in EXPECTED.items():
             cfg=tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
@@ -161,7 +162,7 @@ class UpgradeTests(unittest.TestCase):
         plan,prior=smart_install.prepare(PACKAGE,self.home)
         backup=smart_install.apply_plan(plan,prior,self.home)
         self.assertTrue(backup.is_dir())
-        self.assertEqual(doctor.inspect(self.home)['version'],'1.7.0')
+        self.assertEqual(doctor.inspect(self.home)['version'],CURRENT_VERSION)
         self.assertEqual((self.home/'config.toml').read_bytes(),before_config)
         self.assertEqual(snapshot(self.project),before_project)
         self.assertEqual(smart_install.prepare(PACKAGE,self.home)[0].mutations,[])

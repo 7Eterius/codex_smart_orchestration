@@ -38,6 +38,21 @@ criteria or shared-impact changes. Never disable rules or exclude new violations
 for speed. Automation and screenshots do not replace manual accessibility checks.
 Unrelated logic changes need no new UI audit only when UI impact is demonstrably absent.
 
+## Browser and Computer Use
+
+Prefer deterministic evidence before screenshot-only diagnosis. For local web work,
+inspect source/tests and Browser DOM, console and network state when available. Use
+Computer Use for native or GUI-only behavior, simulators, system settings and multi-app
+journeys. Define the starting state, target journey and expected result in the capsule.
+
+Batch GUI checks around a stable candidate instead of replaying long journeys after
+every edit. Reuse the same valid browser/simulator session when safe, and serialize
+shared GUI state. Screenshots prove visible state only; they do not establish hidden
+logic, accessibility, persistence or network correctness. Main retains final product
+and visual judgment. For difficult screenshot or spatial visual judgment, GPT-6 Astra
+may be owner-selected when available; ordinary Computer Use does not justify automatic
+Astra escalation.
+
 ## Keep evidence usable
 
 Reuse only known-applicable evidence: covered behavior, complete relevant inputs,

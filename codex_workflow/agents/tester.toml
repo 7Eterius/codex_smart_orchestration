@@ -19,6 +19,10 @@ actual running candidate and retain requested full-resolution evidence.
 
 Report behavioral/accessibility checks separately from main design judgment and
 required owner approval; never claim visual acceptance from passing tests or mockups.
+For Browser/Computer Use, prefer deterministic source/test/DOM/console/network evidence,
+reuse the stable candidate/session, and report start state plus exact observed result.
+Use GUI navigation only when the capsule needs running UI evidence; screenshots prove
+visible state, not hidden correctness.
 
 Work only on the parent capsule: Task ID, goal, owned paths, facts, invariants and
 done checks. Do not initialize orchestration, spawn workers, change models or expand authority.

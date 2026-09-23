@@ -1,8 +1,9 @@
 # Smart Orchestration
 
-**Smart Orchestration v1.7.0** is a global adaptive Codex workflow optimized for
+**Smart Orchestration v1.8.0** is a global adaptive Codex workflow optimized for
 high-quality accepted work with GPT-6 economics. The main model owns judgment;
-GPT-6 Luna performs most bounded work; GPT-6 Sol is an exceptional advisory tier.
+GPT-6 Luna performs bounded work; GPT-6 Sol handles parent judgment and rare advisory
+escalation. v1.8 adds runtime-aware effort, stronger grounding and Computer Use discipline.
 
 Install once globally. There are no Light/Medium/Heavy routes and no per-repository
 setup. Project `AGENTS.md` rules remain authoritative for product, safety and
@@ -44,8 +45,8 @@ attempt or the lowest raw token count.
 | --- | --- | --- |
 | **Main** | Owner-selected | Plan, architecture, product/UX/visual design, serious audit, acceptance |
 | simple_executor | GPT-6 Luna · Low | Small established-pattern edits |
-| routine_executor | GPT-6 Luna · High | Normal bounded features |
-| default_executor | GPT-6 Luna · Max | Difficult bounded implementation/diagnosis |
+| routine_executor | GPT-6 Luna · High | Primary lane for normal bounded implementation |
+| default_executor | GPT-6 Luna · Max | Rare deep bounded implementation/diagnosis |
 | senior_executor | GPT-6 Sol · xhigh | Advisory hard judgment; transferred implementation only when justified |
 | tester | GPT-6 Luna · xhigh | Independent verification when risk warrants |
 | companion | GPT-6 Luna · Medium | Targeted project-context discovery |
@@ -64,9 +65,10 @@ Current Work/Codex Standard credit rates per million tokens are:
 | GPT-6 Sol | 50 | 5 | 250 | 20× |
 | GPT-6 Astra | 250 | 25 | 1,250 | 100× |
 
-Hard bounded coding therefore stays with **Luna Max**. Sol is not an automatic
-next rung because a task is difficult or because "stronger must be safer." Astra
-is never automatic; it is an explicit owner choice.
+Most settled implementation stays with **Luna High**. **Luna Max** is reserved for
+genuinely deep bounded work, not anything merely difficult. Sol is not an automatic
+next rung because "stronger must be safer." Astra is never automatic; it is an
+explicit owner choice.
 
 Source: https://developers.openai.com/codex/pricing
 
@@ -120,6 +122,12 @@ visual evidence.
 The parent keeps the owner's selected model, normal/Plan effort and speed. Smart
 does not silently switch the main model.
 
+For a manually selected GPT-6 Sol parent, **GPT-6 Sol Medium** is the normal
+cost/quality baseline. Raise effort only for a named hard judgment. GPT-6 can preserve
+the earlier cached prefix across supported in-session effort changes, but Smart uses
+that only when the active runtime exposes a safe mechanism. It does not invent Codex
+TOML keys or rewrite owner configuration.
+
 Main spends its expensive turns on architecture, product meaning, design hierarchy,
 unresolved tradeoffs, serious audit and final acceptance. Workers collect routine
 build/navigation/screenshot evidence; main should not recollect evidence that is
@@ -138,6 +146,18 @@ the parent and use Senior Sol as advisory escalation. Smart does not enable this
 automatically and does not claim Luna Max is equivalent to Sol for ambiguous
 architecture/product/design work. Evaluate accepted output and rework before making
 it a personal default.
+
+## Browser and Computer Use
+
+For local web work, prefer source/tests plus Browser DOM, console and network evidence
+before repeated screenshots. Use the built-in Browser for normal local verification.
+Use Computer Use for native or GUI-only behavior, simulators, system settings and
+multi-app journeys, and batch those journeys around a stable candidate.
+
+The main still owns final product and visual acceptance. GPT-6 Astra can be useful for
+difficult screenshot or spatial visual judgment, but Smart never auto-selects it for
+ordinary Computer Use. Current Codex credit rates make Astra 5× Sol and 100× Luna, so
+that escalation should buy a real visual-capability gain.
 
 ## Compact worker handoffs
 
@@ -180,7 +200,10 @@ the current capsule.
 
 GPT-6 can preserve earlier prompt-cache reuse across reasoning-effort/tool-availability
 changes, so Smart does not keep unnecessary tools or mismatched effort merely for
-cache continuity.
+cache continuity. When the runtime exposes deferred tool loading/tool search, Smart
+keeps irrelevant schemas deferred instead of preloading them. When async tool calls
+are available, they can overlap slow I/O instead of creating a waiting subagent; in
+multi-agent mode Smart does not combine async tools with parallel tool calls.
 
 ## Permanent memory, not statistics
 
@@ -234,9 +257,10 @@ python3.11 -B scripts/test_v161.py -v
 python3.11 -B scripts/test_v162.py -v
 python3.11 -B scripts/test_v163.py -v
 python3.11 -B scripts/test_v170.py -v
+python3.11 -B scripts/test_v180.py -v
 python3.11 -B codex_workflow/runtime/workflow.py validate --package-root codex_workflow --json
 python3.11 -B scripts/package_smart.py --release-tag v1.7.0 --output-dir smart-dist
 python3.11 -B scripts/package_smart.py --verify smart-dist/codex_workflow-1.7.0.zip --version 1.7.0
 ```
 
-See [v1.7.0 notes](docs/v1.7.0.md).
+See [v1.8.0 notes](docs/v1.8.0.md).

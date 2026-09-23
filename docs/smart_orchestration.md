@@ -1,72 +1,56 @@
 # Smart Orchestration engineering notes
 
-## Changes from Quality Economy 1.2
+## v1.8 operating model
 
-The canonical parent workflow is `codex_workflow/smart_orchestration.md`.
-Global activation is shipped, not a manual local patch. `smart_install.py` performs
-user-level adoption only and never reads/writes project roots. Its small owned
-bootstrap is appended to existing top-level developer instructions via a validated
-TOML edit; all other parsed settings must compare equal. Existing managed global
-AGENTS is replaced without dropping surrounding owner instructions. An existing
-AGENTS override or profile can still change effective behavior and is not erased.
+The canonical parent workflow is `codex_workflow/smart_orchestration.md`. Global
+activation remains a small validated bootstrap; project product, safety and acceptance
+rules stay authoritative.
 
-Source discovery and documentation are no longer mandatory support-agent ceremonies.
-Only current relevant handoff/contracts are loaded. A simple worker (Luna Medium)
-is added; complex implementation and independent verification retain their stronger
-prior settings. Lower-effort context and archival roles escalate evidence conflicts
-instead of guessing. Main retains all architecture and final acceptance decisions.
+v1.8 keeps the eight named GPT-6 roles. Routine Luna High is the primary bounded
+implementation lane. Default Luna Max is a rare deep-work lane. Senior Sol xhigh stays
+advisory-first and takes production ownership only when hard judgment and implementation
+cannot be separated. The installer never rewrites the owner's parent model, effort,
+speed, approvals or tool permissions.
 
-The Archivist owns assigned current-state and changelog updates. This deliberately
-supersedes generic old workflow ownership of three mandatory state documents, not
-a project's actual product or data rules. Existing canonical docs are reused and
-older history remains preserved. Memory is neither a repo installation nor an
-excuse to mutate a read-only task. Pure questions do not generate changelog noise.
+For manually selected GPT-6 Sol parents, Medium is the documented cost/quality
+baseline. Supported runtimes may raise reasoning effort around one hard decision and
+then lower it while retaining the earlier cached prefix. Smart does not emulate this
+with undocumented Codex configuration.
 
-## Promotion semantics
+## Context and tools
 
-Selection is performed by the main model against clear role contracts. No model
-confidence threshold is invented. The evidence packet is expected versus observed,
-smallest reproduction, attempted fix and the missing fact/decision. Context gaps
-are supplied before needless promotion. Known difficult/risky tasks can start with
-a stronger role. Promotion uses a new configured role; it is not an in-place model
-switch. Stop prior writers first. Advice-only Senior assignments remain read-only
-by their capsule; the same Senior role permits writes only on explicit transfer.
-Subagent model/effort configuration must be observed where runtime metadata permits;
-the model saying its name is not independent verification.
+Workers receive bounded capsules with `fork_turns="none"` and follow-ups send deltas.
+Companion, Investigator and Archivist distinguish sourced facts, inference and unknown
+evidence.
 
-## Test compatibility
+When available, deferred tool loading/tool search is preferred to carrying irrelevant
+schemas. Async slow I/O can replace a waiting worker, but GPT-6 multi-agent mode must
+not combine async tools with parallel tool calls. These are runtime capabilities, not
+new static TOML keys in this package.
 
-`scripts/test_fork.py` keeps inherited functional tests. The one old monolithic
-route-text test is superseded by explicit Smart contracts. The inherited fixed
-settings test retains its capability/rendering assertions but now checks no-history
-closure. The historical-project fixture uses a next version and the current title.
-The archived Quality Economy-specific test file is historical, not the canonical
-suite. No runtime failure is caught and reclassified as a pass.
+## Browser and Computer Use
 
-`scripts/package_smart.py` supplies the canonical role set from runtime.layout to
-the inherited packager. This removes its duplicated six-role assumption; archive
-path traversal, completeness, unexpected-role, checksum and full package validation
-checks are retained. simple_executor is required, not ignored as an unknown file.
+Local web verification starts with source/tests and Browser DOM, console and network
+evidence. Computer Use is for native or GUI-only behavior, simulators, system settings
+and multi-app journeys. GUI checks are batched around stable candidates. The main owns
+visual/product acceptance. Astra remains owner-selected for genuinely difficult
+screenshot or spatial visual judgment, not a default Computer Use model.
 
-## Current limits
+## Installation and safety
 
-Automated tests are not live model evaluations. Less instruction text is not an
-exact allowance-saving percentage. Project AGENTS files still load through Codex;
-this global change removes conflicting workflow procedure, not all local context.
-Profile/project/CLI overrides may supersede global configuration. No credentials,
-parent-model selection, tool permissions or service tier are changed by installation.
+`smart_install.py` performs user-level adoption only and never scans or mutates
+project roots. Existing owner configuration is preserved. Backups contain changed
+files only, installation is idempotent, and custom managed-worker edits require
+review rather than forced replacement.
 
-Backups record changed files only, with private permissions. Installation is
-idempotent and fails closed on custom worker changes, stale targets, invalid TOML,
-unknown markers, disabled subagents, unsafe symlinks and competing installers.
-Source/package validation precedes mutation. The compensating transaction handles
-write failures; keep Codex stopped because the installer lock is not an agent lock.
-Update acquire/checksums are inherited from the fork-only release module.
+Automated tests validate package, migration and policy contracts, not live model
+quality or subscription lifespan.
 
 ## Primary configuration references
 
-Verified when preparing this revision; these document Codex behavior, not benchmark
-claims for this workflow:
 - https://developers.openai.com/codex/subagents/
 - https://developers.openai.com/codex/guides/agents-md/
 - https://developers.openai.com/codex/config-reference/
+- https://developers.openai.com/codex/app/browser
+- https://developers.openai.com/codex/app/computer-use
+- https://developers.openai.com/api/docs/guides/model-selection
