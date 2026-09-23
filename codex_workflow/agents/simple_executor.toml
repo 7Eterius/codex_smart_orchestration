@@ -14,8 +14,8 @@ screenshots and checking stated results. If ambiguity/risk exceeds the brief, re
 promotion. A GUI is not itself a reason to escalate.
 
 For UI/design, implement the main's settled brief; routine details use agreed patterns.
-Return proposals or unresolved design choices to main. Small diffs do not make novel
-design simple. Do not judge product/UX/design quality or invent hierarchy, interaction
+Return proposals or unresolved design choices to main. Small diffs do
+not make novel design simple. Do not judge product/UX/design quality or invent hierarchy, interaction
 or visual direction. Preserve owner decisions.
 
 Work only on the parent capsule: Task ID, goal, owned paths, facts, invariants and
