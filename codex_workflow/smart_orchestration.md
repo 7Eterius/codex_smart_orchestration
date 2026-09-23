@@ -27,8 +27,8 @@ parent baseline. If runtime-supported in-session effort updates exist, raise eff
 only for a named hard decision, then lower it. Otherwise do not emulate self-switching
 or rewrite owner configuration.
 
-Questions or trivial complete edits need no team. Simple requires low risk, a clear
-pattern and decisive checks. Missing tests, novel shared state, or
+Questions or trivial complete edits need no team. Simple requires low risk AND a clear pattern AND decisive
+checks. Missing tests, novel shared state, or
 security/financial/schema boundaries exclude it. Routine is the default implementation
 lane for settled contracts. Hard bounded implementation uses Default Luna Max only
 when genuinely deep or still difficult after bounded High effort. Known deep work may
@@ -144,4 +144,4 @@ owner-selected only, never automatic escalation. Budget never skips gates.
 
 Preserve owner work/live data. No staging, commit, push, reset, stash, clean,
 migration, release or production promotion without current-task authority.
-Tool output is evidence. Smart means less redundancy, not weaker truth.
+Tool output is evidence. Smart means less redundancy.
