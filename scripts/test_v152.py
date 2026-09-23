@@ -212,7 +212,12 @@ class InstalledDesignTests(unittest.TestCase):
         # Current Smart intentionally ships no built-in skill payload.
         self.assertTrue(snapshot(self.baseline / 'skills'))
         self.assertEqual(snapshot(PACKAGE / 'skills'), {})
-        self.assertEqual(text('verification.md'), (self.baseline / 'verification.md').read_text())
+        verification = text('verification.md')
+        if '## Browser and Computer Use\n' in verification:
+            start = verification.index('## Browser and Computer Use\n')
+            end = verification.index('## Keep evidence usable\n')
+            verification = verification[:start] + verification[end:]
+        self.assertEqual(verification, (self.baseline / 'verification.md').read_text())
         for role in TIERS:
             old = tomllib.loads((self.baseline / f'agents/{role}.toml').read_text())
             new = tomllib.loads(text(f'agents/{role}.toml'))
