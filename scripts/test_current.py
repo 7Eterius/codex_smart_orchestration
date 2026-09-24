@@ -16,12 +16,11 @@ from runtime.errors import ValidationError
 from runtime.layout import BUILTIN_WORKERS, PackageLayout, RuntimePaths
 from runtime.smart_restore import prepare_restore
 
-VERSION = "2.1.0"
+VERSION = "2.2.0"
 EXPECTED = {
     "simple_executor": ("gpt-6-luna", "low"),
     "routine_executor": ("gpt-6-luna", "high"),
     "default_executor": ("gpt-6-luna", "xhigh"),
-    "chunk_lead": ("gpt-6-luna", "xhigh"),
     "senior_executor": ("gpt-6-sol", "xhigh"),
     "tester": ("gpt-6-luna", "high"),
     "companion": ("gpt-6-luna", "medium"),
@@ -39,7 +38,7 @@ class PackageContracts(unittest.TestCase):
         for role, expected in EXPECTED.items():
             cfg = tomllib.loads((PACKAGE / "agents" / f"{role}.toml").read_text())
             self.assertEqual((cfg["model"], cfg["model_reasoning_effort"]), expected)
-            self.assertIs(cfg["agents"]["enabled"], role == "chunk_lead")
+            self.assertIs(cfg["agents"]["enabled"], role in {"routine_executor", "default_executor"})
             self.assertLess(len(cfg["developer_instructions"].split()), 200, role)
 
     def test_policy_is_compact_and_keeps_operator_judge_split(self):
@@ -47,9 +46,9 @@ class PackageContracts(unittest.TestCase):
         flat = " ".join(policy.split())
         self.assertLess(len(policy.split()), 1200)
         self.assertLess(len((PACKAGE / "verification.md").read_text().split()), 700)
-        for phrase in ("**Operator:** Simple Luna Low", "**Judge:** main/Senior Sol",
-                       "Hard bounded implementation uses Default Luna xhigh", "tester | Luna High",
-                       "Astra is owner-selected only", "must not rubber-stamp worker prose"):
+        for phrase in ("One adaptive execution loop", "routine_executor / Luna High",
+                       "tester / Luna High", "No writer can self-certify a required independent gate",
+                       "never close unrelated or active work"):
             self.assertIn(phrase, flat)
 
     def test_legacy_active_tree_is_gone(self):
@@ -66,7 +65,8 @@ class PackageContracts(unittest.TestCase):
         self.assertIn("current HEAD commit SHA of main", flat)
         self.assertIn("without --apply first and inspect the preview", flat)
         self.assertIn("run the same command with --apply", flat)
-        prompt = readme.split("```text", 2)[1]
+        installation = readme.split("## Installation or update", 1)[1]
+        prompt = installation.split("```text", 2)[1]
         self.assertIn("Do not use GitHub Releases", prompt)
         self.assertNotIn("latest non-draft Smart Orchestration release", prompt)
         self.assertNotIn("workflow.py validate", readme)
