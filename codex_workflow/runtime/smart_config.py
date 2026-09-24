@@ -13,9 +13,10 @@ SMART = Marker('<!-- smart-orchestration-start -->', '<!-- smart-orchestration-e
 def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
     return f'''The owner's selected workflow is Smart Orchestration. Main sessions read
-{json.dumps(policy, ensure_ascii=False)} once for substantive work. Named leaves follow their role and capsule, never initialize parent orchestration.
-Only chunk_lead may coordinate its bounded leaves under the supplied coordinated.md
-contract; it never becomes the global main or delegates to another lead. This replaces only
+{json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and capsule, never initialize global main orchestration.
+There is one adaptive execution loop. Only routine_executor and default_executor may
+dispatch one independent tester under the supplied execution.md contract and explicit
+authority. Main dispatches review when nesting is not supported; no manager layer. This replaces only
 legacy codex-workflow route selection, mandatory support-agent/intake ceremony
 and bookkeeping ownership. Keep all repository product, architecture, security,
 financial, testing, permission and explicit owner constraints. Do not invent

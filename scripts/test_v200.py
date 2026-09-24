@@ -42,32 +42,32 @@ def snapshot(root: Path):
 
 
 class V2ArchitectureTests(unittest.TestCase):
-    def test_one_delegator_and_no_unverified_config_keys(self):
-        self.assertEqual(DELEGATING_WORKERS, {'chunk_lead'})
+    def test_execution_owners_and_no_unverified_config_keys(self):
+        self.assertEqual(DELEGATING_WORKERS, {'routine_executor', 'default_executor'})
         for path in (PACKAGE / 'agents').glob('*.toml'):
             cfg = tomllib.loads(path.read_text())
             self.assertEqual(set(cfg), {'name', 'description', 'model', 'model_reasoning_effort',
                                        'sandbox_mode', 'developer_instructions', 'agents'})
-            self.assertEqual(cfg['agents'], {'enabled': path.stem == 'chunk_lead'})
-        lead = ' '.join((PACKAGE / 'agents/chunk_lead.toml').read_text().split())
-        for role in ('simple_executor', 'routine_executor', 'default_executor', 'tester'):
-            self.assertIn(role, lead)
-        self.assertIn('Never spawn another lead', lead)
+            self.assertEqual(cfg['agents'], {'enabled': path.stem in DELEGATING_WORKERS})
+        for role in DELEGATING_WORKERS:
+            owner = ' '.join((PACKAGE / 'agents' / (role + '.toml')).read_text().split())
+            self.assertIn('tester', owner)
+            self.assertIn('no other role', owner)
 
     def test_progressive_disclosure_and_gate_contracts(self):
         policy = ' '.join((PACKAGE / 'smart_orchestration.md').read_text().split())
-        coordinated = ' '.join((PACKAGE / 'coordinated.md').read_text().split())
+        execution = ' '.join((PACKAGE / 'execution.md').read_text().split())
         verify = ' '.join((PACKAGE / 'verification.md').read_text().split())
-        self.assertIn('Normal is the default', policy)
-        self.assertIn('Read `coordinated.md` only for this mode', policy)
-        self.assertIn('No acknowledgement or retirement chatter', policy)
+        self.assertIn('One adaptive execution loop', policy)
+        self.assertIn('Read `execution.md` for multi-agent work', policy)
+        self.assertIn('No acknowledgement messages', policy)
         self.assertIn('Freeze relevant candidate inputs', policy)
-        self.assertIn('same writer', coordinated)
-        self.assertIn('qualification.md', coordinated)
+        self.assertIn('same writer', execution)
+        self.assertIn('runtime_check.md', execution)
         self.assertNotIn('capture_check.py', verify)
         self.assertIn('candidate.py', verify)
         self.assertIn('identity only for listed inputs, not test coverage', verify)
-        self.assertLess(len((PACKAGE / 'coordinated.md').read_text().split()), 1000)
+        self.assertLess(len((PACKAGE / 'execution.md').read_text().split()), 1000)
         self.assertLess(len((PACKAGE / 'browser.md').read_text().split()), 650)
 
     def test_current_guides_and_links_exist(self):
@@ -144,7 +144,7 @@ class InstallerIntegrityTests(unittest.TestCase):
         before = snapshot(self.home)
         result = install.status(self.home)
         self.assertTrue(result['disk_ok'], result)
-        self.assertEqual(result['coordinated_qualification'], 'unverified')
+        self.assertEqual(result['runtime_observation'], 'not_inspected')
         self.assertEqual(snapshot(self.home), before)
         self.assertEqual(result['package_fingerprint'], PackageLayout.resolve(self.package).fingerprint)
         config = tomllib.loads((self.home / 'config.toml').read_text())
@@ -158,7 +158,7 @@ class InstallerIntegrityTests(unittest.TestCase):
 
     def test_check_detects_corrupt_runtime_and_runtime_overwrite_is_blocked(self):
         self.apply()
-        path = self.runtime.runtime / 'coordinated.md'
+        path = self.runtime.runtime / 'execution.md'
         path.write_text(path.read_text() + '\nowner edit\n')
         self.assertFalse(install.status(self.home)['disk_ok'])
         before = snapshot(self.home)
@@ -168,11 +168,11 @@ class InstallerIntegrityTests(unittest.TestCase):
 
     def test_check_detects_changed_worker_and_managed_block(self):
         self.apply()
-        (self.runtime.agents / 'chunk_lead.toml').write_text('owner replacement')
+        (self.runtime.agents / 'routine_executor.toml').write_text('owner replacement')
         (self.home / 'AGENTS.md').write_text('only owner instructions')
         result = install.status(self.home)
         self.assertFalse(result['disk_ok'])
-        self.assertIn('agents/chunk_lead.toml', result['mismatches'])
+        self.assertIn('agents/routine_executor.toml', result['mismatches'])
         self.assertIn('global AGENTS managed block', result['mismatches'])
 
     def test_missing_hash_inventory_cannot_pass_check(self):
@@ -199,7 +199,7 @@ class InstallerIntegrityTests(unittest.TestCase):
         self.assertEqual(install.prepare(self.package, self.home)[0].mutations, [])
 
     def test_unknown_file_collision_is_not_adopted(self):
-        path = self.runtime.runtime / 'coordinated.md'
+        path = self.runtime.runtime / 'execution.md'
         path.parent.mkdir()
         path.write_text('unowned')
         with self.assertRaises(ValidationError):
@@ -222,20 +222,20 @@ class InstallerIntegrityTests(unittest.TestCase):
             install.prepare(self.package, self.home)
 
     def test_required_guide_and_delegation_shape_validated(self):
-        guide = self.package / 'qualification.md'
+        guide = self.package / 'runtime_check.md'
         guide.unlink()
         with self.assertRaises(ValidationError):
             PackageLayout.resolve(self.package)
-        shutil.copyfile(PACKAGE / 'qualification.md', guide)
+        shutil.copyfile(PACKAGE / 'runtime_check.md', guide)
         path = self.package / 'agents/simple_executor.toml'
         path.write_text(path.read_text().replace('enabled = false', 'enabled = true'))
         with self.assertRaises(ValidationError):
             PackageLayout.resolve(self.package)
 
     def test_wrong_worker_name_and_nonboolean_enabled_rejected(self):
-        path = self.package / 'agents/chunk_lead.toml'
+        path = self.package / 'agents/routine_executor.toml'
         original = path.read_text()
-        path.write_text(original.replace('name = "chunk_lead"', 'name = "something_else"'))
+        path.write_text(original.replace('name = "routine_executor"', 'name = "something_else"'))
         with self.assertRaises(ValidationError):
             PackageLayout.resolve(self.package)
         path.write_text(original.replace('enabled = true', 'enabled = 1'))
@@ -396,7 +396,7 @@ class ActualV19Upgrade(unittest.TestCase):
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)['disk_ok'])
             self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), (PACKAGE / 'operate/VERSION').read_text())
-            self.assertTrue((home / 'agents/chunk_lead.toml').exists())
+            self.assertFalse((home / 'agents/chunk_lead.toml').exists())
             self.assertEqual(tomllib.loads((home / 'config.toml').read_text())['agents']['max_threads'], 3)
             self.assertEqual(install.prepare(PACKAGE, home)[0].mutations, [])
             restore, prior = prepare_restore(home, backup)
