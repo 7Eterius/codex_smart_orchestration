@@ -1,19 +1,20 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.1.0 -->
+<!-- codex-workflow-version: 2.2.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-Smart Orchestration comes from `7Eterius/codex_smart_orchestration` and is installed
-globally. Main sessions read `~/.codex/codex_workflow/smart_orchestration.md` once for
-substantive work. Normal is the default. Coordinated mode is conditional on a suitable
-authorized run and live runtime qualification.
+Smart Orchestration from `7Eterius/codex_smart_orchestration` uses one adaptive workflow.
+Main reads `~/.codex/codex_workflow/smart_orchestration.md` once for substantive work.
+Delegate settled execution to the cheapest sufficient named owner. There is no mode
+selection or dedicated chunk_lead. Main keeps architecture, product/UX/design and final
+acceptance; applicable project and owner constraints remain binding.
 
-Named leaves follow their role and capsule without loading parent orchestration.
-Only `chunk_lead` can coordinate bounded leaves under the supplied `coordinated.md`
-contract; it cannot become main or spawn another lead. Main keeps architecture,
-product/UX/design judgments and final acceptance. Project/owner constraints prevail.
+Named workers follow their role and capsule, not the global main workflow. Only Routine
+and Default may dispatch one independent Tester when explicitly authorized and supported;
+otherwise main dispatches that same reviewer. Use `execution.md` for capacity, holds,
+repair and native thread release. Unsupported nesting does not disable direct cheap work.
 
-For source installation, updates, disk diagnostics or exact rollback, read
-`~/.codex/codex_workflow/operate/smart_install.md`. Never invoke retired project
-bootstrap, release-update or token-report machinery.
+For preview/apply/check and exact rollback read
+`~/.codex/codex_workflow/operate/smart_install.md`. Installed disk integrity is not a live
+runtime check. No project bootstrap, release updater or token-report ceremony is required.
 <!-- codex-workflow-user-managed-end -->

@@ -1,65 +1,65 @@
 # Global installation and update
 
-Use Python 3.11 or newer. Current `main` in `7Eterius/codex_smart_orchestration` is
-the distribution channel. Resolve its HEAD once, obtain that exact source archive,
-and safely extract it to a temporary directory. A commit pin identifies the selected
-snapshot; it is not a separately signed release checksum. Never use historical ZIPs,
-release fallbacks, another repository or an existing project checkout as scratch.
+Use Python 3.11+. Current `main` in `7Eterius/codex_smart_orchestration` is the normal
+distribution channel: resolve HEAD once, download that exact source snapshot and safely
+extract it outside real projects. A source upgrade bundle must first be applied to a
+reviewed source checkout; its payload alone is not a complete installable package.
+Never use historical dist archives, a different repository or a guessed release.
 
-From the extracted repository root, preview and then apply:
+From the complete source repository root, preview then apply:
 
 ```text
 python3 -B codex_workflow/runtime/smart_install.py --package-root codex_workflow
 python3 -B codex_workflow/runtime/smart_install.py --package-root codex_workflow --apply
-```
-
-Use the same verified Python interpreter and extracted package for both commands.
-Preview validates the complete package, nine named roles, owned-file conflicts and
-configuration. It writes nothing. Apply only a clean plan; on an error stop without
-forcing replacement or deleting a stale lock. An explicit lower capacity or different
-parent model is preserved, not silently "optimized".
-
-An agent inside Codex must not quit, relaunch, or wait for Codex to exit during
-installation. Finish `--apply` in the current session, inspect its exit status and
-JSON, then ask the user to restart Codex manually. Do not create detached wait helpers
-or run AppleScript, kill/pkill, relaunch or other app-control commands. Avoid simultaneous
-configuration edits; writes are atomic per file, not an instantaneous multi-file switch.
-
-The installer respects `CODEX_HOME`, otherwise `~/.codex`. It changes only declared
-Smart runtime files, nine worker TOMLs, the managed global AGENTS region and Smart's
-developer-instructions block plus absent child defaults. It preserves unrelated
-configuration, explicit parent/permission/tool settings and all project files.
-It never grants itself full access or scans repositories.
-
-After applying, use the extracted installer for read-only disk verification:
-
-```text
 python3 -B codex_workflow/runtime/smart_install.py --check
 ```
 
-A successful disk check is not live activation. Report installed version, selected
-Git commit, package fingerprint, backup location, warnings and any unverified runtime
-capabilities. The package fingerprint is content identity, not a Git authentication
-claim. Restart manually before using new roles. Normal needs no nested qualification;
-Coordinated uses the bundled `qualification.md` once per materially changed arrangement.
+Use the same verified interpreter and source for both steps. Preview validates package,
+eight named roles, current managed-file conflicts and existing configuration without
+writes. Apply only a clean result. On conflicts stop, do not force, delete locks or
+uninstall first. Updates from source at the same version are supported.
 
-Update by repeating the same pinned-main preview/apply flow. Same-version source changes
-are supported. No uninstall, tag or formal release is required.
+An agent inside Codex must not quit, relaunch, or wait for Codex to exit during installation.
+Let the command complete in this session and inspect its exit status/JSON. Then ask the
+user to restart Codex manually. Never create detached wait helpers or use AppleScript,
+kill/pkill or app relaunch. Avoid simultaneous configuration changes; replacement is
+atomic per file with compensating rollback, not a single instant for all readers.
 
-## Backups and safe retirement
+The installer honors `CODEX_HOME` (default `~/.codex`). It owns only declared workflow
+runtime files, its named worker copies, the global managed AGENTS region, the Smart
+bootstrap and absent generic child defaults. It preserves explicit parent/model/effort/
+speed, tools, permissions, cap and generic fallback choices. It never edits projects.
+An older generic child model is warned about, not silently changed. Use named roles.
 
-Every applied change has a private exact changed-file backup under
-`~/.codex/.smart-orchestration-backups/` (or `CODEX_HOME`). To preview one named rollback:
+## What the result means
+
+Report version, selected Git source commit when known, package fingerprint, backup,
+warnings and disk check. The fingerprint identifies bytes, not an authenticated Git
+commit. `execution_policy: adaptive` describes installed policy; `runtime_observation:
+not_inspected` is not an activation failure or an execution-mode gate. No disk check
+can prove live role selection, permission inheritance, thread availability or savings.
+
+After manual restart, describe the actual available owner/reviewer when beginning
+substantive work. Use `runtime_check.md` only for a needed uncertain mechanism. Do not
+run an expensive full qualification or audit during every install. Direct named workers
+remain the route when delegated review has not been demonstrated.
+
+## Safe retirement and rollback
+
+Every successful write creates a private changed-file backup under
+`CODEX_HOME/.smart-orchestration-backups/`. Preview a named restoration:
 
 ```text
 python3 -B codex_workflow/runtime/smart_install.py --restore-backup <backup-directory>
 ```
 
-Add `--apply` only for the reviewed rollback. It rejects later conflicting edits and
-creates its own backup. Do not wipe the Codex home, original source caches or backups.
+Add `--apply` only after review. Later local edits block restoration; rollback is itself
+backed up. Preserve source caches and older rollback history.
 
-Current owned-file edits block overwrite. Retired runtime files are removed only when
-recorded hashes or verified historical originals match; changed/unknown retired files
-are preserved with warnings. A skill ownership comment alone never authorizes directory
-clearing. Unrelated files and historical source caches remain intact. Cleanup beyond
-these exact verified managed changes requires separate authority.
+2.2 retires the dedicated chunk_lead and old mode/qualification guides. A previously
+owned worker is removed only if its live bytes match a verified previous template;
+modified/unverifiable retired workers block the update for review. Unowned workers are
+not adopted or deleted. Retired runtime files with unverified edits are preserved and
+reported. Preserved historical files are not active policy. A marker alone never grants
+permission to wipe a directory. Runtime installation does not close old live Codex
+threads; their supported lifecycle or the user's manual restart is separate.

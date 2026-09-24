@@ -122,6 +122,28 @@ def _retired_runtime(runtime: RuntimePaths, state: dict, incoming_hashes: dict[s
     return changes, cleanup, warnings
 
 
+def _retire_workers(runtime: RuntimePaths, state: dict, incoming: set[str], installed_version: str | None):
+    """Retire only live worker bytes proven by their previous managed template."""
+    changes = []
+    for worker in sorted(set(read_string_list(state, "owned_workers")) - incoming):
+        if re.fullmatch(r"[A-Za-z0-9_-]+", worker) is None:
+            raise ValidationError("Unsafe retired worker name in state")
+        target = runtime.agents / f"{worker}.toml"
+        relative = f"templates/agents/{worker}.toml"
+        template = runtime.runtime / relative
+        safe_path(target, runtime.codex_home)
+        safe_path(template, runtime.codex_home)
+        current = _read(target)
+        if current is None:
+            continue
+        baseline = _read(template)
+        if (baseline is None or current != baseline
+                or not _known_bytes(runtime, state, relative, baseline, installed_version)):
+            raise ValidationError(f"Modified/unverified retired worker requires review: {target}")
+        changes.append(Mutation(target, None))
+    return changes
+
+
 def _retire_skills(runtime: RuntimePaths, state: dict):
     """Retire only byte-proven files, never sweep a marker-bearing directory."""
     changes, cleanup, warnings = [], [], []
@@ -224,6 +246,7 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
             raise ValidationError(f"Custom/unowned runtime file requires review: {mutation.path}")
 
     mutations.append(Mutation(runtime.config_toml, rendered_config.encode(), 0o600))
+    mutations.extend(_retire_workers(runtime, state, package.worker_names, installed_version))
     retired, retired_cleanup, retirement_warnings = _retired_runtime(runtime, state, owned_hashes, installed_version)
     mutations.extend(retired)
     cleanup_dirs.extend(retired_cleanup)
@@ -258,7 +281,7 @@ def prepare(package_root: Path, home: Path) -> tuple[OperationPlan, dict[str, by
     if any(isinstance(profile, dict) and "developer_instructions" in profile
            for profile in parsed.get("profiles", {}).values()):
         warnings.append("Profile developer instructions may override activation; verify the selected profile.")
-    warnings.append("Coordinated mode requires a live qualification; installed files do not prove nested delegation.")
+    warnings.append("One adaptive policy is installed; native role execution and thread release require runtime observations, not a disk check.")
     return OperationPlan("install-smart-global", changed, warnings, [], {
         "workflow": "Smart Orchestration", "version": package.version, "scope": str(home),
         "project_mutations": 0, "parent_settings": "preserved", "child_defaults_added": defaults_added,
@@ -376,8 +399,8 @@ def status(home: Path) -> dict:
     return {"workflow": "Smart Orchestration", "version": version,
             "global_bootstrap_present": block_ok, "configuration_assessment": assessment,
             "disk_ok": ok, "mismatches": mismatches, "package_fingerprint": state.get("package_fingerprint"),
-            "coordinated_qualification": "unverified",
-            "note": "Disk evidence only. Restart after changes; qualify actual models, nested roles and tools in Codex."}
+            "execution_policy": "adaptive", "runtime_observation": "not_inspected",
+            "note": "Disk evidence only. Restart manually after changes. Observe role execution and native closure in the client; no global execution-mode gate."}
 
 
 def main(argv=None) -> int:
