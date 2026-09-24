@@ -116,8 +116,11 @@ def _validate(manifest: dict) -> None:
         raise CandidateError("Manifest scopes must be a bounded nonempty list")
     seen = set()
     for scope in scopes:
-        if not isinstance(scope, dict) or scope.get("kind") not in {"file", "directory"}:
+        if (not isinstance(scope, dict) or not isinstance(scope.get("kind"), str)
+                or scope["kind"] not in {"file", "directory"}):
             raise CandidateError("Invalid manifest scope")
+        if set(scope) != {"path", "kind"}:
+            raise CandidateError("Unexpected manifest scope fields")
         name = _relative(scope.get("path"))
         if name != scope["path"] or name in seen:
             raise CandidateError("Duplicate/noncanonical scope")
@@ -128,6 +131,8 @@ def _validate(manifest: dict) -> None:
     for name, info in files.items():
         if _relative(name) != name or not isinstance(info, dict):
             raise CandidateError("Invalid manifest file")
+        if set(info) != {"sha256", "bytes", "mode"}:
+            raise CandidateError("Unexpected manifest file metadata")
         if not any(name == s["path"] or (s["kind"] == "directory" and name.startswith(s["path"] + "/"))
                    for s in scopes):
             raise CandidateError("Manifest file escapes declared scopes")
@@ -171,7 +176,10 @@ def read_manifest(path: Path) -> dict:
         content = stream.read(MAX_MANIFEST_BYTES + 1)
     if len(content) > MAX_MANIFEST_BYTES:
         raise CandidateError("Manifest exceeds size limit")
-    value = json.loads(content, object_pairs_hook=_unique_pairs)
+    try:
+        value = json.loads(content, object_pairs_hook=_unique_pairs)
+    except RecursionError as error:
+        raise CandidateError("Manifest nesting exceeds parser limit") from error
     _validate(value)
     return value
 
@@ -214,9 +222,25 @@ def verify_many(manifests: list[Path]) -> dict:
     if len(set(identities)) != len(paths):
         raise CandidateError("Duplicate manifest paths are not separate evidence")
     results, remaining = [], MAX_BATCH_PREVIEW_PATHS
+    seen_paths, seen_files = set(), set()
     counts = {"matched": 0, "drift": 0, "error": 0}
     for path in paths:
         try:
+            # Parent-directory aliases and hard links must not count the same
+            # evidence twice. Unreadable paths remain individual batch errors.
+            if path.is_symlink() or not path.is_file():
+                raise CandidateError("Manifest must be a regular file")
+            try:
+                canonical = path.resolve(strict=True)
+            except RuntimeError as error:
+                raise CandidateError("Manifest path contains a symlink loop") from error
+            info = canonical.stat()
+            identity = (info.st_dev, info.st_ino) if info.st_ino else None
+            if canonical in seen_paths or (identity is not None and identity in seen_files):
+                raise CandidateError("Duplicate manifest identity is not separate evidence")
+            seen_paths.add(canonical)
+            if identity is not None:
+                seen_files.add(identity)
             result = verify(read_manifest(path))
             result["status"] = "matched" if result["matched"] else "drift"
             result["counts"] = {key: len(result[key]) for key in ("added", "removed", "changed")}

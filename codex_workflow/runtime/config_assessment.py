@@ -44,7 +44,7 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
     if cap is None:
         warnings.append("No concurrency cap is established in this configuration; live default is unverified.")
     elif isinstance(cap, int) and not isinstance(cap, bool) and cap > 3:
-        warnings.append("Explicit concurrency above 3 is preserved; normal Smart fan-out remains 1-3.")
+        warnings.append("Explicit concurrency above 3 is preserved; Smart targets at most two owned open threads, respecting lower limits and other work.")
     for key in ("default_subagent_model", "default_subagent_reasoning_effort"):
         value = agents.get(key)
         if key in agents and (not isinstance(value, str) or not value.strip()):

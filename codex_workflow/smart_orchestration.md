@@ -1,4 +1,4 @@
-# Smart Orchestration 2.2
+# Smart Orchestration 2.3
 
 One adaptive execution loop: define the outcome, assign one owner, execute, verify,
 repair if needed, accept, release. There is no Normal/Coordinated mode selection.
@@ -112,3 +112,9 @@ Persist acceptance basis before authorized consequential writes and their observ
 outcomes afterward. On resume inspect real files/processes/holds before retrying uncertain
 mutations. Acceptance, Git commit, integration and release are distinct. Keep unfinished
 source and evidence durable. No ungranted Git, production, cleanup or memory writes.
+
+Main re-enters for decisions, authority, genuine blockers or acceptance, not routine
+message relays. Repairs name the failed requirement, evidence, allowed delta and fresh
+gates. Repeating a failed approach needs new evidence; reconsider diagnosis before
+upgrading a model. Load only relevant guides. For checked review transitions use
+`boundary.md` and `runtime/boundary.py`, not a new per-command ledger.

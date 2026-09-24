@@ -83,3 +83,9 @@ write. Thread release never implies deleting source, profile, logs or shared res
 
 The Tester owns its separate verdict artifact. The writer may reference it, not revise
 its findings. Main checks the original verdict/candidate, not only the writer's summary.
+
+For supplied structured capsules, check review, write resumption and acceptance with
+`runtime/boundary.py`; see `boundary.md`. Reuse is not an ownership transfer or permission
+to edit a held candidate. Allocation distinguishes work, readback and cleanup; only the
+literal legacy `main` is implicit. Supply actual primary handles and explicit same-unit
+review authority. Cleanup of eligible old children never authorizes new work.
