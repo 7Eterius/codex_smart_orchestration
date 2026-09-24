@@ -1,6 +1,6 @@
 # Targeted runtime checks
 
-Smart 2.2 has no globally gated execution mode. Direct custom-role work and independent
+Smart 2.3 has no globally gated execution mode. Direct custom-role work and independent
 verification remain available using the client's existing supported operations. Nested
 review is only an optimization; it needs evidence for the particular mechanism used.
 Do not convert an old failed trial into a pass by changing its label.
@@ -44,7 +44,7 @@ benchmark completion to execute ordinary safe tasks.
 The supplied 2.1 trial proved one three-thread repair/validation group and then failed
 at the next Routine spawn. Exact capacity cause, repeatable reclamation and several
 other mechanics were not observed. Preserve that result. It motivates explicit release
-and a two-thread unit; it does not prove that v2.2 fixes a Codex backend problem.
+and a two-thread unit; it does not prove that 2.3 fixes a Codex backend problem.
 
 ## When a mechanism is unavailable
 
@@ -58,3 +58,22 @@ Actual cost/quality evaluation stays optional and separate: compare similar acce
 outcomes across all roles, setup and rework, with real allowance observations where
 available. Raw tokens and public price equivalents are not subscription usage or waste.
 No fixed saving percentage or five-day allowance guarantee is established by these tests.
+
+## Scope an existing evidence record
+
+Record the source commit/package fingerprint, client build, relevant configuration,
+primary/child handles, dispatcher and unchanged effective cap. For each mechanism retain
+its native result reference and disposition. Missing evidence stays UNVERIFIED:
+
+| Mechanism | Required observation |
+| --- | --- |
+| Direct review | Deliberate rejection, repair, fresh pass and separate Tester verdict |
+| Turnover | Observed native close results and two complete owner/reviewer pairs |
+| Nested review | Real descendant relationship, scoped context and inherited permissions |
+| Interruption | Only actual supported pause/resume and uncertain-write reconciliation |
+| Economics | Comparable accepted outcomes and actual allowance, or explicitly unknown |
+
+The optional `boundary.md` record checks internal consistency of an existing capsule.
+It neither fills missing native observations nor establishes their authenticity. Do not
+publish private handles or configuration. Reuse observations only within their applicable
+client/configuration scope, and recheck an affected mechanism after a relevant change.

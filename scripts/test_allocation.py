@@ -22,13 +22,13 @@ def task(**kw):
 
 def thread(ident='writer', **kw):
     value=dict(id=ident,parent='main',unit='U1',role='routine_executor',state='running',
-               owned=True,retain=True,durable=False,released_resources=False)
+               owned=True,retain=True,durable=False,released_resources=False,review_authorized=True)
     value.update(kw)
     return value
 
 
 def obs(*threads, **kw):
-    value=dict(caller='main',cap=3,complete=True,close_supported=True,threads=list(threads))
+    value=dict(caller='main',primary='main',cap=3,complete=True,close_supported=True,threads=list(threads))
     value.update(kw)
     return value
 

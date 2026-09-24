@@ -33,7 +33,7 @@ class CurrentContracts(unittest.TestCase):
         self.assertEqual(BUILTIN_WORKERS,allocation.ROLES)
         self.assertEqual(DELEGATING_WORKERS,allocation.REVIEW_OWNERS)
         self.assertEqual(len(BUILTIN_WORKERS),8)
-        self.assertEqual(PackageLayout.resolve(PACKAGE).version,'2.2.0')
+        self.assertEqual(PackageLayout.resolve(PACKAGE).version,'2.3.0')
         self.assertFalse((PACKAGE/'agents/chunk_lead.toml').exists())
         for name in BUILTIN_WORKERS:
             role=tomllib.loads((PACKAGE/'agents'/f'{name}.toml').read_text())

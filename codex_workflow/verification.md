@@ -73,3 +73,7 @@ evidence and remaining authority/lifecycle obligations. The owner cannot convert
 own self-check into independent approval. Main checks applicability and decisive risks
 without routinely repeating the full source investigation. No implied commit, integration,
 release, owner sign-off or savings follows from a test pass.
+
+Optional `boundary.md` records bind verdicts to unit/attempt/contract/candidate/target and
+fresh-gate obligations. Check supplied records with `runtime/boundary.py`; consistent
+identifiers do not authenticate observations or replace actual evidence.

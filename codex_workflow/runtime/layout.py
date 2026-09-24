@@ -29,6 +29,7 @@ _REQUIRED = (
     "runtime/layout.py", "runtime/markers.py", "runtime/plan.py", "runtime/runtime_ops.py",
     "runtime/smart_config.py", "runtime/smart_install.py", "runtime/smart_restore.py",
     "runtime/transaction.py", "runtime/candidate.py", "runtime/allocation.py",
+    "runtime/boundary.py", "boundary.md",
 )
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure allocation and lifecycle checks for Smart 2.2, not a Codex tool adapter.
+"""Pure allocation and lifecycle checks for Smart 2.3, not a Codex tool adapter.
 
 Inputs are caller-supplied classifications/observations. No source scan, persistence,
 network, model call, process control or automatic close/spawn is performed here.
@@ -85,7 +85,8 @@ def classify(task: dict) -> dict:
 
 
 def _inventory(obs: dict):
-    _keys(obs, {"caller", "cap", "complete", "close_supported", "threads"})
+    _keys(obs, {"caller", "cap", "complete", "close_supported", "threads"}, {"primary"})
+    primary = _text(obs.get("primary", "main"))
     caller = _text(obs["caller"])
     cap = obs["cap"]
     if cap is not None and (type(cap) is not int or not 1 <= cap <= MAX_THREADS):
@@ -97,16 +98,18 @@ def _inventory(obs: dict):
     entries = {}
     for thread in obs["threads"]:
         _keys(thread, {"id", "parent", "unit", "role", "state", "owned", "retain", "durable", "released_resources"},
-              {"closure_evidence"})
+              {"closure_evidence", "review_authorized"})
         for key in ("id", "parent", "unit", "role"):
             _text(thread[key])
-        if thread["id"] in entries or thread["id"] == thread["parent"]:
-            raise AllocationError("Duplicate/self-parented thread")
+        if thread["id"] in entries or thread["id"] == thread["parent"] or thread["id"] == primary:
+            raise AllocationError("Duplicate/self-parented thread or primary included as a spawned thread")
         # Existing unknown/legacy/external roles still consume slots.
         if _text(thread["state"]) not in {"running", "waiting", "completed", "closing", "closed", "unknown"}:
             raise AllocationError("Invalid lifecycle state")
         for key in ("owned", "retain", "durable", "released_resources"):
             _bool(thread[key])
+        if "review_authorized" in thread:
+            _bool(thread["review_authorized"])
         if "closure_evidence" in thread:
             _text(thread["closure_evidence"])
         if thread["state"] == "closed" and not thread.get("closure_evidence"):
@@ -129,47 +132,85 @@ def _inventory(obs: dict):
 
 
 def next_action(obs: dict, request: dict) -> dict:
-    """Check one prospective native action. Requested closure never frees a slot.
+    """Check a prospective action; observations are not authenticated capabilities.
 
-    A caller retains full responsibility for accurate inventory, authority, candidate
-    holds, and invocation of the actual exposed native tool. Never call on every token.
+    ``primary`` defaults only to the literal legacy ID "main". Real handles should
+    supply it explicitly. Reuse defaults to work; readback must be requested and
+    grants no write authority. Cleanup is distinct from new-work authorization.
     """
-    _keys(request, {"unit", "role", "reserve", "reuse_id", "spawn_failed", "state_changed"})
+    _keys(request, {"unit", "role", "reserve", "reuse_id", "spawn_failed", "state_changed"},
+          {"intent"})
     unit = _text(request["unit"])
-    if _text(request["role"]) not in ROLES:
-        raise AllocationError("Requested role is not a Smart 2.2 role")
+    role = _text(request["role"])
+    if role not in ROLES:
+        raise AllocationError("Requested role is not a Smart 2.3 role")
+    intent = _text(request.get("intent", "work"))
+    if intent not in {"work", "readback", "cleanup"}:
+        raise AllocationError("Intent must be work, readback or cleanup")
     if type(request["reserve"]) is not int or request["reserve"] not in (0, 1):
         raise AllocationError("Reserve must be zero or one review slot")
     for key in ("spawn_failed", "state_changed"):
         _bool(request[key])
     if request["reuse_id"] is not None:
         _text(request["reuse_id"])
+    if intent == "readback" and (request["reuse_id"] is None or request["reserve"] != 0):
+        raise AllocationError("Readback requires an existing handle and no reserved slot")
+    if intent == "cleanup" and (request["reuse_id"] is not None or request["reserve"] != 0):
+        raise AllocationError("Cleanup cannot reuse work or reserve capacity")
     cap, entries, opened, closable = _inventory(obs)
     result = {"action": "inspect", "reason": "incomplete_inventory", "open_count": len(opened),
               "cap": cap, "limitation": LIMITATION}
     if not obs["complete"]:
         return result
-    caller_thread = entries.get(obs["caller"])
-    if caller_thread is not None and (caller_thread["role"] not in REVIEW_OWNERS or request["role"] != "tester"):
-        raise AllocationError("Only an execution owner may delegate, and only to Tester")
+    primary = obs.get("primary", "main")
+    caller = entries.get(obs["caller"])
+    if obs["caller"] != primary:
+        if caller is None or not caller["owned"]:
+            raise AllocationError("Caller must be the declared primary or a known owned thread")
+        if caller["state"] not in {"running", "waiting", "completed"}:
+            raise AllocationError("Caller lifecycle does not permit work or cleanup")
+
+    def cleanup():
+        if closable and obs["close_supported"]:
+            return {**result, "action": "close", "reason": "release_completed_children", "ids": closable,
+                    "then": "reobserve; closure requested is not closure observed"}
+        return None
+
+    # A completed/retired owner may release eligible direct children, but cannot
+    # dispatch new work. A next-unit request must not prevent old-child cleanup.
+    if intent == "cleanup":
+        return cleanup() or {**result, "action": "wait", "reason": "no_supported_cleanup"}
     reuse = entries.get(request["reuse_id"])
+    if request["reuse_id"] is None:
+        same = [t for t in opened.values() if t["owned"] and t["unit"] == unit and t["role"] == role]
+        if not same:
+            released = cleanup()
+            if released is not None:
+                return released
+    if caller is not None:
+        if (caller["state"] not in {"running", "waiting"}
+                or caller["role"] not in REVIEW_OWNERS or role != "tester"
+                or caller["unit"] != unit or not caller.get("review_authorized", False)):
+            raise AllocationError("New review work requires an active same-unit owner with explicit review authority")
     if request["reuse_id"] is not None:
         if (reuse is None or not reuse["owned"] or reuse["parent"] != obs["caller"]
-                or reuse["role"] != request["role"] or reuse["unit"] != unit
+                or reuse["role"] != role or reuse["unit"] != unit
                 or reuse["state"] not in {"completed", "waiting"}):
             raise AllocationError("Reuse requires a stopped same-unit owned direct child with matching role")
-        return {**result, "action": "reuse", "reason": "same_unit_delta", "id": reuse["id"]}
-    # Finish already-owned work before paying for a duplicate replacement.
-    same = [t for t in opened.values() if t["owned"] and t["unit"] == unit and t["role"] == request["role"]]
-    if same:
-        return {**result, "action": "wait", "reason": "assignment_already_open"}
-    if request["role"] in WRITERS and any(t["owned"] and t["unit"] == unit and t["role"] in WRITERS for t in opened.values()):
+    # Apply the same writer exclusion to spawning AND reactivating a writer.
+    # Even a stopped other writer retains ownership until explicitly released.
+    if intent == "work" and role in WRITERS and any(
+            t["owned"] and t["unit"] == unit and t["role"] in WRITERS
+            and t["id"] != request["reuse_id"] for t in opened.values()):
+        if request["reuse_id"] is None and any(
+                t["owned"] and t["unit"] == unit and t["role"] == role for t in opened.values()):
+            return {**result, "action": "wait", "reason": "assignment_already_open"}
         return {**result, "action": "wait", "reason": "existing_writer_requires_explicit_transfer"}
-    # Close only direct children whose evidence/resources are safe. Re-observe before
-    # making any allocation calculation with fewer open threads.
-    if closable and obs["close_supported"]:
-        return {**result, "action": "close", "reason": "release_completed_children", "ids": closable,
-                "then": "reobserve; closure requested is not closure observed"}
+    if reuse is not None:
+        return {**result, "action": "reuse", "reason": "readback_only" if intent == "readback" else "same_unit_delta",
+                "id": reuse["id"], "intent": intent}
+    if any(t["owned"] and t["unit"] == unit and t["role"] == role for t in opened.values()):
+        return {**result, "action": "wait", "reason": "assignment_already_open"}
     if request["spawn_failed"] and not request["state_changed"]:
         return {**result, "action": "blocked", "reason": "no_blind_spawn_retry"}
     if cap is None:
@@ -178,9 +219,8 @@ def next_action(obs: dict, request: dict) -> dict:
     if sum(t["owned"] for t in opened.values()) + required > SMART_OPEN_LIMIT:
         return {**result, "action": "blocked", "reason": "smart_open_thread_budget", "required_free": required}
     if cap - len(opened) < required:
-        return {**result, "action": "blocked", "reason": "insufficient_open_thread_budget",
-                "required_free": required}
-    return {**result, "action": "spawn", "reason": "budget_available", "role": request["role"],
+        return {**result, "action": "blocked", "reason": "insufficient_open_thread_budget", "required_free": required}
+    return {**result, "action": "spawn", "reason": "budget_available", "role": role,
             "reserve": request["reserve"]}
 
 
@@ -215,7 +255,10 @@ def main(argv=None):
             data = stream.read(MAX_INPUT_BYTES + 1)
         if len(data) > MAX_INPUT_BYTES:
             raise AllocationError("Input exceeds size limit")
-        value = json.loads(data, object_pairs_hook=_pairs)
+        try:
+            value = json.loads(data, object_pairs_hook=_pairs)
+        except RecursionError as error:
+            raise AllocationError("JSON nesting exceeds parser limit") from error
         _keys(value, {"observation", "request"})
         result = next_action(value["observation"], value["request"])
         print(json.dumps(result, sort_keys=True))

@@ -12,6 +12,7 @@ jobs:
   validate:
     name: validate (${{ matrix.os }}, Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -30,11 +31,63 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Current contracts, candidates, installation and exact v1.9 migration
+      - name: Contracts, helpers, installation and exact historical migrations
         run: python -B -m unittest discover -s scripts -p 'test_*.py' -v
-      - name: Syntax and whitespace checks
+      - name: Syntax and changed-commit whitespace checks
         shell: bash
         run: |
           set -euo pipefail
           python -m compileall -q codex_workflow scripts
-          git diff --check
+          git diff --check HEAD^ HEAD
+          git diff --exit-code
+
+  release:
+    name: Publish verified version change
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == '7Eterius/codex_smart_orchestration'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: smart-orchestration-release
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Publish immutable tested source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet HEAD^ HEAD -- codex_workflow/operate/VERSION; then
+            echo 'Version unchanged; no release requested.'
+            exit 0
+          fi
+          version=$(python3 -c 'from pathlib import Path; import re; v=Path("codex_workflow/operate/VERSION").read_text().strip(); assert re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", v); print(v)')
+          tag="v$version"
+          notes="docs/v${version%.*}.md"
+          test -s "$notes"
+          work=$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/smart-release.XXXXXX")
+          # Create-only tag; retries may reuse it only at this exact tested commit.
+          if ! gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA" > "$work/tag.json" 2> "$work/tag-error.txt"; then
+            gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$tag" > "$work/tag.json"
+          fi
+          python3 -c 'import json,os,sys; o=json.load(open(sys.argv[1]))["object"]; assert o["type"]=="commit" and o["sha"]==os.environ["GITHUB_SHA"], "Existing tag does not identify this tested commit"' "$work/tag.json"
+          if gh release view "$tag" --json isDraft,isPrerelease,tagName > "$work/existing.json" 2>/dev/null; then
+            python3 -c 'import json,sys; r=json.load(open(sys.argv[1])); assert not r["isDraft"] and not r["isPrerelease"] and r["tagName"]==sys.argv[2], "Existing release needs explicit inspection"' "$work/existing.json" "$tag"
+            echo 'Exact published release already exists; no overwrite.'
+            exit 0
+          fi
+          archive="smart-orchestration-$version.zip"
+          git archive --format=zip --prefix="smart-orchestration-$version/" "$GITHUB_SHA" > "$work/$archive"
+          (cd "$work" && sha256sum "$archive" > SHA256SUMS)
+          cp "$notes" "$work/notes.md"
+          printf '\n## Published source verification\n\nCommit: `%s`\n\n[Successful validation run](https://github.com/%s/actions/runs/%s).\n\nSource/CI verification is not native Codex qualification or measured allowance savings.\n' \
+            "$GITHUB_SHA" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> "$work/notes.md"
+          gh release create "$tag" "$work/$archive" "$work/SHA256SUMS" \
+            --verify-tag --title "Smart Orchestration $version" --notes-file "$work/notes.md" --latest
