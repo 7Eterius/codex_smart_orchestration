@@ -1,91 +1,102 @@
-# Adaptive execution and thread lifecycle
+# Delegation-first execution and thread lifecycle
 
-This is one loop with a resource-aware dispatcher, not two modes or a new daemon.
-Main defines the contract. One appropriately priced owner completes a bounded outcome;
-an independent Tester reviews a stable candidate when required. Main accepts the
-result and settles lifecycle obligations before scheduling an unrelated unit.
+One loop, no manager layer. Main decides and assesses; a named inexpensive owner executes.
+Name the execution owner in the initial plan. Assign settled work before undertaking broad
+implementation investigation. Direct answers and decisive review reads stay main; code,
+settled edits, build/test operation, browser journeys and review repairs belong to workers.
+Read `design.md` for main-authored briefs and the visual correction loop.
 
-## Admission without a global qualification gate
+## Supported dispatch, not a global qualification gate
 
-Use the custom roles actually exposed by the current client. Disk integrity, catalog
-settings and observed execution are separate facts. Unavailable model metadata remains
-unknown for accounting; do not fabricate it, but do not disable every inexpensive role
-because one unrelated observation is unavailable. Never override a known permission or
-capability failure. Use the installed `runtime_check.md` only for affected mechanics.
+Use custom roles actually exposed by the client. Disk integrity, catalog settings and
+observed execution are different facts. Missing model telemetry stays unknown; it does
+not disable all cheap work. Never override a known permission or capability failure.
+Use `runtime_check.md` only for affected mechanics, not before every assignment.
 
-Routine/Default may create a single independent Tester only when main has delegated
-review scheduling and the relevant nested spawn, scoped context, permission and lifecycle
-mechanics have been observed in this client/configuration. The old three-thread trial
-is not proof of this new pair's readiness. If unverified/unavailable, main creates the
-same Tester directly. Direct named Luna execution does not require nested qualification.
-A request explicitly requiring an unavailable mechanism must report that limitation.
+Routine/Default may dispatch exactly one independent Tester only with main's explicit
+scheduling authority and applicable observed nesting, scope, permission and lifecycle
+behavior. Otherwise main dispatches that same named Tester. No generic substitution,
+manager, extra writer or required nesting qualification for direct named execution.
 
-The reviewer must have a known dispatch path before implementation starts. Reserve one
-available slot when keeping the writer for repair. With a single slot and observed
-native reclamation, plan serialized writer close -> main-dispatched Tester -> replacement
-writer from durable evidence if needed. Review independence survives serialization.
-No reclamation plus no reviewer slot means stop before starting new review-dependent
-implementation; return a plan/checkpoint, not an unverifiable finished change.
+Establish the review path before review-dependent implementation. Reserve reviewer capacity
+while retaining the writer for repair. With one slot and observed reclamation, serialize
+writer close -> main-dispatched Tester -> replacement writer from durable evidence.
+Without a safe review path, checkpoint before review-dependent work; do not omit the gate.
 
-## Implementation and independent review
+## A complete bounded assignment
 
-Capsule: unit/attempt, goal/stop, exact contract/requirement IDs, owned and protected paths,
-starting state, acceptance level, expected evidence, authority and absolute guide paths.
-A coherent named group keeps per-member gates and dependency order; never extend it to
-keep an agent busy. Do not create one worker for every file or command.
+Capsule: unit/attempt, goal/stop, exact contract/requirement IDs, owned/protected paths,
+starting state, acceptance level, evidence, authority and absolute relevant guide paths.
+Design work includes main's accepted brief and review checkpoint. A coherent group keeps
+per-member gates and dependency order; never extend it to keep an agent busy.
+Do not create a worker per file/click or prescribe the entire solution before delegation.
 
-Owner investigates relevant consumers, implements, self-checks and identifies the actual
-candidate including untracked files, test/config/dependency inputs, build and target.
-It requests independent review only when ready. Main or the authorized owner dispatches
-Tester with the immutable contract, diff, gate list, target and artifact locations.
-Do not send the writer's confidence or private reasoning as the review oracle.
+Simple performs established low-risk edits and mechanical journeys with explicit results.
+Routine is the settled implementation default, including ordinary design implementation.
+Default needs actual depth. Main may request bounded discovery before deciding but must
+not re-do the owner's discovery merely to supervise it. Workers report ambiguity early;
+main resolves product/design/architecture choices, then sends only the changed contract.
 
-Tester reviews actual code/contracts and executes the independent gates. It writes only
-evidence or authorized disposable data, not the candidate. Hold candidate and target
-changes throughout. A failure is a focused correction packet. Release hold, reuse the
-same writer where still available, then re-hold and revalidate affected and required
-fresh gates. Retain original failures. Architectural/design/authority changes go to main;
-ordinary repairs stay within the bounded loop where the native dispatcher supports it.
+Owner handles relevant consumers, implementation, self-checks, ordinary repair and evidence.
+No progress ping for every step. At a stable candidate identify source including untracked
+files, test/config/dependency inputs and actual build/target. The capable owner may collect
+required visuals; avoid adding another agent just to forward screenshots.
 
-Owner returns candidate-ready, independently-verified, partial or blocked, never unilateral
-independent acceptance. Main keeps final acceptance and visual/product judgment. If a
-repository requires a third distinct reviewer/owner approval, retain it explicitly;
-the two-thread target cannot waive a gate. Serialize additional checks when necessary.
+## Review, main judgment, delegated corrections
 
-## Finish means handoff plus native release
+Use `verification.md` to decide independent review. Main or its authorized owner supplies
+Tester with immutable requirements, actual diff, gates, target and evidence locations,
+not the writer's confidence or private reasoning. Tester owns its separate verdict artifact;
+the writer may reference it, not rewrite findings. Freeze source/config/build/target during
+review. Tester writes only evidence or authorized disposable data, never the candidate.
 
-Track only existing unit/attempt -> native handle/parent -> running, waiting, completed,
-closing or observed-closed state in the current plan. No per-command ledger. Include
-other open threads in capacity accounting; a parent's child inventory alone may be partial.
-A configured cap is not proof of effective availability. Avoid bulk status scans.
+On failure, release hold, reuse the same writer, re-hold the repaired candidate and rerun
+affected plus mandated fresh gates. Preserve original failures. Ordinary objective repairs
+stay local where supported; unresolved design/architecture/authority goes to main.
+
+Return candidate-ready or independently-verified, not finally accepted. Keep the writer
+available for concrete pending main review when capacity allows. Main examines the actual
+result, decisive changes and original verdict; UI evidence receives main's detailed visual
+assessment. Main sends its findings as a bounded correction task to that worker, not a
+self-authored patch. A changed brief/target invalidates affected evidence. Main rechecks
+corrected results before acceptance. Required distinct reviewers/owner approval still bind.
+
+Main waits through settled execution instead of doing parallel implementation, inspecting
+unfinished diffs or repeatedly running tools for status. An intentional early design
+checkpoint is an exception for judgment, not license to take over execution. One missing
+fact request should be targeted, not a full replay of investigation.
+
+## Handoff and native release
+
+Track unit/attempt, native handle/parent and running, waiting, completed, closing or
+observed-closed state in the existing plan. Include other open threads; a cap is not free
+capacity. No per-command ledger or repeated global inventory scan.
 
 A completed worker still counts until native closure or equivalent reclamation is observed.
-Keep it only for a concrete pending correction or named next member. To close, first
-persist results, confirm no pending writes, and transfer any still-needed server/browser
-or evidence consumers. Its parent closes completed children before closing itself. Report
-unreleased handles to the parent; no invented tools, self-killing shell or generic close-all.
+Retain it for pending review/correction or a named group member, not indefinite future work.
+After main accepts, persist evidence, settle pending writes and transfer retained resources;
+parents close completed owned children before themselves. Observe closure before claiming
+slot reuse. Unreleased handles go in the handoff. Never close unrelated/active work.
 
-Reobserve a native close result before using the reclaimed slot. A failure or ambiguous
-result does not release it on paper. On `agent thread limit reached`, stop new dispatch,
-inspect only relevant handles, close eligible completed owned threads where supported,
-and allow one retry after a concrete change. Otherwise reuse safely or checkpoint.
-Do not churn fresh leads, reserve speculative workers, or raise the cap to mask leakage.
-
-The pure `runtime/allocation.py` helper can check a small supplied inventory and prospective
-request at uncertain boundaries. It counts completed/closing threads, rejects unsupported
-reuse, protects descendants and recommends actions. It calls no native tools and cannot
-verify that a claimed observation is true. Its tests are not a live capacity trial.
+On `agent thread limit reached`, reconcile relevant handles once and use supported native
+release for eligible completed owned threads. Retry only after an observed state change.
+Otherwise reuse safely or checkpoint. Do not raise limits, loop on spawns, simulate
+reclamation or silently switch execution to main because waiting is slower.
+`runtime/allocation.py` checks supplied observations, not live availability or authority.
 
 Progress commentary continues the run; final worker handoff ends only that assignment.
-On pause cancel new dispatch, safely reconcile active operations and preserve the candidate.
-After interruption verify actual state before resume, never replay an uncertain external
-write. Thread release never implies deleting source, profile, logs or shared resources.
+Pause stops new dispatch and preserves state. Resume inspects actual files/processes/holds
+before uncertain writes. Thread closure does not delete source, profiles, logs or servers.
 
-The Tester owns its separate verdict artifact. The writer may reference it, not revise
-its findings. Main checks the original verdict/candidate, not only the writer's summary.
+## Narrow main-only execution
 
-For supplied structured capsules, check review, write resumption and acceptance with
-`runtime/boundary.py`; see `boundary.md`. Reuse is not an ownership transfer or permission
-to edit a held candidate. Allocation distinguishes work, readback and cleanup; only the
-literal legacy `main` is implicit. Supply actual primary handles and explicit same-unit
-review authority. Cleanup of eligible old children never authorizes new work.
+An explicit user no-agent/direct-execution instruction remains binding. A verified tool
+or permission boundary may require main to perform only an indispensable authorized
+bridge action. State that boundary once; return remaining execution to a named worker.
+An assumed inconvenience, tiny diff, faster patch or unavailable nesting is not such a
+boundary. Never pretend a child can use an unavailable browser/GUI tool or widen permissions.
+If no safe path exists, report the blocked action, not invented completion.
+
+For existing structured capsules, `boundary.md` and `runtime/boundary.py` check independent
+review/write/acceptance consistency. Readback is non-writing; cleanup is not new-work
+authority. Main's visual judgment and owner approval are separate from a consistent record.

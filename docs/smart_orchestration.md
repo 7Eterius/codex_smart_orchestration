@@ -1,57 +1,62 @@
 # Smart Orchestration engineering notes
 
-## Single adaptive loop
+## Delegation-first, single adaptive loop
 
-2.3 preserves the single-owner architecture introduced in 2.2. Main retains consequential
-judgment and final acceptance. Routine/Default own implementation, self-checks and repairs.
-Tester covers actual-diff/contract review and required behavior verification. There is
-no dedicated lead reviewing the same ordinary change again.
+2.4 retains the single-owner architecture and strengthens the actual division of labor.
+Main owns product/architecture/UX/visual decisions, detailed quality review and acceptance.
+Named Luna workers own settled implementation, mechanical operation, evidence and repair.
+Small edits and main-authored findings are delegated too; latency is not an exception.
 
-Answers/trivial already-known operations can stay direct. Multi-step mechanical work
-goes to Simple, settled implementation to Routine, deep work to Default. These are
-responsibilities, not modes. No classifier guarantees a globally cheapest correct choice.
-Main re-entry is for decisions, authority, genuine blockers or acceptance. Corrections
-carry failed requirements, evidence, allowed deltas and fresh gates, not full rediscovery.
+The main policy, managed AGENTS region and installed developer-instructions bootstrap all
+carry the rule. Main can answer, write authorized decision briefs and inspect decisive
+source/visual evidence. Main-only execution requires an explicit user override or a
+verified narrowly authorized tool/permission boundary. The remaining work returns to
+workers; no assumed access, generic model substitution or hidden configuration override.
 
-## Capability and lifecycle
+## Design authorship and repair
 
-Routine/Default may dispatch one Tester under explicit authority with applicable observed
-nested mechanics and an available slot. Otherwise Main dispatches the same named reviewer.
-The intended unit uses two Smart-owned open threads, with serialization for additional
-mandatory reviewers. The configured cap remains a ceiling including other work.
+The on-demand [design guide](../codex_workflow/design.md) defines a short accepted brief,
+actual running evidence, main's detail-oriented review and grouped correction tasks.
+Workers implement within settled patterns, returning unresolved design choices to main.
+Main inspects the result and rechecks repairs instead of implementing its own quick fixes.
+An existing capable owner may collect short evidence; Simple handles substantial known
+operator journeys. Do not create a new agent per click, file or finding.
 
-Completion, correction retention, closing, observed closure and resource handoff are
-separate. Only observed native release frees a slot. Parents close eligible direct
-children before themselves. No blind retries, unrelated closures or cap increases.
+Tester independently reviews actual diff/contracts and required behavior. It does not
+replace main's visual judgment or an explicit owner approval. Review depth is not bounded
+by a delegation percentage. The instruction policy is not a native tool interceptor.
 
-`runtime/allocation.py` checks supplied observations; it does not authenticate them or
-call native tools. 2.3 applies writer exclusion to reuse as well as spawn, separates
-readback/cleanup from work, and validates primary/caller identity, same-unit review and
-explicit authority. Cleanup can release eligible children of completed/retired owners
-without granting new dispatch. See [input contracts](../codex_workflow/boundary.md).
+## Capability, lifecycle and evidence
 
-## Evidence boundaries
+Routine/Default may dispatch one Tester only with explicit authority and observed nested
+mechanics. Otherwise main dispatches that same named reviewer. No manager or separate mode.
+Use existing source/build/target identity and hold inputs during independent review.
+Release before corrections, retain original failures and rerun affected and mandated fresh
+gates. Preserve separate Tester verdicts and actual current visual evidence for main.
 
-The optional `runtime/boundary.py` checks an existing capsule at review, repair and
-acceptance boundaries. A separate Tester verdict must match unit, attempt, contract,
-candidate, target and reviewer, with the exact authoritative gate map. Required fresh
-checks cannot be satisfied by reused results. Holds prevent a permitted write transition
-in the supplied record, not at the filesystem or native tool layer.
+Keep the same worker for concrete pending review/corrections, not speculative future work.
+A completed response does not free capacity. Persist results and transfer resources, close
+eligible owned direct children natively, observe release and only then reuse slots. The
+two-thread target and existing lower/user caps remain binding. No process killing or
+capacity increases to mask lifecycle problems.
 
-`runtime/candidate.py` fingerprints explicit source inputs, not behavioral coverage or
-runtime provenance. Batch errors preserve later results; directory aliases and hard links
-cannot inflate matched-manifest counts. Equal bytes in different files are still not
-proof of independent review. There is no automatic hash cache or new telemetry store.
+`runtime/allocation.py`, `runtime/candidate.py` and `runtime/boundary.py` are unchanged.
+They check supplied ownership/input/transition data, not native availability, authority,
+model behavior or evidence truth. See [boundary contracts](../codex_workflow/boundary.md).
+No new helper module, model-call loop, logging daemon or mandatory statistics is added.
 
-## Installation and verification
+## Installation and validation
 
-The installer fingerprints the new guide/helper along with the existing package. It
-continues to protect owner edits, unrelated configuration and projects. Migration tests
-run real historical installers and verify idempotence and exact rollback, including
-v2.2 -> v2.3. CI requires full Git history rather than skipping unavailable migrations.
+`design.md` is an explicit package input included in installation and fingerprint checks.
+Bootstrap content updates transactionally inside its existing managed region. All other
+owner settings and project files remain protected. A new source snapshot is installed by
+preview/apply/check, followed by the user's manual client restart and a fresh conversation.
 
-See [2.3 release notes](v2.3.md), [2.2 rationale](v2.2.md),
-[targeted runtime checks](../codex_workflow/runtime_check.md) and
-[optional evaluation](evaluation.md). Source tests do not qualify native thread turnover
-or establish allowance savings. The earlier three-thread trial remains evidence for
-its first loop, not proof of repeatable reclamation or of the exact failure cause.
+CI runs source/installation tests and exact archived migrations, now including
+2.3 -> 2.4 -> no-op reapply -> exact rollback. Prompt contract tests validate instructions,
+not whether an LLM obeyed them. The targeted [runtime checks](../codex_workflow/runtime_check.md)
+cover actual observations without disabling ordinary direct named execution.
+
+See [2.4 notes](v2.4.md), [2.3 hardening](v2.3.md) and [optional evaluation](evaluation.md).
+Savings require observation of comparable satisfactory outcomes across every model layer,
+setup and rework. Opaque tool calls and missing pricing are not evidence of waste.

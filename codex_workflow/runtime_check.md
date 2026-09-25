@@ -1,6 +1,6 @@
 # Targeted runtime checks
 
-Smart 2.3 has no globally gated execution mode. Direct custom-role work and independent
+Smart 2.4 has no globally gated execution mode. Direct custom-role work and independent
 verification remain available using the client's existing supported operations. Nested
 review is only an optimization; it needs evidence for the particular mechanism used.
 Do not convert an old failed trial into a pass by changing its label.
@@ -44,7 +44,7 @@ benchmark completion to execute ordinary safe tasks.
 The supplied 2.1 trial proved one three-thread repair/validation group and then failed
 at the next Routine spawn. Exact capacity cause, repeatable reclamation and several
 other mechanics were not observed. Preserve that result. It motivates explicit release
-and a two-thread unit; it does not prove that 2.3 fixes a Codex backend problem.
+and a two-thread unit; it does not prove a later version fixes a Codex backend problem.
 
 ## When a mechanism is unavailable
 
@@ -77,3 +77,24 @@ The optional `boundary.md` record checks internal consistency of an existing cap
 It neither fills missing native observations nor establishes their authenticity. Do not
 publish private handles or configuration. Reuse observations only within their applicable
 client/configuration scope, and recheck an affected mechanism after a relevant change.
+
+## Observe delegation and main review on ordinary work
+
+This is a focused observation checklist, not a new admission gate or a quota-report task.
+Use an actual authorized task or a small private fixture after a fresh session loads 2.4:
+
+- A small settled edit is delegated to a named inexpensive owner, not patched by main
+  for speed. A known multi-step browser journey is one operator assignment.
+- Main authors the design brief and directly inspects actual running evidence. When main
+  identifies a real finding, it sends a bounded correction task to the same suitable owner,
+  then inspects fresh affected evidence before closing the finding. Do not fabricate a
+  finding or count a worker's PASS as main review.
+- Judgment-only work stays main. A missing child browser/tool capability is explicitly
+  reported; any authorized main-only bridge stays narrow rather than taking over the task.
+- No extra manager or speculative reviewer appears. Retained correction workers and
+  observed closure respect the effective cap. Existing independent gates remain intact.
+
+Keep only the concise existing task/evidence references needed to establish these facts.
+Configured model/effort, catalog-advertised values and observed per-run metadata stay
+separate. Missing runtime metadata is unknown, not a reason to rerun a whole log archive.
+This checklist cannot establish allowance savings or make main's design judgment cheap.

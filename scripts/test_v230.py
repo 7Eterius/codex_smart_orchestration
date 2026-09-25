@@ -29,10 +29,11 @@ def snapshot(root):
 
 class ReleaseContracts(unittest.TestCase):
     def test_version_and_new_runtime_inputs(self):
-        self.assertEqual(PackageLayout.resolve(PACKAGE).version, '2.3.0')
+        self.assertEqual(PackageLayout.resolve(PACKAGE).version, (PACKAGE / 'operate/VERSION').read_text().strip())
         for name in ('runtime/boundary.py', 'boundary.md'):
             self.assertIn(name, INSTALLED_RUNTIME_FILES)
-        self.assertIn('Smart Orchestration 2.3', (ROOT / 'README.md').read_text())
+        version = (PACKAGE / 'operate/VERSION').read_text().strip().rsplit('.', 1)[0]
+        self.assertIn('Smart Orchestration ' + version, (ROOT / 'README.md').read_text())
 
     def test_concurrency_warning_matches_policy_without_mutation(self):
         config = {'agents': {'max_threads': 8}}
@@ -116,7 +117,7 @@ class ArchivedV22Upgrade(unittest.TestCase):
             self.assertEqual(snapshot(home), before, 'preview must not mutate')
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)['disk_ok'])
-            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), '2.3.0\n')
+            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), (PACKAGE / 'operate/VERSION').read_text())
             self.assertTrue((home / 'codex_workflow/boundary.md').is_file())
             self.assertTrue((home / 'codex_workflow/runtime/boundary.py').is_file())
             old_config = tomllib.loads(before['config.toml'][0].decode())
