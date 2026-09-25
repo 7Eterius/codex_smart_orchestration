@@ -55,7 +55,8 @@ class DelegationContracts(unittest.TestCase):
         for path in paths:
             cfg = tomllib.loads(path.read_text())
             self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), expected[path.stem])
-            self.assertEqual(cfg['sandbox_mode'], 'workspace-write')
+            expected_sandbox = 'read-only' if path.stem in {'companion', 'investigator'} else 'workspace-write'
+            self.assertEqual(cfg['sandbox_mode'], expected_sandbox)
             self.assertIs(cfg['agents']['enabled'], path.stem in {'routine_executor', 'default_executor'})
             self.assertLess(len(cfg['developer_instructions'].split()), 200, path.name)
 
@@ -121,6 +122,27 @@ class DelegationContracts(unittest.TestCase):
         self.assertIn('tiny diff, faster patch or unavailable nesting is not such a boundary', text)
         self.assertIn('If no safe path exists, report the blocked action', text)
         self.assertIn('Progress commentary continues the run', text)
+
+    def test_allocator_delegates_tiny_settled_execution(self):
+        from runtime.allocation import classify
+        for kind in ('operation', 'implementation'):
+            for risk in ('low', 'material', 'critical'):
+                for independent in (False, True):
+                    with self.subTest(kind=kind, risk=risk, independent=independent):
+                        result = classify(dict(kind=kind, risk=risk, settled=True,
+                            tiny=True, deep=False, independent_required=independent))
+                        self.assertEqual(result['owner'], 'simple_executor' if risk == 'low' else 'routine_executor')
+                        self.assertEqual(result['reviewer'], 'tester' if independent or risk != 'low' else None)
+
+    def test_allocator_retains_main_judgment_and_deep_review(self):
+        from runtime.allocation import classify
+        base = dict(kind='implementation', risk='low', settled=True, tiny=False,
+                    deep=False, independent_required=False)
+        for kind in ('answer', 'judgment'):
+            self.assertEqual(classify({**base, 'kind': kind})['owner'], 'main')
+        self.assertEqual(classify({**base, 'settled': False})['owner'], 'main')
+        deep = classify({**base, 'deep': True})
+        self.assertEqual((deep['owner'], deep['reviewer']), ('default_executor', 'tester'))
 
     def test_validation_notes_do_not_claim_live_success(self):
         text = flat(ROOT / 'docs/v2.4.md')

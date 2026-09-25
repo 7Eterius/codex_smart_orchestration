@@ -51,8 +51,8 @@ class ResponsibilityTests(unittest.TestCase):
             with self.assertRaises(a.AllocationError):
                 a.classify(task(**{key:100}))
 
-    def test_tiny_already_understood_action_is_direct(self):
-        self.assertEqual(a.classify(task(tiny=True))['owner'],'main')
+    def test_tiny_already_understood_action_is_delegated(self):
+        self.assertEqual(a.classify(task(tiny=True))['owner'],'simple_executor')
 
     def test_unknown_design_or_contract_not_sent_to_simple(self):
         for kind in ('operation','implementation'):

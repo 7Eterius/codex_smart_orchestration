@@ -40,8 +40,9 @@ eligible owned direct children natively, observe release and only then reuse slo
 two-thread target and existing lower/user caps remain binding. No process killing or
 capacity increases to mask lifecycle problems.
 
-`runtime/allocation.py`, `runtime/candidate.py` and `runtime/boundary.py` are unchanged.
-They check supplied ownership/input/transition data, not native availability, authority,
+`runtime/allocation.py` now routes tiny settled execution to Simple rather than main.
+Its capacity/ownership checks, `runtime/candidate.py` and `runtime/boundary.py` are unchanged.
+These helpers check supplied data, not native availability, authority,
 model behavior or evidence truth. See [boundary contracts](../codex_workflow/boundary.md).
 No new helper module, model-call loop, logging daemon or mandatory statistics is added.
 
