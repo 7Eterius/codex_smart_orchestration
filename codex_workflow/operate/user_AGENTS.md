@@ -1,20 +1,23 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.3.0 -->
+<!-- codex-workflow-version: 2.4.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-Smart Orchestration from `7Eterius/codex_smart_orchestration` uses one adaptive workflow.
+Smart Orchestration from `7Eterius/codex_smart_orchestration` is delegation-first.
 Main reads `~/.codex/codex_workflow/smart_orchestration.md` once for substantive work.
-Delegate settled execution to the cheapest sufficient named owner. There is no mode
-selection or dedicated chunk_lead. Main keeps architecture, product/UX/design and final
-acceptance; applicable project and owner constraints remain binding.
+Main owns design/product/architecture decisions, detailed result review and acceptance.
+Named Luna workers perform settled implementation and mechanical operation, including
+small edits and main's correction tasks. Main inspects actual running evidence, sends
+findings back to the same suitable worker and rechecks the result, not self-patching.
+Speed or unavailable nesting is not a main-execution shortcut. Read `design.md` for
+main's brief/review/correction loop. Preserve project rules and explicit owner overrides.
 
-Named workers follow their role and capsule, not the global main workflow. Only Routine
-and Default may dispatch one independent Tester when explicitly authorized and supported;
-otherwise main dispatches that same reviewer. Use `execution.md` for capacity, holds,
-repair and native thread release. Unsupported nesting does not disable direct cheap work.
+Named workers follow their role/capsule, not the global main workflow. Only Routine and
+Default may dispatch one Tester when explicitly authorized and supported; otherwise main
+dispatches that same reviewer. `execution.md` covers scoped ownership, holds and native
+thread release. No mode selection, extra manager or blanket qualification gate.
 
-For preview/apply/check and exact rollback read
-`~/.codex/codex_workflow/operate/smart_install.md`. Installed disk integrity is not a live
-runtime check. No project bootstrap, release updater or token-report ceremony is required.
+For preview/apply/check and rollback read
+`~/.codex/codex_workflow/operate/smart_install.md`. Disk integrity is not proof of live
+routing. No project bootstrap, permission/model changes or token-report ceremony.
 <!-- codex-workflow-user-managed-end -->

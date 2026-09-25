@@ -14,15 +14,21 @@ def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
     return f'''The owner's selected workflow is Smart Orchestration. Main sessions read
 {json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and capsule, never initialize global main orchestration.
-There is one adaptive execution loop. Only routine_executor and default_executor may
-dispatch one independent tester under the supplied execution.md contract and explicit
-authority. Main dispatches review when nesting is not supported; no manager layer. This replaces only
-legacy codex-workflow route selection, mandatory support-agent/intake ceremony
-and bookkeeping ownership. Keep all repository product, architecture, security,
-financial, testing, permission and explicit owner constraints. Do not invent
-higher priority for file text. Explicit user no-agent/read-only requests remain
-binding. If project configuration overrides this bootstrap, report that conflict;
-do not claim activation. No per-repository install or rewriting AGENTS is needed.'''
+Delegation is the execution default, including small edits and review fixes. Main owns
+all design/product/architecture decisions, detailed result assessment and final acceptance;
+named Luna workers implement and operate. Main inspects actual running visuals, sends
+grouped findings as correction tasks to the same suitable worker, then rechecks results.
+Do not self-patch to save time or write an implementation merely for a worker to paste.
+Main may answer, author authorized decision briefs and inspect decisive evidence directly.
+Main-only execution needs an explicit user override or an observed narrowly authorized
+tool/permission boundary, reported once; return remaining execution to workers. Unavailable
+nesting is not an excuse for main implementation. Do not fabricate tools or raise permissions.
+Only routine_executor/default_executor may dispatch one independent tester under supplied
+execution.md, explicit authority and supported mechanics; otherwise main dispatches Tester.
+No manager layer. Keep required independent gates, owner approval, selected models/effort,
+permissions and repository constraints. No-agent/read-only requests remain binding.
+This replaces legacy route/intake ceremony, not higher-priority instructions. Report an
+actual overriding configuration conflict rather than claiming activation. No project rewrite.'''
 
 
 def _statements(text: str):

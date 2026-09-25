@@ -1,107 +1,112 @@
-# Smart Orchestration 2.3
+# Smart Orchestration 2.4
 
-**One adaptive workflow. One economical execution owner. Checked review boundaries.**
-Main keeps architecture, product/UI/UX judgment and final acceptance. Luna handles settled
-implementation, mechanical browser work and ordinary repairs. No Normal/Coordinated
-mode switch, dedicated Chunk Lead or global qualification gate for ordinary named work.
+**Main designs and judges. Luna implements, operates and repairs.**
+One delegation-first workflow, not Normal/Coordinated modes. Optimize satisfactory accepted
+work, including corrections, rather than speed. Main keeps product/UX/architecture
+decisions, detailed quality assessment and final acceptance; cheaper named workers execute.
 
-## How work flows
+## The 2.4 loop
 
 ```text
-Main: define outcome and authority, settle design, accept decisive evidence
+Main: settle the brief, protected decisions and acceptance criteria
   |
-  +--> Simple Luna Low: complete known low-risk journeys and explicit checks
+  +--> Simple Luna Low: established edits and complete mechanical journeys
   |
-  +--> Routine Luna High (Default xhigh only for deep work)
-          implementation + self-check + repair
+  +--> Routine Luna High: settled implementation and self-checks
+       Default Luna xhigh only for genuinely deep bounded work
           |
-          +--> Independent Tester Luna High at a stable candidate
-               actual-diff / contract review + required behavioral checks
-
-If owner-dispatched review is not supported, main dispatches the same Tester.
-The contract, independence and inexpensive models stay the same.
+          +--> Tester Luna High when independent gates require it
+          |
+          +--> Stable candidate + actual running evidence
+                    |
+                    v
+Main: inspect the result and assess quality/detail
+  |
+  +--> Concrete correction task to the same suitable Luna worker
+  |       repair -> fresh affected evidence -> main rechecks
+  |
+  +--> Main accepts when the brief and required gates are satisfied
 ```
 
-Answers and an already-understood trivial operation can stay with main when delegation
-costs more. A full browser journey is not many tiny workers. Standalone verification
-gets a Tester without an implementer. Design-only requests do not trigger implementation.
+The implementation owner can dispatch one Tester only when explicitly authorized and
+supported. Otherwise main dispatches that same named reviewer. No manager layer, new
+mode or generic fallback substitution. Lack of nesting does not justify main implementation.
 
-Routine/Default can delegate **only one Tester**, only with explicit review scheduling
-authority and applicable runtime evidence. They cannot create teams or self-certify an
-independent gate. Other roles do not delegate. This is a policy boundary, not a native
-role allowlist or security guarantee. No unseen runtime capability is assumed.
+## What changes in 2.4
 
-## What 2.3 hardens
+**Delegation is the execution default, including small edits and review fixes.**
+The former broad trivial-operation shortcut is removed. Main does not take a quick
+production patch just because it knows the code or waiting is slower, and does not
+write a full implementation merely for another model to paste.
 
-Writer reuse now passes the same ownership guard as new dispatch. Readback is explicitly
-non-writing; cleanup is separate from new-work authority. Caller identity, lifecycle,
-same-unit review and delegated authority are checked instead of assuming an absent
-caller is Main. Actual primary handles should be supplied explicitly.
+Main may still answer directly, author authorized decision briefs, and inspect decisive
+source and actual visuals. An explicit user no-agent/direct-execution instruction or an
+observed, narrowly authorized main-only tool boundary can justify limited direct action.
+The reason is stated once and remaining execution returns to workers. Missing capability
+is reported, not invented; permissions and models are never expanded silently.
 
-Candidate batches preserve per-item errors, drift and matches even with malformed
-schema types or excessively nested JSON. Directory aliases and hard links cannot count
-the same manifest twice. These are input identities, not independent review counts.
+The installed developer-instructions bootstrap now contains this division of labor and
+the review/correction loop. It is not only advice hidden in a long guide. These remain
+instructions, not a native tool interceptor or proof that every client will comply.
 
-The optional [boundary checker](codex_workflow/boundary.md) binds a separate Tester
-verdict to unit, attempt, contract, candidate, target and fresh-gate obligations. It
-blocks held-candidate writes and stale verdicts from supplied records. It is not a lock,
-authenticated authority, native scheduler or proof that observations are true.
+## Design quality remains main's responsibility
+
+Main settles purpose, hierarchy, composition, typography/spacing intent, interactions,
+responsive states and visual language from accepted references. Workers implement that
+brief within established patterns; missing product/design choices return to main.
+
+Main directly inspects early running frames for new compositions and the final affected
+screens. Passing tests, a worker's confidence or the mere existence of screenshots is
+not visual acceptance. Main gives specific expected/observed findings, evidence, protected
+decisions and fresh checks. The worker repairs; main rechecks the corrected candidate.
+
+Related findings are batched into a bounded task rather than creating a worker per pixel.
+Keep the same suitable owner through concrete review corrections when capacity permits.
+A new candidate needs applicable current evidence. Do not reduce review depth to chase
+a delegation percentage, or polish indefinitely beyond the agreed quality target.
+See the on-demand [design loop](codex_workflow/design.md).
 
 ## Model map
 
 | Role | Model / effort |
 | --- | --- |
-| Main | Owner-selected; Sol Medium recommended baseline |
+| Main | Owner-selected; Sol Medium is advice, not an override |
 | simple_executor | GPT-6 Luna Low |
 | routine_executor | GPT-6 Luna High |
 | default_executor | GPT-6 Luna xhigh |
 | tester | GPT-6 Luna High |
-| senior_executor | GPT-6 Sol xhigh, advisory-first |
+| senior_executor | GPT-6 Sol xhigh, advice to main |
 | companion | GPT-6 Luna Medium |
 | investigator | GPT-6 Luna xhigh |
 | archivist | GPT-6 Luna Medium |
 
-The eight model tiers are unchanged. Max and Astra are not automatic upgrades. Preserve
-explicit owner settings and permission controls. The installer does not silently upgrade
-an old generic fallback or change the parent.
+Eight roles, unchanged model/effort settings. Max and Astra are not automatic tiers.
+Routine is the settled implementation default. Simple handles explicit low-risk edits,
+web extraction, known browser/Computer Use journeys and observable checks. Default needs
+actual depth, not file count. Senior advice does not transfer main's design authority.
 
-## Resource-conscious execution
+## Economical operation without losing safeguards
 
-A unit targets at most **two Smart-owned open threads**, including reviewer. The existing
-configured cap of three stays unchanged and includes other work. Lower limits are
-respected; speed is not a reason to fill every slot or run speculative reviewers.
+Use complete bounded jobs rather than tiny handoffs. Delegate mechanical discovery before
+main investigates an entire project; retain main's decisive inspection for judgment.
+Reuse verified browser/build setup and deterministic recipes where appropriate, not stale
+verdicts. Verify actual child tool/session access. Main-only bridge actions stay narrow.
 
-A completed response is **not** a closed thread. Preserve evidence and resource handoff,
-close completed owned children natively before their parent, and use reclaimed capacity
-only after observing release. A close request is not proof of success. Do not close busy
-or unrelated work, kill processes, wipe profiles or change the cap to hide leakage.
+One unit targets at most two Smart-owned open threads, including a required reviewer.
+The existing cap and lower limits remain binding. A final message is not slot release:
+preserve results, close eligible owned direct children natively and observe the result.
+Keep workers for real pending corrections, not speculative work. Do not raise capacity,
+close unrelated workers or kill shared processes to hide lifecycle problems.
 
-If capacity is constrained, reuse compatible stopped same-unit workers or serialize
-review after observed release. If that is not safe, checkpoint with the exact blocker.
-No blind spawn loop, fake PASS, or silent transfer of all work back to an expensive main.
+Independent Tester remains risk-adaptive and mandatory wherever the owner/project requires
+it. Candidate holds, original failures, fresh-gate requirements and separate verdicts stay
+intact. Main's visual acceptance is separate from technical review and owner approval.
+No speculative reviewer, duplicate implementation, unfinished-diff polling or repeated
+status tests. Main returns for meaningful decisions, review findings, blockers and acceptance.
 
-`runtime/allocation.py` is a deterministic advisory checker, not a native tool adapter.
-Use it at uncertain allocation boundaries, not as another model/tool loop for every step.
-Main returns for decisions, authority, blockers or acceptance rather than routine relays.
-Repairs use the failed requirement, exact evidence, allowed delta and fresh gates.
-Repeated failure needs new evidence or a revised diagnosis, not automatic model escalation.
-
-## Quality without redundant work
-
-The owner self-checks. Independent Tester covers actual diff/contracts and required
-behavior rather than adding a separate reviewer-manager in front of testing. Main
-retains high-risk decisions and visual/product acceptance. Repository-mandated distinct
-reviewers remain mandatory, serialized when needed. Matching hashes are not acceptance.
-
-Verification depends on residual risk and explicit obligations, not merely an UI label.
-Reversible established copy/style changes with decisive checks need no automatic second
-review. Auth, payments, persistence, schema and financial invariants retain stronger gates.
-Never silently weaken a project's tests or owner approval requirements.
-
-Keep source/build/target stable during independent checks, release before repairs, and
-revalidate affected plus mandated fresh gates. Reuse one verified setup and requirement
-map, preserve original failures, and load only relevant guides and context. Optimization
-should remove rediscovery, not safeguards. No new manager or per-command ledger is added.
+The existing [boundary checker](codex_workflow/boundary.md), candidate fingerprints and
+allocation helper check supplied data only. They are not native locks/schedulers, do not
+authenticate observations and cannot prove model behavior or savings.
 
 ## Installation or update
 
@@ -111,29 +116,32 @@ Use the current source on `main`, pinned to the resolved commit:
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
 ```
 
-Releases identify tested source snapshots. Installing source and restarting the actual
-client are separate actions; publication does not modify an existing installation.
-Exact conflict-checked rollback remains available through the installer.
+After successful installation, restart Codex manually and start a fresh conversation so
+new bootstrap/role instructions can be loaded. Publication alone does not update local
+files or an existing session. Exact conflict-checked rollback remains available.
 
-## Validation
+The installer preserves explicit parent model/effort/speed, generic child fallback,
+permissions, capacity and all project files. It does not silently replace an older owner
+fallback. The new design guide is declared, installed, fingerprinted and conflict-protected.
+
+## Validation and observation
 
 ```bash
 python3 -B -m unittest discover -s scripts -p 'test_*.py' -v
 python3 -m compileall -q codex_workflow scripts
 ```
 
-Historical Git objects are needed for migration tests; CI fetches full history and
-requires those tests rather than skipping them. The matrix covers Ubuntu/Python 3.11,
-Ubuntu/Python 3.12 and macOS/Python 3.12. A version-change release is published only after
-that matrix passes. Source archives and checksums identify the released commit.
+CI fetches full history and requires exact historical migration tests, including
+2.3 -> 2.4 -> repeated installation -> rollback. Ubuntu/Python 3.11, Ubuntu/Python 3.12
+and macOS/Python 3.12 remain the validation matrix. Existing version-change publication
+runs only after the matrix passes.
 
-Pure helper tests are not live Codex lifecycle tests. Use the targeted
-[runtime checks](codex_workflow/runtime_check.md) before relying on owner-dispatched
-review. Unverified nesting does not disable direct named Luna work. The failed 2.1 trial
-remains failed evidence, not reclassified as a 2.3 success.
+Source tests prove package/helper/install contracts, not native routing or UI quality.
+Use [targeted runtime checks](codex_workflow/runtime_check.md) for an actual uncertainty,
+not an expensive qualification ceremony for ordinary work. Observe delegation and main's
+review/correction loop on real tasks before claiming savings. Root-token share alone is
+not waste; no fixed savings or five-day allowance guarantee is promised.
 
 See [execution](codex_workflow/execution.md), [verification](codex_workflow/verification.md),
 [browser economy](codex_workflow/browser.md), [engineering notes](docs/smart_orchestration.md),
-[2.3 release notes](docs/v2.3.md) and [optional evaluation](docs/evaluation.md).
-No universal saving percentage or guaranteed error-free routing is promised. Measure
-satisfactory accepted work, including repairs and all layers.
+[2.4 notes](docs/v2.4.md) and [optional evaluation](docs/evaluation.md).

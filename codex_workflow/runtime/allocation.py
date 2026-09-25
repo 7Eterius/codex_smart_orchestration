@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure allocation and lifecycle checks for Smart 2.3, not a Codex tool adapter.
+"""Pure allocation and lifecycle checks for Smart 2.4, not a Codex tool adapter.
 
 Inputs are caller-supplied classifications/observations. No source scan, persistence,
 network, model call, process control or automatic close/spawn is performed here.
@@ -48,6 +48,7 @@ def classify(task: dict) -> dict:
 
     Risk and judgment override the cheap lane. Unknown/ambiguous intent is resolved
     before mutation. Field count and click count intentionally do not affect routing.
+    Tiny settled execution is still delegated; it is not a main-writing exception.
     """
     _keys(task, {"kind", "risk", "settled", "tiny", "deep", "independent_required"})
     kind = _text(task["kind"])
@@ -70,8 +71,6 @@ def classify(task: dict) -> dict:
         role, reason = ("investigator", "deep_evidence_gap") if task["deep"] else ("companion", "targeted_discovery")
     elif kind == "memory":
         role, reason = "archivist", "authorized_checkpoint_only"
-    elif task["tiny"] and task["risk"] == "low" and not review:
-        role, reason = "main", "one_decisive_action_cheaper_than_handoff"
     elif task["deep"]:
         role, reason, review = "default_executor", "deep_bounded_work", True
     elif task["risk"] == "low" and (kind == "operation" or task["tiny"]):
@@ -143,7 +142,7 @@ def next_action(obs: dict, request: dict) -> dict:
     unit = _text(request["unit"])
     role = _text(request["role"])
     if role not in ROLES:
-        raise AllocationError("Requested role is not a Smart 2.3 role")
+        raise AllocationError("Requested role is not a Smart role")
     intent = _text(request.get("intent", "work"))
     if intent not in {"work", "readback", "cleanup"}:
         raise AllocationError("Intent must be work, readback or cleanup")
