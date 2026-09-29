@@ -145,7 +145,8 @@ class PolicyContracts(unittest.TestCase):
                        "controlling code", "sibling cases", "smallest concrete counterexample",
                        "BLOCKING", "NON-BLOCKING"):
             self.assertIn(phrase, text)
-        cfg = tomllib.loads((PACKAGE / "agents/tester.toml").read_text())\n        self.assertLess(len(cfg["developer_instructions"].split()), 200)
+        cfg = tomllib.loads((PACKAGE / "agents/tester.toml").read_text())
+        self.assertLess(len(cfg["developer_instructions"].split()), 200)
 
     def test_workers_return_protected_ambiguity_instead_of_guessing(self):
         for role in ("simple_executor", "routine_executor", "default_executor"):

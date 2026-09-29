@@ -99,5 +99,6 @@ then delegate the rest. A tiny diff, faster patch or unavailable nesting is not 
 boundary. If no safe path exists, report the blocked action. Never widen permissions or
 fabricate access.
 
-`allocation.py`, `candidate.py`, `boundary.py` and `challenge.py` are bounded advisory helpers,
-not native scheduling, authority, semantic review or completion enforcement.
+See `boundary.md` for optional review-boundary records. `allocation.py`, `candidate.py`,
+`boundary.py` and `challenge.py` are bounded advisory helpers, not native scheduling,
+authority, semantic review or completion enforcement.
