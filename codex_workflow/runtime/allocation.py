@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure allocation and lifecycle checks for Smart 2.4, not a Codex tool adapter.
+"""Pure allocation and lifecycle checks for Smart 2.6, not a Codex tool adapter.
 
 Inputs are caller-supplied classifications/observations. No source scan, persistence,
 network, model call, process control or automatic close/spawn is performed here.
