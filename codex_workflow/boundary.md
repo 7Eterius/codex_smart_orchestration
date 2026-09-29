@@ -59,7 +59,7 @@ After interruption reconcile actual source, build, target and native handles fir
 The checker cannot detect an invented observation or an intervening change that was
 changed back; actual holds, source/target checks and original evidence remain necessary.
 
-## Allocation inputs in 2.3
+## Allocation inputs
 
 Supply the actual `primary` handle separately from spawned threads. For legacy inputs,
 only the literal `main` is the default primary; an arbitrary absent caller is not Main.
