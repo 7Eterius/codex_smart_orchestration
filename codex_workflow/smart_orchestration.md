@@ -114,7 +114,8 @@ alone is not failure/new evidence and must not trigger a progress SEND, repeated
 or test. No acknowledgement messages. A fresh snapshot is one coalesced owner request, not a cascade of tests or descendant polls.
 
 Use at most two Smart-owned open threads across the run, including descendants/support/prior
-units. Preserve results/resources before native close; final messages do not prove release.
+units; never allocate two per parent/unit. Preserve results/resources before native close;
+final messages do not prove release. Never close unrelated or active work.
 Reconcile capacity once and retry only after observed change. Never raise limits, close
 unrelated work or move implementation to Main. `runtime/allocation.py` is not a native scheduler.
 
