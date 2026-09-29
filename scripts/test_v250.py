@@ -202,10 +202,13 @@ class ActualV24Upgrade(unittest.TestCase):
             for role in (package/'agents').glob('*.toml'):
                 original=tomllib.loads(role.read_text())
                 updated=tomllib.loads((home/'agents'/role.name).read_text())
+                for key in ('model_reasoning_effort','sandbox_mode','agents'):
+                    self.assertEqual(updated[key],original[key],(role.name,key))
                 if role.stem=='senior_executor':
                     self.assertEqual(original['model'],'gpt-6-sol')
-                    original['model']='gpt-6.1-sol'
-                self.assertEqual(updated,original,role.name)
+                    self.assertEqual(updated['model'],'gpt-6.1-sol')
+                else:
+                    self.assertEqual(updated['model'],original['model'],role.name)
             self.assertEqual(install.prepare(PACKAGE,home)[0].mutations,[])
             self.assertEqual(snapshot(project),project_before)
             restore,prior=prepare_restore(home,backup);install.apply_plan(restore,prior,home)
