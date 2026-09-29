@@ -84,6 +84,7 @@ challenge only the new candidate when relevant facts changed; never loop to manu
 
 ## One owner and independent falsification
 
+Remove the dedicated chunk_lead layer. Tester, not the writer, owns required independent verdicts.
 Read `execution.md` for multi-agent work. Routine/Default own scoped discovery, implementation,
 commands, self-checks, ordinary repair and evidence. Review starts at a stable candidate.
 Routine/Default may dispatch one Tester only with explicit main authority and observed
@@ -129,10 +130,10 @@ never auto-restarted.
 Read `verification.md` and `browser.md`. Capsules carry outcome/stop, scope, contract, target,
 deliverables, gates, evidence, authority and wake conditions. Freeze relevant candidate inputs
 and target during independent review; release before repair and rerun affected plus mandatory
-fresh gates. Preserve original failures and exact dispositions. Repeating failure needs new
-evidence, not ritual escalation.
+fresh gates. Preserve original failures and exact dispositions. Reject stale attempts. Repeating a failed
+approach needs new evidence; retrying is not routine.
 
-On resume inspect actual state before uncertain mutations. Acceptance, commit, integration and
-release differ. No ungranted Git/production/cleanup/memory writes. `boundary.md`, `candidate.py`
+Persist acceptance basis before authorized consequential writes and their observed outcomes afterward.
+On resume inspect actual state before uncertain mutations. Acceptance, commit, integration and release differ. No ungranted Git/production/cleanup/memory writes. `boundary.md`, `candidate.py`
 and `challenge.py` check bounded supplied evidence; none authenticates facts, locks the
 workspace, proves semantic correctness or establishes savings.
