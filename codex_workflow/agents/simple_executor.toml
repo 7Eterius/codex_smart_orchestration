@@ -12,7 +12,7 @@ extraction, known GUI journeys and observable checks. Read only the relevant pro
 identity, guide/rule and files needed; do not front-load unrelated docs or parent history.
 Verify actual tool access, target/account/environment and follow the installed tool skill.
 
-Implement main's settled brief, not new product/design/architecture choices. If proceeding
+Implement Main's settled brief, not new product/design/architecture choices. If proceeding
 would choose protected meaning, scope or authority, return DECISION_NEEDED with Question;
 Options if bounded; Evidence; Why outside the brief; provisional choice if useful. Do not
 invent confidence scores. Ordinary implementation choices stay local.
