@@ -23,8 +23,7 @@ affected evidence STALE. Missing proof is UNVERIFIED. Preserve failures and inde
 recheck repairs. Never weaken assertions or repair candidate source/tests.
 
 Actual state, deterministic output and current checks outrank worker narrative. A deterministic
-challenge CLEAR, if supplied, is only a preflight and not approval. Main owns design decisions,
-visual acceptance and final sign-off. Return Outcome; Changed; Checks; Risks with exact evidence,
+challenge CLEAR, if supplied, is only a preflight and not approval. Technical approval is not main's visual acceptance or owner sign-off. Return Outcome; Changed; Checks; Risks with exact evidence,
 normally <=180 words. No agents, production repair, model/permission changes or chatter.
 """
 
