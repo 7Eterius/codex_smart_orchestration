@@ -1,4 +1,4 @@
-# Smart Orchestration 2.5
+# Smart Orchestration 2.6
 
 **GPT-6.1 Sol judges. Luna implements, operates and repairs.**
 
@@ -11,24 +11,30 @@ There is **one adaptive execution loop**, no Normal/Coordinated modes and no ded
 Chunk Lead. The workflow is an instruction policy with small deterministic helpers,
 not a native scheduler, tool interceptor, security boundary or guaranteed saving.
 
-## What changes in 2.5
+## What changes in 2.6
 
-The recommended Main baseline becomes **GPT-6.1 Sol Medium**. The installed Senior role
-uses **GPT-6.1 Sol xhigh**. All seven Luna role settings remain unchanged.
+2.6 keeps the 2.5 model map and delegation architecture, but adds cheap safeguards inspired
+by [Kiborgik/BlaBla](https://github.com/Kiborgik/blabla):
 
-The other changes focus on avoidable supervision rather than adding another agent layer:
+- **Progressive disclosure:** route from project status/index to the relevant identity/rule
+  before reading broad project context. Do not replace a large parent prompt with a large
+  documentation dump.
+- **Deterministic challenge:** a new read-only `runtime/challenge.py` can catch objective
+  handoff contradictions in already-structured facts before Main or Tester spends tokens.
+- **Evidence precedence:** repository/target state and deterministic current evidence outrank
+  worker narrative. `STALE` and `UNVERIFIED` are explicit states.
+- **DECISION_NEEDED:** workers stop at protected product/design/architecture/contract/scope
+  choices and ask Main one focused question instead of guessing.
+- **Falsification-first Tester:** independent review starts from the original task and full
+  diff, accounts for every deliverable, reads controlling code and seeks a concrete
+  counterexample rather than merely confirming the patch.
 
-- Give assignments explicit events that require main's attention.
-- Do not turn a wait timeout into a progress message, another inspection or a test rerun.
-- Count the two-thread Smart budget across the entire run, not separately per assignment.
-- Reuse a writer through corrections, but retire accumulated investigation at accepted
-  milestone boundaries and preserve a compact handoff.
-- Expose the recommended parent and any on-disk mismatch in configuration assessment,
-  without silently replacing owner settings or claiming live model selection.
+Smart does **not** adopt BlaBla's DSL, persistent task database, long state-machine ceremony,
+or universal review requirement. There is still one adaptive loop, eight roles, no manager
+layer and no per-project Smart installation. GPT-6.1 Sol Medium remains the recommended Main
+baseline and Senior remains GPT-6.1 Sol xhigh; Luna role settings are unchanged.
 
-The release preserves the design loop, independent verdicts, candidate holds, required
-fresh checks, native thread release and exact install/rollback protections.
-See [2.5 notes](docs/v2.5.md).
+See [2.6 notes](docs/v2.6.md).
 
 ## Architecture
 
@@ -133,6 +139,65 @@ A finite coherent group may share setup and contracts but retains per-member gat
 dependency order. Do not extend it simply to keep a worker busy. Workers report missing
 product/design/architecture decisions before inventing them; main sends a contract delta.
 
+## Progressive project context and deterministic preflight
+
+A worker should not begin by reading every architecture document, every project instruction,
+or the complete Main transcript. Smart 2.6 uses a progressive path:
+
+```text
+project instructions / status / index
+            ↓
+relevant system, contract or design identity
+            ↓
+specific rule, file or evidence
+            ↓
+implementation
+```
+
+If the repository already provides a queryable status/explain/index mechanism, use it.
+Otherwise use targeted search/read. Smart introduces no proprietary project-memory format.
+
+When a candidate already has structured scope, deliverable, finding, decision and gate facts,
+`runtime/challenge.py` can run once before expensive review. It reports CLEAR or one grounded
+contradiction such as a scope breach, unresolved protected decision, missing deliverable,
+open blocking finding, stale/unverified evidence or unmet fresh gate.
+
+**CLEAR is intentionally weak.** It does not mean the code is correct, the evidence is
+authentic, the tests cover the requirement, or Main should accept the result. The helper
+does not scan chat/source, execute tests, call a model or mutate the project. Do not create
+a mandatory task ledger merely to feed it.
+
+### Evidence ordering
+
+For claims about implementation state, prefer:
+
+1. actual repository/working target;
+2. deterministic readback/tool output;
+3. current executed tests/browser evidence tied to the candidate;
+4. independent Tester findings;
+5. worker narrative.
+
+Requirements and owner intent still decide what *should* be built. A tool result proves only
+what it checked. Candidate/contract/target drift makes affected earlier evidence `STALE`;
+missing proof is `UNVERIFIED`, not PASS.
+
+### Protected decisions
+
+Workers keep ordinary implementation choices. If continuing would choose product meaning,
+architecture, UX/visual direction, contract semantics, scope or authority, the worker returns:
+
+```text
+DECISION_NEEDED
+Question
+Options, if bounded
+Evidence
+Why this is outside the settled brief
+Provisional choice, if useful
+```
+
+Main answers only that decision and sends the delta back to the same worker. Smart does not
+use numeric confidence thresholds.
+
 ## Detailed UI/UX workflow
 
 Design authorship remains with main. Implementation delegation is not delegation of visual
@@ -234,6 +299,12 @@ second reviewer merely because it touches UI.
 Tester derives expected behavior from authoritative requirements, reviews the actual diff
 and consumers, and executes the required checks. It owns a separate verdict artifact.
 The writer may reference that verdict, not rewrite it or turn self-checks into independence.
+
+In 2.6 the review is explicitly **falsification-first**. Tester reads the original bounded
+task and complete actual diff, accounts for every requested deliverable, reads the code that
+controls any semantic finding, inspects sibling cases around changed branches, and seeks the
+smallest concrete counterexample. BLOCKING means wrong, incomplete or untrue; style and
+optional cleanup are NON-BLOCKING. Tool-call volume is not evidence of review quality.
 
 Identify relevant source, staged/unstaged/untracked files, test/config/lockfile inputs and
 the actual served build/target/account. Hold those inputs stable through independent review.
@@ -353,5 +424,6 @@ or number of working days follows from this release.
 [Boundary records](codex_workflow/boundary.md) ·
 [Runtime checks](codex_workflow/runtime_check.md) ·
 [Engineering notes](docs/smart_orchestration.md) ·
-[2.5 notes](docs/v2.5.md) ·
+[2.6 notes](docs/v2.6.md) ·
+[2.5 history](docs/v2.5.md) ·
 [Evaluation](docs/evaluation.md)
