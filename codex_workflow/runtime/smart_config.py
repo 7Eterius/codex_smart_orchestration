@@ -12,27 +12,13 @@ SMART = Marker('<!-- smart-orchestration-start -->', '<!-- smart-orchestration-e
 
 def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
-    return f'''Smart Orchestration: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive
-work. Named workers follow their role/capsule, not global main orchestration.
-Delegation is the execution default, including small edits and review fixes. Main owns
-product/architecture/design decisions, detailed assessment and acceptance. Named Luna
-workers implement/operate. Main inspects actual running visuals, sends grouped findings as correction tasks
-to the same suitable worker, then rechecks results. Do not self-patch to save time or
-pre-write implementation for a worker to paste. Direct answers/briefs/decisive inspection stay main.
-Main baseline is GPT-6.1 Sol Medium; preserve explicit owner selections.
-Assign outcome, stop and wake conditions: review-ready, complete, decision-needed or blocked.
-Workers own command/test waits and ordinary repairs. Use supported long interruptible waits;
-timeout alone triggers no progress SEND, repeated inspection or test. No acknowledgements.
-Main returns for real decisions, required design review and acceptance; honor user interruptions.
-Routine/Default may dispatch one independent Tester only under execution.md with explicit
-authority and supported mechanics; otherwise main dispatches that named Tester.
-At most two Smart-owned open threads across the run, including descendants/old units.
-Preserve results/resources and observe native closure before reuse. No extra manager.
-Main-only execution requires explicit user override or an observed narrowly authorized
-tool/permission boundary, stated once; delegate the rest. Missing nesting is not an excuse.
-Keep independent gates, owner approval, selected models/effort, permissions and project constraints.
-No-agent/read-only requests remain binding. No invented tools, expanded permissions, project
-rewrite or claimed live activation from disk alone.'''
+    return f'''Smart Orchestration: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow role/capsule.
+Delegation is the execution default, including small edits and review fixes. Main owns product/architecture/design judgment, assessment/acceptance; Luna implements/operates. Main inspects actual running visuals, sends grouped findings as correction tasks to the same suitable worker, then rechecks results. Do not self-patch to save time or pre-write implementation for a worker to paste.
+Main baseline is GPT-6.1 Sol Medium; preserve explicit owner selections. Give bounded outcome, scope, deliverables, gates and wake conditions. Recover context progressively: project index/status -> relevant identity -> specific rule/file; do not dump the parent transcript or all docs.
+Workers own waits/ordinary repair. timeout alone triggers no progress SEND, duplicate inspection or test. Wake Main for review-ready/completed, decision-needed / DECISION_NEEDED, blocked, required checkpoint or user interruption. DECISION_NEEDED names the question, evidence and why it exceeds the settled brief.
+Evidence beats narrative: actual state/tool output/checks outrank worker summaries. Where structured facts already exist, use runtime/challenge.py once before expensive review; CLEAR is not correctness or acceptance. Mechanical challenge returns to worker; protected judgment returns to Main.
+Routine/Default may dispatch one Tester only under execution.md with explicit authority and supported mechanics; otherwise Main dispatches that Tester. Tester falsifies the stable patch from original task + full diff, not writer confidence.
+At most two Smart-owned open threads across the run. Observe native release before reuse. No manager, invented tools, expanded permissions, project rewrite or claimed activation from disk. Main-only execution needs explicit user override or observed narrow tool/permission boundary. Independent gates, owner approval and No-agent/read-only requests remain binding.'''
 
 
 def _statements(text: str):
