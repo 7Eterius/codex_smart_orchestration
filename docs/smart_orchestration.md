@@ -1,57 +1,60 @@
 # Smart Orchestration engineering notes
 
-## Main judgment, economical execution
+## 2.6: judgment stays expensive, contradictions get cheap
 
-2.5 retains one adaptive loop and eight roles. Main recommends GPT-6.1 Sol Medium;
-Senior explicitly uses GPT-6.1 Sol xhigh. All Luna role model/effort/permission settings
-remain unchanged. Existing owner parent/profile/fallback settings are not silently replaced.
-The read-only configuration assessment exposes the recommendation and disk mismatch.
+Smart 2.6 keeps the single-loop/eight-role architecture from 2.5. Main recommends GPT-6.1
+Sol Medium; Senior remains GPT-6.1 Sol xhigh; Luna role models/efforts stay unchanged.
+Main owns product/architecture/design judgment and acceptance; named workers execute settled
+work and repairs.
 
-Main owns product/architecture/design choices, detailed result assessment and acceptance.
-Named workers perform settled discovery, implementation, mechanical operation and repairs,
-including small edits and main's findings. Main does not implement a complete patch just
-for another model to paste. The [design guide](../codex_workflow/design.md) preserves actual
-running evidence, early composition review, grouped correction tasks and fresh reassessment.
-Tester technical approval does not replace main's visual judgment or owner sign-off.
+2.6 borrows lightweight mechanisms from Kiborgik/BlaBla without adopting its DSL or task
+database. The shared theme is that durable project/evidence state should outrank an agent's
+story, and that a bounded worker should stop at a protected decision instead of silently
+redesigning the system.
 
-## Supervision and context boundaries
+## Progressive context disclosure
 
-The policy and bootstrap name wake conditions: review-ready, complete, decision-needed,
-blocked or real interruption. Execution owners also own command/test/browser waiting.
-A wait timeout alone does not authorize a progress SEND or reinspection. Use supported
-long interruptible waits/notifications, with no guessed tool API or rapid polling loop.
-Main's meaningful decisions and detailed design checkpoints remain intentional work.
+Assignments point workers toward the narrowest authoritative routing surface first:
+project instructions, status/index/architecture map, then relevant identity/rule/file.
+Projects may provide queryable status/explain/index commands; Smart does not require one.
+Retrieving a rule is not applying it. This avoids replacing a large parent transcript with
+a large project-memory dump.
 
-Keep a suitable writer for real corrections; an accepted new contract gets a fresh bounded
-context after durable handoff and safe release. Reuse infrastructure, not stale verdicts.
-After compaction consult the current handoff and changed evidence. No automatic app restart,
-forced compaction, new manager layer or mandatory per-action ledger is introduced.
+## Deterministic preflight
 
-## Capacity, authority and independent evidence
+`runtime/challenge.py` accepts one bounded structured record and returns CLEAR or one
+grounded contradiction. It covers supplied scope/attribution, protected decisions,
+deliverables, blocking findings and evidence freshness/disposition. It performs no model
+call, source scan, test run or mutation. CLEAR is deliberately weak: it means no supported
+contradiction in supplied facts, not semantic correctness, authenticity, coverage,
+authority or acceptance.
 
-The two-thread Smart target is run-wide, not per parent/unit. Count descendants, support,
-previous owners and client-wide competing work appropriately. The allocation helper already
-checks total supplied owned-open observations; prose now makes that boundary explicit.
-A final message is not native release. Preserve results/resources and observe eligible
-closure before relying on capacity. No increased caps, unrelated closure or process killing.
+The helper is progressive enhancement. Do not create a persistent ledger solely to feed it.
+Mechanical challenges return to the current worker; DECISION_NEEDED returns to Main.
 
-Routine/Default may dispatch one Tester only with explicit authority and supported nested
-mechanics. Otherwise main dispatches that same named reviewer. Keep source/config/build/
-target stable for independent checks, separate verdict ownership, original failures and
-required fresh checks after repair. See [boundary contracts](../codex_workflow/boundary.md).
+## Evidence and review
 
-Allocation, candidate and boundary helpers operate on supplied observations, not authenticated
-native state. They cannot prove model selection, correct coverage, actual locks or savings.
-Instruction contracts are not tool interceptors. A measured behavior gap must remain visible.
+Implementation claims now use an explicit precedence: actual repository/target state,
+deterministic readback, current executed checks, independent review, then worker narrative.
+STALE and UNVERIFIED are first-class states.
 
-## Installation, tests and observation
+Tester is falsification-first: original task, complete diff, every deliverable, controlling
+code before semantic findings, sibling cases around changed branches and the smallest
+concrete counterexample. BLOCKING is correctness/completeness/truth, not taste. Tester
+still never edits candidate source and does not replace Main's visual judgment.
 
-The installer still uses pinned main source, preview/apply/check, exact backups and manual
-restart. Existing owner configuration and all project files remain protected. Source tests
-and exact historical migrations include 2.4 -> 2.5 -> no-op reapply -> rollback. Only the
-explicitly authorized Senior model changes; model availability remains runtime-dependent.
+Workers use DECISION_NEEDED only for protected product/design/architecture/contract/scope/
+authority choices. Smart intentionally avoids numeric confidence thresholds.
 
-Use [targeted runtime checks](../codex_workflow/runtime_check.md) for actual uncertainties,
-not a global admission ceremony. Read [2.5 notes](v2.5.md), [2.4 history](v2.4.md) and
-[optional evaluation](evaluation.md). Compare accepted outcomes across every model layer,
-setup, review and rework. Raw tokens are not quota; temporal overlap is not measured waste.
+## Preserved safeguards
+
+The run-wide two-thread target, meaningful wake conditions, no-timeout-polling rule,
+candidate holds, independent verdict ownership, same-writer correction loop, progressive
+milestone handoff, native-release observation, permissions and exact rollback protections
+remain. `allocation.py`, `candidate.py`, `boundary.py` and `challenge.py` are advisory
+bounded helpers, not native enforcement.
+
+CI includes exact archived 2.5 -> 2.6 -> no-op reapply -> rollback plus all historical
+migrations. Tests prove shipped contracts and helper behavior, not live Codex compliance
+or measured savings. See [2.6 notes](v2.6.md), [2.5 history](v2.5.md) and
+[optional evaluation](evaluation.md).
