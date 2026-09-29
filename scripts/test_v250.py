@@ -25,6 +25,7 @@ from runtime.smart_restore import prepare_restore
 from test_allocation import obs, thread, request
 from runtime.allocation import next_action
 from test_v240 import snapshot
+from test_current import VERSION
 BASELINE = '04fba052b2c64064ca22c24a5212b23b9d28c486'
 
 
@@ -34,7 +35,7 @@ def flat(name):
 
 class ModelBaselineTests(unittest.TestCase):
     def test_exact_version_and_senior(self):
-        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), '2.5.0\n')
+        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), VERSION + '\n')
         senior=tomllib.loads((PACKAGE/'agents/senior_executor.toml').read_text())
         self.assertEqual((senior['model'],senior['model_reasoning_effort']),('gpt-6.1-sol','xhigh'))
         self.assertEqual(MAIN_BASELINE,dict(model='gpt-6.1-sol',model_reasoning_effort='medium'))
@@ -192,7 +193,7 @@ class ActualV24Upgrade(unittest.TestCase):
             self.assertIsNotNone(backup)
             status=install.status(home)
             self.assertTrue(status['disk_ok'],status)
-            self.assertEqual(status['version'],'2.5.0')
+            self.assertEqual(status['version'],VERSION)
             self.assertEqual(status['runtime_observation'],'not_inspected')
             original_cfg=tomllib.loads(before['config.toml'][0].decode())
             updated_cfg=tomllib.loads((home/'config.toml').read_text())
@@ -201,10 +202,13 @@ class ActualV24Upgrade(unittest.TestCase):
             for role in (package/'agents').glob('*.toml'):
                 original=tomllib.loads(role.read_text())
                 updated=tomllib.loads((home/'agents'/role.name).read_text())
+                for key in ('model_reasoning_effort','sandbox_mode','agents'):
+                    self.assertEqual(updated[key],original[key],(role.name,key))
                 if role.stem=='senior_executor':
                     self.assertEqual(original['model'],'gpt-6-sol')
-                    original['model']='gpt-6.1-sol'
-                self.assertEqual(updated,original,role.name)
+                    self.assertEqual(updated['model'],'gpt-6.1-sol')
+                else:
+                    self.assertEqual(updated['model'],original['model'],role.name)
             self.assertEqual(install.prepare(PACKAGE,home)[0].mutations,[])
             self.assertEqual(snapshot(project),project_before)
             restore,prior=prepare_restore(home,backup);install.apply_plan(restore,prior,home)

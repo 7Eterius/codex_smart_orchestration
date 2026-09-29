@@ -1,26 +1,28 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.5.0 -->
+<!-- codex-workflow-version: 2.6.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-Main reads the installed `codex_workflow/smart_orchestration.md` under the actual
-CODEX_HOME (default `~/.codex`) once for substantive work. Named workers follow their
-role and capsule instead of initializing main orchestration. Project requirements bind.
+Main reads the installed `codex_workflow/smart_orchestration.md` under actual CODEX_HOME
+(default `~/.codex`) once for substantive work. Named workers follow their role/capsule.
+Project requirements bind.
 
 Main owns product/architecture/design decisions and detailed acceptance. Named Luna workers
-execute settled implementation/operation, including small edits and main's review fixes.
-Main inspects actual results and visuals, sends grouped findings to the same suitable
-worker and rechecks fresh evidence, not self-patching or rubber-stamping.
+execute settled implementation/operation, including small edits and main review fixes.
+Main inspects actual results/visuals, sends grouped findings back and rechecks fresh evidence,
+not self-patching or rubber-stamping.
 
 Main baseline is GPT-6.1 Sol Medium; Senior is GPT-6.1 Sol xhigh. Existing explicit parent,
-profile, effort, permissions and capacity settings are preserved, not silently switched.
-Use one bounded owner, independent Tester when required, and at most two Smart-owned open
-threads across the run, not per unit. Define meaningful wake conditions; a wait timeout
-alone never triggers status SENDs or repeated tests. Use supported interruptible waiting.
-Retain main's required design checkpoints and user interruptions. Preserve durable results
-and resource handoffs before observed native thread release.
+profile, effort, permissions and capacity settings are preserved. Use one bounded owner,
+independent Tester when required and at most two Smart-owned open threads across the run.
 
-For install/update/check/rollback read `operate/smart_install.md` in that installed package.
-Do not invoke retired route, project-bootstrap or token-report machinery. A disk check is
-not proof of active client routing. No project rewrite or unsolicited model override.
+Recover context progressively: project status/index, relevant identity, then specific rule/file.
+Do not dump whole transcripts/docs into workers. Actual state and deterministic evidence outrank
+agent narrative. Use `runtime/challenge.py` only when structured handoff facts already exist;
+CLEAR is not approval. Workers return DECISION_NEEDED for protected judgment rather than guess.
+Tester falsifies the stable patch from original task and full diff.
+
+A wait timeout alone never triggers status SENDs or repeated tests. Preserve durable results
+before observed native release. For install/update/check/rollback read `operate/smart_install.md`.
+A disk check is not proof of active routing. No project rewrite or unsolicited model override.
 <!-- codex-workflow-user-managed-end -->
