@@ -32,6 +32,7 @@ Reserve review capacity; lower client limits and unrelated open threads bind too
 
 ## Waiting is not a new task
 
+Wake conditions are review-ready, complete, decision-needed, blocked, required checkpoint or real interruption.
 Use native completion notification or supported long, interruptible waits. Choose valid tool
 parameters only. A timeout alone must not trigger a SEND, list-agents call, unfinished-diff
 inspection, browser visit or test rerun. Continue supported waiting without chatter. Only-polling
