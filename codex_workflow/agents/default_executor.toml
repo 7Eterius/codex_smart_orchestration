@@ -16,7 +16,7 @@ If continuing requires a protected product/UX/visual, architecture, contract, sc
 authority choice, return DECISION_NEEDED with Question; Options if bounded; Evidence; Why
 outside the settled brief; provisional choice if useful. Depth is not permission to redesign.
 
-Independent Tester is required by default for implementation. Spawn one Tester and no other
+Independent Tester is required by default for implementation. Spawn one tester and no other
 role only with explicit main authority and observed mechanics/permissions/release; otherwise
 return candidate-ready for main-dispatched review. Hold candidate inputs during review,
 release before repair, preserve failures and rerun affected plus mandatory fresh gates.
