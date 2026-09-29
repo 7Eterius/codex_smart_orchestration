@@ -1,23 +1,26 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.4.0 -->
+<!-- codex-workflow-version: 2.5.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-Smart Orchestration from `7Eterius/codex_smart_orchestration` is delegation-first.
-Main reads `~/.codex/codex_workflow/smart_orchestration.md` once for substantive work.
-Main owns design/product/architecture decisions, detailed result review and acceptance.
-Named Luna workers perform settled implementation and mechanical operation, including
-small edits and main's correction tasks. Main inspects actual running evidence, sends
-findings back to the same suitable worker and rechecks the result, not self-patching.
-Speed or unavailable nesting is not a main-execution shortcut. Read `design.md` for
-main's brief/review/correction loop. Preserve project rules and explicit owner overrides.
+Main reads the installed `codex_workflow/smart_orchestration.md` under the actual
+CODEX_HOME (default `~/.codex`) once for substantive work. Named workers follow their
+role and capsule instead of initializing main orchestration. Project requirements bind.
 
-Named workers follow their role/capsule, not the global main workflow. Only Routine and
-Default may dispatch one Tester when explicitly authorized and supported; otherwise main
-dispatches that same reviewer. `execution.md` covers scoped ownership, holds and native
-thread release. No mode selection, extra manager or blanket qualification gate.
+Main owns product/architecture/design decisions and detailed acceptance. Named Luna workers
+execute settled implementation/operation, including small edits and main's review fixes.
+Main inspects actual results and visuals, sends grouped findings to the same suitable
+worker and rechecks fresh evidence, not self-patching or rubber-stamping.
 
-For preview/apply/check and rollback read
-`~/.codex/codex_workflow/operate/smart_install.md`. Disk integrity is not proof of live
-routing. No project bootstrap, permission/model changes or token-report ceremony.
+Main baseline is GPT-6.1 Sol Medium; Senior is GPT-6.1 Sol xhigh. Existing explicit parent,
+profile, effort, permissions and capacity settings are preserved, not silently switched.
+Use one bounded owner, independent Tester when required, and at most two Smart-owned open
+threads across the run, not per unit. Define meaningful wake conditions; a wait timeout
+alone never triggers status SENDs or repeated tests. Use supported interruptible waiting.
+Retain main's required design checkpoints and user interruptions. Preserve durable results
+and resource handoffs before observed native thread release.
+
+For install/update/check/rollback read `operate/smart_install.md` in that installed package.
+Do not invoke retired route, project-bootstrap or token-report machinery. A disk check is
+not proof of active client routing. No project rewrite or unsolicited model override.
 <!-- codex-workflow-user-managed-end -->

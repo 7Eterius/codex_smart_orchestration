@@ -1,100 +1,90 @@
 # Targeted runtime checks
 
-Smart 2.4 has no globally gated execution mode. Direct custom-role work and independent
-verification remain available using the client's existing supported operations. Nested
-review is only an optimization; it needs evidence for the particular mechanism used.
-Do not convert an old failed trial into a pass by changing its label.
+Smart 2.5 has no globally gated execution mode. Direct custom-role work and independent
+verification use existing supported client operations. Nested review is optional and
+needs evidence for the particular mechanism. Do not convert an old failed trial into a pass
+by changing its label.
 
 ## Separate evidence
 
-`smart_install.py --check` verifies installed bytes and configured policy only. It does
-not observe startup loading, selected models, actual native permissions or open-thread
-accounting. A role advertised in the catalog is not proof of execution. A successful
-file read proves that read, not every capability. Missing telemetry remains unknown.
+`smart_install.py --check` verifies installed bytes and supplied disk configuration.
+Its configured_parent, recommended_parent and parent_baseline_status do not observe
+startup loading, the selected profile, actual model/effort, permissions or open-thread
+accounting. A catalog-advertised role is not proof of execution. A successful read proves
+that read only. Select GPT-6.1 Sol Medium explicitly for Main where available; the installed
+Senior is GPT-6.1 Sol xhigh. Missing runtime telemetry remains UNVERIFIED.
 
-At an actual problem, inspect only the relevant settings/handles. Use exact absolute
-paths: the version file is `CODEX_HOME/codex_workflow/operate/VERSION`, not the package
-root. Do not rerun a complete log audit or full trial for every ordinary task.
+At a real problem inspect only relevant settings/handles. Use the exact absolute version
+path: `CODEX_HOME/codex_workflow/operate/VERSION`, not the package root. Do not rerun a
+whole log archive or a complete qualification trial for ordinary work.
 
-## Small isolated check when needed
+## Small isolated mechanics check when needed
 
-In a new authorized private fixture, not production, establish the following mechanisms
-without modifying parent models, permissions or limits:
+Use an authorized private fixture, never production. Do not alter models, permissions
+or capacity merely to make a check pass.
 
-1. A named execution owner reads or implements the explicit fixture contract. An
-   independent Tester, dispatched by main, rejects a deliberate defect, then passes
-   the repair. Writer holds and original failures remain visible.
-2. Persist results, close completed owned threads using actual native lifecycle tools,
-   and record the close result. Complete a second owner/reviewer pair without increasing
-   capacity. A successful second owner spawn alone does not prove reuse.
-3. Only to enable delegated review, repeat the relevant pair with Routine/Default
-   spawning exactly one Tester. Confirm scoped context, relevant inherited authority
-   and a real descendant relationship, not a flat simulation. Verify no owner/Tester
-   editing overlap and no recursive reviewer or implementation-team creation.
-4. Exercise only the outstanding mechanisms required by the intended work: e.g. a
-   supported pause, uncertain write reconciliation or browser-resource handoff. Do not
-   fabricate user interruption or complete unavailable checks on paper.
+1. A named owner implements an explicit contract. Independent main-dispatched Tester
+   rejects a deliberate fixture defect, then freshly passes the repair. Preserve the
+   original failure and candidate holds.
+2. Persist results, close eligible completed owned threads through native operations
+   and observe the result. Complete a second owner/reviewer pair without increasing
+   capacity. A second successful owner spawn alone does not prove slot reuse.
+3. Only for delegated review, verify Routine/Default can spawn exactly one Tester with
+   explicit authority, scoped context, inherited permissions and a real descendant
+   relationship. Do not simulate nesting by main spawning every worker. Verify no
+   candidate-writing overlap or recursive reviewer/team construction.
+4. Exercise only outstanding applicable mechanisms, such as an actual pause, uncertain
+   write reconciliation or resource handoff. Never fabricate a user interruption.
 
-Record client/configuration scope, role paths, observed mechanism, exact artifact or
-native-event reference and PASS/FAIL/UNVERIFIED. Keep it in existing evidence, not inside
-the installed package. Reuse applicable observations with a stated basis; model metadata
-and a changed contract have different invalidation scopes. Do not require unrelated
-benchmark completion to execute ordinary safe tasks.
+Retain client/configuration scope, source fingerprint, native handles/results, evidence
+and PASS/FAIL/UNVERIFIED in authorized private evidence, not the installed package.
+Reuse applicable observations without requiring unrelated benchmarks. Model selection,
+contract changes and browser identity have different invalidation scopes.
 
-The supplied 2.1 trial proved one three-thread repair/validation group and then failed
-at the next Routine spawn. Exact capacity cause, repeatable reclamation and several
-other mechanics were not observed. Preserve that result. It motivates explicit release
-and a two-thread unit; it does not prove a later version fixes a Codex backend problem.
+The recorded 2.1 trial demonstrated one nested group but failed before completing the
+second. It did not establish the exact capacity cause or reliable reclamation. Preserve
+that limitation. It motivated explicit closure and the run-wide two-thread target, not
+a claim that Smart fixed a native backend defect.
 
-## When a mechanism is unavailable
+## If a mechanism is unavailable
 
-Use main-dispatched named workers instead of pretending owner-dispatched review is
-supported. With a lower cap, serialize only after real reclamation and preserve required
-independent checks. If no safe dispatch/reuse path exists, checkpoint and identify the
-exact blocker. Never silently perform all settled implementation in expensive main,
-substitute a model, increase limits, weaken permissions or accept unchecked work.
+Use direct named workers instead of pretending nested review works. Under lower capacity,
+serialize only after observed reclamation and preserve independent gates. If no safe
+path exists, checkpoint the exact blocker. Never silently take all settled implementation
+back into main, substitute a model, raise limits or weaken approvals.
 
-Actual cost/quality evaluation stays optional and separate: compare similar accepted
-outcomes across all roles, setup and rework, with real allowance observations where
-available. Raw tokens and public price equivalents are not subscription usage or waste.
-No fixed saving percentage or five-day allowance guarantee is established by these tests.
+## Observe ordinary work, not a new admission gate
 
-## Scope an existing evidence record
+A small settled edit is delegated to a named inexpensive worker. A complete known browser
+journey is an operator assignment, while actual UI/UX judgment remains main. The capable
+implementation owner may gather short evidence without spawning another relay worker.
 
-Record the source commit/package fingerprint, client build, relevant configuration,
-primary/child handles, dispatcher and unchanged effective cap. For each mechanism retain
-its native result reference and disposition. Missing evidence stays UNVERIFIED:
+Main settles a brief, examines running visuals, sends real grouped findings back as a
+correction task, then examines fresh evidence. Do not invent findings for a report or
+substitute a worker's PASS for main's own assessment. Judgment-only work stays main.
+Observed main-only tool boundaries are narrow, explicit and permission-preserving.
 
-| Mechanism | Required observation |
-| --- | --- |
-| Direct review | Deliberate rejection, repair, fresh pass and separate Tester verdict |
-| Turnover | Observed native close results and two complete owner/reviewer pairs |
-| Nested review | Real descendant relationship, scoped context and inherited permissions |
-| Interruption | Only actual supported pause/resume and uncertain-write reconciliation |
-| Economics | Comparable accepted outcomes and actual allowance, or explicitly unknown |
+For an assignment that actually waits, record its agreed wake condition and the native
+wait/completion events already available. A timeout alone should not cause a progress
+SEND, diff inspection, browser reload or repeated test. A real checkpoint, error or user
+interruption still receives attention. Do not infer polling intervals or intentions from
+aggregate WAIT counts, or manufacture delays to create evidence.
 
-The optional `boundary.md` record checks internal consistency of an existing capsule.
-It neither fills missing native observations nor establishes their authenticity. Do not
-publish private handles or configuration. Reuse observations only within their applicable
-client/configuration scope, and recheck an affected mechanism after a relevant change.
+Check known owned handles at genuine turnover boundaries, including descendants and
+previous units. Completion is not closure; temporal lifetime overlap in an audit is not
+live occupancy. Preserve native release evidence when available and unknowns otherwise.
 
-## Observe delegation and main review on ordinary work
+At an accepted milestone, verify the compact handoff preserves decisions, candidate,
+gates, findings and resource ownership. Reuse it after compaction or an explicitly chosen
+context transition without restarting the app or recreating still-valid setup.
 
-This is a focused observation checklist, not a new admission gate or a quota-report task.
-Use an actual authorized task or a small private fixture after a fresh session loads 2.4:
+## Limits of checks and measurements
 
-- A small settled edit is delegated to a named inexpensive owner, not patched by main
-  for speed. A known multi-step browser journey is one operator assignment.
-- Main authors the design brief and directly inspects actual running evidence. When main
-  identifies a real finding, it sends a bounded correction task to the same suitable owner,
-  then inspects fresh affected evidence before closing the finding. Do not fabricate a
-  finding or count a worker's PASS as main review.
-- Judgment-only work stays main. A missing child browser/tool capability is explicitly
-  reported; any authorized main-only bridge stays narrow rather than taking over the task.
-- No extra manager or speculative reviewer appears. Retained correction workers and
-  observed closure respect the effective cap. Existing independent gates remain intact.
+No fixed saving percentage or five-day allowance follows from these checks. Compare
+similar accepted outcomes across setup, all roles, review and rework. Treat primary and
+carry-in accounting separately, and do not sum inclusive subtrees. API-equivalent costs
+are not subscription billing. Unknown assignment labels do not erase observed usage.
 
-Keep only the concise existing task/evidence references needed to establish these facts.
-Configured model/effort, catalog-advertised values and observed per-run metadata stay
-separate. Missing runtime metadata is unknown, not a reason to rerun a whole log archive.
-This checklist cannot establish allowance savings or make main's design judgment cheap.
+Optional `boundary.md` and runtime helpers check supplied consistency, not authenticity
+or native enforcement. Do not publish private handles, raw conversations or configuration.
+Recheck only affected mechanics when the relevant client/configuration changes.

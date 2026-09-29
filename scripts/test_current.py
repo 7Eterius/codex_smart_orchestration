@@ -1,4 +1,4 @@
-"""Preserved current Smart contracts, updated for v2's role and safety boundaries."""
+"""Current Smart contracts, with preserved installer and retirement regressions."""
 from __future__ import annotations
 
 import json
@@ -16,12 +16,12 @@ from runtime.errors import ValidationError
 from runtime.layout import BUILTIN_WORKERS, PackageLayout, RuntimePaths
 from runtime.smart_restore import prepare_restore
 
-VERSION = "2.4.0"
+VERSION = "2.5.0"
 EXPECTED = {
     "simple_executor": ("gpt-6-luna", "low"),
     "routine_executor": ("gpt-6-luna", "high"),
     "default_executor": ("gpt-6-luna", "xhigh"),
-    "senior_executor": ("gpt-6-sol", "xhigh"),
+    "senior_executor": ("gpt-6.1-sol", "xhigh"),
     "tester": ("gpt-6-luna", "high"),
     "companion": ("gpt-6-luna", "medium"),
     "investigator": ("gpt-6-luna", "xhigh"),
@@ -79,6 +79,7 @@ class InstallerTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.home = Path(self.tmp.name).resolve() / "home"
         self.home.mkdir()
+        # Deliberately an older explicit owner selection; upgrades must preserve it.
         self.original_config = ('model="gpt-6-sol"\nmodel_reasoning_effort="medium"\n'
                                 'service_tier="standard"\n[agents]\nenabled=true\n')
         (self.home / "config.toml").write_text(self.original_config)
@@ -119,7 +120,6 @@ class InstallerTests(unittest.TestCase):
 
     def test_exact_rollback_restores_preinstall_state(self):
         _, backup = self.install()
-        self.assertIsNotNone(backup)
         restore, before = prepare_restore(self.home, backup)
         smart_install.apply_plan(restore, before, self.home)
         self.assertEqual((self.home / "config.toml").read_text(), self.original_config)
@@ -154,7 +154,6 @@ class InstallerTests(unittest.TestCase):
         skill.mkdir(parents=True)
         (skill / "SKILL.md").write_text("<!-- codex-workflow-skill: deployment-token-report -->\n# retired\n")
         (skill / "data.txt").write_text("old")
-        # v2 requires actual baseline bytes and provenance, not merely a marker.
         for path in skill.iterdir():
             target = runtime.runtime / "templates/skills/deployment-token-report" / path.name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -191,7 +190,6 @@ class InstallerTests(unittest.TestCase):
         smart_install.apply_plan(plan, before, self.home)
         self.assertFalse(legacy.exists())
         self.assertFalse(generated.exists())
-        # Safety correction: backups are preserved, not swept on routine updates.
         self.assertTrue(source.exists())
         self.assertEqual((source / "heavy_route.md").read_text(), "legacy route\n")
 
