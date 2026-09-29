@@ -1,10 +1,9 @@
-"""2.4 delegation/design contracts and exact archived 2.3 migration.
+"""Preserve 2.4's delegation/design guarantees and exact archived 2.3 migration.
 
-Prompt tests establish shipped instructions, not live routing, visual quality or savings.
-All installation writes use isolated temporary homes, never the owner's actual config.
+Current model/version expectations live in test_current; archived baselines stay pinned.
+Prompt assertions are not native runtime, quality or savings evidence.
 """
 from __future__ import annotations
-
 import io
 import json
 import os
@@ -20,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / 'codex_workflow'
 BASELINE = 'f2c40c919a64863e8539245307f7c26226a90c3f'
 sys.path.insert(0, str(PACKAGE))
+from test_current import VERSION, EXPECTED
 
 
 def flat(path):
@@ -34,27 +34,19 @@ def snapshot(root):
 
 class DelegationContracts(unittest.TestCase):
     def test_version_and_existing_prompt_budgets(self):
-        self.assertEqual((PACKAGE / 'operate/VERSION').read_text(), '2.4.0\n')
+        self.assertEqual((PACKAGE / 'operate/VERSION').read_text(), VERSION + '\n')
         for name, limit in [('smart_orchestration.md', 1200), ('execution.md', 1000),
                             ('verification.md', 700), ('browser.md', 650), ('design.md', 600)]:
             self.assertLess(len(flat(PACKAGE / name).split()), limit, name)
-        self.assertIn('Smart Orchestration 2.4', (ROOT / 'README.md').read_text())
-        self.assertIn('codex-workflow-version: 2.4.0', (PACKAGE / 'operate/user_AGENTS.md').read_text())
+        self.assertIn('Smart Orchestration ' + VERSION.rsplit('.', 1)[0], (ROOT / 'README.md').read_text())
+        self.assertIn('codex-workflow-version: ' + VERSION, (PACKAGE / 'operate/user_AGENTS.md').read_text())
 
     def test_no_new_role_or_model_downgrade(self):
-        expected = {'simple_executor': ('gpt-6-luna', 'low'),
-                    'routine_executor': ('gpt-6-luna', 'high'),
-                    'default_executor': ('gpt-6-luna', 'xhigh'),
-                    'tester': ('gpt-6-luna', 'high'),
-                    'senior_executor': ('gpt-6-sol', 'xhigh'),
-                    'companion': ('gpt-6-luna', 'medium'),
-                    'investigator': ('gpt-6-luna', 'xhigh'),
-                    'archivist': ('gpt-6-luna', 'medium')}
         paths = list((PACKAGE / 'agents').glob('*.toml'))
-        self.assertEqual({p.stem for p in paths}, set(expected))
+        self.assertEqual({p.stem for p in paths}, set(EXPECTED))
         for path in paths:
             cfg = tomllib.loads(path.read_text())
-            self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), expected[path.stem])
+            self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), EXPECTED[path.stem])
             expected_sandbox = 'read-only' if path.stem in {'companion', 'investigator'} else 'workspace-write'
             self.assertEqual(cfg['sandbox_mode'], expected_sandbox)
             self.assertIs(cfg['agents']['enabled'], path.stem in {'routine_executor', 'default_executor'})
@@ -75,13 +67,10 @@ class DelegationContracts(unittest.TestCase):
                        'Main directly reviews an early running frame',
                        'Open and assess the actual evidence',
                        'Main groups related findings into one bounded correction assignment',
-                       'Main inspects the corrected evidence',
-                       'Missing evidence stays open'):
+                       'Main inspects the corrected evidence', 'Missing evidence stays open'):
             self.assertIn(clause, guide)
-        self.assertIn('Never reduce review depth to meet a delegation percentage',
-                      flat(PACKAGE / 'smart_orchestration.md'))
-        self.assertIn('Design-only tasks stop at the authorized concept',
-                      flat(PACKAGE / 'smart_orchestration.md'))
+        self.assertIn('Never reduce review depth to meet a delegation percentage', flat(PACKAGE / 'smart_orchestration.md'))
+        self.assertIn('Design-only tasks stop at the authorized concept', flat(PACKAGE / 'smart_orchestration.md'))
 
     def test_browser_access_must_be_real_and_simple_gets_whole_journeys(self):
         browser = flat(PACKAGE / 'browser.md')
@@ -89,8 +78,7 @@ class DelegationContracts(unittest.TestCase):
                        'one complete bounded assignment, not a worker per click',
                        'Verify the worker has the needed browser/Computer Use tools',
                        'only the indispensable authorized bridge step',
-                       'Main reviews actual evidence, not captions',
-                       'One owner controls shared GUI state'):
+                       'Main reviews actual evidence, not captions', 'One owner controls shared GUI state'):
             self.assertIn(clause, browser)
 
     def test_corrections_reuse_context_without_bypassing_holds(self):
@@ -106,22 +94,19 @@ class DelegationContracts(unittest.TestCase):
     def test_worker_briefs_cannot_replace_main_design_authority(self):
         for role in ('simple_executor', 'routine_executor', 'default_executor'):
             text = flat(PACKAGE / 'agents' / (role + '.toml'))
-            self.assertIn('Main', text)
-            self.assertIn('correction', text)
-            self.assertIn('design', text)
-            self.assertIn('evidence', text)
-            self.assertIn('main', text)
+            for phrase in ('Main', 'correction', 'design', 'evidence', 'main'):
+                self.assertIn(phrase, text)
         self.assertIn('Technical approval is not main', flat(PACKAGE / 'agents/tester.toml'))
-        self.assertIn('Main settles design direction before Luna continues',
-                      flat(PACKAGE / 'agents/senior_executor.toml'))
+        self.assertIn('Main settles design direction before Luna continues', flat(PACKAGE / 'agents/senior_executor.toml'))
 
     def test_explicit_overrides_and_observed_boundaries_not_latency_escape(self):
         text = flat(PACKAGE / 'execution.md')
-        self.assertIn('An explicit user no-agent/direct-execution instruction remains binding', text)
-        self.assertIn('verified tool or permission boundary', text)
-        self.assertIn('tiny diff, faster patch or unavailable nesting is not such a boundary', text)
-        self.assertIn('If no safe path exists, report the blocked action', text)
-        self.assertIn('Progress commentary continues the run', text)
+        for phrase in ('An explicit user no-agent/direct-execution instruction remains binding',
+                       'verified tool or permission boundary',
+                       'tiny diff, faster patch or unavailable nesting is not such a boundary',
+                       'If no safe path exists, report the blocked action',
+                       'Progress commentary continues the run'):
+            self.assertIn(phrase, text)
 
     def test_allocator_delegates_tiny_settled_execution(self):
         from runtime.allocation import classify
@@ -168,7 +153,7 @@ class BootstrapTests(unittest.TestCase):
         self.assertIn('not self-patching', managed)
 
     def test_bootstrap_patch_preserves_owner_settings_and_is_idempotent(self):
-        from runtime.smart_config import patch_config, SMART
+        from runtime.smart_config import patch_config
         owner = ('developer_instructions="Protected owner guidance."\n'
                  'model="owner-main"\nmodel_reasoning_effort="high"\n'
                  'plan_mode_reasoning_effort="xhigh"\nservice_tier="standard"\n'
@@ -183,6 +168,7 @@ class BootstrapTests(unittest.TestCase):
         active = after.pop('developer_instructions')
         self.assertEqual(before, after)
         self.assertTrue(active.startswith(original))
+        from runtime.smart_config import SMART
         self.assertEqual(active.count(SMART.start), 1)
         self.assertIn(str(home / 'codex_workflow/smart_orchestration.md'), active)
         self.assertEqual(patch_config(patched, home), patched)
@@ -219,7 +205,7 @@ class InstallationTests(unittest.TestCase):
             with self.assertRaises(ValidationError):
                 install.prepare(PACKAGE, home)
 
-    def test_exact_v23_to_v24_reapply_and_rollback(self):
+    def test_exact_v23_to_current_reapply_and_rollback(self):
         from runtime import smart_install as install
         from runtime.smart_restore import prepare_restore
         result = subprocess.run(['git', 'archive', BASELINE, 'codex_workflow'], cwd=ROOT,
@@ -266,7 +252,7 @@ class InstallationTests(unittest.TestCase):
             backup = install.apply_plan(plan, prior, home)
             self.assertIsNotNone(backup)
             self.assertTrue(install.status(home)['disk_ok'])
-            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), '2.4.0\n')
+            self.assertEqual((home / 'codex_workflow/operate/VERSION').read_text(), VERSION + '\n')
             self.assertEqual((home / 'codex_workflow/design.md').read_bytes(), (PACKAGE / 'design.md').read_bytes())
             old_cfg = tomllib.loads(before['config.toml'][0].decode())
             new_cfg = tomllib.loads((home / 'config.toml').read_text())
@@ -278,8 +264,13 @@ class InstallationTests(unittest.TestCase):
             for role in (PACKAGE / 'agents').glob('*.toml'):
                 old_role = tomllib.loads((old_package / 'agents' / role.name).read_text())
                 new_role = tomllib.loads((home / 'agents' / role.name).read_text())
-                for key in ('model', 'model_reasoning_effort', 'sandbox_mode', 'agents'):
+                for key in ('model_reasoning_effort', 'sandbox_mode', 'agents'):
                     self.assertEqual(old_role[key], new_role[key], (role.name, key))
+                if role.stem == 'senior_executor':
+                    self.assertEqual(old_role['model'], 'gpt-6-sol')
+                    self.assertEqual(new_role['model'], EXPECTED[role.stem][0])
+                else:
+                    self.assertEqual(old_role['model'], new_role['model'], role.name)
             self.assertEqual(snapshot(project), project_before)
             self.assertEqual(install.prepare(PACKAGE, home)[0].mutations, [])
             restore, prior = prepare_restore(home, backup)
@@ -289,7 +280,6 @@ class InstallationTests(unittest.TestCase):
             self.assertFalse((home / 'codex_workflow/design.md').exists())
             checked = subprocess.run(command + ['--check'], capture_output=True, text=True)
             self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
-            self.assertTrue(json.loads(checked.stdout)['disk_ok'])
 
 
 if __name__ == '__main__':

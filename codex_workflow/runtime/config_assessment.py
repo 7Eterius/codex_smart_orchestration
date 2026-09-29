@@ -1,15 +1,11 @@
-"""Shared, read-only configuration assessment; not a live Codex schema probe.
-
-Error: invalid known shape or explicitly disabled root agents. Warning: deliberate
-cost choices or legacy/version-dependent flags. Unverified: effective runtime state.
-Never mutate input, read profiles/projects, infer availability, or echo secrets.
-"""
+"""Read-only configuration assessment; recommendations never establish live selection."""
 from __future__ import annotations
-
 from typing import Any
 from .agent_defaults import DEFAULTS
 
 PARENT_FIELDS = ("model", "model_reasoning_effort", "plan_mode_reasoning_effort", "service_tier")
+MAIN_BASELINE = {"model": "gpt-6.1-sol", "model_reasoning_effort": "medium"}
+SOL_61_EFFORTS = frozenset({"low", "medium", "high", "xhigh", "max"})
 
 
 def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
@@ -44,15 +40,13 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
     if cap is None:
         warnings.append("No concurrency cap is established in this configuration; live default is unverified.")
     elif isinstance(cap, int) and not isinstance(cap, bool) and cap > 3:
-        warnings.append("Explicit concurrency above 3 is preserved; Smart targets at most two owned open threads, respecting lower limits and other work.")
+        warnings.append("Explicit concurrency above 3 is preserved; Smart targets at most two owned open threads across the run, respecting lower limits and other work.")
     for key in ("default_subagent_model", "default_subagent_reasoning_effort"):
         value = agents.get(key)
         if key in agents and (not isinstance(value, str) or not value.strip()):
             errors.append(f"agents.{key} must be a nonempty string.")
         elif value != DEFAULTS[key]:
             warnings.append(f"agents.{key} is absent or differs from the economical fallback; no live selection is inferred.")
-    # Older clients used backend-specific booleans/tables. False for one backend
-    # is not proof that every backend is disabled. Preserve it and expose doubt.
     for key in ("multi_agent", "multi_agent_v2"):
         if key in tables["features"]:
             value = tables["features"][key]
@@ -71,14 +65,24 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
         warnings.append("Fast mode configured; review allowance cost. No speed setting was changed.")
     if parent["plan_mode_reasoning_effort"] is None:
         unverified.append("Plan-mode effort is unset here; its built-in preset was not observed and is not inferred from normal effort.")
+    baseline_status = "matches" if all(parent[k] == v for k, v in MAIN_BASELINE.items()) else "different_or_unset"
+    if baseline_status != "matches":
+        warnings.append("Recommended Main baseline is gpt-6.1-sol/medium. Existing parent/profile selections are preserved; select it explicitly where available.")
+    # Validate only this known model contract, not an invented global model catalog.
+    if parent["model"] == "gpt-6.1-sol":
+        for key in ("model_reasoning_effort", "plan_mode_reasoning_effort"):
+            effort = parent[key]
+            if effort is not None and effort not in SOL_61_EFFORTS:
+                errors.append(f"{key} is unsupported for gpt-6.1-sol; choose low, medium, high, xhigh or max explicitly.")
     for profile in tables["profiles"].values():
         if isinstance(profile, dict) and any(key in profile for key in PARENT_FIELDS + ("developer_instructions", "agents", "features")):
             warnings.append("A configured profile may override model, normal/Plan effort, speed or agent settings; selected profile is unverified.")
             break
-    # No arbitrary profile names, developer instructions, environment or token data.
     return {
         "errors": errors, "warnings": warnings, "unverified": unverified,
         "configured_parent": parent,
+        "recommended_parent": dict(MAIN_BASELINE),
+        "parent_baseline_status": baseline_status,
         "configured_child_defaults": {key: agents.get(key) for key in DEFAULTS},
         "effective_configured_cap": cap,
         "ok": not errors,

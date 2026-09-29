@@ -1,596 +1,357 @@
-# Smart Orchestration 2.4
+# Smart Orchestration 2.5
 
-**Main decides and judges. Luna implements, operates and repairs.**
+**GPT-6.1 Sol judges. Luna implements, operates and repairs.**
 
-Smart Orchestration is a global Codex workflow for getting more satisfactory work from a limited model allowance without giving up strong product, architecture, UX or visual judgment.
+Smart is a global Codex workflow for getting more satisfactory work from a limited
+allowance. Main retains product, architecture, UX, visual decisions, detailed assessment
+and final acceptance. Named economical workers execute settled work, including small
+edits and main's corrections. Slower execution is acceptable; weaker design judgment is not.
 
-The core idea is deliberately simple:
+There is **one adaptive execution loop**, no Normal/Coordinated modes and no dedicated
+Chunk Lead. The workflow is an instruction policy with small deterministic helpers,
+not a native scheduler, tool interceptor, security boundary or guaranteed saving.
 
-> Use the expensive Main model for decisions that benefit from its intelligence and attention to detail. Delegate settled execution to the cheapest named worker that can do it reliably. Bring the result back to Main for assessment. If Main finds problems, send those findings back to the worker as another bounded implementation task.
+## What changes in 2.5
 
-Smart 2.4 has **one adaptive execution loop**. There are no Normal/Coordinated modes, no dedicated manager layer and no requirement to build a full agent team for every task.
+The recommended Main baseline becomes **GPT-6.1 Sol Medium**. The installed Senior role
+uses **GPT-6.1 Sol xhigh**. All seven Luna role settings remain unchanged.
 
-## Architecture at a glance
+The other changes focus on avoidable supervision rather than adding another agent layer:
+
+- Give assignments explicit events that require main's attention.
+- Do not turn a wait timeout into a progress message, another inspection or a test rerun.
+- Count the two-thread Smart budget across the entire run, not separately per assignment.
+- Reuse a writer through corrections, but retire accumulated investigation at accepted
+  milestone boundaries and preserve a compact handoff.
+- Expose the recommended parent and any on-disk mismatch in configuration assessment,
+  without silently replacing owner settings or claiming live model selection.
+
+The release preserves the design loop, independent verdicts, candidate holds, required
+fresh checks, native thread release and exact install/rollback protections.
+See [2.5 notes](docs/v2.5.md).
+
+## Architecture
 
 ```text
 USER
   |
   v
-MAIN / owner-selected model
-  product meaning
-  architecture
-  UX and visual decisions
-  acceptance criteria
-  consequential authority
-  detailed result review
-  final acceptance
+MAIN: GPT-6.1 Sol Medium recommended; owner selection preserved
+  goal, product meaning, architecture, UX/visual decisions
+  protected brief, acceptance criteria, authority
+  detailed inspection of real results, final acceptance
   |
-  |  once the decision/contract is settled
+  | one complete bounded assignment
   |
-  +----> SIMPLE / GPT-6 Luna Low
-  |        small established edits
-  |        webpage extraction
-  |        known low-risk GUI actions
-  |        complete mechanical browser journeys
-  |        explicit observable checks
+  +--> SIMPLE / Luna Low
+  |      established low-risk edits, exact extraction,
+  |      complete mechanical browser/GUI journeys
   |
-  +----> ROUTINE / GPT-6 Luna High
-  |        normal implementation
-  |        implementation of an accepted design
-  |        scoped discovery needed to implement
-  |        self-checks
-  |        ordinary repairs
+  +--> ROUTINE / Luna High
+  |      normal implementation of settled requirements/design,
+  |      scoped discovery, commands, self-checks, ordinary repairs
   |
-  +----> DEFAULT / GPT-6 Luna xhigh
-  |        genuinely deep bounded implementation
-  |        difficult debugging with settled goals
-  |        tangled cross-module diagnosis
+  +--> DEFAULT / Luna xhigh
+         genuinely deep bounded implementation/diagnosis
+           |
+           +--> TESTER / Luna High when independent review is required
+                   authoritative requirements, stable candidate,
+                   actual diff and behavior, separate verdict
+           |
+           v
+       candidate + original evidence + remaining gates
+           |
+           v
+MAIN examines decisive changes and actual visuals
   |
-  +----> TESTER / GPT-6 Luna High
-  |        independent diff/contract review
-  |        required behavioral verification
-  |        separate verdict
+  +--> findings --> same suitable Luna owner --> fresh evidence --> MAIN
   |
-  +----> SUPPORT ROLES
-           Companion      Luna Medium   targeted context
-           Investigator   Luna xhigh    deep evidence gap
-           Archivist      Luna Medium   durable checkpoint
-           Senior         Sol xhigh     hard advisory judgment
-
-                    implementation/result
-                             |
-                             v
-MAIN inspects decisive evidence and actual visuals
-                             |
-                 +-----------+-----------+
-                 |                       |
-              ACCEPT                  FINDINGS
-                                         |
-                                         v
-                           same suitable Luna worker
-                           applies bounded corrections
-                                         |
-                                         v
-                              fresh evidence/result
-                                         |
-                                         +----> MAIN rechecks
+  +--> acceptance --> durable handoff --> observed native release
 ```
 
-The architecture is intentionally asymmetric. **Main is the judgment layer, not the default execution layer.** The workers are the execution layer. Tester is the independent verification layer when residual risk or project rules require it.
+Main may dispatch Tester directly, or explicitly authorize Routine/Default to dispatch
+one Tester when native nesting, permissions and capacity support it. Only the dispatcher
+changes, not the independent reviewer or its contract. Missing nesting does not justify
+main taking implementation back.
 
-## Why this architecture
+Support roles answer bounded questions or create authorized checkpoints. They are not a
+permanent team and do not multiply the run's thread budget.
 
-A long-lived Main conversation can become expensive because every implementation turn, browser action, progress check and correction may repeatedly invoke a large high-quality context. Smart tries to reserve that context for work where its intelligence has the highest value:
+## Responsibilities and model map
 
-- deciding what should be built;
-- resolving ambiguous requirements;
-- architecture and product tradeoffs;
-- UX, information hierarchy and interaction decisions;
-- visual judgment and detailed design critique;
-- consequential security, financial or authority decisions;
-- inspecting decisive evidence;
-- final acceptance.
-
-Once those decisions are settled, writing the CSS, changing a component, editing configuration, replaying a known browser flow or applying a clearly described correction generally does not require Main to remain the writer.
-
-This is **delegation for economics, not delegation for speed**. Waiting for a cheaper worker is acceptable. A small diff, familiarity with the code, or the fact that Main could perform the edit faster is not by itself a reason for Main to take execution back.
-
-Smart does not promise a fixed saving percentage. Model behavior, task mix, context, tools, cache behavior, corrections and subscription accounting all matter. The workflow optimizes the structure of the work; actual savings should be measured on real accepted outcomes.
-
-## The control plane: what Main owns
-
-Main remains responsible for the parts of the task where judgment matters.
-
-### Main should do
-
-- Understand the user's goal and define the outcome.
-- Resolve ambiguity before implementation.
-- Make product and architecture decisions.
-- Decide UX hierarchy, interaction behavior, visual direction and responsive intent.
-- Define protected decisions and acceptance criteria.
-- Inspect enough source or product evidence to make those decisions.
-- Decide which named role should own the settled execution.
-- Review decisive/high-risk changes and evidence applicability.
-- Open and assess actual UI evidence when visual quality matters.
-- Turn review findings into precise correction assignments.
-- Decide whether corrected results satisfy the brief.
-- Give final workflow acceptance, separately from commit/deploy/owner approval.
-
-### Main should normally not do
-
-- Routine implementation after the contract is settled.
-- A “quick” code or CSS fix simply because it is easy.
-- Mechanical webpage navigation that can be assigned to Simple.
-- Repeated browser clicking while a worker owns the journey.
-- Parallel implementation while a worker is already implementing.
-- Poll unfinished diffs or repeatedly ask workers for progress.
-- Re-run the worker's entire investigation just to supervise it.
-- Pre-write the complete patch and use a worker as a paste mechanism.
-- Silently take work back because nested delegation is unavailable.
-
-Main can still answer questions directly, write the design/architecture brief, inspect decisive source and evidence, or perform a narrowly necessary main-only bridge action when an **observed** tool/permission boundary makes delegation impossible. That exception stays narrow; the remaining execution returns to workers.
-
-An explicit user request for direct/no-agent execution also remains binding.
-
-## The execution plane: choosing the cheapest sufficient owner
-
-Smart routes by **responsibility and uncertainty**, not by file count, number of clicks or how impressive a task looks.
-
-| Work | Default owner | Why |
+| Responsibility | Role | Configured model / effort |
 | --- | --- | --- |
-| Direct answer or unresolved judgment | Main | No execution handoff is useful yet |
-| Product/architecture/UX/visual decision | Main | Judgment is the valuable part |
-| Small established low-risk edit | Simple, Luna Low | Settled execution |
-| Known webpage/GUI journey | Simple, Luna Low | Mechanical operation |
-| Normal settled implementation | Routine, Luna High | Primary implementation lane |
-| Accepted design implementation | Routine, Luna High | Main has already made design decisions |
-| Deep bounded debugging/implementation | Default, Luna xhigh | More reasoning, still cheaper than Main |
-| Standalone independent verification | Tester, Luna High | No implementation owner is required |
-| One targeted context question | Companion, Luna Medium | Cheap bounded retrieval |
-| Deep unresolved evidence question | Investigator, Luna xhigh | Investigation without taking product authority |
-| Difficult advisory judgment | Senior, Sol xhigh | Advice returns to Main; it is not another manager |
-| Meaningful durable checkpoint | Archivist, Luna Medium | Compact grounded handoff |
+| Product, architecture, UX/visual judgment and acceptance | Main | Owner-selected; **GPT-6.1 Sol Medium** baseline |
+| Explicit low-risk operation or established small edit | `simple_executor` | GPT-6 Luna Low |
+| Normal settled implementation and repair | `routine_executor` | GPT-6 Luna High |
+| Deep bounded implementation or diagnosis | `default_executor` | GPT-6 Luna xhigh |
+| Independent diff/contract/behavior verification | `tester` | GPT-6 Luna High |
+| Requested hard advisory judgment | `senior_executor` | **GPT-6.1 Sol xhigh** |
+| Targeted context question | `companion` | GPT-6 Luna Medium |
+| Deep unresolved evidence question | `investigator` | GPT-6 Luna xhigh |
+| Grounded milestone handoff | `archivist` | GPT-6 Luna Medium |
 
-Routine is the **normal implementation default**. Default is not selected merely because many files are involved. It needs a real depth reason, such as a difficult causal bug, tangled cross-module behavior or prolonged tool-heavy diagnosis.
+Routine is the settled implementation default. Default needs a real depth reason, not a
+large file count or slow tools. Simple can own a long known journey when intent, target
+and expected observations are explicit. Novel shared state, security, payments, schema
+invariants and unresolved design are not low-risk edits simply because the patch is short.
 
-Simple is deliberately useful for more than one-line edits. A twenty-step browser journey can still be Simple work when the target, actions and expected observations are explicit and low risk.
+Senior is advisory-first. Main considers its decision/rationale/constraints/next action,
+settles the decision and returns implementation to Luna. Transferred Senior implementation
+requires an explicit ownership transfer for an evidenced capability gap or inseparable
+judgment/implementation, with independent review. Max/Astra are not automatic tiers.
 
-## Mixed tasks are split at judgment boundaries
+## Main owns judgment, not routine execution
 
-A real task often contains both high-value judgment and low-value execution.
+Main defines the outcome and protected decisions, resolves ambiguity, selects the execution
+owner and review checkpoint, and inspects enough source and product evidence to decide.
+It directly reviews consequential changes and real visuals. It does not rubber-stamp a
+worker's confidence or a PASS summary.
 
-Example:
+After the contract is settled, the worker owns implementation and ordinary repairs.
+Main does not make a quick CSS patch, implement alongside an active writer, or write a
+complete solution for Luna to paste. A small diff, familiarity or faster direct execution
+is not sufficient reason to abandon delegation.
 
-> Redesign the story card for mobile, implement it, test the filters, and check the final page.
+Main can answer directly, author authorized briefs and inspect decisive evidence. An
+explicit no-agent request remains binding. A verified tool or permission boundary can
+justify a narrowly authorized main-only bridge action; state that boundary once and
+return the remaining work to the worker. Never invent access or widen permissions.
 
-Smart should not give that whole request to Main or blindly give it all to Luna.
+## The assignment contract
 
-The intended flow is:
+Give a complete bounded job rather than one worker per file or click. The existing capsule
+contains the outcome and stop condition, unit/attempt, exact requirements, owned/protected
+paths, starting candidate/target, authority, gates, evidence locations and absolute relevant
+guide paths. Design work adds main's accepted brief and a review checkpoint.
 
-1. Main inspects the existing product and decides the new hierarchy, composition, interaction and acceptance criteria.
-2. Routine implements that settled design.
-3. The implementation owner performs local checks and returns the current candidate with running evidence.
-4. Simple can own a separate worthwhile mechanical browser journey when appropriate, or the capable implementation owner can gather short evidence without introducing another relay worker.
-5. Main opens the actual visual result and assesses it.
-6. Main converts concrete findings into a bounded correction task.
-7. The same suitable worker applies the correction.
-8. Main reviews the fresh result and accepts or repeats the correction loop.
+The capsule also names the events that require main: **review-ready, completed,
+decision-needed, blocked, or a real user interruption**. The worker owns running commands,
+test waits, browser operation and ordinary diagnosis within that contract.
 
-The expensive model therefore remains deeply involved in **what good looks like**, while cheaper models perform the repetitive editing and operation needed to get there.
+A finite coherent group may share setup and contracts but retains per-member gates and
+dependency order. Do not extend it simply to keep a worker busy. Workers report missing
+product/design/architecture decisions before inventing them; main sends a contract delta.
 
-## UI/UX and design workflow
+## Detailed UI/UX workflow
 
-Design work is a first-class case in 2.4 because delegating implementation must not accidentally delegate design authority.
+Design authorship remains with main. Implementation delegation is not delegation of visual
+judgment. The [design guide](codex_workflow/design.md) specifies the complete loop.
 
-See [`design.md`](codex_workflow/design.md) for the detailed contract.
+### Main settles the brief
 
-### 1. Main writes the brief
+Main uses accepted references and actual product evidence to define purpose, hierarchy,
+composition, visual language, responsive intent, interactions and important states.
+The brief records protected decisions, relevant components/tokens, concrete acceptance
+criteria, required viewports and the next review point. It does not prescribe every CSS
+property or solve the implementation in advance.
 
-Main settles enough of the design to make implementation mechanical rather than interpretive:
+### Luna builds and returns running evidence
 
-- purpose and user outcome;
-- information hierarchy;
-- composition;
-- interaction model and important states;
-- responsive intent;
-- relevant visual language;
-- accepted references;
-- protected decisions;
-- required viewports/states;
-- concrete acceptance criteria;
-- the next visual review checkpoint.
+Routine normally implements the accepted design; Simple handles an established low-risk
+tweak. The capable owner runs appropriate checks and returns the current candidate/build,
+state, viewport/theme and original evidence references. An absent browser capability is
+a limitation, not permission to claim a visual pass.
 
-Main should not prescribe every CSS declaration or implementation detail. The worker still owns implementation.
+### Main examines the actual result
 
-### 2. Luna implements
+For new compositions, main inspects an early running frame and the final affected screens.
+It evaluates hierarchy, typography, spacing, alignment, interaction states, responsiveness
+and consistency at the level the brief requires. Passing tests and the mere presence of
+screenshots do not replace opening and assessing the evidence.
 
-Routine normally implements the accepted design. Simple is appropriate for an established low-risk visual edit.
+### Findings return to the worker
 
-The worker can choose ordinary implementation details inside existing patterns. If implementation reveals a missing hierarchy, interaction, product or visual-language decision, it returns that decision to Main instead of inventing one.
-
-### 3. Worker returns the real candidate
-
-The worker self-checks and returns actual running evidence tied to the current candidate, including the relevant state, viewport/theme and artifact references.
-
-A worker saying “looks good,” a source preview, a mockup, or simply attaching screenshots is not visual acceptance.
-
-### 4. Main judges the result
-
-For a new composition, Main inspects an early running frame. Main also directly reviews the final affected screens.
-
-The review can include:
-
-- hierarchy and visual emphasis;
-- typography;
-- spacing and alignment;
-- composition and rhythm;
-- responsive behavior;
-- interaction states;
-- consistency with the accepted design language;
-- obvious visual regressions;
-- whether the evidence actually belongs to the current candidate.
-
-Passing tests and Tester approval do not replace this visual judgment.
-
-### 5. Main delegates corrections
-
-Main does **not** make the quick patch itself. It groups related findings into a bounded correction assignment:
+Main groups related findings into one concrete correction assignment:
 
 ```text
-Finding / acceptance criterion
-Expected vs observed
-Exact state or evidence
-Allowed change
-Protected decisions
-Fresh checks
-Requested updated visual evidence
+Criterion / finding
+Expected versus observed
+Exact state and evidence
+Allowed change and protected decisions
+Affected checks and required fresh visual evidence
 ```
 
-The same suitable worker receives the delta whenever possible.
-
-### 6. Main reassesses
-
-After correction, Main inspects fresh evidence from the new candidate. Old screenshots and worker assurances do not close a new finding.
-
-The loop ends when the authorized quality target and required gates are satisfied, not when a delegation percentage is reached and not after endless polish beyond the brief.
-
-## Browser and Computer Use economy
-
-See [`browser.md`](codex_workflow/browser.md).
-
-The key distinction is:
-
-> **Operating a GUI and judging a GUI are different jobs.**
-
-Simple Luna Low is the default operator for explicit low-risk tasks such as:
-
-- opening pages and extracting exact information;
-- replaying a known user journey;
-- checking explicit expected states;
-- changing an established low-risk development setting;
-- collecting screenshots or observable evidence;
-- checking several pages against a concrete checklist.
-
-Main remains the judge when the question is:
-
-- Does this composition feel balanced?
-- Is the information hierarchy clear?
-- Is this interaction confusing?
-- Which responsive layout should we choose?
-- Does this look polished enough to accept?
-
-Smart prefers structured evidence when it proves the requested result more directly. DOM, network, console, APIs or deterministic browser tests can avoid repeated model-guided clicking. A real browser is still required when the acceptance contract requires the rendered journey.
-
-Reuse a verified browser session, server and build setup. Do not repeat login, browser installation or rebuilds just because one worker finished. One owner controls shared mutable GUI state at a time.
-
-A mechanically easy click can still be consequential. Billing, permissions, production, destructive actions and other sensitive boundaries retain their authority requirements.
-
-## Implementation, review and repair
-
-Every execution owner self-checks its work. Independent Tester is added when residual risk or repository/owner rules require it.
-
-See [`verification.md`](codex_workflow/verification.md).
-
-Typical reasons for independent review include:
-
-- meaningful behavior or state changes;
-- shared contracts and integrations;
-- uncertain accessibility behavior;
-- authentication/security;
-- payments;
-- schema/data migrations;
-- financial invariants;
-- Default-level implementation;
-- any repository-required independent gate.
-
-A reversible established copy/style change with decisive local checks does not automatically acquire another model reviewer merely because it touches UI.
-
-### Candidate hold
-
-When independent review starts, the relevant candidate is held stable:
-
-```text
-writer finishes candidate
-        |
-        v
-identify source/config/build/target
-        |
-        v
-HOLD candidate
-        |
-        v
-Tester independently reviews and runs required gates
-        |
-   +----+----+
-   |         |
- PASS      FAILURE
-   |         |
-   |      release hold
-   |         |
-   |      same writer repairs
-   |         |
-   |      identify new candidate
-   |         |
-   |      hold + fresh affected checks
-   |         |
-   +-----> Main acceptance
-```
-
-Tester owns its separate verdict. The writer can reference it but cannot rewrite it. Original failures stay preserved.
-
-Main checks whether the evidence is applicable and inspects decisive/high-risk changes, but should not routinely redo the Tester's complete source investigation.
-
-## Correction ownership
-
-Corrections are intentionally economical.
-
-When Main or Tester finds a defect, the default is **not**:
-
-```text
-failure -> new planner -> new writer -> rediscover everything
-```
-
-It is:
-
-```text
-failure -> concise evidence-backed delta -> same suitable writer -> fresh checks
-```
-
-This preserves useful implementation context and avoids paying for rediscovery.
-
-A correction should identify:
-
-- the failed requirement or Main review finding;
-- exact evidence;
-- the allowed delta;
-- protected decisions;
-- affected gates;
-- which fresh evidence must return.
-
-A repeated failure needs new evidence or a revised diagnosis. It does not automatically justify a stronger model.
-
-## Thread lifecycle and capacity
-
-See [`execution.md`](codex_workflow/execution.md).
-
-Smart targets **one execution owner plus one independent reviewer when needed**, at most two Smart-owned open threads for the current unit. The user's configured Codex limit remains authoritative and may include unrelated work.
-
-Important distinction:
-
-> A worker returning its final message does not prove its native thread slot has been released.
-
-When the client supports native closure:
-
-1. persist the worker's result and evidence;
-2. settle pending writes;
-3. transfer any browser/server/evidence resources that must survive;
-4. close completed owned leaf threads before their parent;
-5. observe actual release before relying on the reclaimed slot.
-
-Thread closure is separate from resource deletion. Closing an agent must not delete source, logs, browser profiles, servers or unique evidence.
-
-On `agent thread limit reached`, Smart reconciles the relevant known handles once. It may retry only after an observed state change. It does not raise the cap, blindly respawn, close unrelated work or silently move implementation back to expensive Main.
-
-Routine and Default may dispatch exactly one Tester only when Main explicitly delegated review scheduling and the relevant native nesting/lifecycle behavior is supported. Otherwise Main dispatches that same named Tester directly. The reviewer contract and model stay the same.
-
-Direct named Luna work does not depend on nested-agent support.
-
-## Main stays quiet while execution is settled
-
-A major economic goal is to reduce unnecessary re-entry into the large Main context.
-
-During a bounded worker assignment, Main should not repeatedly:
-
-- ask “how is it going?”;
-- inspect unfinished diffs;
-- re-run the worker's checks;
-- operate the same GUI in parallel;
-- acknowledge every worker message;
-- re-explain the entire task on follow-up.
-
-Use completion notifications or supported waiting. Ordinary status is a snapshot of last-known state, not a reason to launch new investigation.
-
-A follow-up correction should contain the **delta**, not the full original task again.
-
-Main re-enters when it has something valuable to do: resolve a decision, address a blocker, inspect a required checkpoint, assess the returned result, or accept/reject the candidate.
-
-## Context economy
-
-Smart tries to reduce both expensive-model usage and redundant context work.
-
-- Workers receive bounded capsules rather than the entire conversation.
-- Scoped history such as `fork_turns="none"` is preferred when supported.
-- Stable setup and accepted briefs are reused.
-- Follow-ups send deltas.
-- Existing deterministic tests and browser recipes are reused when valid.
-- Raw logs stay outside concise handoffs.
-- Only relevant guides/tools are loaded.
-- One coherent assignment is preferred over a worker per file or click.
-- A manager layer is not added just to relay messages.
-- Main does not solve the implementation before delegating it.
-
-The objective is not the fewest possible model calls. It is the lowest practical allowance cost for a **satisfactory accepted result**, including corrections and verification.
-
-## Model map
-
-| Role | Model / effort | Primary purpose | Does not own |
-| --- | --- | --- | --- |
-| Main | Owner-selected, Sol Medium recommended baseline | Product/architecture/design judgment, result assessment, final acceptance | Routine execution |
-| `simple_executor` | GPT-6 Luna Low | Established edits, extraction, mechanical Browser/Computer Use | New product/design decisions |
-| `routine_executor` | GPT-6 Luna High | Normal settled implementation and repair | Final acceptance |
-| `default_executor` | GPT-6 Luna xhigh | Deep bounded implementation/diagnosis | Product authority |
-| `tester` | GPT-6 Luna High | Independent diff/contract/behavior verification | Production repair |
-| `senior_executor` | GPT-6 Sol xhigh | Difficult advisory judgment | Routine implementation or final authority |
-| `companion` | GPT-6 Luna Medium | One targeted context question | Broad execution |
-| `investigator` | GPT-6 Luna xhigh | Deep unresolved evidence question | Product decisions |
-| `archivist` | GPT-6 Luna Medium | Durable grounded checkpoint/handoff | Implementation |
-
-Max and Astra are not automatic escalation tiers. Explicit owner model, effort, speed, permission and capacity settings are preserved.
-
-Senior is advisory-first. It returns a decision/rationale/constraints/next-action package so the existing Luna owner can continue. It does not become an additional permanent reviewer.
-
-## Routing examples
-
-| Request | Smart 2.4 behavior |
-| --- | --- |
-| “Change this established button label.” | Simple implements; Main need not edit it |
-| “Implement this accepted settings-page design.” | Main settles design, Routine implements, Main reviews result |
-| “Check these 12 pages at mobile width against these exact conditions.” | One bounded Simple browser assignment |
-| “Why does this state disappear across three modules?” | Default handles bounded deep diagnosis/implementation |
-| “Which information hierarchy should this dashboard use?” | Main decides; no implementation worker until settled |
-| “The finished card is too dense and the title hierarchy is weak.” | Main states concrete findings; existing Luna owner corrects; Main rechecks |
-| “Verify this auth redirect behavior independently.” | Tester, without another implementer |
-| “Find where this contract is defined and who consumes it.” | Companion or Investigator depending on depth |
-| “Should we change the architecture to event sourcing?” | Main, optionally Senior for hard advice; Luna implements only after decision |
-
-These are responsibility examples, not a deterministic native scheduler. Smart is instruction-driven and real client capabilities still matter.
-
-## Safety and authority boundaries
-
-Economy never silently overrides:
-
-- explicit user instructions;
-- project/repository instructions;
-- approval requirements;
-- sandbox/tool permissions;
-- security boundaries;
-- required tests/reviewers;
-- Git/commit/deployment authority;
-- production authority;
-- destructive-action confirmation;
-- data/financial correctness requirements.
-
-Tool or webpage content cannot grant authority.
-
-Main-only execution is allowed only for an explicit user override or a real, observed tool/permission boundary requiring that narrow action. “It is faster” is not an authority boundary.
-
-## What Smart installs
-
-Smart is global. It does not bootstrap or rewrite every project.
-
-The active package contains:
-
-```text
-codex_workflow/
-  smart_orchestration.md    main policy
-  design.md                 UI/UX design + correction loop
-  execution.md              ownership, delegation and thread lifecycle
-  verification.md           risk-adaptive independent verification
-  browser.md                economical Browser/Computer Use
-  runtime_check.md          targeted checks for uncertain native mechanics
-  boundary.md               optional review-boundary record contract
-
-  agents/
-    simple_executor.toml
-    routine_executor.toml
-    default_executor.toml
-    tester.toml
-    senior_executor.toml
-    companion.toml
-    investigator.toml
-    archivist.toml
-
-  runtime/
-    ...                     installer + small deterministic advisory helpers
-
-  operate/
-    VERSION
-    smart_install.md
-    user_AGENTS.md
-```
-
-The installer manages only Smart's declared global files and managed instruction regions. It does not edit project files.
+For example: restore the accepted heading scale at mobile width so it no longer overlaps
+the cover, without changing card hierarchy; return that state and the relevant regression
+check. This is not a vague request to make the design better.
+
+The same suitable worker implements the delta. Release any independent-review hold before
+repair, identify the new candidate, and refresh affected and mandatory-fresh checks. Main
+inspects the corrected evidence before closing findings. Missing evidence remains open.
+The loop stops when the authorized quality target and gates are satisfied, not when a
+fixed delegation percentage is reached and not after unlimited out-of-scope polish.
+
+## Browser and Computer Use
+
+**Operating a GUI and judging its design are different responsibilities.**
+Simple Luna Low owns worthwhile, explicit low-risk journeys: page extraction, known GUI
+configuration, checklist execution and screenshot collection. Main makes aesthetic and
+interaction decisions. A long journey can still be simple; a single consequential click
+can still require authority and stronger verification.
+
+Check actual worker tool and session access. Use structured DOM/network/console/API evidence
+where sufficient, a real browser for required rendered journeys and Computer Use for native
+or GUI-only behavior. Do not substitute an API response for a required interaction test.
+
+Reuse verified sessions, builds and setup. One owner controls shared mutable GUI state.
+For repeated stable local checks, reuse an existing deterministic test or verified recipe
+with fresh execution instead of reasoning through every click again. Capture requested
+changed/final/failure states, not an unneeded image after every action.
+
+A capable implementation owner can collect short evidence without an extra relay agent.
+For a separate substantial mechanical journey, transfer GUI ownership safely and use
+Simple. Explain an observed capability exception rather than leaving all browser operation
+with main by habit. See [browser economy](codex_workflow/browser.md).
+
+## Waiting without expensive supervision loops
+
+The parent should not manufacture a new task each time a tool returns a wait timeout.
+Use native completion notification or a supported long, interruptible wait. Choose
+parameters from the exposed tool schema; Smart does not invent a universal timeout API.
+
+A timeout alone is not a failure, evidence change or reason to SEND a progress request,
+list all agents, inspect unfinished files, reload the page or rerun tests. Continue
+supported waiting without duplicating those operations. Clients limited to polling should
+back off within their supported limits, not run rapid model turns or shell sleep loops.
+
+Investigate a real blocker, error, missed authorized checkpoint or an explicit fresh-status
+request. Honor user interruptions promptly. Ordinary status uses last-known state; an
+explicit fresh snapshot is one coalesced active-owner request, not a chain of leaf queries.
+Required user-facing progress can still be reported without creating new investigation.
+
+Main's review of an early design frame is intentional judgment, not unwanted supervision.
+The goal is fewer empty coordination turns, never less attention to the finished product.
+
+## Independent verification and candidate holds
+
+Every owner self-checks. Tester is required by project/owner gates or meaningful residual
+risk, including behavior/state, integration, shared contracts, uncertain accessibility,
+authentication, payments, schema or financial invariants. Default implementation requires
+independent review by default. A reversible established copy/style edit does not gain a
+second reviewer merely because it touches UI.
+
+Tester derives expected behavior from authoritative requirements, reviews the actual diff
+and consumers, and executes the required checks. It owns a separate verdict artifact.
+The writer may reference that verdict, not rewrite it or turn self-checks into independence.
+
+Identify relevant source, staged/unstaged/untracked files, test/config/lockfile inputs and
+the actual served build/target/account. Hold those inputs stable through independent review.
+The hold is an ownership agreement, not a filesystem lock. Release before repair, re-hold
+the repaired candidate, then rerun affected plus mandatory-fresh checks. Retain unrelated
+applicable evidence. Preserve original failures and distinguish executed, reused, failed,
+blocked, unrun, deferred and authorized not-applicable results.
+
+Main examines applicability, decisive risks and actual visuals without routinely repeating
+the full technical investigation. Technical approval, main acceptance, owner sign-off,
+commit, integration and release are separate. See [verification](codex_workflow/verification.md).
+
+## Thread capacity and lifecycle
+
+Smart targets **at most two Smart-owned open threads across the entire run**, normally one
+owner and one independent reviewer. Descendants, support workers and unfinished previous
+units count in the same budget. It is not two per parent or per assignment. Lower client
+limits and unrelated open threads remain binding.
+
+A completed response is not observed native slot release. Preserve results and resource
+handoffs, close eligible completed owned direct children with supported native operations,
+leaves before parent, and observe the result before relying on reclaimed capacity.
+Retain a writer for concrete pending main review/corrections, not indefinite possible work.
+
+On a capacity error reconcile the relevant known handles once. Retry only after an
+observed state change. With one available slot and verified release, serialize writer,
+independent Tester and any replacement writer using durable evidence. Otherwise checkpoint;
+do not raise the cap, blindly respawn, close unrelated/active work or move execution to main.
+
+Closing a thread does not authorize deleting source, browser profiles, servers, logs or
+unique evidence. See [execution and lifecycle](codex_workflow/execution.md).
+
+## Context lifecycle
+
+Reuse the same suitable worker through a concrete correction loop. At an accepted milestone,
+preserve an authorized compact handoff: accepted decisions, candidate/target, gate outcomes,
+open findings, next work and resource ownership. Give a new contract a fresh bounded worker
+after safe release rather than appending unrelated work to an ever-growing thread.
+
+Fresh context is not fresh infrastructure. Preserve applicable browser/server setup and
+run recipes. After compaction consult the current handoff and changed inputs instead of
+re-reading the archive. A parent-session transition must be explicit; Smart never restarts
+the app, forces compaction or discards an active conversation automatically.
+
+Follow-ups carry deltas, logs stay in artifacts and only relevant guides are loaded. These
+are cost controls, not a guarantee about exact context size or cache behavior.
+
+## Configuration and activation
+
+Select **GPT-6.1 Sol / Medium** for Main in the client's supported model selector when
+available. Senior's installed TOML explicitly selects **gpt-6.1-sol / xhigh**. The installer
+preserves existing explicit parent, profile, Plan effort and generic-child selections.
+It does not silently move a running conversation to the new model.
+
+The disk check's configuration assessment reports `configured_parent`, `recommended_parent`
+and `parent_baseline_status`. A match describes the supplied disk configuration, not
+observed live model selection. A different valid owner selection is a warning, not corruption.
+Known unsupported `none`/`minimal` efforts for GPT-6.1 Sol are rejected rather than silently
+rewritten. Profile overrides and account/model availability still require actual client evidence.
+
+No new model-catalog override, permissions, agent concurrency settings or orchestration mode
+is installed. Main-only tool boundaries and explicit user instructions remain authoritative.
+See OpenAI's [model contract](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
+and [subagent configuration](https://developers.openai.com/codex/subagents).
 
 ## Installation or update
 
-### Open Codex CLI / Codex app from your project directory
-
-Set the permission level appropriate for the work you intend Codex to perform, then send:
+Open Codex in your project directory and send:
 
 ```text
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
 ```
 
-**Requires Python 3.11 or newer.**
+After success, restart Codex manually and start a fresh conversation. Select the new Main
+baseline explicitly; inspect any preserved override before changing it. There is no
+per-project installation, uninstall-first requirement or general qualification ceremony.
+Use [targeted runtime checks](codex_workflow/runtime_check.md) only for an actual uncertainty.
 
-After a successful apply/check:
+The package installs its declared guides, eight worker definitions, managed instruction
+regions and Python runtime helpers. It preserves unrelated configuration and project files,
+stops on ownership conflicts, and creates exact conflict-checked rollback backups. Source
+publication does not update your Mac automatically.
 
-1. Restart Codex manually.
-2. Start a fresh conversation so the new global bootstrap and role instructions can load.
-3. Continue working normally. There is no per-project Smart installation command.
-
-The installer preserves explicit parent model/effort/speed, generic child fallback, permissions, capacity and all project files. It stops on managed-file conflicts instead of forcing replacement.
-
-A successful source publication or GitHub release does not update an existing installation. Current pinned `main` source remains the normal installation/update channel.
-
-## Validation
-
-Repository validation:
+## Validation and evaluation
 
 ```bash
 python3 -B -m unittest discover -s scripts -p 'test_*.py' -v
 python3 -m compileall -q codex_workflow scripts
 ```
 
-Smart 2.4 is covered by the existing CI matrix:
+CI runs Ubuntu/Python 3.11, Ubuntu/Python 3.12 and macOS/Python 3.12 with full Git history.
+It retains historical installation tests and checks exact 2.4 -> 2.5 -> no-op reapply ->
+rollback, preserved owner settings, the authorized Senior model change, baseline assessment,
+prompt budgets and run-wide capacity behavior.
 
-- Ubuntu, Python 3.11
-- Ubuntu, Python 3.12
-- macOS, Python 3.12
+These tests validate shipped instructions, helpers and installation. They do not establish
+native runtime compliance, design quality or measured savings. Main still judges the work.
+The helpers check supplied observations; they are not native locks or authenticated telemetry.
 
-The test suite includes exact historical installation/migration and rollback checks, including 2.3 -> 2.4 -> no-op reapply -> rollback.
+For usage analysis, keep primary session totals and separately reported carry-in workers
+explicit, avoid adding overlapping inclusive subtrees, and distinguish tokens from quota.
+Unknown role/assignment metadata is not missing work. Wait counts and overlapping lifetimes
+are investigation signals, not proof of wasted requests or live slot occupancy.
 
-Passing source tests establish package, helper and installation contracts. They do **not** prove native Codex routing behavior, UI quality or a particular allowance saving.
-
-Use [targeted runtime checks](codex_workflow/runtime_check.md) only when a specific native mechanism is uncertain. There is no global qualification ceremony blocking ordinary direct named-worker delegation.
-
-## Measuring whether it helps
-
-The success metric is not “maximum delegation.”
-
-It is:
-
-> **How much satisfactory, accepted work do I get from my available allowance, including setup, worker execution, Main review, verification and repairs?**
-
-A lower Main share can be desirable when settled implementation moved to Luna, but Main usage is not automatically waste. Main should remain active wherever its judgment materially improves the product.
-
-Likewise, more workers are not automatically cheaper. Over-fragmentation creates handoff and rediscovery cost. Smart therefore favors one complete bounded job, one owner, and one independent reviewer only when needed.
-
-For serious evaluation, compare similar accepted tasks and include rework and quality outcomes. Raw token totals, cache share and public API-equivalent prices are useful diagnostics, not subscription billing.
+Compare similar accepted outcomes including setup, Main review, verification and rework.
+Do not pursue a delegation percentage at the expense of judgment. Public API-equivalent
+prices are useful normalization, not subscription accounting. No fixed savings percentage
+or number of working days follows from this release.
 
 ## Documentation
 
-- [Main orchestration policy](codex_workflow/smart_orchestration.md)
-- [Design and UI/UX loop](codex_workflow/design.md)
-- [Execution and thread lifecycle](codex_workflow/execution.md)
-- [Verification policy](codex_workflow/verification.md)
-- [Browser and Computer Use economy](codex_workflow/browser.md)
-- [Optional boundary records](codex_workflow/boundary.md)
-- [Targeted runtime checks](codex_workflow/runtime_check.md)
-- [Engineering notes](docs/smart_orchestration.md)
-- [2.4 release notes](docs/v2.4.md)
-- [Optional evaluation guidance](docs/evaluation.md)
-
-## In one sentence
-
-**Smart 2.4 spends Main on deciding what excellent work should be and judging whether it got there, while Luna performs as much of the settled implementation, operation and correction work as safely possible.**
+[Main policy](codex_workflow/smart_orchestration.md) ·
+[Design](codex_workflow/design.md) ·
+[Execution](codex_workflow/execution.md) ·
+[Verification](codex_workflow/verification.md) ·
+[Browser](codex_workflow/browser.md) ·
+[Boundary records](codex_workflow/boundary.md) ·
+[Runtime checks](codex_workflow/runtime_check.md) ·
+[Engineering notes](docs/smart_orchestration.md) ·
+[2.5 notes](docs/v2.5.md) ·
+[Evaluation](docs/evaluation.md)

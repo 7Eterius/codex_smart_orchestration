@@ -12,31 +12,31 @@ SMART = Marker('<!-- smart-orchestration-start -->', '<!-- smart-orchestration-e
 
 def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
-    return f'''The owner's selected workflow is Smart Orchestration. Main sessions read
-{json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and capsule, never initialize global main orchestration.
+    return f'''Smart Orchestration: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive
+work. Named workers follow their role/capsule, not global main orchestration.
 Delegation is the execution default, including small edits and review fixes. Main owns
-all design/product/architecture decisions, detailed result assessment and final acceptance;
-named Luna workers implement and operate. Main inspects actual running visuals, sends
-grouped findings as correction tasks to the same suitable worker, then rechecks results.
-Do not self-patch to save time or write an implementation merely for a worker to paste.
-Main may answer, author authorized decision briefs and inspect decisive evidence directly.
-Main-only execution needs an explicit user override or an observed narrowly authorized
-tool/permission boundary, reported once; return remaining execution to workers. Unavailable
-nesting is not an excuse for main implementation. Do not fabricate tools or raise permissions.
-Only routine_executor/default_executor may dispatch one independent tester under supplied
-execution.md, explicit authority and supported mechanics; otherwise main dispatches Tester.
-No manager layer. Keep required independent gates, owner approval, selected models/effort,
-permissions and repository constraints. No-agent/read-only requests remain binding.
-This replaces legacy route/intake ceremony, not higher-priority instructions. Report an
-actual overriding configuration conflict rather than claiming activation. No project rewrite.'''
+product/architecture/design decisions, detailed assessment and acceptance. Named Luna
+workers implement/operate. Main inspects actual running visuals, sends grouped findings as correction tasks
+to the same suitable worker, then rechecks results. Do not self-patch to save time or
+pre-write implementation for a worker to paste. Direct answers/briefs/decisive inspection stay main.
+Main baseline is GPT-6.1 Sol Medium; preserve explicit owner selections.
+Assign outcome, stop and wake conditions: review-ready, complete, decision-needed or blocked.
+Workers own command/test waits and ordinary repairs. Use supported long interruptible waits;
+timeout alone triggers no progress SEND, repeated inspection or test. No acknowledgements.
+Main returns for real decisions, required design review and acceptance; honor user interruptions.
+Routine/Default may dispatch one independent Tester only under execution.md with explicit
+authority and supported mechanics; otherwise main dispatches that named Tester.
+At most two Smart-owned open threads across the run, including descendants/old units.
+Preserve results/resources and observe native closure before reuse. No extra manager.
+Main-only execution requires explicit user override or an observed narrowly authorized
+tool/permission boundary, stated once; delegate the rest. Missing nesting is not an excuse.
+Keep independent gates, owner approval, selected models/effort, permissions and project constraints.
+No-agent/read-only requests remain binding. No invented tools, expanded permissions, project
+rewrite or claimed live activation from disk alone.'''
 
 
 def _statements(text: str):
-    """Yield TOML logical statements, ignoring newlines inside values/comments.
-
-The full parser validates syntax first. We only need lexical boundaries, not a
-second TOML parser; multiline strings and nested arrays/inline tables are tracked.
-"""
+    """Yield validated TOML statement spans without reserializing other settings."""
     start = i = depth = 0
     quote = None
     comment = False
