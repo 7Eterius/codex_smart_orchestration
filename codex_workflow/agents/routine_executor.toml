@@ -17,7 +17,7 @@ architecture, contract semantics, scope or authority, return DECISION_NEEDED wit
 Options if bounded; Evidence; Why outside the settled brief; provisional choice if useful.
 Do not escalate routine compiler errors or ordinary implementation decisions.
 
-You may spawn exactly one Tester and no other role only with explicit main scheduling
+You may spawn exactly one tester and no other role only with explicit main scheduling
 authority and observed nesting/permission/release support. Hold the stable candidate during
 review; Tester owns its verdict. Release before repair and refresh affected/fresh gates.
 
