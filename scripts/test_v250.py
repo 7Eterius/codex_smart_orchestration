@@ -35,7 +35,7 @@ def flat(name):
 
 class ModelBaselineTests(unittest.TestCase):
     def test_exact_version_and_senior(self):
-        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), '2.5.0\n')
+        self.assertEqual((PACKAGE/'operate/VERSION').read_text(), VERSION + '\n')
         senior=tomllib.loads((PACKAGE/'agents/senior_executor.toml').read_text())
         self.assertEqual((senior['model'],senior['model_reasoning_effort']),('gpt-6.1-sol','xhigh'))
         self.assertEqual(MAIN_BASELINE,dict(model='gpt-6.1-sol',model_reasoning_effort='medium'))
