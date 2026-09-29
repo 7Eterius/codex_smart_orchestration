@@ -25,6 +25,7 @@ from runtime.smart_restore import prepare_restore
 from test_allocation import obs, thread, request
 from runtime.allocation import next_action
 from test_v240 import snapshot
+from test_current import VERSION
 BASELINE = '04fba052b2c64064ca22c24a5212b23b9d28c486'
 
 
@@ -192,7 +193,7 @@ class ActualV24Upgrade(unittest.TestCase):
             self.assertIsNotNone(backup)
             status=install.status(home)
             self.assertTrue(status['disk_ok'],status)
-            self.assertEqual(status['version'],'2.5.0')
+            self.assertEqual(status['version'],VERSION)
             self.assertEqual(status['runtime_observation'],'not_inspected')
             original_cfg=tomllib.loads(before['config.toml'][0].decode())
             updated_cfg=tomllib.loads((home/'config.toml').read_text())
