@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "codex_workflow"
 sys.path.insert(0, str(PACKAGE))
 from runtime import boundary, challenge, evidence
+from test_current import VERSION
 
 BASELINE = "8b5e5de112dd3c8b468d6a55c81051556124a2ef"
 
@@ -242,7 +243,7 @@ class HistoricalAndInstallationTests(unittest.TestCase):
             self.assertEqual(snapshot(home), before)
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)["disk_ok"])
-            self.assertEqual((home/"codex_workflow/operate/VERSION").read_text(), "2.7.0\n")
+            self.assertEqual((home/"codex_workflow/operate/VERSION").read_text(), VERSION+"\n")
             helper = home/"codex_workflow/runtime/evidence.py"
             self.assertEqual(helper.read_bytes(), (PACKAGE/"runtime/evidence.py").read_bytes())
             a = tomllib.loads(before["config.toml"][0].decode()); b = tomllib.loads((home/"config.toml").read_text())
