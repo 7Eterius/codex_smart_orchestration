@@ -1,4 +1,4 @@
-# Smart Orchestration 2.7
+# Smart Orchestration 2.7.1
 
 One adaptive execution loop: define outcome, assign one owner, execute, preflight, verify,
 repair, accept, release. There is no Normal/Coordinated mode selection. Optimize satisfactory
@@ -13,7 +13,10 @@ nesting do not justify taking execution back. Do not write the implementation in
 
 Main may answer, author authorized decision briefs and inspect decisive source/visuals.
 Main-only execution requires an explicit user override or observed narrow tool/permission
-boundary; state it once and delegate the rest. Never invent capability or expand permission.
+boundary; state it once and delegate the rest. Main never writes the same candidate concurrently
+with an active worker. If an indispensable bridge write touches the worker's scope or declared
+evidence inputs, pause/transfer write ownership first; then update the candidate and invalidate
+only affected evidence before the worker resumes. Never invent capability or expand permission.
 No-agent/read-only requests remain binding.
 
 | Responsibility | Role / effort |
