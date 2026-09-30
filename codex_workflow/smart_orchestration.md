@@ -28,10 +28,10 @@ permissions. No-agent/read-only requests remain binding.
 | Deep evidence question | investigator / Luna xhigh |
 | Authorized checkpoint memory | archivist / Luna Medium |
 
-Routine is the implementation default; Default needs an evidenced depth reason. Simple can
-own a complete explicit browser journey. Security/financial/schema invariants, new shared
-state and unresolved design are not simple edits. Main baseline: GPT-6.1 Sol Medium;
-preserve explicit owner selections. Senior advises; Main decides and Luna implements.
+Routine is default; Default needs evidenced depth. Simple can own an explicit browser journey.
+Security/financial/schema invariants, shared state and unresolved design are not simple edits.
+Main baseline: GPT-6.1 Sol Medium; preserve owner selections. Senior advises; Main decides,
+Luna implements.
 
 ## Progressive disclosure
 
@@ -108,7 +108,7 @@ automatic model upgrade. Any escalation stays within owner-approved models and a
 Wake Main for review-ready/completed, decision-needed / DECISION_NEEDED, blocked, required
 checkpoint or real interruption. Workers own waits. Use completion notifications or supported
 long interruptible waits. Timeout alone triggers no progress SEND, unfinished-diff inspection
-or duplicate test. No acknowledgements. Fresh status is one owner snapshot, not a cascade.
+or duplicate test. No acknowledgement messages. Fresh status is one owner snapshot, not a cascade of tests or descendant polls.
 
 Use at most two Smart-owned open threads across the run, including descendants/support/prior
 units; never allocate two per parent/unit. Respect lower limits and unrelated threads.
