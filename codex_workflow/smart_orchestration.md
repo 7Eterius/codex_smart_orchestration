@@ -11,13 +11,12 @@ Main owns architecture, product meaning, UX/visual decisions, detailed assessmen
 acceptance. Settled implementation and mechanical operation MUST be delegated, including small edits and fixes from main's review. Main is not the default writer. Name the execution owner and next decision/review checkpoint. Speed, familiarity, a small diff or unavailable
 nesting do not justify taking execution back. Do not write the implementation in a prompt for a worker to paste.
 
-Main may answer, author authorized decision briefs and inspect decisive source/visuals.
-Main-only execution requires an explicit user override or observed narrow tool/permission
-boundary; state it once and delegate the rest. Main never writes the same candidate concurrently
-with an active worker. If an indispensable bridge write touches the worker's scope or declared
-evidence inputs, pause/transfer write ownership first; then update the candidate and invalidate
-only affected evidence before the worker resumes. Never invent capability or expand permission.
-No-agent/read-only requests remain binding.
+Main may answer, author decision briefs and inspect decisive source/visuals. Main-only
+execution requires explicit user override or an observed narrow tool/permission boundary; state
+it once, delegate the rest. Never write the same candidate concurrently. A required bridge
+touching worker scope or evidence inputs pauses/transfers write ownership, then reidentifies
+the candidate and stales only affected evidence before resume. Never invent capability or
+permissions. No-agent/read-only requests remain binding.
 
 | Responsibility | Role / effort |
 | --- | --- |
@@ -37,11 +36,9 @@ preserve explicit owner selections. Senior advises; Main decides and Luna implem
 
 ## Progressive disclosure
 
-Read applicable instructions; use the shortest evidence path: a known file directly,
-or project status/index and relevant system/contract/design identity when location is unknown.
-Read needed rules/files,
-not all documentation or parent history. Retrieving guidance is not applying it: assess the
-actual change. Reuse existing implementations before introducing another one.
+Read applicable instructions by the shortest path: known files directly; otherwise
+project status/index then the relevant identity. Read needed rules/files, not all docs/history.
+Retrieving guidance is not applying it: assess the change. Reuse existing implementations.
 
 Capsules carry the settled brief, protected decisions, scope, gates and references. Main may
 name must-answer questions about doubtful assumptions. Workers return each answer with
@@ -110,10 +107,9 @@ automatic model upgrade. Any escalation stays within owner-approved models and a
 ## Communication, threads and recovery
 
 Wake Main for review-ready/completed, decision-needed / DECISION_NEEDED, blocked, required
-checkpoint or real user interruption. Workers own command/test/browser waits. Use completion
-notifications or supported long, interruptible waits. Timeout alone triggers no progress
-SEND, unfinished-diff inspection or duplicate test. No acknowledgement messages. Fresh status is one
-coalesced owner snapshot, not a cascade of tests or descendant polls.
+checkpoint or real interruption. Workers own waits. Use completion notifications or supported
+long interruptible waits. Timeout alone triggers no progress SEND, unfinished-diff inspection
+or duplicate test. No acknowledgements. Fresh status is one owner snapshot, not a cascade.
 
 Use at most two Smart-owned open threads across the run, including descendants/support/prior
 units; never allocate two per parent/unit. Respect lower limits and unrelated threads.
