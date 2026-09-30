@@ -100,6 +100,10 @@ class ReleaseContracts(unittest.TestCase):
         for name, limit in limits.items():
             self.assertLess(len((PACKAGE / name).read_text().split()), limit, name)
 
+    def test_active_runtime_docs_do_not_carry_stale_release_labels(self):
+        self.assertNotIn("Smart 2.6", (PACKAGE / "runtime/allocation.py").read_text())
+        self.assertNotIn("Smart 2.5", (PACKAGE / "runtime_check.md").read_text())
+
 
 class ActualReviewedV27Upgrade(unittest.TestCase):
     def test_reviewed_27_to_271_reapply_and_exact_rollback(self):
