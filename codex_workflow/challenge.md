@@ -62,7 +62,8 @@ and evidence; state is answered/unanswered/unknown. Unknown routes to Main, not 
 
 Gate statuses: executed-pass, reused-pass, failed, blocked, unrun, deferred, not-applicable,
 stale, unverified (status spelling is case-insensitive). Reuse cannot satisfy fresh_required.
-A required not-applicable/deferred result cannot silently waive an obligation.
+A required not-applicable/deferred result cannot silently waive an obligation. The gate
+vocabulary and freshness rule are shared with boundary.py through runtime/evidence.py.
 
 With `current`, positive evidence for due gates, deliverables, findings and answers must
 include an evidence reference and matching `basis`. Missing binding is UNVERIFIED; mismatch
@@ -84,7 +85,9 @@ input/error is not a match. Hashes cannot reveal changes made and later undone.
 Exit 0: clear for the requested stage. Exit 1: contradiction/unverified obligation. Exit 2:
 malformed/unreadable input or manifest. Output includes a leading issue, up to eight issues,
 counts of omitted issues, pending obligations and next_action. No omitted item is a pass.
-Main-related issues still select decision-needed even beyond the preview limit. Read the
+Main-related issues are shown first so decision-needed includes an actionable Main issue,
+not merely a hidden routing flag. Category/input order is retained within each route.
+Manifest drift joins the same bounded batch without hiding a protected decision. Read the
 record to handle the remaining batch; do not repeatedly invoke the same unchanged check.
 
 Mechanical repair/refresh stays with the current worker. Scope/attribution conflicts stop

@@ -29,14 +29,17 @@ Gate booleans mean fresh execution is mandatory (`true`) or applicable reused ev
 is permitted (`false`), not that the gate passed. Main derives this map from authoritative
 requirements. All identifiers and references are nonempty and at most 256 characters;
 at most 128 gates and 64 KiB of input are accepted. Use a short private evidence reference
-when an absolute artifact path exceeds that bound.
+when an absolute artifact path exceeds that bound. Blank/whitespace-only references and
+control characters are malformed; valid Unicode references remain supported.
 
 The separate Tester verdict has the same unit, attempt, contract, candidate, target
 and reviewer; an `artifact` reference; and an exact matching `gates` map. Each verdict
 gate contains `status` and `evidence`. `executed-pass` satisfies a gate; `reused-pass`
 satisfies only a non-fresh gate after applicability is checked. Failed, blocked, unrun,
-deferred and not-applicable never silently satisfy a required gate. Explicitly authorized
-changes to obligations require a revised contract and new applicable evidence.
+deferred, not-applicable, stale and unverified never silently satisfy a required gate.
+Status spelling is case-insensitive, using the shared `runtime/evidence.py` vocabulary.
+STALE/UNVERIFIED are valid observations that block acceptance, not malformed input.
+Explicitly authorized changes to obligations require a revised contract and new applicable evidence.
 
 ## Check one transition
 
