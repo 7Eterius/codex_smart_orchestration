@@ -11,6 +11,11 @@ import json
 from pathlib import Path
 import sys
 
+if __package__:
+    from .evidence import normalize_status, satisfies_gate
+else:
+    from evidence import normalize_status, satisfies_gate
+
 IDENTITY = ("unit", "attempt", "contract", "candidate", "target")
 MAX_INPUT_BYTES = 65536
 MAX_GATES = 128
@@ -27,7 +32,8 @@ def _keys(value, required, optional=()):
 
 
 def _text(value):
-    if not isinstance(value, str) or not value or len(value) > 256 or any(ord(c) < 32 for c in value):
+    if (not isinstance(value, str) or not value.strip() or len(value) > 256
+            or any(ord(c) < 32 or 127 <= ord(c) <= 159 or 0xD800 <= ord(c) <= 0xDFFF for c in value)):
         raise BoundaryError("Expected a bounded nonempty identifier")
     return value
 
@@ -91,11 +97,12 @@ def check(record: dict, action: str, actor: str, verdict: dict | None = None) ->
     for gate, fresh in record["gates"].items():
         item = gates[gate]
         _keys(item, {"status", "evidence"})
-        status = _text(item["status"])
-        if status not in {"executed-pass", "reused-pass", "failed", "blocked", "unrun", "deferred", "not-applicable"}:
-            raise BoundaryError("Unknown gate disposition")
+        try:
+            status = normalize_status(_text(item["status"]))
+        except ValueError as error:
+            raise BoundaryError(str(error)) from error
         _text(item["evidence"])
-        if status != "executed-pass" and not (status == "reused-pass" and not fresh):
+        if not satisfies_gate(status, fresh):
             rejected.append(gate)
     return {**result, "allowed": not rejected, "reason": "consistent_acceptance_basis" if not rejected else "required_gates_unsatisfied",
             "rejected_gates": rejected}

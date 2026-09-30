@@ -15,13 +15,16 @@ from test_v270 import record
 
 
 class HandoffIntegrationContracts(unittest.TestCase):
-    def test_main_issue_beyond_worker_preview_still_selects_main(self):
+    def test_main_issue_beyond_worker_preview_is_visible_and_selects_main(self):
         value = record()
         value["questions"] = [dict(id=f"Q{i}", state="unanswered") for i in range(8)]
         value["questions"].append(dict(id="Q9", state="unknown"))
         result = challenge.check(value)
         self.assertEqual(len(result["issues"]), 8)
-        self.assertTrue(all(x["route"] == "worker" for x in result["issues"]))
+        self.assertEqual(result["issues"][0]["route"], "main")
+        self.assertEqual(result["issues"][0]["reference"], "Q9")
+        self.assertEqual(result["reference"], "Q9")
+        self.assertEqual(result["issue_count"], 9)
         self.assertEqual(result["omitted_issues"], 1)
         self.assertEqual(result["next_action"], "decision-needed")
 

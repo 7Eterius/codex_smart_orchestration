@@ -13,6 +13,11 @@ from pathlib import Path
 import stat
 import sys
 
+if __package__:
+    from .evidence import STATUSES as EVIDENCE, satisfies_gate
+else:
+    from evidence import STATUSES as EVIDENCE, satisfies_gate
+
 MAX_INPUT_BYTES = 65536
 MAX_ITEMS = 128
 MAX_PREVIEW = 8
@@ -22,8 +27,6 @@ LIMITATION = (
     "it is not semantic correctness, evidence authenticity, coverage, authority or acceptance. "
     "Omitted obligations and falsely recorded facts are not detected."
 )
-EVIDENCE = frozenset({"executed-pass", "reused-pass", "failed", "blocked", "unrun",
-                      "deferred", "not-applicable", "stale", "unverified"})
 DELIVERABLE = frozenset({"satisfied", "missing", "unchanged"})
 FINDING = frozenset({"open", "addressed", "resolved"})
 DECISION = frozenset({"resolved", "decision-needed"})
@@ -213,7 +216,7 @@ def check(record):
             issue("evidence-unverified", gate, "Required evidence is unverified.")
         elif status not in {"executed-pass", "reused-pass"}:
             issue("gate-" + status, gate, "Required gate is not satisfied.")
-        elif row["fresh_required"] and status == "reused-pass":
+        elif not satisfies_gate(status, row["fresh_required"]):
             issue("fresh-evidence-required", gate, "Required fresh gate cannot reuse a verdict.")
         else:
             binding(row, gate)
@@ -223,18 +226,31 @@ def check(record):
              + len(record["decisions"]) + len(record.get("questions", [])))
     if not count:
         issue("obligations-unverified", record["unit"], "No acceptance obligations were supplied.", "main")
-    # Preserve category priority above; sort within each input array at the caller only.
-    result = {"status": "challenge" if issues else "clear", "unit": record["unit"], "phase": phase,
-              "issues": issues[:MAX_PREVIEW], "issue_count": len(issues),
-              "omitted_issues": max(0, len(issues) - MAX_PREVIEW),
+    result = {"unit": record["unit"], "phase": phase,
               "pending": pending[:MAX_PREVIEW], "pending_count": len(pending),
               "omitted_pending": max(0, len(pending) - MAX_PREVIEW),
               "identity_checked": current is not None, "limitation": LIMITATION}
-    if issues:
-        result.update({key: issues[0][key] for key in ("class", "reference", "message")})
-        result["next_action"] = "decision-needed" if any(i["route"] == "main" for i in issues) else "repair-or-refresh"
+    return _render_issues(result, issues)
+
+
+def _render_issues(result, issues, *, total=None):
+    """Keep the issue that requires Main visible, including after manifest drift.
+
+    Preserve category/input order within each route. A bounded preview must not ask
+    Main for a decision while hiding every issue that actually requires that decision.
+    The caller may supply the full count when augmenting an already bounded result.
+    """
+    ordered = sorted(issues, key=lambda item: item["route"] != "main")
+    count = len(issues) if total is None else total
+    result.update(status="challenge" if count else "clear", issues=ordered[:MAX_PREVIEW],
+                  issue_count=count, omitted_issues=max(0, count - MAX_PREVIEW))
+    if ordered:
+        first = ordered[0]
+        result.update({key: first[key] for key in ("class", "reference", "message")})
+        result["next_action"] = "decision-needed" if first["route"] == "main" else "repair-or-refresh"
     else:
-        result["next_action"] = "return-for-required-review" if phase == "handoff" else "main-assess-original-evidence"
+        result["next_action"] = ("return-for-required-review" if result["phase"] == "handoff"
+                                 else "main-assess-original-evidence")
     return result
 
 
@@ -298,13 +314,7 @@ def main(argv=None):
                 drift = {"class": "evidence-stale", "reference": record["unit"],
                          "message": "Explicit candidate inputs changed; preserve findings and refresh affected evidence.",
                          "route": "worker"}
-                result["issues"] = ([drift] + result["issues"])[:MAX_PREVIEW]
-                result["issue_count"] += 1
-                result["omitted_issues"] = max(0, result["issue_count"] - MAX_PREVIEW)
-                result.update({key: drift[key] for key in ("class", "reference", "message")})
-                result["status"] = "challenge"
-                if result["next_action"] != "decision-needed":
-                    result["next_action"] = "repair-or-refresh"
+                _render_issues(result, [drift] + result["issues"], total=result["issue_count"] + 1)
         print(json.dumps(result, sort_keys=True))
         return 0 if result["status"] == "clear" else 1
     except (OSError, ValueError, TypeError) as exc:
