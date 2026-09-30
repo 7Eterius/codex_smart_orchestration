@@ -1,5 +1,5 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.7.0 -->
+<!-- codex-workflow-version: 2.7.1 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
