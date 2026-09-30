@@ -207,8 +207,14 @@ def check(record):
             continue
         gate, status = row["gate"], row["status"].lower()
         if phase == "handoff" and row.get("due", "handoff") == "accept":
-            pending.append({"kind": "gate", "id": gate, "status": "pending-acceptance-check",
-                            "reported_status": status})
+            # A gate that is merely not due yet stays pending. A known failure on the
+            # current candidate is already actionable and must not consume reviewer work.
+            if status == "failed":
+                if binding(row, gate):
+                    issue("gate-failed", gate, "Acceptance-stage gate already failed; repair before review.")
+            else:
+                pending.append({"kind": "gate", "id": gate, "status": "pending-acceptance-check",
+                                "reported_status": status})
             continue
         if status == "stale":
             issue("evidence-stale", gate, "Required evidence is stale.")
