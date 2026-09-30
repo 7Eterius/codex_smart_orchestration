@@ -6,99 +6,97 @@ only for affected uncertainty.
 
 ## Contract, context and dispatch
 
-Give one owner a capsule: unit/attempt, outcome/stop, exact requirements, deliverables,
-owned/protected paths, candidate/target, acceptance level, authority, evidence, wake
-conditions and relevant guide identities/paths. Design work adds main's brief/checkpoint.
-A finite coherent group keeps per-member gates and dependency order; never extend it to keep
-an agent busy. Prefer scoped history such as `fork_turns="none"` when supported.
+Give one owner a capsule: unit/attempt, outcome/stop, requirements, deliverables, owned/protected
+paths, candidate/target, acceptance level, authority, evidence, wake conditions and relevant
+absolute guide paths. Design work includes Main's brief/checkpoint. A finite coherent group
+keeps per-member gates and dependency order; never extend it to keep an agent busy.
+Use scoped history such as `fork_turns="none"` where supported.
 
-Recover context progressively: project instructions/status/index first, then the relevant
-system/contract/design identity, then the specific rule/file/evidence needed. Prefer a
-project's queryable status/explain/index surface when available. Do not dump all docs or
-the multi-day parent transcript. Retrieving guidance is not applying it; check the actual
-change against the rule. Delegate discovery needed for implementation.
+For unknown locations use project instructions/status/index first, then relevant identity and
+specific evidence. A known authoritative path is a direct read, not a compulsory lookup ladder.
+Read applicable instructions without importing unrelated history. Retrieving guidance is not
+applying it: check the actual change. Discovery stays with the execution owner.
 
-Simple owns explicit low-risk edits and complete mechanical journeys. Routine owns normal
-settled implementation. Default requires actual depth. Workers decide ordinary implementation
-details but return protected ambiguity as DECISION_NEEDED:
-`Question; Options if bounded; Evidence; Why outside settled brief; provisional choice if useful.`
-Main replies with the narrow decision/contract delta; routine diagnosis stays local.
+Main may include named must-answer questions with the original task. Return answers and exact
+evidence, or unknown, before handoff. Do not manufacture confidence or a decision to clear a
+question. Workers decide ordinary implementation details but return protected ambiguity as
+DECISION_NEEDED: `Question; Options if bounded; Evidence; Why outside settled brief; provisional choice if useful.`
+Main supplies the decision delta, not a pre-written implementation. Repeated same-defect repairs
+justify bounded diagnosis/reassignment within authorized models, not a ritual escalation.
 
-Routine/Default may dispatch exactly one Tester, no other role, only with explicit main
-scheduling authority and observed nesting/permissions/release. Otherwise main dispatches
-the same Tester. Direct named execution needs no nested qualification. At most two Smart-owned
-threads stay open across the whole run, including descendants/support/previous units.
-Reserve review capacity; lower client limits and unrelated open threads bind too.
+Simple owns explicit low-risk edits and complete mechanical journeys; Routine normal settled
+implementation; Default evidenced depth. Routine/Default may dispatch exactly one Tester and
+no other role with explicit Main authority and observed nesting/permissions/release. Otherwise
+Main dispatches the same named Tester. No nested qualification for direct named work.
+At most two Smart-owned open threads across the run include support, descendants and prior
+units. Reserve reviewer capacity and respect lower client limits and unrelated open threads.
 
 ## Waiting is not a new task
 
-Wake conditions are review-ready, complete, decision-needed, blocked, required checkpoint or real interruption.
-Use native completion notification or supported long, interruptible waits. Choose valid tool
-parameters only. A timeout alone must not trigger a SEND, list-agents call, unfinished-diff
-inspection, browser visit or test rerun. Continue supported waiting without chatter. Only-polling
-clients back off within supported limits, never shell sleep loops. Investigate concrete
-blockers/errors, missed checkpoints or explicit fresh-status requests. Never hide an actual
-interruption.
+Wake conditions: review-ready, completed, decision-needed, blocked, required checkpoint or real
+user interruption. Workers own command/test/browser waits. Use completion notifications or
+supported long, interruptible waits with valid tool parameters. A timeout alone must not trigger a SEND,
+list-agents call, unfinished-diff inspection, browser visit or test rerun. Only-polling clients
+back off within supported limits, not shell sleep loops or rapid model turns. Investigate
+actual errors, missed checkpoints or an explicit fresh-status request. Never hide an actual interruption.
 
 Progress commentary continues the run; final worker handoff ends only that assignment.
-Ordinary status uses last-known facts. One fresh snapshot is one active-owner request.
-No receipt acknowledgements. Early running-design checkpoints remain intentional judgment.
+Ordinary status uses known facts. Fresh status is one active-owner snapshot. No receipt acknowledgements.
+An early design checkpoint is intentional Main judgment, not permission for parallel editing.
 
-## Candidate preflight
+## Candidate preflight and handoff
 
-At candidate-ready identify actual staged/unstaged/untracked source, relevant test/config/
-lock inputs, build/target, deliverables, findings and gate evidence. Agent reports are
-advisory; actual state, deterministic output and current executed evidence outrank them.
+Identify actual staged/unstaged/untracked source, relevant test/config/lock inputs, current
+build/target, deliverables, findings and original evidence. Preserve the planned obligations:
+a worker may not remove a deliverable, relabel its own breach as concurrent, weaken a check
+or impersonate Main to make a result clear. Attribution/model strings are attestations.
 
-When structured facts already exist, run `runtime/challenge.py` once before expensive review.
-It can report one grounded contradiction: scope/attribution conflict, unresolved decision,
-missing deliverable/finding, failed/stale/unverified evidence or freshness error. CLEAR is
-not approval, correctness or coverage. Do not create a ledger solely for this helper.
-Mechanical challenges stay with the worker; DECISION_NEEDED wakes Main. Re-run only for
-a new candidate or changed relevant facts; never loop to manufacture CLEAR.
+Where structured facts already exist, read `challenge.md` and use `runtime/challenge.py`.
+Do not create a ledger solely for this helper. Its bounded issue batch avoids one model
+round-trip per bookkeeping defect; fix related mechanical issues locally. Scope conflicts and
+unknown attribution return to Main without blind resets or destruction of another owner's work.
+CLEAR is not correctness or acceptance and must not become a polling target.
 
-Evidence states are executed-pass, reused-pass, failed, blocked, unrun, deferred, authorized
-not-applicable, STALE and UNVERIFIED. Candidate/contract/target drift makes affected prior
-evidence STALE. Missing evidence is UNVERIFIED.
+Use phase handoff before review, accept only for final assessment. A repaired finding is
+addressed with current evidence and still awaits independent resolution; it is not already
+resolved. Gates explicitly due at acceptance remain visible as pending at handoff. Main's
+original obligations remain binding at acceptance. A blocked/abandoned task can be handed back
+as BLOCKED, never passed through a false CLEAR requirement.
 
-## Review and correction
+Current evidence binds to attempt/contract/candidate/target. Optional --manifest reuses the
+existing candidate helper for fresh selected-input identity, not semantic/runtime proof.
+Only actual dependency drift invalidates relevant evidence. Unrelated notes or paths do not.
 
-Tester receives the original task, complete actual diff, deliverables, requirements, gates
-and target, not writer confidence. Hold relevant candidate inputs stable. Tester accounts
-for every deliverable, reads controlling code before semantic findings, inspects sibling
-cases around changed branches and seeks the smallest concrete falsifier. Focused execution
-serves a concrete concern. BLOCKING means wrong/incomplete/untrue; taste and optional cleanup
-are NON-BLOCKING. Tester owns the verdict and never repairs source.
+## Independent review and corrections
 
-On failure release hold, reuse the same writer, identify repaired candidate, re-hold and
-rerun affected plus mandatory fresh gates. Preserve failures. Keep the writer available for
-concrete pending main review when capacity allows. Main examines decisive changes, verdict
-and actual visuals, then sends grouped corrections. Main rechecks fresh results.
+Tester gets the original task, complete actual diff, questions, requirements, gates and target
+without writer reasoning. Its initial context must be independent; reuse it only for the same
+review/repair loop. Verify scoped history where exposed, otherwise report the limitation.
+Required independent gates run regardless of whether optional adversarial probes find concerns.
+Tester owns the verdict, writes evidence/disposable data only, and never repairs source/tests.
+
+Hold candidate inputs/build/target stable during review. On failure release the hold, reuse
+the same writer, identify the repaired candidate, re-hold and rerun affected plus mandatory fresh
+checks. Preserve failures. Keep the writer available for concrete pending main review when
+capacity allows. Main examines decisive changes, original verdict and actual visuals, sends
+grouped findings and rechecks fresh results. Optional cleanup is not a blocker; violating the
+accepted design is. Required gates, visual acceptance and owner/deployment authority differ.
 
 ## Handoff, release and recovery
 
-Track native handle/parent, unit/attempt, next wake and lifecycle state without periodic
-global scans. A completed response occupies capacity until native reclamation is observed.
+Track known handles, parent, unit/attempt, next wake and state without periodic global scans.
 After main accepts, persist evidence, settle writes, transfer retained resources and close
-eligible owned children leaves-first. Observe release; do not close unrelated/active work.
+completed owned direct children leaves-first. Observe native release; completion is not closure.
+Do not close unrelated or active work. Thread closure does not delete source, browser profiles,
+logs or servers. With one slot, preserve the candidate/repair capsule, close writer, then Main
+dispatches Tester; without a safe path checkpoint, never omit required review.
 
-At milestones keep a compact handoff: accepted decisions, candidate/target, deliverables,
-gate dispositions, open findings, next work and resource owners. Use a fresh worker for a
-new contract after safe release. Fresh context is not fresh infrastructure. No automatic
-parent restart. After compaction consult the handoff and changed inputs, not the archive.
+Use a fresh worker for a new contract after safe release. Reuse verified infrastructure.
+No automatic parent restart. After compaction consult the handoff and changed inputs.
+On capacity failure reconcile once. Do not raise limits, loop on spawns, simulate closure
+or take implementation back. Retry only after observed state change. Preserve blocked work.
 
-On thread-limit failure reconcile relevant handles once. Do not raise limits, loop on spawns,
-simulate closure or take implementation back. Retry only after observed state change.
-Thread closure does not delete source, browser profiles, logs or servers.
-
-## Narrow main-only execution
-
-An explicit user no-agent/direct-execution instruction remains binding. A verified tool or
-permission boundary may require one indispensable authorized bridge action; report it once,
-then delegate the rest. A tiny diff, faster patch or unavailable nesting is not such a
-boundary. If no safe path exists, report the blocked action. Never widen permissions or
-fabricate access.
-
-See `boundary.md` for optional review-boundary records. `allocation.py`, `candidate.py`,
-`boundary.py` and `challenge.py` are bounded advisory helpers, not native scheduling,
-authority, semantic review or completion enforcement.
+An explicit user no-agent/direct-execution instruction remains binding. A verified tool or permission boundary
+may require one narrow authorized bridge; return remaining work to workers. A tiny diff, faster patch or unavailable nesting is not such a boundary.
+If no safe path exists, report the blocked action. Never expand permissions or fabricate access.
+See `boundary.md` for optional records. Helpers inspect observations, not native authority or savings.

@@ -119,7 +119,7 @@ class ChallengeTests(unittest.TestCase):
 
 class PolicyContracts(unittest.TestCase):
     def test_version_install_and_prompt_budgets(self):
-        self.assertEqual(VERSION, "2.6.0")
+        self.assertEqual((PACKAGE / "operate/VERSION").read_text(), VERSION + "\n")
         self.assertEqual(PackageLayout.resolve(PACKAGE).version, VERSION)
         self.assertIn("runtime/challenge.py", INSTALLED_RUNTIME_FILES)
         self.assertIn(PACKAGE / "runtime/challenge.py", PackageLayout.resolve(PACKAGE).files)
@@ -208,7 +208,7 @@ class ActualV25Upgrade(unittest.TestCase):
             self.assertEqual(snapshot(home), before)
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)["disk_ok"])
-            self.assertEqual((home / "codex_workflow/operate/VERSION").read_text(), "2.6.0\n")
+            self.assertEqual((home / "codex_workflow/operate/VERSION").read_text(), VERSION + "\n")
             self.assertTrue((home / "codex_workflow/runtime/challenge.py").is_file())
             old_cfg = tomllib.loads(before["config.toml"][0].decode())
             new_cfg = tomllib.loads((home / "config.toml").read_text())

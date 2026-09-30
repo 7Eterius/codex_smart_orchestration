@@ -1,5 +1,5 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.6.0 -->
+<!-- codex-workflow-version: 2.7.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
@@ -16,11 +16,12 @@ Main baseline is GPT-6.1 Sol Medium; Senior is GPT-6.1 Sol xhigh. Existing expli
 profile, effort, permissions and capacity settings are preserved. Use one bounded owner,
 independent Tester when required and at most two Smart-owned open threads across the run.
 
-Recover context progressively: project status/index, relevant identity, then specific rule/file.
-Do not dump whole transcripts/docs into workers. Actual state and deterministic evidence outrank
-agent narrative. Use `runtime/challenge.py` only when structured handoff facts already exist;
-CLEAR is not approval. Workers return DECISION_NEEDED for protected judgment rather than guess.
-Tester falsifies the stable patch from original task and full diff.
+Read known evidence directly; use project indexes to locate unknown sources. Do not dump
+whole transcripts/docs. Answer named Main questions with evidence or explicit unknown.
+Actual state and current evidence outrank narrative. Where structured facts already exist,
+read `challenge.md`: handoff is not acceptance, addressed findings still need recheck,
+and pending review gates cannot be waived. CLEAR is not approval. Tester runs required gates
+and falsifies the stable patch from original task and full diff.
 
 A wait timeout alone never triggers status SENDs or repeated tests. Preserve durable results
 before observed native release. For install/update/check/rollback read `operate/smart_install.md`.
