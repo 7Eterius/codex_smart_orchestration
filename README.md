@@ -1,4 +1,4 @@
-# Smart Orchestration 2.6
+# Smart Orchestration 2.7
 
 **GPT-6.1 Sol judges. Luna implements, operates and repairs.**
 
@@ -11,30 +11,37 @@ There is **one adaptive execution loop**, no Normal/Coordinated modes and no ded
 Chunk Lead. The workflow is an instruction policy with small deterministic helpers,
 not a native scheduler, tool interceptor, security boundary or guaranteed saving.
 
-## What changes in 2.6
+## What changes in 2.7
 
-2.6 keeps the 2.5 model map and delegation architecture, but adds cheap safeguards inspired
-by [Kiborgik/BlaBla](https://github.com/Kiborgik/blabla):
+2.7 keeps the model map and delegation architecture, while correcting the new preflight
+and borrowing further bounded ideas from [Kiborgik/BlaBla](https://github.com/Kiborgik/blabla).
 
-- **Progressive disclosure:** route from project status/index to the relevant identity/rule
-  before reading broad project context. Do not replace a large parent prompt with a large
-  documentation dump.
-- **Deterministic challenge:** a new read-only `runtime/challenge.py` can catch objective
-  handoff contradictions in already-structured facts before Main or Tester spends tokens.
-- **Evidence precedence:** repository/target state and deterministic current evidence outrank
-  worker narrative. `STALE` and `UNVERIFIED` are explicit states.
-- **DECISION_NEEDED:** workers stop at protected product/design/architecture/contract/scope
-  choices and ask Main one focused question instead of guessing.
-- **Falsification-first Tester:** independent review starts from the original task and full
-  diff, accounts for every deliverable, reads controlling code and seeks a concrete
-  counterexample rather than merely confirming the patch.
+**Handoff is not acceptance.** A worker can return an evidenced repair for independent review
+without pretending the reviewer has already approved it. Addressed findings and gates due
+at acceptance stay visibly pending. Main still decides acceptance after all required checks.
 
-Smart does **not** adopt BlaBla's DSL, persistent task database, long state-machine ceremony,
-or universal review requirement. There is still one adaptive loop, eight roles, no manager
-layer and no per-project Smart installation. GPT-6.1 Sol Medium remains the recommended Main
-baseline and Senior remains GPT-6.1 Sol xhigh; Luna role settings are unchanged.
+**Evidence can be bound to the actual assignment.** Optional attempt/contract/candidate/target
+identities make mismatching evidence STALE and absent bindings UNVERIFIED. An optional existing
+candidate manifest adds a fresh selected-input read, not proof of a deployed build.
 
-See [2.6 notes](docs/v2.6.md).
+**Preflight gives a useful next step.** It validates the whole record first, batches grounded
+issues with bounded output and routes mechanical repairs to workers, protected questions to
+Main. It no longer treats malformed later rows or an empty obligation set as acceptable input.
+
+**Main can ask the questions it doubts.** A few named questions in the original assignment
+must receive evidence-backed answers or an explicit unknown. This complements worker-initiated
+DECISION_NEEDED without relying on self-reported confidence or adding a question to every task.
+
+**Required tests are not optional adversarial probes.** Tester runs mandated gates even when
+no defect is suspected, checks real entry points and uses meaningful negative controls for
+new critical tests where practical. An observer must report failure truthfully.
+
+Known source paths can be read directly after applicable instructions. Notes or unrelated
+changes do not invalidate focused evidence. Full failure logs are retained so a summary line
+cannot hide errors and another run is not needed merely to recover discarded output.
+
+No new role, manager, execution mode, task database, model setting or permission is introduced.
+See [2.7 notes](docs/v2.7.md) and the optional [preflight contract](codex_workflow/challenge.md).
 
 ## Architecture
 
@@ -48,6 +55,7 @@ MAIN: GPT-6.1 Sol Medium recommended; owner selection preserved
   detailed inspection of real results, final acceptance
   |
   | one complete bounded assignment
+  | optional must-answer questions about specific uncertainties
   |
   +--> SIMPLE / Luna Low
   |      established low-risk edits, exact extraction,
@@ -59,18 +67,21 @@ MAIN: GPT-6.1 Sol Medium recommended; owner selection preserved
   |
   +--> DEFAULT / Luna xhigh
          genuinely deep bounded implementation/diagnosis
-           |
-           +--> TESTER / Luna High when independent review is required
-                   authoritative requirements, stable candidate,
-                   actual diff and behavior, separate verdict
-           |
-           v
-       candidate + original evidence + remaining gates
-           |
-           v
+             |
+             v
+         optional deterministic handoff preflight
+         mechanical issues return together to the same owner
+         protected questions / scope conflicts return to Main
+             |
+             v
+         TESTER / Luna High when independent review is required
+         original task, stable candidate, complete diff,
+         required gates and separately owned verdict
+             |
+             v
 MAIN examines decisive changes and actual visuals
   |
-  +--> findings --> same suitable Luna owner --> fresh evidence --> MAIN
+  +--> findings --> same suitable Luna owner --> fresh evidence --> recheck
   |
   +--> acceptance --> durable handoff --> observed native release
 ```
@@ -78,10 +89,8 @@ MAIN examines decisive changes and actual visuals
 Main may dispatch Tester directly, or explicitly authorize Routine/Default to dispatch
 one Tester when native nesting, permissions and capacity support it. Only the dispatcher
 changes, not the independent reviewer or its contract. Missing nesting does not justify
-main taking implementation back.
-
-Support roles answer bounded questions or create authorized checkpoints. They are not a
-permanent team and do not multiply the run's thread budget.
+main taking implementation back. Support roles answer bounded questions or create authorized
+checkpoints; they are not a permanent team or an extra manager layer.
 
 ## Responsibilities and model map
 
@@ -106,6 +115,8 @@ Senior is advisory-first. Main considers its decision/rationale/constraints/next
 settles the decision and returns implementation to Luna. Transferred Senior implementation
 requires an explicit ownership transfer for an evidenced capability gap or inseparable
 judgment/implementation, with independent review. Max/Astra are not automatic tiers.
+Repeated same-defect repairs justify bounded diagnosis and ownership reassessment within
+authorized models, not automatic upgrading or endlessly repeating a cheap failed approach.
 
 ## Main owns judgment, not routine execution
 
@@ -127,64 +138,34 @@ return the remaining work to the worker. Never invent access or widen permission
 ## The assignment contract
 
 Give a complete bounded job rather than one worker per file or click. The existing capsule
-contains the outcome and stop condition, unit/attempt, exact requirements, owned/protected
-paths, starting candidate/target, authority, gates, evidence locations and absolute relevant
-guide paths. Design work adds main's accepted brief and a review checkpoint.
+contains the outcome and stop condition, unit/attempt, exact requirements and deliverables,
+owned/protected paths, starting candidate/target, authority, gates, evidence locations and
+absolute relevant guide paths. Design work adds Main's accepted brief and review checkpoint.
+A finite coherent group retains per-member gates and dependency order.
 
-The capsule also names the events that require main: **review-ready, completed,
-decision-needed, blocked, or a real user interruption**. The worker owns running commands,
-test waits, browser operation and ordinary diagnosis within that contract.
+Name the events that require Main: **review-ready, completed, decision-needed, blocked,
+required checkpoint or real user interruption**. The worker owns commands, test waits,
+browser operation and ordinary diagnosis within the assignment. Do not extend a task simply
+to keep an agent busy.
 
-A finite coherent group may share setup and contracts but retains per-member gates and
-dependency order. Do not extend it simply to keep a worker busy. Workers report missing
-product/design/architecture decisions before inventing them; main sends a contract delta.
+Main can include a few must-answer questions, for example which environment a browser is
+connected to or whether a particular edge case is covered. The worker returns an answer
+with original evidence, or unknown. Silence does not answer a question. This is not a new
+mandatory planning round and does not delegate product choices to the worker.
 
-## Progressive project context and deterministic preflight
+## Context and protected decisions
 
-A worker should not begin by reading every architecture document, every project instruction,
-or the complete Main transcript. Smart 2.6 uses a progressive path:
+Read applicable instructions. When the relevant authoritative source is already known,
+read it directly. For an unknown location, use the project's status/index/architecture map
+or targeted search, then the relevant identity and specific rule/file/evidence. Progressive
+disclosure is not a compulsory status -> explain -> explain ritual for every read.
 
-```text
-project instructions / status / index
-            ↓
-relevant system, contract or design identity
-            ↓
-specific rule, file or evidence
-            ↓
-implementation
-```
+Do not dump all documentation or the Main transcript into a worker. Reuse existing code,
+design decisions and trustworthy setup before inventing another implementation. After
+compaction consult the current handoff and changed evidence, not the entire archive.
 
-If the repository already provides a queryable status/explain/index mechanism, use it.
-Otherwise use targeted search/read. Smart introduces no proprietary project-memory format.
-
-When a candidate already has structured scope, deliverable, finding, decision and gate facts,
-`runtime/challenge.py` can run once before expensive review. It reports CLEAR or one grounded
-contradiction such as a scope breach, unresolved protected decision, missing deliverable,
-open blocking finding, stale/unverified evidence or unmet fresh gate.
-
-**CLEAR is intentionally weak.** It does not mean the code is correct, the evidence is
-authentic, the tests cover the requirement, or Main should accept the result. The helper
-does not scan chat/source, execute tests, call a model or mutate the project. Do not create
-a mandatory task ledger merely to feed it.
-
-### Evidence ordering
-
-For claims about implementation state, prefer:
-
-1. actual repository/working target;
-2. deterministic readback/tool output;
-3. current executed tests/browser evidence tied to the candidate;
-4. independent Tester findings;
-5. worker narrative.
-
-Requirements and owner intent still decide what *should* be built. A tool result proves only
-what it checked. Candidate/contract/target drift makes affected earlier evidence `STALE`;
-missing proof is `UNVERIFIED`, not PASS.
-
-### Protected decisions
-
-Workers keep ordinary implementation choices. If continuing would choose product meaning,
-architecture, UX/visual direction, contract semantics, scope or authority, the worker returns:
+Workers keep ordinary implementation choices. If continuing would choose protected product
+meaning, architecture, UX/visual direction, contract semantics, scope or authority, return:
 
 ```text
 DECISION_NEEDED
@@ -195,21 +176,21 @@ Why this is outside the settled brief
 Provisional choice, if useful
 ```
 
-Main answers only that decision and sends the delta back to the same worker. Smart does not
-use numeric confidence thresholds.
+Main answers the narrow decision and sends the delta back to the same worker. Smart does
+not use numeric confidence thresholds or require architecture essays from bounded workers.
 
 ## Detailed UI/UX workflow
 
-Design authorship remains with main. Implementation delegation is not delegation of visual
+Design authorship remains with Main. Implementation delegation is not delegation of visual
 judgment. The [design guide](codex_workflow/design.md) specifies the complete loop.
 
 ### Main settles the brief
 
 Main uses accepted references and actual product evidence to define purpose, hierarchy,
 composition, visual language, responsive intent, interactions and important states.
-The brief records protected decisions, relevant components/tokens, concrete acceptance
-criteria, required viewports and the next review point. It does not prescribe every CSS
-property or solve the implementation in advance.
+The brief records protected decisions, relevant components/tokens, acceptance criteria,
+required viewports and the next review point. It does not prescribe every CSS property or
+solve the implementation in advance.
 
 ### Luna builds and returns running evidence
 
@@ -218,16 +199,14 @@ tweak. The capable owner runs appropriate checks and returns the current candida
 state, viewport/theme and original evidence references. An absent browser capability is
 a limitation, not permission to claim a visual pass.
 
-### Main examines the actual result
+### Main examines and delegates corrections
 
-For new compositions, main inspects an early running frame and the final affected screens.
+For new compositions, Main inspects an early running frame and final affected screens.
 It evaluates hierarchy, typography, spacing, alignment, interaction states, responsiveness
-and consistency at the level the brief requires. Passing tests and the mere presence of
-screenshots do not replace opening and assessing the evidence.
+and consistency at the level the brief requires. Passing tests and attaching screenshots
+do not replace opening and assessing the evidence.
 
-### Findings return to the worker
-
-Main groups related findings into one concrete correction assignment:
+Main groups related findings into a concrete correction assignment:
 
 ```text
 Criterion / finding
@@ -237,138 +216,147 @@ Allowed change and protected decisions
 Affected checks and required fresh visual evidence
 ```
 
-For example: restore the accepted heading scale at mobile width so it no longer overlaps
-the cover, without changing card hierarchy; return that state and the relevant regression
-check. This is not a vague request to make the design better.
+For example: restore the accepted mobile heading scale so it no longer overlaps the cover,
+without changing the card hierarchy; return the corrected state and relevant regression check.
+This is not a vague instruction to make the design better.
 
-The same suitable worker implements the delta. Release any independent-review hold before
-repair, identify the new candidate, and refresh affected and mandatory-fresh checks. Main
-inspects the corrected evidence before closing findings. Missing evidence remains open.
-The loop stops when the authorized quality target and gates are satisfied, not when a
-fixed delegation percentage is reached and not after unlimited out-of-scope polish.
+The same suitable worker implements the delta. Release any review hold before repair,
+identify the new candidate and refresh affected and mandatory-fresh checks. The worker marks
+the finding addressed with evidence; Main/reviewer resolves it after recheck. Missing evidence
+stays open. An accepted design violation is a legitimate blocker; optional taste or unrequested
+polish is not. Stop when the authorized target and required gates are satisfied.
 
 ## Browser and Computer Use
 
 **Operating a GUI and judging its design are different responsibilities.**
-Simple Luna Low owns worthwhile, explicit low-risk journeys: page extraction, known GUI
-configuration, checklist execution and screenshot collection. Main makes aesthetic and
-interaction decisions. A long journey can still be simple; a single consequential click
-can still require authority and stronger verification.
+Simple Luna Low owns explicit low-risk journeys: page extraction, known GUI configuration,
+checklist execution and evidence collection. Main makes aesthetic and interaction decisions.
+A long journey can be simple; a single consequential click can require explicit authority.
 
-Check actual worker tool and session access. Use structured DOM/network/console/API evidence
-where sufficient, a real browser for required rendered journeys and Computer Use for native
-or GUI-only behavior. Do not substitute an API response for a required interaction test.
+Check actual worker tools and session access. Prefer structured DOM/network/console/API
+readback where sufficient, a real browser for required rendered journeys and Computer Use
+for native or GUI-only behavior. Do not replace a required interaction test with an API result.
 
 Reuse verified sessions, builds and setup. One owner controls shared mutable GUI state.
-For repeated stable local checks, reuse an existing deterministic test or verified recipe
-with fresh execution instead of reasoning through every click again. Capture requested
-changed/final/failure states, not an unneeded image after every action.
+For repeated stable checks, reuse an existing deterministic test or verified recipe with
+fresh execution instead of reasoning through every click again. Capture useful requested,
+changed/final/failure states, not an unneeded screenshot after every action.
 
-A capable implementation owner can collect short evidence without an extra relay agent.
-For a separate substantial mechanical journey, transfer GUI ownership safely and use
-Simple. Explain an observed capability exception rather than leaving all browser operation
-with main by habit. See [browser economy](codex_workflow/browser.md).
+A capable implementation owner can gather short evidence without an extra relay agent.
+For a separate substantial mechanical journey, transfer GUI ownership safely to Simple.
+Explain an observed capability boundary rather than leaving all operation with Main by habit.
+Billing, production, permission changes and destructive actions retain their authority gates.
+See [browser economy](codex_workflow/browser.md).
 
-## Waiting without expensive supervision loops
+## Optional deterministic preflight
 
-The parent should not manufacture a new task each time a tool returns a wait timeout.
-Use native completion notification or a supported long, interruptible wait. Choose
-parameters from the exposed tool schema; Smart does not invent a universal timeout API.
+Use [challenge.md](codex_workflow/challenge.md) only when structured handoff facts already
+exist. Do not create a project database or mandatory ledger to feed it. The helper is not
+an LLM, scheduler or semantic reviewer.
 
-A timeout alone is not a failure, evidence change or reason to SEND a progress request,
-list all agents, inspect unfinished files, reload the page or rerun tests. Continue
-supported waiting without duplicating those operations. Clients limited to polling should
-back off within their supported limits, not run rapid model turns or shell sleep loops.
+### Handoff and acceptance are different stages
 
-Investigate a real blocker, error, missed authorized checkpoint or an explicit fresh-status
-request. Honor user interruptions promptly. Ordinary status uses last-known state; an
-explicit fresh snapshot is one coalesced active-owner request, not a chain of leaf queries.
-Required user-facing progress can still be reported without creating new investigation.
+At **handoff**, an addressed finding needs current evidence but remains pending independent
+resolution. Gates explicitly assigned to **acceptance** remain visible as pending, allowing
+the required reviewer to be dispatched. At acceptance, all required gates and blocking
+findings must actually be satisfied. Main owns acceptance; a worker cannot change obligations
+to make its own record clear. An honest BLOCKED handoff does not need a CLEAR result.
 
-Main's review of an early design frame is intentional judgment, not unwanted supervision.
-The goal is fewer empty coordination turns, never less attention to the finished product.
+These stages are not Normal/Coordinated modes or competing architectures. Legacy records
+without a phase retain strict acceptance behavior.
+
+### Identity, batching and limits
+
+The helper checks bounded supplied scope/attribution, decisions, deliverables, findings,
+questions and gate facts. Optional current attempt/contract/candidate/target identities
+require matching evidence references/bases. Missing binding is UNVERIFIED; mismatch is STALE.
+Without current identity, output says binding was not checked.
+
+Optional `--manifest` reads an existing candidate.py manifest and freshly verifies the
+selected local inputs. Its fingerprint must identify the declared candidate. This does not
+prove a served build, external state, complete dependencies, authorship or continuous locking.
+No new source scanner is added.
+
+Output contains a leading issue plus up to eight issues, total/omitted counts, pending
+obligations and a next action. Batch mechanical repairs back to the current worker rather
+than one model round-trip per bookkeeping error. Scope/attribution conflicts and protected
+questions go to Main without destructive resets or invented concurrent attribution.
+
+**CLEAR means no supported contradiction in supplied facts, not correctness or approval.**
+Undeclared obligations and fabricated observations remain undetectable. A known successful
+outcome may be intentionally unchanged with Main's authorization and evidence; do not
+produce a cosmetic edit merely to satisfy a changed-file counter.
 
 ## Independent verification and candidate holds
 
 Every owner self-checks. Tester is required by project/owner gates or meaningful residual
-risk, including behavior/state, integration, shared contracts, uncertain accessibility,
-authentication, payments, schema or financial invariants. Default implementation requires
-independent review by default. A reversible established copy/style edit does not gain a
-second reviewer merely because it touches UI.
+risk, including behavior/state, integration, shared contracts, accessibility uncertainty,
+authentication, payments, schema and financial invariants. Default implementation requires
+independent review by default. An established reversible copy/style edit does not gain an
+extra reviewer merely because it touches UI.
 
-Tester derives expected behavior from authoritative requirements, reviews the actual diff
-and consumers, and executes the required checks. It owns a separate verdict artifact.
-The writer may reference that verdict, not rewrite it or turn self-checks into independence.
+Tester starts in a context independent of the writer's investigation, with the original
+task, complete actual diff, deliverables, questions and authoritative requirements. Reuse
+that reviewer for the same repair loop, not unrelated work. It owns its separate verdict.
 
-In 2.6 the review is explicitly **falsification-first**. Tester reads the original bounded
-task and complete actual diff, accounts for every requested deliverable, reads the code that
-controls any semantic finding, inspects sibling cases around changed branches, and seeks the
-smallest concrete counterexample. BLOCKING means wrong, incomplete or untrue; style and
-optional cleanup are NON-BLOCKING. Tool-call volume is not evidence of review quality.
+Read controlling definitions, possible values, guards and helpers before asserting a semantic
+defect; inspect sibling cases and seek the smallest concrete counterexample. **Required gates
+still run even when no defect is suspected.** Optional extra probes target concrete concerns.
+New critical tests should exercise real entry points and meaningful negative controls where
+practical. Do not count syntax/setup failures as proof of the intended assertion, or mutate
+live work to plant a defect. Observers must report actual failure rather than fabricate success.
 
-Identify relevant source, staged/unstaged/untracked files, test/config/lockfile inputs and
-the actual served build/target/account. Hold those inputs stable through independent review.
-The hold is an ownership agreement, not a filesystem lock. Release before repair, re-hold
-the repaired candidate, then rerun affected plus mandatory-fresh checks. Retain unrelated
-applicable evidence. Preserve original failures and distinguish executed, reused, failed,
-blocked, unrun, deferred and authorized not-applicable results.
+Identify relevant staged/unstaged/untracked source, tests/config/lockfiles, contract and actual
+build/target/account. Hold relevant inputs stable during independent review. The hold is an
+ownership agreement, not a filesystem lock. Tester writes evidence/disposable data, not code
+or tests. Release before repair, re-hold the repaired candidate and rerun affected plus mandatory
+fresh checks. Main inspects decisive risk and actual visuals without repeating the entire review.
 
-Main examines applicability, decisive risks and actual visuals without routinely repeating
-the full technical investigation. Technical approval, main acceptance, owner sign-off,
-commit, integration and release are separate. See [verification](codex_workflow/verification.md).
+Keep original logs and exit codes. Read exit status first, failure blocks next, summary last.
+A passing count in partial output is not a green run. Distinguish executed-pass, reused-pass,
+failed, blocked, unrun, deferred, authorized not-applicable, STALE and UNVERIFIED. Notes and
+unrelated paths do not invalidate focused evidence; actual dependency changes do. Unknown
+impact widens checks. See [verification](codex_workflow/verification.md).
 
-## Thread capacity and lifecycle
+## Waiting, capacity and context lifecycle
 
-Smart targets **at most two Smart-owned open threads across the entire run**, normally one
-owner and one independent reviewer. Descendants, support workers and unfinished previous
-units count in the same budget. It is not two per parent or per assignment. Lower client
-limits and unrelated open threads remain binding.
+A wait timeout is not a new task. Use native completion notifications or supported long,
+interruptible waits with actual exposed parameters. Do not SEND for progress, inspect
+unfinished diffs, reload the browser or rerun tests merely because waiting returned.
+Polling-only clients back off within supported limits, not rapid model turns or sleep loops.
+Main re-enters for real decisions, required checkpoints, blockers and acceptance. Ordinary
+user-facing progress uses known state; an explicitly requested fresh snapshot is one
+coalesced owner request, not a cascade. Honor actual interruptions promptly.
 
-A completed response is not observed native slot release. Preserve results and resource
-handoffs, close eligible completed owned direct children with supported native operations,
-leaves before parent, and observe the result before relying on reclaimed capacity.
-Retain a writer for concrete pending main review/corrections, not indefinite possible work.
+Smart targets **at most two Smart-owned open threads across the run**, usually one owner and
+one reviewer. Descendants, support and prior unfinished units count too. Lower client limits
+and unrelated open threads remain binding. A final response is not native slot release.
 
-On a capacity error reconcile the relevant known handles once. Retry only after an
-observed state change. With one available slot and verified release, serialize writer,
-independent Tester and any replacement writer using durable evidence. Otherwise checkpoint;
-do not raise the cap, blindly respawn, close unrelated/active work or move execution to main.
+Preserve results, settle writes and transfer useful resources, then use supported native
+closure on completed owned children, leaves before parent. Observe release before relying
+on capacity. On an error reconcile known handles once; retry only after observed state change.
+With one slot, save candidate/repair context, close the writer and dispatch the independent
+Tester from Main. Without a safe review path, checkpoint instead of dropping the gate.
+Never raise the cap, close unrelated/active work or silently move implementation back to Main.
 
-Closing a thread does not authorize deleting source, browser profiles, servers, logs or
-unique evidence. See [execution and lifecycle](codex_workflow/execution.md).
-
-## Context lifecycle
-
-Reuse the same suitable worker through a concrete correction loop. At an accepted milestone,
-preserve an authorized compact handoff: accepted decisions, candidate/target, gate outcomes,
-open findings, next work and resource ownership. Give a new contract a fresh bounded worker
-after safe release rather than appending unrelated work to an ever-growing thread.
-
-Fresh context is not fresh infrastructure. Preserve applicable browser/server setup and
-run recipes. After compaction consult the current handoff and changed inputs instead of
-re-reading the archive. A parent-session transition must be explicit; Smart never restarts
-the app, forces compaction or discards an active conversation automatically.
-
-Follow-ups carry deltas, logs stay in artifacts and only relevant guides are loaded. These
-are cost controls, not a guarantee about exact context size or cache behavior.
+Closing an agent does not delete source, logs, browser profiles, servers or unique evidence.
+Keep the same writer for concrete corrections. Accepted milestones preserve decisions,
+candidate, gates, findings, next work and resource ownership. New unrelated contracts get
+fresh bounded contexts after release, not repeated login or infrastructure setup. No automatic
+parent restart, forced compaction or discarded live conversation. See [execution](codex_workflow/execution.md).
 
 ## Configuration and activation
 
-Select **GPT-6.1 Sol / Medium** for Main in the client's supported model selector when
-available. Senior's installed TOML explicitly selects **gpt-6.1-sol / xhigh**. The installer
-preserves existing explicit parent, profile, Plan effort and generic-child selections.
-It does not silently move a running conversation to the new model.
+Select **GPT-6.1 Sol / Medium** for Main in the client's supported selector when available.
+Senior's managed role selects **gpt-6.1-sol / xhigh**. The installer preserves explicit
+parent, profile, Plan effort and generic-child choices. It does not move an active session
+to a different model.
 
-The disk check's configuration assessment reports `configured_parent`, `recommended_parent`
-and `parent_baseline_status`. A match describes the supplied disk configuration, not
-observed live model selection. A different valid owner selection is a warning, not corruption.
-Known unsupported `none`/`minimal` efforts for GPT-6.1 Sol are rejected rather than silently
-rewritten. Profile overrides and account/model availability still require actual client evidence.
-
-No new model-catalog override, permissions, agent concurrency settings or orchestration mode
-is installed. Main-only tool boundaries and explicit user instructions remain authoritative.
-See OpenAI's [model contract](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
-and [subagent configuration](https://developers.openai.com/codex/subagents).
+The read-only assessment reports configured/recommended parent and `parent_baseline_status`.
+A matching disk setting is not observed live selection. A valid different selection is a
+warning, not corruption. Actual profile overrides, account access, tools and native capacity
+still require client evidence. No new catalog override, permission or concurrency setting
+is introduced by 2.7.
 
 ## Installation or update
 
@@ -378,15 +366,15 @@ Open Codex in your project directory and send:
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
 ```
 
-After success, restart Codex manually and start a fresh conversation. Select the new Main
-baseline explicitly; inspect any preserved override before changing it. There is no
-per-project installation, uninstall-first requirement or general qualification ceremony.
-Use [targeted runtime checks](codex_workflow/runtime_check.md) only for an actual uncertainty.
+After success, restart Codex manually and start a fresh conversation. Select the intended
+Main baseline explicitly; review preserved overrides before changing them. There is no
+per-project installation, uninstall-first requirement or global qualification ceremony.
+Use [targeted runtime checks](codex_workflow/runtime_check.md) for an actual uncertainty.
 
-The package installs its declared guides, eight worker definitions, managed instruction
-regions and Python runtime helpers. It preserves unrelated configuration and project files,
-stops on ownership conflicts, and creates exact conflict-checked rollback backups. Source
-publication does not update your Mac automatically.
+The installer manages declared guides, eight worker definitions, managed instruction regions
+and Python helpers. It protects unrelated configuration and project files, stops on ownership
+conflicts, and creates exact conflict-checked rollback backups. The new challenge guide is
+installed on demand and protected like other managed files. Publication does not update your Mac.
 
 ## Validation and evaluation
 
@@ -396,23 +384,20 @@ python3 -m compileall -q codex_workflow scripts
 ```
 
 CI runs Ubuntu/Python 3.11, Ubuntu/Python 3.12 and macOS/Python 3.12 with full Git history.
-It retains historical installation tests and checks exact 2.4 -> 2.5 -> no-op reapply ->
-rollback, preserved owner settings, the authorized Senior model change, baseline assessment,
-prompt budgets and run-wide capacity behavior.
+Historical migration tests remain pinned; the new exact 2.6 -> 2.7 -> no-op reapply -> rollback
+path checks owner/project preservation, every role setting and local-edit protection.
+Executable regressions cover old false-clear inputs, full validation, stage transitions,
+identity mismatches, questions, real CLI behavior and candidate-helper integration.
 
-These tests validate shipped instructions, helpers and installation. They do not establish
-native runtime compliance, design quality or measured savings. Main still judges the work.
-The helpers check supplied observations; they are not native locks or authenticated telemetry.
+Tests establish shipped instructions, helper behavior and installation, not live Codex
+compliance, independent model-review quality or measured savings. For comparison, count all
+model layers, setup, Main review, verification and rework per comparable accepted outcome.
+Account for carry-in workers once and avoid overlapping inclusive subtree totals. Raw tokens,
+cache share and API-price equivalents are diagnostics, not subscription billing.
 
-For usage analysis, keep primary session totals and separately reported carry-in workers
-explicit, avoid adding overlapping inclusive subtrees, and distinguish tokens from quota.
-Unknown role/assignment metadata is not missing work. Wait counts and overlapping lifetimes
-are investigation signals, not proof of wasted requests or live slot occupancy.
-
-Compare similar accepted outcomes including setup, Main review, verification and rework.
-Do not pursue a delegation percentage at the expense of judgment. Public API-equivalent
-prices are useful normalization, not subscription accounting. No fixed savings percentage
-or number of working days follows from this release.
+A lower Main share is useful when settled work moved to Luna, not when necessary judgment
+was removed. More agents are not automatically cheaper. No fixed saving percentage or number
+of working days follows from this release.
 
 ## Documentation
 
@@ -421,9 +406,10 @@ or number of working days follows from this release.
 [Execution](codex_workflow/execution.md) ·
 [Verification](codex_workflow/verification.md) ·
 [Browser](codex_workflow/browser.md) ·
+[Preflight contract](codex_workflow/challenge.md) ·
 [Boundary records](codex_workflow/boundary.md) ·
 [Runtime checks](codex_workflow/runtime_check.md) ·
 [Engineering notes](docs/smart_orchestration.md) ·
-[2.6 notes](docs/v2.6.md) ·
-[2.5 history](docs/v2.5.md) ·
+[2.7 notes](docs/v2.7.md) ·
+[2.6 history](docs/v2.6.md) ·
 [Evaluation](docs/evaluation.md)

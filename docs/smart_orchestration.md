@@ -1,60 +1,61 @@
 # Smart Orchestration engineering notes
 
-## 2.6: judgment stays expensive, contradictions get cheap
+## 2.7: evidence-bound handoffs without extra coordination
 
-Smart 2.6 keeps the single-loop/eight-role architecture from 2.5. Main recommends GPT-6.1
-Sol Medium; Senior remains GPT-6.1 Sol xhigh; Luna role models/efforts stay unchanged.
-Main owns product/architecture/design judgment and acceptance; named workers execute settled
-work and repairs.
+Keep one adaptive loop and eight roles. Main recommends GPT-6.1 Sol Medium; Senior remains
+GPT-6.1 Sol xhigh; all Luna models/efforts and sandbox/delegation settings are unchanged.
+Main owns design/product/architecture decisions and final assessment, while named workers
+own settled implementation and repairs. Design and browser contracts remain intact.
 
-2.6 borrows lightweight mechanisms from Kiborgik/BlaBla without adopting its DSL or task
-database. The shared theme is that durable project/evidence state should outrank an agent's
-story, and that a bounded worker should stop at a protected decision instead of silently
-redesigning the system.
+## Separate handoff from acceptance
 
-## Progressive context disclosure
+2.6's optional preflight treated addressed repairs and future independent gates as acceptance
+failures before review could begin. 2.7 adds explicit handoff/accept stages inside that helper,
+not execution modes. Addressed findings need current evidence and await independent resolution.
+Gates assigned to acceptance remain pending at handoff; all bind at acceptance. CLEAR grants
+no authority. Honest blocked handoffs do not need a false success signal.
 
-Assignments point workers toward the narrowest authoritative routing surface first:
-project instructions, status/index/architecture map, then relevant identity/rule/file.
-Projects may provide queryable status/explain/index commands; Smart does not require one.
-Retrieving a rule is not applying it. This avoids replacing a large parent transcript with
-a large project-memory dump.
+challenge.py validates the whole record first. Ambiguous paths, duplicate identities,
+non-integer schema, malformed later rows and empty obligations no longer produce misleading
+results. Optional current/basis fields bind evidence to attempt/contract/candidate/target.
+Optional --manifest calls the existing candidate helper for fresh selected-input identity.
+This is not a new scanner, dependency graph, evidence authenticator or filesystem lock.
 
-## Deterministic preflight
+Batch results include bounded previews, exact omitted counts, pending obligations and an
+explicit next action. Related mechanical issues return together to the same worker; scope
+conflicts and protected questions return to Main. Worker-supplied attribution and authority
+remain attestations. The helper cannot detect omitted requirements or fabricated facts.
+See the installed [preflight contract](../codex_workflow/challenge.md).
 
-`runtime/challenge.py` accepts one bounded structured record and returns CLEAR or one
-grounded contradiction. It covers supplied scope/attribution, protected decisions,
-deliverables, blocking findings and evidence freshness/disposition. It performs no model
-call, source scan, test run or mutation. CLEAR is deliberately weak: it means no supported
-contradiction in supplied facts, not semantic correctness, authenticity, coverage,
-authority or acceptance.
+## Ask focused questions and verify real behavior
 
-The helper is progressive enhancement. Do not create a persistent ledger solely to feed it.
-Mechanical challenges return to the current worker; DECISION_NEEDED returns to Main.
+Main may name a few must-answer questions in the initial capsule. Answers need evidence or
+an explicit unknown; no calibrated-confidence claim is made. This does not force another
+planning round or transfer Main's decision authority to a cheap worker.
 
-## Evidence and review
+Tester uses independent context, original requirements and complete diff. Required gates
+run whether or not optional probes find a concern. New critical tests should exercise real
+entry points and a meaningful negative control where practical. Do not change an observer
+to report success when the underlying operation failed. Required visual/design criteria
+are obligations; optional taste remains a suggestion.
 
-Implementation claims now use an explicit precedence: actual repository/target state,
-deterministic readback, current executed checks, independent review, then worker narrative.
-STALE and UNVERIFIED are first-class states.
+## Economy without weakening gates
 
-Tester is falsification-first: original task, complete diff, every deliverable, controlling
-code before semantic findings, sibling cases around changed branches and the smallest
-concrete counterexample. BLOCKING is correctness/completeness/truth, not taste. Tester
-still never edits candidate source and does not replace Main's visual judgment.
+Read known sources directly after applicable instructions; use indexes for unknown locations.
+Avoid mandatory lookup ladders, repeated lost-log runs and invalidation caused only by notes
+or unrelated paths. Preserve original failures and refresh actual affected dependencies.
+Repeated same-defect repair prompts bounded diagnosis/ownership reassessment, not automatic
+escalation. Keep the run-wide two-thread target and one-slot serialized reviewer fallback.
+No manager layer, confidence score, task database, telemetry service or model change is added.
 
-Workers use DECISION_NEEDED only for protected product/design/architecture/contract/scope/
-authority choices. Smart intentionally avoids numeric confidence thresholds.
+## Installation and validation
 
-## Preserved safeguards
+Pinned main source, preview/apply/check, protected owner configuration/project files and exact
+rollback remain unchanged. The new guide participates in inventory/fingerprints and edited-file
+conflict checks. Historical migration tests remain pinned and the exact 2.6 -> 2.7 -> no-op
+reapply -> rollback path is exercised. CLI regressions include old false-clear cases and actual
+candidate drift. Tests are not live model qualification or measured savings.
 
-The run-wide two-thread target, meaningful wake conditions, no-timeout-polling rule,
-candidate holds, independent verdict ownership, same-writer correction loop, progressive
-milestone handoff, native-release observation, permissions and exact rollback protections
-remain. `allocation.py`, `candidate.py`, `boundary.py` and `challenge.py` are advisory
-bounded helpers, not native enforcement.
-
-CI includes exact archived 2.5 -> 2.6 -> no-op reapply -> rollback plus all historical
-migrations. Tests prove shipped contracts and helper behavior, not live Codex compliance
-or measured savings. See [2.6 notes](v2.6.md), [2.5 history](v2.5.md) and
-[optional evaluation](evaluation.md).
+See [2.7 notes](v2.7.md), [2.6 history](v2.6.md), [2.5 history](v2.5.md) and
+[optional evaluation](evaluation.md). Source-derived lessons and implementation limitations
+are recorded separately from any future usage measurements.
