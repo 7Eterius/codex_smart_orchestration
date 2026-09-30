@@ -9,9 +9,11 @@ the worker cannot change them, spoof authority or relabel its own breach to get 
 
 `phase: handoff` checks readiness to return work for required review. A blocking finding
 marked `addressed` needs current evidence but remains pending independent resolution.
-Required gates with `due: accept` stay visible as pending. The next action is the original
-review path, never acceptance. `phase: accept` checks every required gate and requires
-blocking findings to be resolved. Only Main accepts after inspecting original evidence.
+Required gates with `due: accept` stay visible as pending when they are not yet decisive.
+A gate already reported failed on the current candidate is actionable worker evidence and
+blocks a normal review-ready handoff instead of consuming reviewer time. The next action is
+otherwise the original review path, never acceptance. `phase: accept` checks every required
+gate and requires blocking findings to be resolved. Only Main accepts after inspecting original evidence.
 
 Omitting phase retains 2.6's strict acceptance behavior. Every gate defaults to due at
 handoff; a later due stage must be explicitly assigned by Main. A BLOCKED/abandoned task

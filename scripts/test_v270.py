@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = ROOT / "codex_workflow"
 sys.path.insert(0, str(PACKAGE))
 from runtime import challenge
+from test_current import VERSION
 
 BASELINE = "ce7c841c8d32fbc357f941ba008d30b24deae44e"
 
@@ -370,7 +371,7 @@ class PackageAndMigrationTests(unittest.TestCase):
             self.assertEqual(snapshot(home), before, "Preview must not mutate")
             backup = install.apply_plan(plan, prior, home)
             self.assertTrue(install.status(home)["disk_ok"])
-            self.assertEqual(install.status(home)["version"], "2.7.0")
+            self.assertEqual(install.status(home)["version"], VERSION)
             self.assertEqual((home/"codex_workflow/challenge.md").read_bytes(), (PACKAGE/"challenge.md").read_bytes())
             a = tomllib.loads(before["config.toml"][0].decode()); b = tomllib.loads((home/"config.toml").read_text())
             a.pop("developer_instructions", None); b.pop("developer_instructions", None)

@@ -1,4 +1,4 @@
-# Smart Orchestration 2.7
+# Smart Orchestration 2.7.1
 
 **GPT-6.1 Sol judges. Luna implements, operates and repairs.**
 
@@ -11,14 +11,22 @@ There is **one adaptive execution loop**, no Normal/Coordinated modes and no ded
 Chunk Lead. The workflow is an instruction policy with small deterministic helpers,
 not a native scheduler, tool interceptor, security boundary or guaranteed saving.
 
-## What changes in 2.7
+## What changes in 2.7.1
 
-2.7 keeps the model map and delegation architecture, while correcting the new preflight
-and borrowing further bounded ideas from [Kiborgik/BlaBla](https://github.com/Kiborgik/blabla).
+2.7.1 is a patch release over the reviewed 2.7 architecture. It keeps the model map and
+delegation design while fixing a handoff edge case and tightening single-writer ownership.
+The broader 2.7 evidence-bound handoff design remains based on bounded ideas from
+[Kiborgik/BlaBla](https://github.com/Kiborgik/blabla).
 
 **Handoff is not acceptance.** A worker can return an evidenced repair for independent review
-without pretending the reviewer has already approved it. Addressed findings and gates due
-at acceptance stay visibly pending. Main still decides acceptance after all required checks.
+without pretending the reviewer has already approved it. Addressed findings and genuinely
+not-yet-due acceptance gates stay pending. A gate already known to fail on the current candidate
+returns to the worker before Tester is dispatched. Main still decides acceptance after all required checks.
+
+**One candidate has one writer.** A rare authorized Main-only bridge write never races an active
+worker. If it must touch the worker's scope or a declared evidence input, write ownership is
+paused/transferred first; afterward the new candidate/delta is handed back and only affected
+evidence is invalidated.
 
 **Evidence can be bound to the actual assignment.** Optional attempt/contract/candidate/target
 identities make mismatching evidence STALE and absent bindings UNVERIFIED. An optional existing

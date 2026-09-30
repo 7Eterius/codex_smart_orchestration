@@ -1,6 +1,6 @@
 # Targeted runtime checks
 
-Smart 2.5 has no globally gated execution mode. Direct custom-role work and independent
+Smart has no globally gated execution mode. Direct custom-role work and independent
 verification use existing supported client operations. Nested review is optional and
 needs evidence for the particular mechanism. Do not convert an old failed trial into a pass
 by changing its label.
