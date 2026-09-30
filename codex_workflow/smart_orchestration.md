@@ -36,12 +36,12 @@ preserve explicit owner selections. Senior advises; Main decides and Luna implem
 
 Read applicable instructions; use the shortest evidence path: a known file directly,
 or project status/index and relevant system/contract/design identity when location is unknown.
-Do not require status/explain for a known source. Read needed rules/files,
+Read needed rules/files,
 not all documentation or parent history. Retrieving guidance is not applying it: assess the
 actual change. Reuse existing implementations before introducing another one.
 
 Capsules carry the settled brief, protected decisions, scope, gates and references. Main may
-name a few must-answer questions about doubtful assumptions. Workers return each answer with
+name must-answer questions about doubtful assumptions. Workers return each answer with
 evidence or an explicit unknown; silence and confidence scores cannot discharge the question.
 After compaction read the current handoff and changed evidence, not the archive.
 
@@ -83,17 +83,16 @@ Missing bindings remain unknown. Recheck changed facts, not repeatedly unchanged
 ## One owner and independent falsification
 
 Remove the dedicated chunk_lead layer. Tester, not the writer, owns independent verdicts.
-Read `execution.md`. Routine/Default own discovery, implementation, commands, self-checks,
+Read `execution.md` for multi-agent work. Routine/Default own discovery, implementation, commands, self-checks,
 ordinary repair and evidence. They may dispatch one Tester with Main authority and
 observed mechanics/permissions/capacity; otherwise Main dispatches that named Tester.
 
 Tester uses the original bounded task, complete actual diff and deliverables, not the
 writer's explanation. Read controlling code before semantic findings; inspect sibling cases
 and seek the smallest concrete counterexample. Execute required gates regardless of suspicion;
-optional extra probes answer concrete concerns. New critical tests need a meaningful negative
-control where practical. Never change an observer to fabricate success. BLOCKING means wrong,
+optional extra probes answer concrete concerns. Critical tests need meaningful negative controls where practical. Never change an observer to fabricate success. BLOCKING means wrong,
 incomplete or untrue, including accepted-design violations; optional taste is NON-BLOCKING.
-Main inspects decisive/high-risk changes and actual visuals without repeating the whole review.
+Main inspects decisive/high-risk changes and actual visuals, not merely a PASS sentence, without repeating the whole review.
 
 ## DECISION_NEEDED
 
@@ -110,7 +109,7 @@ automatic model upgrade. Any escalation stays within owner-approved models and a
 Wake Main for review-ready/completed, decision-needed / DECISION_NEEDED, blocked, required
 checkpoint or real user interruption. Workers own command/test/browser waits. Use completion
 notifications or supported long, interruptible waits. Timeout alone triggers no progress
-SEND, unfinished-diff inspection or duplicate test. No acknowledgements. Fresh status is one
+SEND, unfinished-diff inspection or duplicate test. No acknowledgement messages. Fresh status is one
 coalesced owner snapshot, not a cascade of tests or descendant polls.
 
 Use at most two Smart-owned open threads across the run, including descendants/support/prior
@@ -119,10 +118,10 @@ Preserve evidence/resources, close completed owned children leaves-first using n
 observe release, and never close unrelated or active work. A final message is not slot release.
 At capacity failure reconcile once; retry only after observed change. `runtime/allocation.py`
 is not a native scheduler. With one slot, preserve the repair capsule, release writer, then
-Main dispatches Tester. No safe review path means checkpoint, not omitted review or Main takeover.
+Main dispatches Tester. Without review capacity, checkpoint; never omit review or take over.
 
 Keep writers for corrections. At accepted milestones hand off decisions, candidate,
-gates, findings and resources. New contracts get fresh context, not infrastructure setup. Never auto-restart Main. Hold relevant source/build/target during independent review;
+gates, findings and resources. New contracts get fresh context, not infrastructure setup. Never auto-restart Main. Freeze relevant candidate inputs and source/build/target during independent review;
 release before repair and rerun affected plus mandated fresh gates. Reject stale attempts.
 Repeating a failed approach needs new evidence; retrying is not routine.
 

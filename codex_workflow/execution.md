@@ -76,7 +76,7 @@ Required independent gates run regardless of whether optional adversarial probes
 Tester owns the verdict, writes evidence/disposable data only, and never repairs source/tests.
 
 Hold candidate inputs/build/target stable during review. On failure release the hold, reuse
-the writer, identify the repaired candidate, re-hold and rerun affected plus mandatory fresh
+the same writer, identify the repaired candidate, re-hold and rerun affected plus mandatory fresh
 checks. Preserve failures. Keep the writer available for concrete pending main review when
 capacity allows. Main examines decisive changes, original verdict and actual visuals, sends
 grouped findings and rechecks fresh results. Optional cleanup is not a blocker; violating the
