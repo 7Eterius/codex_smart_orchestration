@@ -33,10 +33,11 @@ seek the smallest concrete counterexample.
 For corrections, reuse the same suitable reviewer and its recorded reviewed candidate.
 Read every hunk of the correction delta, affected callers/dependencies and original findings;
 retain only demonstrably applicable prior coverage. Do not restart the complete investigation
-merely because a new candidate exists. Missing review baseline, changed contract, unknown
-impact or a new reviewer requires the full bounded review. Explicit full-review requirements
-and mandated fresh gates always override this optimization. Record the baseline and delta
-in the existing verdict, not another ledger.
+merely because a new candidate exists. A Main bridge or concurrent mutation must be included
+in that delta; if its impact is unknown, the optimization is unavailable. Missing review
+baseline, changed contract, unknown impact or a new reviewer requires the full bounded review.
+Explicit full-review requirements and mandated fresh gates always override this optimization.
+Record the baseline and delta in the existing verdict, not another ledger.
 
 Execute required independent gates even when no defect is suspected. Optional probes address concrete
 concerns. New critical tests exercise real entry points and meaningful negative controls
