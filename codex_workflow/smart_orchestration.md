@@ -1,9 +1,8 @@
 # Smart Orchestration 2.7.1
 
 One adaptive execution loop: define outcome, assign one owner, execute, preflight, verify,
-repair, accept, release. There is no Normal/Coordinated mode selection. Optimize satisfactory
-accepted work including rework, not speed. Preserve project safety, approvals,
-explicit gates, selected models, effort and tools.
+repair, accept, release. There is no Normal/Coordinated mode selection. Optimize satisfactory accepted work, including rework, not speed. Preserve safety,
+approvals, gates, selected models, effort and tools.
 
 ## Main judges; workers execute
 
