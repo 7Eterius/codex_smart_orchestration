@@ -87,9 +87,9 @@ accepted design is. Required gates, visual acceptance and owner/deployment autho
 ## Handoff, release and recovery
 
 Track known handles, parent, unit/attempt, next wake and state without global scans.
-After Main accepts, persist evidence/resources and close completed owned children leaves-first.
+After main accepts, persist evidence/resources and close completed owned children leaves-first.
 Observe native release; completion is not closure. Do not close unrelated or active work.
-Closure does not delete source, browser profiles, logs or servers. With one slot, preserve the
+Thread closure does not delete source, browser profiles, logs or servers. With one slot, preserve the
 repair capsule, close writer, then Main dispatches Tester; without a safe path checkpoint.
 
 Use a fresh worker for a new contract after safe release. Reuse verified infrastructure.
