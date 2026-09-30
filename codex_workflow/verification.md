@@ -38,12 +38,12 @@ impact or a new reviewer requires the full bounded review. Explicit full-review 
 and mandated fresh gates always override this optimization. Record the baseline and delta
 in the existing verdict, not another ledger.
 
-Execute required independent gates regardless of suspicion. Optional probes address concrete
+Execute required independent gates even when no defect is suspected. Optional probes address concrete
 concerns. New critical tests exercise real entry points and meaningful negative controls
 where practical: known-bad input or a disposable mutation failing the intended assertion,
 not syntax/setup failure. Never mutate live work or alter observers to fabricate success.
 
-BLOCKING means wrong, incomplete or untrue, including accepted-design violations. Optional
+BLOCKING means wrong, incomplete or untrue, including an unmet accepted UI/design criterion. Optional
 taste/cleanup is NON-BLOCKING. No grounded defect is not proof of correctness. Tester never
 repairs candidate code/tests. Main examines decisive risks and actual visuals without repeating
 the whole technical review. Technical approval is not visual acceptance or owner sign-off.
@@ -58,11 +58,10 @@ unrelated applicable evidence.
 
 Workers mark repairs addressed with fresh evidence; Main/reviewer resolves after recheck.
 A handoff is not acceptance. Never require independent approval before dispatching its reviewer.
-All required gates and blocking findings must be settled at acceptance. Unknown named questions
-need Main's decision, not a fabricated answer.
+All required gates and blocking findings must be settled at acceptance. Named unknown questions require Main's decision, not a fabricated answer.
 
 Use `challenge.md` only with existing structured facts. Its optional manifest check and
-`candidate.py` establish listed-input identity only, not test coverage, provenance or authority.
+`candidate.py` establish identity only for listed inputs, not test coverage, provenance or authority.
 `boundary.py` checks supplied transitions. Both gate helpers share `runtime/evidence.py`:
 STALE/UNVERIFIED are valid unsatisfied states, not protocol errors. None authenticates evidence,
 locks the workspace or requires a per-edit ledger.
@@ -74,4 +73,4 @@ theme, locale and manual accessibility coverage without replaying full matrices 
 Tests prove hidden behavior, browser journeys interaction, screenshots appearance. Main directly
 inspects required design evidence. Return candidate/reviewer, deliverable/question dispositions,
 gate evidence, findings and authority/lifecycle obligations. No commit, deployment, owner sign-off
-or savings follows from a test pass. Standalone validation needs no implementer or manager.
+or savings follows from a test pass. Standalone validation has no implementer or manager.
