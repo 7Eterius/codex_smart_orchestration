@@ -106,7 +106,7 @@ automatic model upgrade. Any escalation stays within owner-approved models and a
 ## Communication, threads and recovery
 
 Wake Main for review-ready/completed, decision-needed / DECISION_NEEDED, blocked, required
-checkpoint or real interruption. Workers own waits. Use completion notifications or supported
+checkpoint or real user interruption. Workers own waits. Use completion notifications or supported
 long interruptible waits. Timeout alone triggers no progress SEND, unfinished-diff inspection
 or duplicate test. No acknowledgement messages. Fresh status is one owner snapshot, not a cascade of tests or descendant polls.
 
