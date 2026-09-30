@@ -21,11 +21,10 @@ Main may include named must-answer questions with the original task. Return answ
 evidence, or unknown, before handoff. Do not manufacture confidence or a decision to clear a
 question. Workers decide ordinary implementation details but return protected ambiguity as
 DECISION_NEEDED: `Question; Options if bounded; Evidence; Why outside settled brief; provisional choice if useful.`
-Main supplies the decision delta, not a pre-written implementation. Keep one writer per candidate.
-If a narrow authorized Main bridge must write a worker-owned path or declared evidence input,
-pause/transfer write ownership first; after the bridge, identify the new candidate, mark affected
-evidence stale and send the exact delta before the worker resumes. Repeated same-defect repairs
-justify bounded diagnosis/reassignment within authorized models, not a ritual escalation.
+Main supplies a decision delta, not pre-written implementation. Keep one writer per candidate.
+A Main bridge touching worker scope/evidence pauses or transfers write ownership first; afterward
+identify the new candidate, stale affected evidence and send the exact delta before resume.
+Repeated same-defect repairs justify bounded diagnosis/reassignment, not ritual escalation.
 
 Simple owns explicit low-risk edits and complete mechanical journeys; Routine normal settled
 implementation; Default evidenced depth. Routine/Default may dispatch exactly one Tester and
@@ -62,11 +61,9 @@ CLEAR is not correctness or acceptance and must not become a polling target.
 
 Use phase handoff before review, accept only for final assessment. A repaired finding is
 addressed with current evidence and still awaits independent resolution; it is not already
-resolved. Gates explicitly due at acceptance remain visible as pending at handoff when they are not yet
-decisive. A gate already known to fail on the current candidate is actionable worker evidence,
-not pending reviewer work, and blocks a normal review-ready handoff. Main's original obligations
-remain binding at acceptance. A blocked/abandoned task can be handed back as BLOCKED, never
-passed through a false CLEAR requirement.
+resolved. Acceptance-due gates stay pending at handoff only while not yet decisive. A gate already
+known to fail on the current candidate returns to the worker before review. Main's obligations
+still bind at acceptance. Blocked/abandoned work returns as BLOCKED, never via false CLEAR.
 
 Current evidence binds to attempt/contract/candidate/target. Optional --manifest reuses the
 existing candidate helper for fresh selected-input identity, not semantic/runtime proof.
@@ -89,12 +86,11 @@ accepted design is. Required gates, visual acceptance and owner/deployment autho
 
 ## Handoff, release and recovery
 
-Track known handles, parent, unit/attempt, next wake and state without periodic global scans.
-After main accepts, persist evidence, settle writes, transfer retained resources and close
-completed owned direct children leaves-first. Observe native release; completion is not closure.
-Do not close unrelated or active work. Thread closure does not delete source, browser profiles,
-logs or servers. With one slot, preserve the candidate/repair capsule, close writer, then Main
-dispatches Tester; without a safe path checkpoint, never omit required review.
+Track known handles, parent, unit/attempt, next wake and state without global scans.
+After Main accepts, persist evidence/resources and close completed owned children leaves-first.
+Observe native release; completion is not closure. Do not close unrelated or active work.
+Closure does not delete source, browser profiles, logs or servers. With one slot, preserve the
+repair capsule, close writer, then Main dispatches Tester; without a safe path checkpoint.
 
 Use a fresh worker for a new contract after safe release. Reuse verified infrastructure.
 No automatic parent restart. After compaction consult the handoff and changed inputs.
