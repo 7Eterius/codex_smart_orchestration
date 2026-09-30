@@ -21,7 +21,10 @@ Main may include named must-answer questions with the original task. Return answ
 evidence, or unknown, before handoff. Do not manufacture confidence or a decision to clear a
 question. Workers decide ordinary implementation details but return protected ambiguity as
 DECISION_NEEDED: `Question; Options if bounded; Evidence; Why outside settled brief; provisional choice if useful.`
-Main supplies the decision delta, not a pre-written implementation. Repeated same-defect repairs
+Main supplies the decision delta, not a pre-written implementation. Keep one writer per candidate.
+If a narrow authorized Main bridge must write a worker-owned path or declared evidence input,
+pause/transfer write ownership first; after the bridge, identify the new candidate, mark affected
+evidence stale and send the exact delta before the worker resumes. Repeated same-defect repairs
 justify bounded diagnosis/reassignment within authorized models, not a ritual escalation.
 
 Simple owns explicit low-risk edits and complete mechanical journeys; Routine normal settled
@@ -59,9 +62,11 @@ CLEAR is not correctness or acceptance and must not become a polling target.
 
 Use phase handoff before review, accept only for final assessment. A repaired finding is
 addressed with current evidence and still awaits independent resolution; it is not already
-resolved. Gates explicitly due at acceptance remain visible as pending at handoff. Main's
-original obligations remain binding at acceptance. A blocked/abandoned task can be handed back
-as BLOCKED, never passed through a false CLEAR requirement.
+resolved. Gates explicitly due at acceptance remain visible as pending at handoff when they are not yet
+decisive. A gate already known to fail on the current candidate is actionable worker evidence,
+not pending reviewer work, and blocks a normal review-ready handoff. Main's original obligations
+remain binding at acceptance. A blocked/abandoned task can be handed back as BLOCKED, never
+passed through a false CLEAR requirement.
 
 Current evidence binds to attempt/contract/candidate/target. Optional --manifest reuses the
 existing candidate helper for fresh selected-input identity, not semantic/runtime proof.
