@@ -1,29 +1,21 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 2.7.1 -->
+<!-- codex-workflow-version: 3.0.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-Main reads the installed `codex_workflow/smart_orchestration.md` under actual CODEX_HOME
-(default `~/.codex`) once for substantive work. Named workers follow their role/capsule.
-Project requirements bind.
+For substantive work Main reads the installed `codex_workflow/smart_orchestration.md` under
+actual CODEX_HOME (default `~/.codex`) once. Named workers use their role and bounded task.
+Main owns product, architecture, design and acceptance, and may implement small or critical-path
+work directly. Do not delegate every tiny edit. Sol handles problem-solving; Luna handles
+explicit mechanical recipes or prescribed repetition, not ambiguous debugging.
 
-Main owns product/architecture/design decisions and detailed acceptance. Named Luna workers
-execute settled implementation/operation, including small edits and main review fixes.
-Main inspects actual results/visuals, sends grouped findings back and rechecks fresh evidence,
-not self-patching or rubber-stamping.
+Dispatch useful independent work before waiting. Up to four owned open threads fit only within
+observed owner/client limits and nonconflicting read/write scopes and mutable resources.
+Main can work on a disjoint path. Keep candidate holds, independent gates, actual visual review,
+original evidence and native thread release. Same-defect failure without progress gets Sol/Main
+diagnosis rather than endless cheap retries. No mandatory ledgers or per-action preflights.
 
-Main baseline is GPT-6.1 Sol Medium; Senior is GPT-6.1 Sol xhigh. Existing explicit parent,
-profile, effort, permissions and capacity settings are preserved. Use one bounded owner,
-independent Tester when required and at most two Smart-owned open threads across the run.
-
-Read known evidence directly; use project indexes to locate unknown sources. Do not dump
-whole transcripts/docs. Answer named Main questions with evidence or explicit unknown.
-Actual state and current evidence outrank narrative. Where structured facts already exist,
-read `challenge.md`: handoff is not acceptance, addressed findings still need recheck,
-and pending review gates cannot be waived. CLEAR is not approval. Tester runs required gates
-and falsifies the stable patch from original task and full diff.
-
-A wait timeout alone never triggers status SENDs or repeated tests. Preserve durable results
-before observed native release. For install/update/check/rollback read `operate/smart_install.md`.
-A disk check is not proof of active routing. No project rewrite or unsolicited model override.
+Main baseline: GPT-6.1 Sol Medium. Existing parent/profile, permissions, speed and capacity
+settings are preserved. Read `operate/smart_install.md` for managed installation. Restart
+manually afterward; a disk check is not live runtime proof. Project and owner instructions bind.
 <!-- codex-workflow-user-managed-end -->

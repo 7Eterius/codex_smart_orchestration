@@ -1,61 +1,35 @@
-# Smart Orchestration engineering notes
+# Smart engineering notes
 
-## 2.7: evidence-bound handoffs without extra coordination
+## 3.0: optimize the accepted outcome, not the cheapest individual call
 
-Keep one adaptive loop and eight roles. Main recommends GPT-6.1 Sol Medium; Senior remains
-GPT-6.1 Sol xhigh; all Luna models/efforts and sandbox/delegation settings are unchanged.
-Main owns design/product/architecture decisions and final assessment, while named workers
-own settled implementation and repairs. Design and browser contracts remain intact.
+The current architecture restores direct Main execution for small/context-heavy critical-path
+work and makes Sol Medium the normal solver. Luna has a bounded recipe lane. This intentionally
+supersedes 2.x mandatory delegation and its two-thread ceiling.
 
-## Separate handoff from acceptance
+Parallel work needs proven independence in read/write scopes, dependencies and mutable
+resources, including Main's activity. The optional allocator checks those supplied facts with
+native capacity/lifecycle observations. Up to four owned threads is a ceiling, not a fan-out
+target. Existing explicit lower limits remain binding. One future reviewer slot is shared by
+waiting tasks, and completed useful results can advance without a batch-wide barrier.
 
-2.6's optional preflight treated addressed repairs and future independent gates as acceptance
-failures before review could begin. 2.7 adds explicit handoff/accept stages inside that helper,
-not execution modes. Addressed findings need current evidence and await independent resolution.
-Gates assigned to acceptance remain pending at handoff; all bind at acceptance. CLEAR grants
-no authority. Honest blocked handoffs do not need a false success signal.
+Main can write, but a required independent reviewer must still be a different agent. Holds,
+original evidence, meaningful tests, exact target identity and separate acceptance/deployment
+authority remain. Main retains product/design decisions and actual visual acceptance.
 
-challenge.py validates the whole record first. Ambiguous paths, duplicate identities,
-non-integer schema, malformed later rows and empty obligations no longer produce misleading
-results. Optional current/basis fields bind evidence to attempt/contract/candidate/target.
-Optional --manifest calls the existing candidate helper for fresh selected-input identity.
-This is not a new scanner, dependency graph, evidence authenticator or filesystem lock.
+The installer modifies only declared global Smart files and managed instruction regions.
+Explicit owner configuration, project files, locally modified managed files and exact rollback
+are protected. Fresh missing defaults differ from preserved old values; disk checks make that
+visible without claiming current-session activation.
 
-Batch results include bounded previews, exact omitted counts, pending obligations and an
-explicit next action. Related mechanical issues return together to the same worker; scope
-conflicts and protected questions return to Main. Worker-supplied attribution and authority
-remain attestations. The helper cannot detect omitted requirements or fabricated facts.
-See the installed [preflight contract](../codex_workflow/challenge.md).
+The test organization now separates current 3.0 behavioral tests from the exact historical
+2.7.1 suite. Current policy is not constrained by obsolete literal 2.x prompt strings. Historical
+source is never silently rewritten to satisfy new expectations. Archived upgrade/rollback tests
+exercise the real old installers with the new package.
 
-## Ask focused questions and verify real behavior
+No runtime database, telemetry, dependency crawler, model-price calculator or global mandatory
+qualification gate is added. Optional helper output is only as trustworthy as its supplied
+facts. Source CI does not measure live speed, model judgment or allowance savings.
 
-Main may name a few must-answer questions in the initial capsule. Answers need evidence or
-an explicit unknown; no calibrated-confidence claim is made. This does not force another
-planning round or transfer Main's decision authority to a cheap worker.
-
-Tester uses independent context, original requirements and complete diff. Required gates
-run whether or not optional probes find a concern. New critical tests should exercise real
-entry points and a meaningful negative control where practical. Do not change an observer
-to report success when the underlying operation failed. Required visual/design criteria
-are obligations; optional taste remains a suggestion.
-
-## Economy without weakening gates
-
-Read known sources directly after applicable instructions; use indexes for unknown locations.
-Avoid mandatory lookup ladders, repeated lost-log runs and invalidation caused only by notes
-or unrelated paths. Preserve original failures and refresh actual affected dependencies.
-Repeated same-defect repair prompts bounded diagnosis/ownership reassessment, not automatic
-escalation. Keep the run-wide two-thread target and one-slot serialized reviewer fallback.
-No manager layer, confidence score, task database, telemetry service or model change is added.
-
-## Installation and validation
-
-Pinned main source, preview/apply/check, protected owner configuration/project files and exact
-rollback remain unchanged. The new guide participates in inventory/fingerprints and edited-file
-conflict checks. Historical migration tests remain pinned and the exact 2.6 -> 2.7 -> no-op
-reapply -> rollback path is exercised. CLI regressions include old false-clear cases and actual
-candidate drift. Tests are not live model qualification or measured savings.
-
-See [2.7 notes](v2.7.md), [2.6 history](v2.6.md), [2.5 history](v2.5.md) and
-[optional evaluation](evaluation.md). Source-derived lessons and implementation limitations
-are recorded separately from any future usage measurements.
+See [3.0 review](v3.0.md), [current architecture](../README.md),
+[execution](../codex_workflow/execution.md) and [verification](../codex_workflow/verification.md).
+Earlier version documents remain historical records, not current instructions.

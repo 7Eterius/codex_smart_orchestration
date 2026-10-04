@@ -1,9 +1,4 @@
-"""Conservative child defaults, preserving explicit owner configuration.
-
-Only absent scalar keys are inserted. Existing settings (including lower caps,
-legacy aliases, model choices and disabled agents) are never silently replaced.
-The complete parsed result must equal the intended one-key-at-a-time change.
-"""
+"""Insert only absent defaults. Explicit owner settings are never replaced."""
 from __future__ import annotations
 import copy
 import json
@@ -13,10 +8,11 @@ from .errors import ValidationError
 from .smart_config import _statements
 
 DEFAULTS = {
-    'max_concurrent_threads_per_session': 3,
-    'default_subagent_model': 'gpt-6-luna',
+    'max_concurrent_threads_per_session': 4,
+    'default_subagent_model': 'gpt-6.1-sol',
     'default_subagent_reasoning_effort': 'medium',
 }
+
 
 def parse(text: str) -> dict:
     try:
@@ -45,13 +41,14 @@ def configure(text: str) -> tuple[str, list[str], dict]:
         if key in agents and (not isinstance(agents[key], str) or not agents[key].strip()):
             raise ValidationError(f'agents.{key} must be a nonempty string')
         if key in agents and agents[key] != DEFAULTS[key]:
-            warnings.append(f'Explicit agents.{key} preserved; it differs from the economical default.')
+            warnings.append(f'Explicit agents.{key} preserved; it differs from the Smart 3 balanced default. Named role settings still apply.')
     cap = agents.get('max_concurrent_threads_per_session', agents.get('max_threads'))
-    if cap is not None and cap > 3:
-        warnings.append('Explicit concurrency above 3 preserved. Normal Smart fan-out remains 1-3; review the cap deliberately.')
+    if cap is not None and cap < 4:
+        warnings.append('Existing lower concurrency cap preserved. Smart 3 uses fewer parallel branches or serial review; no cap increase was made.')
+    elif cap is not None and cap > 4:
+        warnings.append('Higher owner cap preserved. Smart 3 uses at most four owned open threads, not a fan-out target.')
     if not added:
         return text, warnings, {}
-    # Safest common representation: add absent assignments to the explicit table.
     spans = list(_statements(text))
     insertion = None
     root_agents = False
@@ -68,8 +65,6 @@ def configure(text: str) -> tuple[str, list[str], dict]:
         prefix = text[:insertion]
         result = prefix + ('' if prefix.endswith('\n') else '\n') + lines + text[insertion:]
     elif root_agents:
-        # Inline/dotted definitions have subtle table-closure rules. Preserve them
-        # rather than attempt a lossy serializer; expose the missing defaults.
         warnings.append('Inline/dotted [agents] syntax preserved. Missing child defaults were not inserted; use named roles and inspect configuration.')
         return text, warnings, {}
     else:

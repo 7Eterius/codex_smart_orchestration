@@ -1,77 +1,63 @@
-# Verification proportional to residual risk
+# Risk-based verification with intelligent review
 
-Every owner self-checks. Add independent Tester for project/owner requirements or meaningful
-behavior/state/integration risk, shared contracts, accessibility uncertainty, security,
-payments, schema and financial invariants. Default/transferred Senior implementation needs
-review by default. Established reversible copy/style changes with decisive checks do not
-need another reviewer merely because they touch UI. Existing obligations cannot be waived.
+Every writer, including Main, self-checks. Independent review is required by project/owner
+gates and meaningful behavior, integration, security, payment, schema or data-integrity risk.
+A reversible established copy/style change with decisive checks does not automatically acquire
+a reviewer. Default now means normal Sol implementation, not a reason by itself for a full suite.
+Do not mistake a small diff for low risk. Main cannot self-certify a required independent gate.
 
-## Evidence and honest completion
+## Evidence and acceptance
 
-Agent narratives point to evidence, not authoritative state. Match claims to repository/target
-readback and current test/browser evidence. Owner intent defines expected behavior. A tool
-result proves only what it checked; source hashes cannot prove a served deployment or visuals.
+Use original requirements and controlling code for expected behavior, never assertions copied
+from current output. Actual state and executed tests outrank summaries. Preserve complete logs,
+exit codes and failure blocks. Missing proof is UNVERIFIED; affected dependency drift is STALE.
+Unrelated notes do not invalidate tests. Mandatory fresh checks remain fresh; an old green run
+cannot establish a current deployment, browser state or repaired finding.
 
-Keep executed-pass, reused-pass, failed, blocked, unrun, deferred, authorized not-applicable,
-STALE and UNVERIFIED distinct. Change in actual candidate/contract/target dependencies makes
-affected evidence STALE. Missing proof is UNVERIFIED. Unrelated notes/files do not force reruns;
-unknown impact widens checks. Required local failures block local acceptance. Later gates
-remain pending, not falsely failed locally or silently satisfied.
+Optional challenge.py/boundary.py use existing records only; no mandatory ledger or per-tool
+preflight. CLEAR is not acceptance or authentic evidence. Handoff is distinct from acceptance:
+later checks stay pending, current known failures return for repair, addressed findings await
+independent resolution. Honest BLOCKED does not require a fake pass. Main alone accepts the
+result, separately from owner approval, commit or deployment authority.
 
-Check coverage independently using original requirement IDs, never implementation output.
-Preserve failures and full logs. Read exit status, failure blocks, then summary; a green count
-in partial output is not PASS. Inspect retained failures before rerunning.
+## One thorough first review, bounded corrections
 
-## Initial review and correction deltas
+Tester is GPT-6.1 Sol Medium: use intelligence to identify controlling behavior and a small
+reproduction, not a large checklist of speculative concerns. Initially read the original task,
+complete actual bounded diff and each requested deliverable. Review without writer history.
+Read definitions, returned values, guards and affected consumers before asserting defects.
+Inspect sibling cases. Ground a counterexample; do not invent faults to look adversarial.
 
-Initially, Tester gets the original bounded task, complete actual diff, deliverables and
-must-answer questions without writer reasoning/history. Account for every deliverable:
-implemented, intentionally unchanged with evidence, or missing. Read controlling definitions,
-possible values, guards and helpers before semantic findings. Inspect sibling cases and
-seek the smallest concrete counterexample.
+For corrections use the same suitable reviewer and a recorded reviewed candidate. Read every
+hunk of the correction delta, affected dependencies and original findings. Preserve only
+applicable prior coverage. Include Main fixes and concurrent mutations. Missing baseline,
+changed contract, unknown impact or a new reviewer requires full bounded review. Record this
+in the existing verdict, not a second database. Execute required independent gates even when
+no defect is suspected. Mandatory fresh/full checks override delta optimization.
 
-For corrections, reuse the same suitable reviewer and its recorded reviewed candidate.
-Read every hunk of the correction delta, affected callers/dependencies and original findings;
-retain only demonstrably applicable prior coverage. Do not restart the complete investigation
-merely because a new candidate exists. A Main bridge or concurrent mutation must be included
-in that delta; if its impact is unknown, the optimization is unavailable. Missing review
-baseline, changed contract, unknown impact or a new reviewer requires the full bounded review.
-Explicit full-review requirements and mandated fresh gates always override this optimization.
-Record the baseline and delta in the existing verdict, not another ledger.
+New critical checks should exercise real entry points and meaningful negative controls where
+practical. A disposable known-bad input must fail the intended assertion, not only setup or
+syntax. Never mutate live work to plant defects or alter observers to fabricate success.
+BLOCKING includes correctness, completeness and violations of the accepted design. Optional
+taste or cleanup is nonblocking. A worker repairs; reviewer/Main resolves from fresh evidence.
 
-Execute required independent gates even when no defect is suspected. Optional probes address concrete
-concerns. New critical tests exercise real entry points and meaningful negative controls
-where practical: known-bad input or a disposable mutation failing the intended assertion,
-not syntax/setup failure. Never mutate live work or alter observers to fabricate success.
+## Holds, parallel tests and integration
 
-BLOCKING means wrong, incomplete or untrue, including an unmet accepted UI/design criterion. Optional
-taste/cleanup is NON-BLOCKING. No grounded defect is not proof of correctness. Tester never
-repairs candidate code/tests. Main examines decisive risks and actual visuals without repeating
-the whole technical review. Technical approval is not visual acceptance or owner sign-off.
+Hold the reviewed source, test/config/lock inputs and build/target stable. Disjoint isolated
+work can proceed only when it cannot alter those inputs or shared resources. Whole-tree checks
+and mutable live-preview review must not run against active conflicting writers. An immutable
+preview can overlap later implementation. Temporary test outputs and accounts need ownership.
 
-## Candidate holds and repaired findings
+Release the hold before repair, identify the repaired candidate, re-hold and refresh affected
+plus mandated fresh gates. Tester never changes candidate code/tests. Main-authored repairs
+retain independent requirements. Failed independent review cannot be overwritten by writer
+self-checks. Unknown named questions go to Main, not guessed answers.
 
-Identify staged/unstaged/untracked source, tests/config/lockfiles, contract, build/target/account
-and environment. Freeze relevant writer changes and target replacement during review. Tester
-writes only evidence/disposable data. Release before same-writer repair, identify the new
-candidate, re-hold and rerun affected plus required fresh checks. Preserve failures and
-unrelated applicable evidence.
+Main directly inspects required design evidence and consequential risks without duplicating
+the complete technical investigation. Established tweaks can use one final visual check;
+new compositions need an early frame where it reduces rework. Tests, rendered journeys and
+screenshots answer different questions; preserve required complementary evidence.
 
-Workers mark repairs addressed with fresh evidence; Main/reviewer resolves after recheck.
-A handoff is not acceptance. Never require independent approval before dispatching its reviewer.
-All required gates and blocking findings must be settled at acceptance. Named unknown questions require Main's decision, not a fabricated answer.
-
-Use `challenge.md` only with existing structured facts. Its optional manifest check and
-`candidate.py` establish identity only for listed inputs, not test coverage, provenance or authority.
-`boundary.py` checks supplied transitions. Both gate helpers share `runtime/evidence.py`:
-STALE/UNVERIFIED are valid unsatisfied states, not protocol errors. None authenticates evidence,
-locks the workspace or requires a per-edit ledger.
-
-## Complementary checks
-
-Use focused editing checks and required integration/release gates. Preserve mandated device,
-theme, locale and manual accessibility coverage without replaying full matrices after each tweak.
-Tests prove hidden behavior, browser journeys interaction, screenshots appearance. Main directly
-inspects required design evidence. Return candidate/reviewer, deliverable/question dispositions,
-gate evidence, findings and authority/lifecycle obligations. No commit, deployment, owner sign-off
-or savings follows from a test pass. Standalone validation has no implementer or manager.
+Reuse the narrowest decisive local checks while editing. Run the complete product gate at
+integration/release when required, not after every typo. Helpers establish consistency or
+identity only for listed inputs, not test coverage, runtime provenance, authority or savings.

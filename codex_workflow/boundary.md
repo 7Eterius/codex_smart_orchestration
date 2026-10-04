@@ -1,77 +1,49 @@
-# Checked review boundaries
+# Optional checked review boundaries
 
-Use the existing capsule, not another ledger. For an independent-review unit the
-optional `runtime/boundary.py` checks supplied identities and obligations before review,
-repair resumption or acceptance. It is read-only, not a native scheduler, lock, evidence
-authenticator or authority grant. Ordinary low-risk work does not need this record.
+Use an existing capsule, not another ledger. boundary.py checks supplied identities and
+obligations before review, repair or acceptance. It is not a native lock, authority grant
+or evidence authenticator. Low-risk tasks do not need this record merely to finish.
 
-## Capsule and verdict
-
-A record uses schema 1 and exactly these fields:
+A schema-1 record contains unit, attempt, contract, candidate, target, primary, writer,
+reviewer, hold and gates. Identities/evidence references are nonblank, at most 256 characters,
+without control characters. At most 128 gates and 64 KiB of input are supported.
 
 ```json
 {
-  "schema": 1,
-  "unit": "pricing-page",
-  "attempt": "A2",
-  "contract": "pricing-requirements-v3",
-  "candidate": "candidate-fingerprint-or-exact-build-id",
-  "target": "preview-build-17/test-account",
-  "primary": "main-handle",
-  "writer": "routine-handle",
-  "reviewer": "tester-handle",
-  "hold": "held",
-  "gates": {"behavior": true, "reference-check": false}
+  "schema": 1, "unit": "card", "attempt": "A2", "contract": "R1",
+  "candidate": "fingerprint-or-build-id", "target": "preview/test-account",
+  "primary": "main", "writer": "main", "reviewer": "independent-tester",
+  "hold": "held", "gates": {"behavior": true, "references": false}
 }
 ```
 
-Gate booleans mean fresh execution is mandatory (`true`) or applicable reused evidence
-is permitted (`false`), not that the gate passed. Main derives this map from authoritative
-requirements. All identifiers and references are nonempty and at most 256 characters;
-at most 128 gates and 64 KiB of input are accepted. Use a short private evidence reference
-when an absolute artifact path exceeds that bound. Blank/whitespace-only references and
-control characters are malformed; valid Unicode references remain supported.
+Main may now be the writer. The independent reviewer must still differ from both writer
+and primary. A different name is a supplied identity, not proof of a separate model context.
+Primary and worker may differ as before. Hold is held/released. Each gate boolean means
+fresh execution required (true), or applicable reused evidence permitted (false), never PASS.
 
-The separate Tester verdict has the same unit, attempt, contract, candidate, target
-and reviewer; an `artifact` reference; and an exact matching `gates` map. Each verdict
-gate contains `status` and `evidence`. `executed-pass` satisfies a gate; `reused-pass`
-satisfies only a non-fresh gate after applicability is checked. Failed, blocked, unrun,
-deferred, not-applicable, stale and unverified never silently satisfy a required gate.
-Status spelling is case-insensitive, using the shared `runtime/evidence.py` vocabulary.
-STALE/UNVERIFIED are valid observations that block acceptance, not malformed input.
-Explicitly authorized changes to obligations require a revised contract and new applicable evidence.
-
-## Check one transition
-
-Pass an existing private JSON input with `record`, `action`, `actor`, and (for acceptance
-only) `verdict`:
+A separate verdict repeats unit/attempt/contract/candidate/target/reviewer, has an artifact
+reference and the exact gate map. Each gate has status/evidence. executed-pass satisfies
+freshness; reused-pass satisfies only a non-fresh gate. failed, blocked, unrun, deferred,
+not-applicable, stale and unverified cannot satisfy an obligation. Status is case-insensitive
+through evidence.py. Required evidence is not waived by Main writing the implementation.
 
 ```bash
-python3 -B /absolute/CODEX_HOME/codex_workflow/runtime/boundary.py --input /private/boundary-check.json
+python3 -B /absolute/CODEX_HOME/codex_workflow/runtime/boundary.py --input /private/boundary.json
 ```
 
-`write` requires the current writer and a released hold. `review` requires the independent
-reviewer and a held candidate. `readback` allows the named participants to inspect state,
-not resume editing. `accept` requires Main, a held candidate, a matching independent
-verdict and every required gate. Exit codes: 0 consistent, 1 blocked, 2 malformed input.
-A zero exit is not permission to commit, integrate or release.
+Input keys are record, action, actor and optional verdict (accept only). write requires the
+writer and released hold. review requires the distinct reviewer and held candidate. readback
+allows named participants to inspect, not edit. accept requires primary, held candidate and
+matching independent verdict with every gate satisfied. Exit 0 is consistent, 1 blocked,
+2 malformed; none grants Git/deployment/owner approval.
 
-A repair releases the hold first, preserves the rejected verdict, and creates a new
-attempt/candidate before review. Update the existing capsule, then reject old verdicts.
-After interruption reconcile actual source, build, target and native handles first.
-The checker cannot detect an invented observation or an intervening change that was
-changed back; actual holds, source/target checks and original evidence remain necessary.
+Release holds before repair, including Main's small corrections. Retain rejected verdicts,
+identify the new candidate and update the original capsule. Reject old verdicts. Reconcile
+source/build/target after interruptions. Helpers cannot detect forged claims, omitted
+obligations or an intervening change that was undone. Actual state/evidence remain necessary.
 
-## Allocation inputs
-
-Supply the actual `primary` handle separately from spawned threads. For legacy inputs,
-only the literal `main` is the default primary; an arbitrary absent caller is not Main.
-An owner starting nested review needs `review_authorized: true`, its own unit, and a
-running/waiting lifecycle. This boolean records explicit delegation, not native proof.
-The caller must separately establish supported nesting and inherited permissions.
-
-Requests default to `intent: "work"`. Both new writers and writer reuse require exclusive
-unit ownership. `intent: "readback"` requires an existing stopped matching child and
-`reserve: 0`, and never grants writes. `intent: "cleanup"` also requires `reserve: 0`
-and no reuse ID. Cleanup can release eligible completed children of a completed/retired
-owner without authorizing new work. Observe native closure before counting its slot.
+For allocation, read execution.md: scope-aware parallelism is separate from a review boundary.
+The primary handle is explicit, or literal main for old inputs. A completed thread occupies
+capacity until native closure is observed. Readback is not reactivation; cleanup is not a new
+work grant. Never use a false boundary record to bypass permissions or another writer.

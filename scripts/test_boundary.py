@@ -1,162 +1,124 @@
-"""Deterministic boundary consistency checks, not live runtime qualification."""
+"""Current independent boundaries, including Main-authored candidates."""
 from __future__ import annotations
-import contextlib
 import copy
-import io
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'codex_workflow'))
+PACKAGE=Path(__file__).resolve().parents[1]/'codex_workflow'
+sys.path.insert(0,str(PACKAGE))
 from runtime import boundary as b
 
-
 def record(**changes):
-    value = dict(schema=1, unit='U1', attempt='A1', contract='requirements-v1',
-                 candidate='sha256:fixture', target='local-build-1', primary='main',
-                 writer='writer-1', reviewer='tester-1', hold='held', gates={'behavior': True, 'references': False})
-    value.update(changes)
-    return value
+    r=dict(schema=1,unit='U1',attempt='A1',contract='R1',candidate='C1',target='local',
+           primary='main',writer='writer',reviewer='tester',hold='held',gates={'behavior':True,'references':False})
+    r.update(changes);return r
 
-
-def verdict(**changes):
-    r = record()
-    value = {k: r[k] for k in (*b.IDENTITY, 'reviewer')}
-    value.update(artifact='evidence/tester-A1.json', gates={
-        'behavior': {'status': 'executed-pass', 'evidence': 'evidence/behavior.log'},
-        'references': {'status': 'reused-pass', 'evidence': 'evidence/reference.log'}})
-    value.update(changes)
-    return value
-
+def verdict(r=None,**changes):
+    r=record() if r is None else r
+    v={k:r[k] for k in (*b.IDENTITY,'reviewer')}
+    v.update(artifact='original/review',gates={'behavior':{'status':'executed-pass','evidence':'behavior/log'},
+                                             'references':{'status':'reused-pass','evidence':'reference/log'}})
+    v.update(changes);return v
 
 class BoundaryTests(unittest.TestCase):
-    def test_matching_independent_acceptance_basis(self):
-        result = b.check(record(), 'accept', 'main', verdict())
-        self.assertTrue(result['allowed'])
-        self.assertIn('not authenticated', result['limitation'])
+    def test_matching_acceptance_and_nonmutation(self):
+        r=record();v=verdict(r);before=copy.deepcopy((r,v))
+        self.assertTrue(b.check(r,'accept','main',v)['allowed']);self.assertEqual((r,v),before)
 
-    def test_no_input_mutations(self):
-        r, v = record(), verdict()
-        before = copy.deepcopy((r, v))
-        b.check(r, 'accept', 'main', v)
-        self.assertEqual((r, v), before)
+    def test_writer_needs_released_hold_and_correct_identity(self):
+        for actor in ('main','tester','unknown','writer'):
+            self.assertFalse(b.check(record(),'write',actor)['allowed'])
+            self.assertEqual(b.check(record(hold='released'),'write',actor)['allowed'],actor=='writer')
 
-    def test_writer_cannot_resume_during_hold(self):
-        self.assertFalse(b.check(record(), 'write', 'writer-1')['allowed'])
-        self.assertTrue(b.check(record(hold='released'), 'write', 'writer-1')['allowed'])
+    def test_main_authored_work_is_allowed_but_not_self_review(self):
+        r=record(writer='main');v=verdict(r)
+        self.assertTrue(b.check(r,'accept','main',v)['allowed'])
+        self.assertFalse(b.check(r,'review','main')['allowed'])
+        self.assertFalse(b.check(r,'accept','main')['allowed'])
+        self.assertTrue(b.check(record(writer='main',hold='released'),'write','main')['allowed'])
+        for role in ('main','writer'):
+            with self.assertRaises(b.BoundaryError): b.check(record(reviewer=role),'review',role)
 
-    def test_wrong_actor_cannot_write(self):
-        for actor in ('main', 'tester-1', 'stranger'):
-            self.assertFalse(b.check(record(hold='released'), 'write', actor)['allowed'])
-
-    def test_readback_during_hold_does_not_grant_writes(self):
-        for actor in ('main', 'writer-1', 'tester-1'):
-            self.assertTrue(b.check(record(), 'readback', actor)['allowed'])
-        self.assertFalse(b.check(record(), 'readback', 'stranger')['allowed'])
+    def test_readback_never_grants_writes(self):
+        for actor in ('main','writer','tester','unknown'):
+            self.assertEqual(b.check(record(),'readback',actor)['allowed'],actor!='unknown')
+            self.assertFalse(b.check(record(),'write',actor)['allowed'])
 
     def test_review_requires_reviewer_and_hold(self):
-        self.assertTrue(b.check(record(), 'review', 'tester-1')['allowed'])
-        self.assertFalse(b.check(record(hold='released'), 'review', 'tester-1')['allowed'])
-        self.assertFalse(b.check(record(), 'review', 'writer-1')['allowed'])
+        for actor in ('main','writer','tester'):
+            self.assertEqual(b.check(record(),'review',actor)['allowed'],actor=='tester')
+            self.assertFalse(b.check(record(hold='released'),'review',actor)['allowed'])
 
-    def test_acceptance_requires_primary_and_hold(self):
-        self.assertFalse(b.check(record(), 'accept', 'writer-1', verdict())['allowed'])
-        self.assertFalse(b.check(record(), 'accept', 'tester-1', verdict())['allowed'])
-        self.assertFalse(b.check(record(hold='released'), 'accept', 'main', verdict())['allowed'])
+    def test_acceptance_requires_primary_hold_and_verdict(self):
+        for actor in ('writer','tester','unknown'):
+            self.assertFalse(b.check(record(),'accept',actor,verdict())['allowed'])
+        self.assertFalse(b.check(record(hold='released'),'accept','main',verdict())['allowed'])
+        self.assertEqual(b.check(record(),'accept','main')['reason'],'independent_verdict_missing')
 
-    def test_missing_verdict_is_not_acceptance(self):
-        self.assertEqual(b.check(record(), 'accept', 'main')['reason'], 'independent_verdict_missing')
+    def test_stale_identity_and_reviewer_rejected(self):
+        for field in (*b.IDENTITY,'reviewer'):
+            self.assertEqual(b.check(record(),'accept','main',verdict(**{field:'changed'}))['reason'],
+                             'stale_or_misattributed_verdict',field)
 
-    def test_stale_attempt_contract_candidate_target_or_identity(self):
-        for field in (*b.IDENTITY, 'reviewer'):
-            with self.subTest(field=field):
-                self.assertEqual(b.check(record(), 'accept', 'main', verdict(**{field: 'changed'}))['reason'],
-                                 'stale_or_misattributed_verdict')
+    def test_obligations_cannot_be_omitted_added_or_waived(self):
+        for gates in ({},{'behavior':{}},{**verdict()['gates'],'extra':{}}):
+            self.assertEqual(b.check(record(),'accept','main',verdict(gates=gates))['reason'],'gate_map_mismatch')
+        for state in ('failed','blocked','unrun','deferred','not-applicable','stale','unverified','reused-pass'):
+            v=verdict();v['gates']['behavior']['status']=state
+            r=b.check(record(),'accept','main',v)
+            self.assertFalse(r['allowed']);self.assertEqual(r['rejected_gates'],['behavior'])
 
-    def test_no_self_review(self):
-        for changes in ({'reviewer': 'writer-1'}, {'reviewer': 'main'}, {'writer': 'main'}):
-            with self.subTest(changes=changes), self.assertRaises(b.BoundaryError):
-                b.check(record(**changes), 'accept', 'main', verdict())
+    def test_fresh_result_also_satisfies_reusable_gate(self):
+        v=verdict();v['gates']['references']['status']='executed-pass'
+        self.assertTrue(b.check(record(),'accept','main',v)['allowed'])
 
-    def test_gate_map_cannot_omit_or_add_obligations(self):
-        for gates in ({}, {'behavior': {'status': 'executed-pass', 'evidence': 'log'}}, {**verdict()['gates'], 'extra': {}}):
-            self.assertEqual(b.check(record(), 'accept', 'main', verdict(gates=gates))['reason'], 'gate_map_mismatch')
+    def test_evidence_and_artifact_must_be_real_references_syntactically(self):
+        for key in ('artifact','evidence'):
+            for invalid in ('',' ','\x7f','\ud800'):
+                v=verdict()
+                if key=='artifact':v[key]=invalid
+                else:v['gates']['behavior'][key]=invalid
+                with self.assertRaises(b.BoundaryError):b.check(record(),'accept','main',v)
 
-    def test_failed_blocked_unrun_deferred_na_and_stale_pass_block(self):
-        for status in ('failed', 'blocked', 'unrun', 'deferred', 'not-applicable', 'reused-pass'):
-            v = verdict()
-            v['gates']['behavior']['status'] = status
-            with self.subTest(status=status):
-                result = b.check(record(), 'accept', 'main', v)
-                self.assertFalse(result['allowed'])
-                self.assertEqual(result['rejected_gates'], ['behavior'])
-
-    def test_fresh_execution_can_satisfy_reusable_gate(self):
-        v = verdict()
-        v['gates']['references']['status'] = 'executed-pass'
-        self.assertTrue(b.check(record(), 'accept', 'main', v)['allowed'])
-
-    def test_evidence_reference_required(self):
-        for field in ('artifact', 'gate'):
-            v = verdict()
-            if field == 'artifact':
-                v['artifact'] = ''
-            else:
-                v['gates']['behavior']['evidence'] = ''
-            with self.assertRaises(b.BoundaryError):
-                b.check(record(), 'accept', 'main', v)
-
-    def test_schema_types_rejected_without_typeerror(self):
+    def test_invalid_schema_types_and_freshness_are_rejected(self):
         for field in record():
-            for value in (None, [], {}, 3.5, ''):
-                with self.subTest(field=field, value=value), self.assertRaises(b.BoundaryError):
-                    b.check(record(**{field: value}), 'review', 'tester-1')
+            for value in (None,[],{},3.5,''):
+                with self.subTest(field=field,value=value),self.assertRaises(b.BoundaryError):
+                    b.check(record(**{field:value}),'review','tester')
+        for value in (1,'false',[],None):
+            with self.assertRaises(b.BoundaryError):b.check(record(gates={'behavior':value}),'review','tester')
 
-    def test_freshness_is_strict_boolean(self):
-        for value in (1, 'false', [], None):
-            with self.assertRaises(b.BoundaryError):
-                b.check(record(gates={'behavior': value}), 'review', 'tester-1')
+    def test_unknown_fields_states_and_irrelevant_verdict_rejected(self):
+        with self.assertRaises(b.BoundaryError):b.check(record(unexpected=True),'review','tester')
+        v=verdict();v['gates']['behavior']['status']='probably-pass'
+        with self.assertRaises(b.BoundaryError):b.check(record(),'accept','main',v)
+        with self.assertRaises(b.BoundaryError):b.check(record(),'review','tester',v)
 
-    def test_unknown_fields_and_dispositions_are_errors(self):
-        with self.assertRaises(b.BoundaryError):
-            b.check(record(unexpected=True), 'review', 'tester-1')
-        v = verdict()
-        v['gates']['behavior']['status'] = 'probably-pass'
-        with self.assertRaises(b.BoundaryError):
-            b.check(record(), 'accept', 'main', v)
+    def test_real_cli_codes_and_readonly_input(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'input.json'
+            for payload,code in ((dict(record=record(),action='review',actor='tester'),0),
+                                 (dict(record=record(),action='write',actor='writer'),1),
+                                 (dict(record=record(),action='review',actor=[]),2)):
+                path.write_text(json.dumps(payload));before=path.read_bytes()
+                r=subprocess.run([sys.executable,'-B',str(PACKAGE/'runtime/boundary.py'),'--input',str(path)],
+                    capture_output=True,text=True,timeout=10)
+                self.assertEqual(r.returncode,code,r.stderr);self.assertEqual(path.read_bytes(),before)
+                self.assertIn('allowed',json.loads(r.stderr if code==2 else r.stdout))
 
-    def test_irrelevant_verdict_rejected(self):
-        with self.assertRaises(b.BoundaryError):
-            b.check(record(), 'review', 'tester-1', verdict())
-
-    def test_cli_results_exit_codes_and_read_only_input(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / 'boundary.json'
-            for payload, code in ((dict(record=record(), action='review', actor='tester-1'), 0),
-                                  (dict(record=record(), action='write', actor='writer-1'), 1),
-                                  (dict(record=record(), action='review', actor=[]), 2)):
-                path.write_text(json.dumps(payload))
-                before = path.read_bytes()
-                output, error = io.StringIO(), io.StringIO()
-                with contextlib.redirect_stdout(output), contextlib.redirect_stderr(error):
-                    self.assertEqual(b.main(['--input', str(path)]), code)
-                self.assertEqual(path.read_bytes(), before)
-                self.assertIn('allowed', json.loads(error.getvalue() if code == 2 else output.getvalue()))
-
-    def test_cli_duplicate_deep_oversize_and_symlink_inputs(self):
-        with tempfile.TemporaryDirectory() as temp:
-            path = Path(temp) / 'boundary.json'
-            for text in ('{"record":{},"record":{}}', '[' * 2000 + '0' + ']' * 2000, ' ' * (b.MAX_INPUT_BYTES + 1)):
+    def test_duplicate_deep_oversize_and_symlink_inputs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'input.json'
+            for text in ('{"record":{},"record":{}}','['*2000+'0'+']'*2000,' '*(b.MAX_INPUT_BYTES+1)):
                 path.write_text(text)
-                with contextlib.redirect_stderr(io.StringIO()):
-                    self.assertEqual(b.main(['--input', str(path)]), 2)
-            alias = Path(temp) / 'alias.json'
-            alias.symlink_to(path)
-            with contextlib.redirect_stderr(io.StringIO()):
-                self.assertEqual(b.main(['--input', str(alias)]), 2)
+                r=subprocess.run([sys.executable,'-B',str(PACKAGE/'runtime/boundary.py'),'--input',str(path)],capture_output=True,text=True,timeout=10)
+                self.assertEqual(r.returncode,2)
+            alias=Path(tmp)/'alias';alias.symlink_to(path)
+            r=subprocess.run([sys.executable,'-B',str(PACKAGE/'runtime/boundary.py'),'--input',str(alias)],capture_output=True,text=True,timeout=10)
+            self.assertEqual(r.returncode,2)
 
-
-if __name__ == '__main__':
-    unittest.main()
+if __name__=='__main__':unittest.main()
