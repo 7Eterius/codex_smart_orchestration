@@ -1,224 +1,193 @@
-"""Current Smart contracts, with preserved installer and retirement regressions."""
+"""Smart 3 active package, model and lossless-configuration contracts."""
 from __future__ import annotations
-
+import copy
 import json
 from pathlib import Path
+import re
 import sys
 import tempfile
+import tomllib
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = ROOT / "codex_workflow"
+PACKAGE = ROOT / 'codex_workflow'
 sys.path.insert(0, str(PACKAGE))
-from runtime import smart_install
-from runtime._toml import tomllib
+from runtime import smart_install as install
+from runtime.agent_defaults import configure, DEFAULTS
+from runtime.config_assessment import assess_configuration
 from runtime.errors import ValidationError
-from runtime.layout import BUILTIN_WORKERS, PackageLayout, RuntimePaths
+from runtime.layout import PackageLayout, BUILTIN_WORKERS
+from runtime.smart_config import patch_config, bootstrap
 from runtime.smart_restore import prepare_restore
 
-VERSION = "2.7.1"
+VERSION = '3.0.0'
 EXPECTED = {
-    "simple_executor": ("gpt-6-luna", "low"),
-    "routine_executor": ("gpt-6-luna", "high"),
-    "default_executor": ("gpt-6-luna", "xhigh"),
-    "senior_executor": ("gpt-6.1-sol", "xhigh"),
-    "tester": ("gpt-6-luna", "high"),
-    "companion": ("gpt-6-luna", "medium"),
-    "investigator": ("gpt-6-luna", "xhigh"),
-    "archivist": ("gpt-6-luna", "medium"),
+    'simple_executor': ('gpt-6-luna', 'low'),
+    'routine_executor': ('gpt-6-luna', 'high'),
+    'default_executor': ('gpt-6.1-sol', 'medium'),
+    'senior_executor': ('gpt-6.1-sol', 'xhigh'),
+    'tester': ('gpt-6.1-sol', 'medium'),
+    'investigator': ('gpt-6.1-sol', 'medium'),
+    'companion': ('gpt-6-luna', 'medium'),
+    'archivist': ('gpt-6-luna', 'medium'),
 }
 
-
 class PackageContracts(unittest.TestCase):
-    def test_current_package_and_model_map(self):
+    def test_version_inventory_models_and_role_budgets(self):
         package = PackageLayout.resolve(PACKAGE)
         self.assertEqual(package.version, VERSION)
         self.assertEqual(package.worker_names, BUILTIN_WORKERS)
         self.assertEqual(set(EXPECTED), BUILTIN_WORKERS)
-        for role, expected in EXPECTED.items():
-            cfg = tomllib.loads((PACKAGE / "agents" / f"{role}.toml").read_text())
-            self.assertEqual((cfg["model"], cfg["model_reasoning_effort"]), expected)
-            self.assertIs(cfg["agents"]["enabled"], role in {"routine_executor", "default_executor"})
-            self.assertLess(len(cfg["developer_instructions"].split()), 200, role)
+        for role, model in EXPECTED.items():
+            cfg = tomllib.loads((PACKAGE/'agents'/f'{role}.toml').read_text())
+            self.assertEqual((cfg['model'], cfg['model_reasoning_effort']), model, role)
+            self.assertIs(cfg['agents']['enabled'], role in {'routine_executor', 'default_executor'})
+            self.assertLess(len(cfg['developer_instructions'].split()), 200, role)
+            self.assertEqual(set(cfg), {'name','description','model','model_reasoning_effort',
+                                      'sandbox_mode','developer_instructions','agents'})
 
-    def test_policy_is_compact_and_keeps_operator_judge_split(self):
-        policy = (PACKAGE / "smart_orchestration.md").read_text()
-        flat = " ".join(policy.split())
-        self.assertLess(len(policy.split()), 1200)
-        self.assertLess(len((PACKAGE / "verification.md").read_text().split()), 700)
-        for phrase in ("One adaptive execution loop", "routine_executor / Luna High",
-                       "tester / Luna High", "No writer can self-certify a required independent gate",
-                       "never close unrelated or active work"):
-            self.assertIn(phrase, flat)
+    def test_prompt_budgets(self):
+        for name, limit in {'smart_orchestration.md':1200, 'execution.md':1000,
+                            'verification.md':700, 'browser.md':650, 'design.md':600}.items():
+            self.assertLess(len((PACKAGE/name).read_text().split()), limit, name)
+        self.assertLess(len(bootstrap(Path('/example')).split()), 400)
 
-    def test_legacy_active_tree_is_gone(self):
-        retired = ("AGENTS.md", "heavy_route.md", "medium_route.md", "archivist.md", "project_docs", "resources",
-                   "runtime/workflow.py", "runtime/lifecycle.py", "runtime/project_ops.py", "runtime/release.py",
-                   "runtime/efficiency.py", "runtime/capture_check.py", "runtime/platform_settings.py",
-                   "operate/bootstrap.md", "operate/install.md", "operate/update.md", "operate/remove.md")
-        for relative in retired:
-            self.assertFalse((PACKAGE / relative).exists(), relative)
+    def test_bootstrap_removes_mandatory_small_task_delegation(self):
+        text = bootstrap(Path('/example'))
+        self.assertIn('Main may implement', text)
+        self.assertIn('Sol', text)
+        self.assertIn('parallel', text.lower())
+        for retired in ('Delegation is the execution default, including small edits',
+                        'At most two Smart-owned', 'Do not self-patch'):
+            self.assertNotIn(retired, text)
 
-    def test_readme_uses_main_preview_apply_flow(self):
-        readme = (ROOT / "README.md").read_text()
-        flat = " ".join(readme.split())
-        self.assertIn("current HEAD commit SHA of main", flat)
-        self.assertIn("without --apply first and inspect the preview", flat)
-        self.assertIn("run the same command with --apply", flat)
-        installation = readme.split("## Installation or update", 1)[1]
-        prompt = installation.split("```text", 2)[1]
-        self.assertIn("Do not use GitHub Releases", prompt)
-        self.assertNotIn("latest non-draft Smart Orchestration release", prompt)
-        self.assertNotIn("workflow.py validate", readme)
-        self.assertIn("restart Codex manually", readme)
+    def test_safety_and_quality_survive_architecture_change(self):
+        text = (PACKAGE/'smart_orchestration.md').read_text()
+        for phrase in ('Main owns product meaning', 'Required independent review',
+                       'No acknowledgement messages', 'DECISION_NEEDED',
+                       'only after observed state change', 'no-agent'):
+            self.assertIn(phrase, text)
+        self.assertIn('actual visual evidence', text)
+        self.assertIn('Luna Max is an optional', text)
 
+    def test_links_and_install_contract(self):
+        for path in [ROOT/'README.md', ROOT/'docs/v3.0.md', ROOT/'docs/smart_orchestration.md']:
+            for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
+                if not target.startswith(('http:', 'https:', '#')):
+                    self.assertTrue((path.parent/target.split('#')[0]).is_file(), (path,target))
+        readme = (ROOT/'README.md').read_text()
+        self.assertTrue(readme.startswith('# Smart Orchestration 3.0'))
+        for text in ('current HEAD commit SHA of main', 'without --apply first',
+                     'Do not use GitHub Releases', 'restart Codex manually'):
+            self.assertIn(text, readme)
+        self.assertNotIn('workflow.py validate', readme)
+
+class ConfigurationTests(unittest.TestCase):
+    def test_only_absent_balanced_defaults_are_inserted(self):
+        text, warnings, added = configure('model="owner"\n')
+        self.assertEqual(tomllib.loads(text)['agents'], DEFAULTS)
+        self.assertEqual(DEFAULTS['default_subagent_model'], 'gpt-6.1-sol')
+        self.assertEqual(DEFAULTS['max_concurrent_threads_per_session'], 4)
+        self.assertEqual(configure(text)[0], text)
+        self.assertEqual(configure(text)[2], {})
+
+    def test_existing_parent_child_cap_profile_and_permission_are_unchanged(self):
+        original = ('model="owner-sol"\nmodel_reasoning_effort="high"\n'
+            'plan_mode_reasoning_effort="xhigh"\nservice_tier="standard"\n'
+            'approval_policy="on-request"\n[agents]\nmax_threads=2\n'
+            'default_subagent_model="owner-luna"\ndefault_subagent_reasoning_effort="low"\n'
+            '[profiles.custom]\nmodel="custom"\n[mcp_servers.mine]\ncommand="keep"\n')
+        value, warnings, added = configure(patch_config(original, Path('/example')))
+        before, after = tomllib.loads(original), tomllib.loads(value)
+        after.pop('developer_instructions')
+        self.assertEqual(before, after)
+        self.assertEqual(added, {})
+        self.assertTrue(warnings)
+        self.assertEqual(patch_config(value, Path('/example')), value)
+
+    def test_inline_and_dotted_settings_not_lossily_rewritten(self):
+        for text in ('agents={enabled=true,max_threads=2}\n', 'agents.max_threads=2\n'):
+            result, warnings, added = configure(text)
+            self.assertEqual(result, text)
+            self.assertEqual(added, {})
+            self.assertTrue(warnings)
+
+    def test_low_cap_is_visible_but_not_changed(self):
+        for cap in (1, 2, 3):
+            cfg = {'agents': {'max_threads': cap}}
+            before = copy.deepcopy(cfg)
+            result = assess_configuration(cfg)
+            self.assertEqual(cfg, before)
+            self.assertTrue(result['ok'])
+            self.assertEqual(result['effective_configured_cap'], cap)
+            self.assertEqual(result['recommended_parallel_cap'], 4)
+            self.assertTrue(any('lower cap' in x for x in result['warnings']))
+
+    def test_invalid_or_disabled_configuration_fails_without_repair(self):
+        for cfg in ({'agents': {'enabled':False}}, {'agents':{'max_threads':True}},
+                    {'agents':{'max_threads':2,'max_concurrent_threads_per_session':4}},
+                    {'agents':[]}, {'model':'gpt-6.1-sol','model_reasoning_effort':'none'}):
+            self.assertFalse(assess_configuration(cfg)['ok'], cfg)
+
+    def test_model_contract_is_specific_not_a_global_guess(self):
+        for effort in ('low','medium','high','xhigh','max'):
+            self.assertTrue(assess_configuration({'model':'gpt-6.1-sol','model_reasoning_effort':effort})['ok'])
+        self.assertTrue(assess_configuration({'model':'owner','model_reasoning_effort':'none'})['ok'])
+
+    def test_owner_instruction_region_is_preserved(self):
+        original = 'developer_instructions="Owner rules remain."\nmodel="owner"\n'
+        text = patch_config(original, Path('/example'))
+        self.assertIn('Owner rules remain.', tomllib.loads(text)['developer_instructions'])
+        self.assertEqual(patch_config(text, Path('/example')), text)
 
 class InstallerTests(unittest.TestCase):
     def setUp(self):
-        self.tmp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.tmp.cleanup)
-        self.home = Path(self.tmp.name).resolve() / "home"
-        self.home.mkdir()
-        # Deliberately an older explicit owner selection; upgrades must preserve it.
-        self.original_config = ('model="gpt-6-sol"\nmodel_reasoning_effort="medium"\n'
-                                'service_tier="standard"\n[agents]\nenabled=true\n')
-        (self.home / "config.toml").write_text(self.original_config)
+        temp = tempfile.TemporaryDirectory(); self.addCleanup(temp.cleanup)
+        self.root=Path(temp.name).resolve(); self.home=self.root/'home'; self.home.mkdir()
+        self.original='model="owner"\nmodel_reasoning_effort="high"\n[agents]\nmax_threads=2\n'
+        (self.home/'config.toml').write_text(self.original)
+        self.project=self.root/'project'; self.project.mkdir()
+        (self.project/'data').write_text('Owner data')
 
-    def install(self):
-        plan, before = smart_install.prepare(PACKAGE, self.home)
-        backup = smart_install.apply_plan(plan, before, self.home)
-        return plan, backup
+    def apply(self):
+        plan, before = install.prepare(PACKAGE,self.home)
+        return install.apply_plan(plan,before,self.home)
 
-    def test_fresh_install_preserves_parent_and_projects(self):
-        project = Path(self.tmp.name) / "project"
-        project.mkdir()
-        (project / "important.txt").write_text("owner data")
-        before_project = (project / "important.txt").read_bytes()
-        plan, backup = self.install()
-        self.assertIsNotNone(backup)
-        self.assertEqual(plan.details["project_mutations"], 0)
-        self.assertEqual((project / "important.txt").read_bytes(), before_project)
-        cfg = tomllib.loads((self.home / "config.toml").read_text())
-        self.assertEqual(cfg["model"], "gpt-6-sol")
-        self.assertEqual(cfg["model_reasoning_effort"], "medium")
-        self.assertEqual(cfg["service_tier"], "standard")
-        self.assertIs(cfg["agents"]["enabled"], True)
-        self.assertEqual(cfg["agents"]["default_subagent_model"], "gpt-6-luna")
-        self.assertEqual(cfg["agents"]["default_subagent_reasoning_effort"], "medium")
-        self.assertIn("Smart Orchestration", cfg["developer_instructions"])
-        runtime = RuntimePaths(self.home)
-        self.assertEqual((runtime.runtime / "operate/VERSION").read_text(), VERSION + "\n")
-        self.assertTrue((runtime.runtime / "smart_orchestration.md").is_file())
-        self.assertFalse((runtime.runtime / "heavy_route.md").exists())
+    def test_install_check_noop_and_project_preservation(self):
+        self.apply()
+        state=install.status(self.home)
+        self.assertTrue(state['disk_ok'])
+        self.assertEqual(state['version'], VERSION)
+        self.assertEqual((self.project/'data').read_text(),'Owner data')
+        self.assertEqual(tomllib.loads((self.home/'config.toml').read_text())['agents']['max_threads'],2)
+        self.assertEqual(install.prepare(PACKAGE,self.home)[0].mutations,[])
         for role in EXPECTED:
-            self.assertTrue((runtime.agents / f"{role}.toml").is_file())
+            self.assertEqual((self.home/'agents'/f'{role}.toml').read_bytes(),
+                             (PACKAGE/'agents'/f'{role}.toml').read_bytes())
 
-    def test_reapply_is_idempotent(self):
-        self.install()
-        plan, _ = smart_install.prepare(PACKAGE, self.home)
-        self.assertEqual(plan.mutations, [])
+    def test_exact_fresh_rollback(self):
+        backup=self.apply(); plan,before=prepare_restore(self.home,backup)
+        install.apply_plan(plan,before,self.home)
+        self.assertEqual((self.home/'config.toml').read_text(),self.original)
+        self.assertFalse((self.home/'codex_workflow').exists())
+        self.assertFalse((self.home/'agents').exists())
 
-    def test_exact_rollback_restores_preinstall_state(self):
-        _, backup = self.install()
-        restore, before = prepare_restore(self.home, backup)
-        smart_install.apply_plan(restore, before, self.home)
-        self.assertEqual((self.home / "config.toml").read_text(), self.original_config)
-        self.assertFalse((self.home / "codex_workflow").exists())
-        self.assertFalse((self.home / "AGENTS.md").exists())
-        self.assertFalse((self.home / "agents").exists())
+    def test_conflict_between_preview_and_apply_stops(self):
+        plan,before=install.prepare(PACKAGE,self.home)
+        (self.home/'config.toml').write_text(self.original+'# changed\n')
+        with self.assertRaises(ValidationError): install.apply_plan(plan,before,self.home)
+        self.assertFalse((self.home/'codex_workflow').exists())
 
-    def test_custom_worker_blocks_replacement(self):
-        self.install()
-        worker = self.home / "agents/default_executor.toml"
-        worker.write_text(worker.read_text() + "\n# owner customization\n")
-        with self.assertRaises(ValidationError):
-            smart_install.prepare(PACKAGE, self.home)
+    def test_custom_worker_and_runtime_edits_are_not_overwritten(self):
+        self.apply()
+        for relative in ('agents/default_executor.toml','codex_workflow/execution.md'):
+            path=self.home/relative; original=path.read_bytes(); path.write_bytes(original+b'\n# Owner\n')
+            self.assertFalse(install.status(self.home)['disk_ok'])
+            with self.assertRaises(ValidationError): install.prepare(PACKAGE,self.home)
+            self.assertTrue(path.read_bytes().endswith(b'# Owner\n')); path.write_bytes(original)
 
-    def test_prepare_apply_conflict_stops_without_writes(self):
-        plan, before = smart_install.prepare(PACKAGE, self.home)
-        (self.home / "config.toml").write_text(self.original_config + "\n# changed concurrently\n")
-        with self.assertRaises(ValidationError):
-            smart_install.apply_plan(plan, before, self.home)
-        self.assertFalse((self.home / "codex_workflow").exists())
+    def test_rollback_refuses_later_edits(self):
+        backup=self.apply(); (self.home/'config.toml').write_text('# later owner\n')
+        with self.assertRaises(ValidationError): prepare_restore(self.home,backup)
 
-    def test_retires_recorded_legacy_runtime_and_skill(self):
-        self.install()
-        runtime = RuntimePaths(self.home)
-        legacy = runtime.runtime / "heavy_route.md"
-        legacy.write_text("legacy route\n")
-        state_path = runtime.runtime / "install_state.json"
-        state = json.loads(state_path.read_text())
-        state["owned_runtime_files"].append("heavy_route.md")
-        state["owned_runtime_hashes"]["heavy_route.md"] = smart_install.digest(legacy.read_bytes())
-        skill = runtime.skills / "deployment-token-report"
-        skill.mkdir(parents=True)
-        (skill / "SKILL.md").write_text("<!-- codex-workflow-skill: deployment-token-report -->\n# retired\n")
-        (skill / "data.txt").write_text("old")
-        for path in skill.iterdir():
-            target = runtime.runtime / "templates/skills/deployment-token-report" / path.name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(path.read_bytes())
-            relative = target.relative_to(runtime.runtime).as_posix()
-            state["owned_runtime_files"].append(relative)
-            state["owned_runtime_hashes"][relative] = smart_install.digest(target.read_bytes())
-        state["owned_skills"] = ["deployment-token-report"]
-        state_path.write_text(json.dumps(state, indent=2) + "\n")
-        plan, before = smart_install.prepare(PACKAGE, self.home)
-        smart_install.apply_plan(plan, before, self.home)
-        self.assertFalse(legacy.exists())
-        self.assertFalse(skill.exists())
-
-    def test_migrates_legacy_state_without_hashes_using_source_cache(self):
-        self.install()
-        runtime = RuntimePaths(self.home)
-        legacy = runtime.runtime / "heavy_route.md"
-        legacy.write_text("legacy route\n")
-        generated = runtime.runtime / "templates/AGENTS.md"
-        generated.parent.mkdir(parents=True, exist_ok=True)
-        generated.write_text("legacy project template\n")
-        source = runtime.runtime / ".source_backup" / VERSION
-        source.mkdir(parents=True)
-        (source / "heavy_route.md").write_text("legacy route\n")
-        (source / "AGENTS.md").write_text("legacy project template\n")
-        state_path = runtime.runtime / "install_state.json"
-        state = json.loads(state_path.read_text())
-        state["schema_version"] = 1
-        state.pop("owned_runtime_hashes", None)
-        state["owned_runtime_files"].extend(["heavy_route.md", "templates/AGENTS.md"])
-        state_path.write_text(json.dumps(state, indent=2) + "\n")
-        plan, before = smart_install.prepare(PACKAGE, self.home)
-        smart_install.apply_plan(plan, before, self.home)
-        self.assertFalse(legacy.exists())
-        self.assertFalse(generated.exists())
-        self.assertTrue(source.exists())
-        self.assertEqual((source / "heavy_route.md").read_text(), "legacy route\n")
-
-    def test_locally_modified_retired_file_is_preserved(self):
-        self.install()
-        runtime = RuntimePaths(self.home)
-        legacy = runtime.runtime / "heavy_route.md"
-        legacy.write_text("owner changed\n")
-        state_path = runtime.runtime / "install_state.json"
-        state = json.loads(state_path.read_text())
-        state["owned_runtime_files"].append("heavy_route.md")
-        state["owned_runtime_hashes"]["heavy_route.md"] = "0" * 64
-        state_path.write_text(json.dumps(state, indent=2) + "\n")
-        plan, before = smart_install.prepare(PACKAGE, self.home)
-        self.assertTrue(any("Preserved retired managed file" in item for item in plan.warnings))
-        smart_install.apply_plan(plan, before, self.home)
-        self.assertEqual(legacy.read_text(), "owner changed\n")
-
-    def test_install_path_never_requires_self_quit(self):
-        readme = (ROOT / "README.md").read_text()
-        guide = (PACKAGE / "operate/smart_install.md").read_text()
-        runtime = (PACKAGE / "runtime/smart_install.py").read_text()
-        for forbidden in ("Quit Codex before applying", "quit Codex and retry", "Preview only. Quit Codex", "wait for Codex to terminate"):
-            self.assertNotIn(forbidden, readme)
-            self.assertNotIn(forbidden, guide)
-            self.assertNotIn(forbidden, runtime)
-        self.assertIn("must not quit, relaunch, or wait for Codex to exit", guide)
-        self.assertIn("restart codex manually", runtime.lower())
-
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__=='__main__': unittest.main()

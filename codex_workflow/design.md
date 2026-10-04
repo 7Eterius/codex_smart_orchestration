@@ -1,68 +1,48 @@
-# Main-authored design, delegated implementation
+# Main-led design with intelligent implementation
 
-Use this for UI/UX, visual refinement and design-led implementation, not as another
-agent role or mandatory document template. Main remains the design author and quality
-judge. Cheaper workers perform implementation, reproducible checks and evidence collection.
-Do not exchange main's attention to detail for fewer review turns.
+Main owns purpose, hierarchy, composition, visual language, responsive intent and interaction
+choices. A worker may solve implementation details within that brief. Delegation does not
+transfer product authority, but Main need not prescribe every CSS declaration.
 
-## Brief before building
+## Short path to a real result
 
-Main inspects accepted references and enough actual product evidence to settle purpose,
-information hierarchy, composition, interactions and key states, visual language and
-responsive intent. Delegate mechanical discovery, page traversal and source inventory
-instead of investigating the whole project before assignment. Main may inspect the
-returned source or visuals directly wherever judgment requires it.
+Inspect the actual product and relevant accepted references. State the visual outcome, protected
+decisions, important states/viewports and acceptance criteria. Use established tokens/components
+before inventing replacements. Avoid elaborate briefs for established tweaks.
 
-Give the existing execution capsule a concise design brief: accepted references, protected
-decisions, relevant tokens/components, required states/viewports, concrete acceptance
-criteria and the next review checkpoint. Main supplies intent and constraints, not a
-complete implementation for another model to paste. Reuse an accepted brief; send changes
-as deltas. Do not create a new specification ceremony for an established small tweak.
+Main can implement a small, understood adjustment directly. A coherent redesign normally goes
+to default_executor (Sol Medium), not Luna by default: good realization often needs technical
+judgment, responsive reasoning and efficient diagnosis. Routine Luna is for genuinely prescribed
+repetition after those choices are settled. Do not instruct a cheap worker merely to paste a
+complete Main-authored patch.
 
-The worker chooses ordinary implementation details within settled patterns. It must
-return unresolved hierarchy, interaction, visual-language or product-meaning decisions
-to main before changing them. A one-line visual change can still need main's judgment;
-a complex-looking implementation of an accepted design can still belong to Luna.
+For new composition or uncertain direction, inspect an early running frame before expensive
+polish. For an established adjustment, one decisive final rendered check can suffice. An early
+checkpoint is intentional judgment, not a mandatory stop after every edit. The worker returns
+actual candidate/build, viewport, theme, state and evidence references. Missing browser access
+is a limitation, not a PASS.
 
-## Stable candidate, real evidence
+## Main assesses; one owner corrects
 
-Use Routine for normal implementation; Simple for explicit low-risk established edits
-or complete mechanical journeys. Reuse the current capable owner to gather evidence;
-do not add a third worker merely to capture a screenshot. Main can dispatch Simple for
-a separate worthwhile operator assignment after transferring shared GUI ownership safely.
+Main opens actual visuals and checks hierarchy, typography, spacing, alignment, responsiveness,
+important interaction states and consistency with the brief. Passing tests or attaching files
+is not visual assessment. Group related findings with expected/observed, exact state/evidence,
+allowed changes, protected decisions and fresh checks. Avoid vague requests to polish.
 
-The worker self-checks, identifies the current candidate/build and returns actual running
-evidence with origin, relevant state, viewport/theme and artifact references. Keep originals
-at required resolution. Include failed/blocked checks and departures from the brief.
-Source previews, mockups and worker descriptions are not proof of the running result.
-A missing tool or inaccessible rendered target is a limitation, not visual approval.
+Keep the same suitable owner through concrete corrections. Main may finish a tiny obvious fix
+after ownership transfer, but never edit under an active writer. Include Main's changes in the
+candidate delta and obtain any required independent recheck. Otherwise return the grouped
+findings to Sol or the appropriate mechanical worker. Reassess fresh visuals, not old screenshots.
 
-Main directly reviews an early running frame for a new composition and the final affected
-screens. Inspect hierarchy, typography, spacing/alignment, composition, responsive behavior,
-interaction states and consistency at the detail needed for the brief. Required accessibility
-and behavioral checks remain separate. Do not accept because screenshots exist or Tester
-passed. Open and assess the actual evidence; verify it belongs to the current candidate.
+Independent technical review is risk-based and does not replace Main's visual acceptance.
+An accepted design violation may block; optional taste is not a reason for endless cycles.
+Stop when the authorized target and required gates hold. Design-only requests stop at the
+concept rather than creating implementation work.
 
-## Findings are tasks, not main-authored patches
+## Concurrency without visual drift
 
-Main groups related findings into one bounded correction assignment:
-
-`Finding/criterion; expected vs observed; exact state/evidence; allowed change;
-protected decisions; fresh checks and requested visual evidence.`
-
-For example: the mobile story heading wraps over the cover; restore the accepted heading
-scale and spacing without changing card hierarchy, then return that viewport plus the
-required unaffected-state check. Avoid vague "polish it" requests that transfer design
-judgment. Do not micro-manage every CSS declaration or click.
-
-Reuse the same suitable worker with a new correction task/delta. Main does not make a
-"quick fix" itself. If the worker is closed, transfer the concise brief, findings and
-candidate to a replacement after safe slot reclamation. Release any independent candidate
-hold before repair; identify the new candidate and revalidate affected and required fresh
-gates. Tester keeps ownership of its independent verdict.
-
-Main inspects the corrected evidence and closes findings only against observed results.
-Repeat for unresolved acceptance findings; new design choices require an explicit main
-brief revision, not endless worker improvisation. Preserve accepted decisions and stop
-when the authorized quality target and gates are satisfied. Missing evidence stays open.
-Main's acceptance, owner sign-off and production authorization remain distinct.
+Independent components can be implemented in parallel only after shared tokens, responsive
+contracts and interactions are settled. Shared styles, lockfiles and the same live preview
+are not independent. Main can judge one immutable preview while another isolated scope is
+built; hold the reviewed inputs. Unknown cross-component impact requires coordinated integration,
+not simultaneous guesses. Preserve Git, production, privacy and owner approval boundaries.

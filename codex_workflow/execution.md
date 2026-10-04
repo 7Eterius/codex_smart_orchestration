@@ -1,103 +1,94 @@
-# One bounded owner, independent verification, main acceptance
+# Bounded ownership and useful concurrency
 
-Use this for multi-agent work. Catalog availability, configured models and observed execution
-are different facts. Never bypass known capability/permission failures. Use `runtime_check.md`
-only for affected uncertainty.
+Main may execute directly; delegation is not compulsory. For a tiny understood correction or
+context-heavy critical path, a handoff can cost more than it saves. Otherwise select a coherent
+independent assignment and dispatch it before waiting for another result. Main owns integration,
+not necessarily every implementation detail. Read only task-relevant guides.
 
-## Contract, context and dispatch
+## Choose an owner once
 
-Give one owner a capsule: unit/attempt, outcome/stop, requirements, deliverables, owned/protected
-paths, candidate/target, acceptance level, authority, evidence, wake conditions and relevant
-absolute guide paths. Design work includes Main's brief/checkpoint. A finite coherent group
-keeps per-member gates and dependency order; never extend it to keep an agent busy.
-Use scoped history such as `fork_turns="none"` where supported.
+Sol/default_executor owns normal implementation, diagnosis, adaptive tool use and realizing
+Main's design. Luna/simple_executor handles explicit mechanical recipes; routine_executor
+handles prescribed bulk transformations. Senior handles evidenced depth or scoped advice.
+Never route a novel bug to Luna merely because the diff might be small. Do not run multiple
+agents to solve the same issue speculatively. The optional allocation.classify helper accepts
+kind/risk/settled/tiny/deep/independent_required plus mechanical/in_context/on_critical_path/stalled.
+Unknown mechanical fitness favors Sol. Required review is preserved for Main-authored changes.
 
-For unknown locations use project instructions/status/index first, then relevant identity and
-specific evidence. A known authoritative path is a direct read, not a compulsory lookup ladder.
-Read applicable instructions without importing unrelated history. Retrieving guidance is not
-applying it: check the actual change. Discovery stays with the execution owner.
+Give outcome, non-goals, requirements, scope, dependencies, resource/target, authority and checks.
+Workers discover technical implementation within the accepted contract. Return protected
+choices as DECISION_NEEDED; normal local diagnosis stays local. Preserve the original failure
+and evidence. A same-defect correction without progress triggers bounded Sol/Main diagnosis,
+not another cheap retry or a forced ladder through all reasoning levels.
 
-Main may include named must-answer questions with the original task. Return answers and exact
-evidence, or unknown, before handoff. Do not manufacture confidence or a decision to clear a
-question. Workers decide ordinary implementation details but return protected ambiguity as
-DECISION_NEEDED: `Question; Options if bounded; Evidence; Why outside settled brief; provisional choice if useful.`
-Main supplies a decision delta, not pre-written implementation. Keep one writer per candidate.
-A Main bridge touching worker scope/evidence pauses or transfers write ownership first; afterward
-identify the new candidate, stale affected evidence and send the exact delta before resume.
-Repeated same-defect repairs justify bounded diagnosis/reassignment, not ritual escalation.
+## Parallel, not speculative
 
-Simple owns explicit low-risk edits and complete mechanical journeys; Routine normal settled
-implementation; Default evidenced depth. Routine/Default may dispatch exactly one Tester and
-no other role with explicit Main authority and observed nesting/permissions/release. Otherwise
-Main dispatches the same named Tester. No nested qualification for direct named work.
-At most two Smart-owned open threads across the run include support, descendants and prior
-units. Reserve reviewer capacity and respect lower client limits and unrelated open threads.
+Start with two independent branches where useful; at most four Smart-owned open threads,
+within the actual client cap. Main is not counted. Existing lower caps are preserved. A ready
+result can unblock the next assignment without waiting for the whole batch. Main can execute
+a disjoint task while helpers work, not duplicate their implementation.
 
-## Waiting is not a new task
+Independence means no write/read or write/write conflict and no unmet prerequisite. Declare
+canonical workspace paths and all relevant input/output paths, including shared modules,
+lockfiles and build/test inputs. Unknown dependencies widen scopes. Separate source worktrees
+do not isolate shared accounts, databases, ports, deployments or browser sessions. Those need
+explicit resource identities. Worktrees are optional and require existing Git authority;
+never create them or modify Git configuration solely because parallelism is suggested.
 
-Wake conditions: review-ready, completed, decision-needed, blocked, required checkpoint or real
-user interruption. Workers own command/test/browser waits. Use completion notifications or
-supported long, interruptible waits with valid tool parameters. A timeout alone must not trigger a SEND,
-list-agents call, unfinished-diff inspection, browser visit or test rerun. Only-polling clients
-back off within supported limits, not shell sleep loops or rapid model turns. Investigate
-actual errors, missed checkpoints or an explicit fresh-status request. Never hide an actual interruption.
+A stable preview can be reviewed while a disjoint branch is edited. A reviewer of the mutable
+whole application instead holds its full dependency scope. Global checks run at the integration
+boundary, not against a changing tree. Tests that write snapshots, profiles or browser state
+are writers of those resources even if the agent's source role is read-only.
 
-Progress commentary continues the run; final worker handoff ends only that assignment.
-Ordinary status uses known facts. Fresh status is one active-owner snapshot. No receipt acknowledgements.
-An early design checkpoint is intentional Main judgment, not permission for parallel editing.
+## Optional allocator observations
 
-## Candidate preflight and handoff
+Use existing structured facts only. No required ledger. Legacy unscoped observations support
+one unit and its reviewer; unrelated concurrent work requires scope information. A scope has
+workspace (canonical absolute real path), reads/writes (relative POSIX paths), and
+resource_reads/resource_writes (shared hierarchical resource IDs). Relative `.` means the
+entire workspace, not a resource wildcard. Resolve aliases before declaring scopes; the helper
+does not authenticate real paths or discover dependencies. Resource IDs must match across users.
 
-Identify actual staged/unstaged/untracked source, relevant test/config/lock inputs, current
-build/target, deliverables, findings and original evidence. Preserve the planned obligations:
-a worker may not remove a deliverable, relabel its own breach as concurrent, weaken a check
-or impersonate Main to make a result clear. Attribution/model strings are attestations.
+Both observation threads and request can carry scope. Observation.main_scope is explicit null
+when Main has no concurrent access, otherwise Main's scope. Unknown Main/peer activity stops
+parallel scheduling. Requests can name depends_on; observation.accepted_units maps accepted
+prerequisites to evidence references. A final worker message alone is not an accepted dependency.
 
-Where structured facts already exist, read `challenge.md` and use `runtime/challenge.py`.
-Do not create a ledger solely for this helper. Its bounded issue batch avoids one model
-round-trip per bookkeeping defect; fix related mechanical issues locally. Scope conflicts and
-unknown attribution return to Main without blind resets or destruction of another owner's work.
-CLEAR is not correctness or acceptance and must not become a polling target.
+Reserve one shared future review slot, when needed, using request.reserve=1 and record the
+returned review_reserved obligation on the writer. Pending reviews can share this reusable
+slot rather than reserving a slot per unfinished writer. An existing Tester occupies that
+pool. Do not fill reviewer capacity with unrelated execution. A reserve is planning, not a
+native slot allocation. Completed open threads still count, including retained workers.
 
-Use phase handoff before review, accept only for final assessment. A repaired finding is
-addressed with current evidence and still awaits independent resolution; it is not already
-resolved. Acceptance-due gates stay pending at handoff only while not yet decisive. A gate already
-known to fail on the current candidate returns to the worker before review. Main's obligations
-still bind at acceptance. Blocked/abandoned work returns as BLOCKED, never via false CLEAR.
+For independent review, request.candidate_held=true and stopped writer state describe a real
+hold. For repair, release the hold first and explicitly set candidate_held=false; a stopped
+reviewer may remain for recheck after its mutable resources are released. Never manufacture
+these observations to make the allocator allow work. Parallel results are advisory, not locks.
 
-Current evidence binds to attempt/contract/candidate/target. Optional --manifest reuses the
-existing candidate helper for fresh selected-input identity, not semantic/runtime proof.
-Only actual dependency drift invalidates relevant evidence. Unrelated notes or paths do not.
+## Review and repair
 
-## Independent review and corrections
+Main dispatches Tester directly by default. Routine/Default may dispatch exactly one Tester
+and no other role only with explicit scheduling authority and observed native support.
+Direct named work needs no nested qualification. Tester starts independently of the writer's
+reasoning. Stable candidate, original task and decisive evidence are supplied, not a persuasion
+summary. It owns its verdict; Main owns acceptance and actual visual judgment.
 
-Tester gets the original task, complete actual diff, questions, requirements, gates and target
-without writer reasoning. Its initial context must be independent; reuse it only for the same
-review/repair loop. Verify scoped history where exposed, otherwise report the limitation.
-Required independent gates run regardless of whether optional adversarial probes find concerns.
-Tester owns the verdict, writes evidence/disposable data only, and never repairs source/tests.
+Release holds before repair. Reuse suitable writer/reviewer context for concrete corrections.
+If Main fixes a small finding, stop/transfer the writer first, include Main's entire delta,
+refresh affected evidence and obtain required independent verification. Never write the same
+candidate concurrently. Same-reviewer delta review is unavailable when impact is unknown.
 
-Hold candidate inputs/build/target stable during review. On failure release the hold, reuse
-the same writer, identify the repaired candidate, re-hold and rerun affected plus mandatory fresh
-checks. Preserve failures. Keep the writer available for concrete pending main review when
-capacity allows. Main examines decisive changes, original verdict and actual visuals, sends
-grouped findings and rechecks fresh results. Optional cleanup is not a blocker; violating the
-accepted design is. Required gates, visual acceptance and owner/deployment authority differ.
+## Wait, hand off and release
 
-## Handoff, release and recovery
+Workers own commands and their waits. Main waits only after scheduling independent ready work;
+use completion notifications or supported long interruptible waits, not progress SEND loops.
+Timeout alone does not trigger inspection, tests or acknowledgements. Honor real user
+interruptions. A requested fresh status is one owner snapshot.
 
-Track known handles, parent, unit/attempt, next wake and state without global scans.
-After main accepts, persist evidence/resources and close completed owned children leaves-first.
-Observe native release; completion is not closure. Do not close unrelated or active work.
-Thread closure does not delete source, browser profiles, logs or servers. With one slot, preserve the
-repair capsule, close writer, then Main dispatches Tester; without a safe path checkpoint.
-
-Use a fresh worker for a new contract after safe release. Reuse verified infrastructure.
-No automatic parent restart. After compaction consult the handoff and changed inputs.
-On capacity failure reconcile once. Do not raise limits, loop on spawns, simulate closure
-or take implementation back. Retry only after observed state change. Preserve blocked work.
-
-An explicit user no-agent/direct-execution instruction remains binding. A verified tool or permission boundary
-may require one narrow authorized bridge; return remaining work to workers. A tiny diff, faster patch or unavailable nesting is not such a boundary.
-If no safe path exists, report the blocked action. Never expand permissions or fabricate access.
-See `boundary.md` for optional records. Helpers inspect observations, not native authority or savings.
+After acceptance, preserve decisions, candidate, gates, findings, next work and resource owners.
+Close completed owned children leaves-first; observe native release before relying on the slot.
+Thread closure does not delete source, browser profiles, logs or servers. Keep concrete repair
+context, not idle agents indefinitely. A one-slot client can save the repair capsule, release
+the writer and run Tester serially. At capacity failure inspect relevant handles once; retry
+only after observed change. Never omit a required review, close unrelated work or raise caps.
+No automatic restart, hidden model downgrade, ungranted cleanup or permission expansion.

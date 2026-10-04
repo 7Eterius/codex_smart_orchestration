@@ -1,55 +1,35 @@
-# Smart Orchestration 2.7.1
+# Smart Orchestration 3.0
 
-**GPT-6.1 Sol judges. Luna implements, operates and repairs.**
+**Solve with intelligence. Delegate when it helps. Run independent work in parallel.**
 
-Smart is a global Codex workflow for getting more satisfactory work from a limited
-allowance. Main retains product, architecture, UX, visual decisions, detailed assessment
-and final acceptance. Named economical workers execute settled work, including small
-edits and main's corrections. Slower execution is acceptable; weaker design judgment is not.
+Smart is a global Codex workflow for balancing response time, model usage and accepted quality.
+Main retains product, architecture, UX/design judgment and final acceptance. Unlike 2.x, it
+can finish small tasks itself. GPT-6.1 Sol handles normal problem-solving; Luna handles known,
+prescribed work where its lower price is actually useful.
 
-There is **one adaptive execution loop**, no Normal/Coordinated modes and no dedicated
-Chunk Lead. The workflow is an instruction policy with small deterministic helpers,
-not a native scheduler, tool interceptor, security boundary or guaranteed saving.
+The workflow is instructions plus bounded deterministic helpers, not a native scheduler,
+permission system or guarantee of savings. Actual tools, model availability and owner settings bind.
 
-## What changes in 2.7.1
+## What changes in 3.0
 
-2.7.1 is a patch release over the reviewed 2.7 architecture. It keeps the model map and
-delegation design while fixing a handoff edge case and tightening single-writer ownership.
-The broader 2.7 evidence-bound handoff design remains based on bounded ideas from
-[Kiborgik/BlaBla](https://github.com/Kiborgik/blabla).
+The 2.7.1 design deliberately traded latency for cheap delegation. That is no longer the goal.
+Mandatory handoffs for tiny edits, a two-thread policy ceiling and Luna as the ordinary coding
+lane could make inexpensive individual calls an expensive and slow overall task.
 
-**Handoff is not acceptance.** A worker can return an evidenced repair for independent review
-without pretending the reviewer has already approved it. Addressed findings and genuinely
-not-yet-due acceptance gates stay pending. A gate already known to fail on the current candidate
-returns to the worker before Tester is dispatched. Main still decides acceptance after all required checks.
+| Responsibility | 2.7.1 | 3.0 |
+| --- | --- | --- |
+| Small understood fix | Mandatory worker handoff | Main can finish directly |
+| Ordinary implementation / unknown bug | Routine Luna High | Main or Default Sol Medium |
+| Deep implementation | Default Luna xhigh | Sol Medium first; Senior Sol xhigh for demonstrated depth |
+| Independent semantic review | Luna High | Sol Medium, only when risk or explicit gates require it |
+| Causal investigation | Luna xhigh | Sol Medium |
+| Known extraction / GUI recipe | Luna Low | Luna Low, in coherent batches |
+| Prescribed bulk transformations | Luna High | Luna High, explicitly bounded |
+| Open Smart worker budget | Two across the run | Up to four with verified independence and actual capacity |
+| Main during worker execution | Mainly waits | Can work on a disjoint critical path |
 
-**One candidate has one writer.** A rare authorized Main-only bridge write never races an active
-worker. If it must touch the worker's scope or a declared evidence input, write ownership is
-paused/transferred first; afterward the new candidate/delta is handed back and only affected
-evidence is invalidated.
-
-**Evidence can be bound to the actual assignment.** Optional attempt/contract/candidate/target
-identities make mismatching evidence STALE and absent bindings UNVERIFIED. An optional existing
-candidate manifest adds a fresh selected-input read, not proof of a deployed build.
-
-**Preflight gives a useful next step.** It validates the whole record first, batches grounded
-issues with bounded output and routes mechanical repairs to workers, protected questions to
-Main. It no longer treats malformed later rows or an empty obligation set as acceptable input.
-
-**Main can ask the questions it doubts.** A few named questions in the original assignment
-must receive evidence-backed answers or an explicit unknown. This complements worker-initiated
-DECISION_NEEDED without relying on self-reported confidence or adding a question to every task.
-
-**Required tests are not optional adversarial probes.** Tester runs mandated gates even when
-no defect is suspected, checks real entry points and uses meaningful negative controls for
-new critical tests where practical. An observer must report failure truthfully.
-
-Known source paths can be read directly after applicable instructions. Notes or unrelated
-changes do not invalidate focused evidence. Full failure logs are retained so a summary line
-cannot hide errors and another run is not needed merely to recover discarded output.
-
-No new role, manager, execution mode, task database, model setting or permission is introduced.
-See [2.7 notes](docs/v2.7.md) and the optional [preflight contract](codex_workflow/challenge.md).
+No new manager or role is introduced. Stronger models have higher token prices; fewer calls or
+repairs may offset them, but that is a hypothesis to measure, not a promised cheaper bill.
 
 ## Architecture
 
@@ -57,332 +37,189 @@ See [2.7 notes](docs/v2.7.md) and the optional [preflight contract](codex_workfl
 USER
   |
   v
-MAIN: GPT-6.1 Sol Medium recommended; owner selection preserved
-  goal, product meaning, architecture, UX/visual decisions
-  protected brief, acceptance criteria, authority
-  detailed inspection of real results, final acceptance
+MAIN: owner-selected model, GPT-6.1 Sol Medium recommended
+  product / architecture / UX / visual judgment
+  small direct fixes and context-heavy critical-path work
+  final assessment and acceptance
   |
-  | one complete bounded assignment
-  | optional must-answer questions about specific uncertainties
+  +--> DEFAULT: Sol Medium
+  |      coherent feature, unknown bug, adaptive browser work
   |
-  +--> SIMPLE / Luna Low
-  |      established low-risk edits, exact extraction,
-  |      complete mechanical browser/GUI journeys
+  +--> SIMPLE / ROUTINE: Luna Low / High
+  |      known recipe, extraction, prescribed transformation
   |
-  +--> ROUTINE / Luna High
-  |      normal implementation of settled requirements/design,
-  |      scoped discovery, commands, self-checks, ordinary repairs
-  |
-  +--> DEFAULT / Luna xhigh
-         genuinely deep bounded implementation/diagnosis
-             |
-             v
-         optional deterministic handoff preflight
-         mechanical issues return together to the same owner
-         protected questions / scope conflicts return to Main
-             |
-             v
-         TESTER / Luna High when independent review is required
-         original task, stable candidate, complete diff,
-         required gates and separately owned verdict
-             |
-             v
-MAIN examines decisive changes and actual visuals
-  |
-  +--> findings --> same suitable Luna owner --> fresh evidence --> recheck
-  |
-  +--> acceptance --> durable handoff --> observed native release
+  +--> Independent work starts concurrently where safe
+         distinct read/write scopes, accepted dependencies, resources
+         initial two useful branches, at most four open Smart threads
+                |
+                v
+         stable candidate + decisive evidence
+                |
+                +--> TESTER: Sol Medium, when independent review is required
+                |      may overlap another isolated implementation
+                v
+MAIN examines actual result and required visuals
+  corrections: same suitable owner, or a small direct fix after ownership transfer
+  accept -> preserve evidence/resources -> observe native thread release
 ```
 
-Main may dispatch Tester directly, or explicitly authorize Routine/Default to dispatch
-one Tester when native nesting, permissions and capacity support it. Only the dispatcher
-changes, not the independent reviewer or its contract. Missing nesting does not justify
-main taking implementation back. Support roles answer bounded questions or create authorized
-checkpoints; they are not a permanent team or an extra manager layer.
+A short task should not automatically create a writer, a reviewer and a handoff record.
+A complex task should not automatically be forced through several cheap-model failures.
+Main chooses the least complicated ownership structure that can deliver the accepted outcome.
 
-## Responsibilities and model map
+## Roles and intelligence
 
-| Responsibility | Role | Configured model / effort |
+| Role | Configured model / effort | Intended work |
 | --- | --- | --- |
-| Product, architecture, UX/visual judgment and acceptance | Main | Owner-selected; **GPT-6.1 Sol Medium** baseline |
-| Explicit low-risk operation or established small edit | `simple_executor` | GPT-6 Luna Low |
-| Normal settled implementation and repair | `routine_executor` | GPT-6 Luna High |
-| Deep bounded implementation or diagnosis | `default_executor` | GPT-6 Luna xhigh |
-| Independent diff/contract/behavior verification | `tester` | GPT-6 Luna High |
-| Requested hard advisory judgment | `senior_executor` | **GPT-6.1 Sol xhigh** |
-| Targeted context question | `companion` | GPT-6 Luna Medium |
-| Deep unresolved evidence question | `investigator` | GPT-6 Luna xhigh |
-| Grounded milestone handoff | `archivist` | GPT-6 Luna Medium |
+| Main | Owner-selected; GPT-6.1 Sol Medium baseline | Decisions, direct small tasks, critical path, visual judgment and acceptance |
+| `default_executor` | GPT-6.1 Sol Medium | Normal problem-solving, implementation, difficult diagnosis and adaptive tools |
+| `senior_executor` | GPT-6.1 Sol xhigh | Deep bounded advice or explicitly transferred implementation |
+| `tester` | GPT-6.1 Sol Medium | Independent semantic review and required gates |
+| `investigator` | GPT-6.1 Sol Medium | Causal investigation and uncertain evidence |
+| `simple_executor` | GPT-6 Luna Low | Known GUI journeys, exact extraction, established low-risk off-path edits |
+| `routine_executor` | GPT-6 Luna High | Prescribed repetitive implementation, not general problem-solving |
+| `companion` | GPT-6 Luna Medium | Exact bounded lookup |
+| `archivist` | GPT-6 Luna Medium | Authorized compact checkpoint memory |
 
-Routine is the settled implementation default. Default needs a real depth reason, not a
-large file count or slow tools. Simple can own a long known journey when intent, target
-and expected observations are explicit. Novel shared state, security, payments, schema
-invariants and unresolved design are not low-risk edits simply because the patch is short.
+Role names are retained for installation compatibility, but **Routine is no longer the normal
+coding lane**. Normal implementation belongs to Default or Main.
 
-Senior is advisory-first. Main considers its decision/rationale/constraints/next action,
-settles the decision and returns implementation to Luna. Transferred Senior implementation
-requires an explicit ownership transfer for an evidenced capability gap or inseparable
-judgment/implementation, with independent review. Max/Astra are not automatic tiers.
-Repeated same-defect repairs justify bounded diagnosis and ownership reassessment within
-authorized models, not automatic upgrading or endlessly repeating a cheap failed approach.
+Luna is appropriate when the recipe, pattern and success condition are clear. A small function
+with an unknown causal defect can still require Sol. A twenty-step browser recipe can remain
+Luna work. A novel dashboard, confusing GUI state or unfamiliar API is not cheap work merely
+because the patch or click count is small.
 
-## Main owns judgment, not routine execution
+### Why not Luna Max everywhere?
 
-Main defines the outcome and protected decisions, resolves ambiguity, selects the execution
-owner and review checkpoint, and inspects enough source and product evidence to decide.
-It directly reviews consequential changes and real visuals. It does not rubber-stamp a
-worker's confidence or a PASS summary.
+Higher reasoning effort is not a substitute for selecting the right model family. Luna Max
+remains an owner-selected experiment for well-specified work, not the default difficult-work
+lane and not a compulsory step before Sol. Start with Sol Medium for actual problem-solving;
+use Senior xhigh when observed depth justifies it. There is no automatic Fast/Astra/Max ladder.
 
-After the contract is settled, the worker owns implementation and ordinary repairs.
-Main does not make a quick CSS patch, implement alongside an active writer, or write a
-complete solution for Luna to paste. A small diff, familiarity or faster direct execution
-is not sufficient reason to abandon delegation.
+## Direct execution without losing judgment
 
-Main can answer directly, author authorized briefs and inspect decisive evidence. An
-explicit no-agent request remains binding. A verified tool or permission boundary can
-justify a narrowly authorized main-only bridge action; state that boundary once and
-return the remaining work to the worker. Never invent access or widen permissions.
+Main may implement an already-understood small task or context-heavy critical-path fix when a
+handoff would cost more than it saves. It still self-checks and observes all risk-based gates.
+Main can also handle a small review correction, but not while another writer owns the same inputs.
 
-## The assignment contract
+Delegate when a task is large enough to benefit from a separate owner, keeps noisy tool output
+out of Main, or can run usefully in parallel. Give the outcome and constraints rather than
+pre-writing a patch for a worker to paste. The implementation owner chooses the technical solution
+inside the accepted design and contract.
 
-Give a complete bounded job rather than one worker per file or click. The existing capsule
-contains the outcome and stop condition, unit/attempt, exact requirements and deliverables,
-owned/protected paths, starting candidate/target, authority, gates, evidence locations and
-absolute relevant guide paths. Design work adds Main's accepted brief and review checkpoint.
-A finite coherent group retains per-member gates and dependency order.
+If the same defect survives one evidence-based repair with no progress, or a worker cannot
+diagnose it, stop the cheap loop. Main or Sol examines the original failure and takes ownership
+as appropriate. Ordinary compile errors do not require escalation. Increasing effort through
+Low, High, xhigh and Max by ritual is not a recovery plan.
 
-Name the events that require Main: **review-ready, completed, decision-needed, blocked,
-required checkpoint or real user interruption**. The worker owns commands, test waits,
-browser operation and ordinary diagnosis within the assignment. Do not extend a task simply
-to keep an agent busy.
+## Safe parallelism, not fan-out for its own sake
 
-Main can include a few must-answer questions, for example which environment a browser is
-connected to or whether a particular edge case is covered. The worker returns an answer
-with original evidence, or unknown. Silence does not answer a question. This is not a new
-mandatory planning round and does not delegate product choices to the worker.
+Dispatch ready independent work before waiting. Begin with two useful branches; use up to four
+Smart-owned open threads only when the work, model allowance and client capacity justify them.
+The primary thread is excluded. Existing lower caps and unrelated open threads count.
 
-## Context and protected decisions
+Parallelism requires more than different filenames. Identify canonical workspaces, read and
+write sets, dependencies and shared mutable resources. A write conflicts with another owner's
+reads or writes. Shared styles, lockfiles, builds, test accounts, servers, ports, browser sessions
+and the desktop mouse can couple apparently separate assignments.
 
-Read applicable instructions. When the relevant authoritative source is already known,
-read it directly. For an unknown location, use the project's status/index/architecture map
-or targeted search, then the relevant identity and specific rule/file/evidence. Progressive
-disclosure is not a compulsory status -> explain -> explain ritual for every read.
+Main may work in parallel too, but its activity belongs in the same conflict check. Unknown
+impact serializes the affected work rather than inventing isolation. An isolated immutable
+preview can be reviewed while another scope changes. A test against the mutable whole tree
+cannot safely ignore active writers just because the test process is read-only.
 
-Do not dump all documentation or the Main transcript into a worker. Reuse existing code,
-design decisions and trustworthy setup before inventing another implementation. After
-compaction consult the current handoff and changed evidence, not the entire archive.
+Do not wait for the slowest worker before using an independent completed result. Pipeline
+ready review and integration points. Share one future reviewer slot rather than reserving one
+unused slot per writer: a preserved capacity of three can support two independent writers and
+one reviewer, when their actual scopes and resources allow it.
 
-Workers keep ordinary implementation choices. If continuing would choose protected product
-meaning, architecture, UX/visual direction, contract semantics, scope or authority, return:
+The optional [allocation protocol](codex_workflow/execution.md) checks supplied scopes,
+accepted dependencies, Main activity, reservations and native lifecycle observations. It does
+not discover dependencies, authenticate scopes, lock files, spawn agents or change capacity.
+Unscoped legacy records do not gain unproven parallelism.
 
-```text
-DECISION_NEEDED
-Question
-Options, if bounded
-Evidence
-Why this is outside the settled brief
-Provisional choice, if useful
-```
+## Design and browser work
 
-Main answers the narrow decision and sends the delta back to the same worker. Smart does
-not use numeric confidence thresholds or require architecture essays from bounded workers.
+Main still defines product meaning, hierarchy, composition, interaction, visual language and
+responsive intent. Sol realizes nontrivial designs; Luna applies settled repetitive details.
+Main inspects the actual rendered result, not a worker's assurance or the existence of screenshots.
 
-## Detailed UI/UX workflow
+Use an early running frame for a genuinely new composition or uncertain direction. An established
+spacing or copy correction can go straight to the relevant final visual check. Group related
+findings, correct through the same suitable owner where useful, and stop at the accepted quality
+level instead of generating endless optional polish.
 
-Design authorship remains with Main. Implementation delegation is not delegation of visual
-judgment. The [design guide](codex_workflow/design.md) specifies the complete loop.
+For browser work, distinguish operation from judgment. Simple handles known low-risk recipes
+and extraction. Sol handles unknown states, investigation or adaptation. Reuse valid sessions,
+builds and existing deterministic tests. A substantial repeatable journey can be one assignment;
+a worker per click adds overhead. Different agents never share an uncontrolled desktop or mutable
+browser session. Billing, permissions, destructive actions and production retain approval gates.
 
-### Main settles the brief
+See [design](codex_workflow/design.md) and [browser work](codex_workflow/browser.md).
 
-Main uses accepted references and actual product evidence to define purpose, hierarchy,
-composition, visual language, responsive intent, interactions and important states.
-The brief records protected decisions, relevant components/tokens, acceptance criteria,
-required viewports and the next review point. It does not prescribe every CSS property or
-solve the implementation in advance.
+## Review and evidence
 
-### Luna builds and returns running evidence
+Every writer self-checks, including Main. Add independent Tester for explicit requirements or
+meaningful behavioral, integration, security, payment, schema and data-integrity risk. The Default
+role now means normal implementation, so its name alone no longer requires maximum verification.
+A reversible established copy/style change with decisive checks does not automatically need Tester.
 
-Routine normally implements the accepted design; Simple handles an established low-risk
-tweak. The capable owner runs appropriate checks and returns the current candidate/build,
-state, viewport/theme and original evidence references. An absent browser capability is
-a limitation, not permission to claim a visual pass.
+Initial review uses the original requirements and complete bounded diff in an independent context.
+The same reviewer can inspect the complete correction delta, affected dependencies and original
+findings against a recorded reviewed candidate. New reviewer, changed contract, unknown impact
+or missing baseline requires a full bounded review. All mandated fresh/full tests remain binding.
+Include Main-authored fixes and any concurrent changes in the reviewed delta.
 
-### Main examines and delegates corrections
+Main may be the writer, but never its own independent reviewer. The boundary helper now supports
+that distinction. Holds, separate verdicts and all required evidence still apply. Freeze the
+reviewed source/config/build/target; release before repair and refresh affected evidence.
 
-For new compositions, Main inspects an early running frame and final affected screens.
-It evaluates hierarchy, typography, spacing, alignment, interaction states, responsiveness
-and consistency at the level the brief requires. Passing tests and attaching screenshots
-do not replace opening and assessing the evidence.
+Keep original logs and exit codes. UNVERIFIED and STALE never silently become PASS. Required tests
+run regardless of whether an optional adversarial probe found a suspected bug. The unchanged
+[preflight helper](codex_workflow/challenge.md) remains optional for existing structured facts;
+do not create a ledger simply to run it. CLEAR is not truth, approval or permission to deploy.
 
-Main groups related findings into a concrete correction assignment:
+See [verification](codex_workflow/verification.md) and [boundaries](codex_workflow/boundary.md).
 
-```text
-Criterion / finding
-Expected versus observed
-Exact state and evidence
-Allowed change and protected decisions
-Affected checks and required fresh visual evidence
-```
+## Context, waiting and lifecycle
 
-For example: restore the accepted mobile heading scale so it no longer overlaps the cover,
-without changing the card hierarchy; return the corrected state and relevant regression check.
-This is not a vague instruction to make the design better.
+Read applicable instructions and known sources directly. Use targeted search/indexes to locate
+unknown material. Do not front-load every guide or the entire Main transcript. A bounded brief
+contains the outcome, protected decisions, useful references, scope/resources and decisive checks.
+Worker questions go to Main only when they require protected judgment or authority.
 
-The same suitable worker implements the delta. Release any review hold before repair,
-identify the new candidate and refresh affected and mandatory-fresh checks. The worker marks
-the finding addressed with evidence; Main/reviewer resolves it after recheck. Missing evidence
-stays open. An accepted design violation is a legitimate blocker; optional taste or unrequested
-polish is not. Stop when the authorized target and required gates are satisfied.
+Use supported completion notifications or long interruptible waits after dispatching useful
+independent work. A timeout is not a new task: no repeated progress messages, unfinished-diff
+inspections or duplicate checks merely because waiting returned. User-facing updates use known
+state and actual interruptions remain binding.
 
-## Browser and Computer Use
-
-**Operating a GUI and judging its design are different responsibilities.**
-Simple Luna Low owns explicit low-risk journeys: page extraction, known GUI configuration,
-checklist execution and evidence collection. Main makes aesthetic and interaction decisions.
-A long journey can be simple; a single consequential click can require explicit authority.
-
-Check actual worker tools and session access. Prefer structured DOM/network/console/API
-readback where sufficient, a real browser for required rendered journeys and Computer Use
-for native or GUI-only behavior. Do not replace a required interaction test with an API result.
-
-Reuse verified sessions, builds and setup. One owner controls shared mutable GUI state.
-For repeated stable checks, reuse an existing deterministic test or verified recipe with
-fresh execution instead of reasoning through every click again. Capture useful requested,
-changed/final/failure states, not an unneeded screenshot after every action.
-
-A capable implementation owner can gather short evidence without an extra relay agent.
-For a separate substantial mechanical journey, transfer GUI ownership safely to Simple.
-Explain an observed capability boundary rather than leaving all operation with Main by habit.
-Billing, production, permission changes and destructive actions retain their authority gates.
-See [browser economy](codex_workflow/browser.md).
-
-## Optional deterministic preflight
-
-Use [challenge.md](codex_workflow/challenge.md) only when structured handoff facts already
-exist. Do not create a project database or mandatory ledger to feed it. The helper is not
-an LLM, scheduler or semantic reviewer.
-
-### Handoff and acceptance are different stages
-
-At **handoff**, an addressed finding needs current evidence but remains pending independent
-resolution. Gates explicitly assigned to **acceptance** remain visible as pending, allowing
-the required reviewer to be dispatched. At acceptance, all required gates and blocking
-findings must actually be satisfied. Main owns acceptance; a worker cannot change obligations
-to make its own record clear. An honest BLOCKED handoff does not need a CLEAR result.
-
-These stages are not Normal/Coordinated modes or competing architectures. Legacy records
-without a phase retain strict acceptance behavior.
-
-### Identity, batching and limits
-
-The helper checks bounded supplied scope/attribution, decisions, deliverables, findings,
-questions and gate facts. Optional current attempt/contract/candidate/target identities
-require matching evidence references/bases. Missing binding is UNVERIFIED; mismatch is STALE.
-Without current identity, output says binding was not checked.
-
-Optional `--manifest` reads an existing candidate.py manifest and freshly verifies the
-selected local inputs. Its fingerprint must identify the declared candidate. This does not
-prove a served build, external state, complete dependencies, authorship or continuous locking.
-No new source scanner is added.
-
-Output contains a leading issue plus up to eight issues, total/omitted counts, pending
-obligations and a next action. Batch mechanical repairs back to the current worker rather
-than one model round-trip per bookkeeping error. Scope/attribution conflicts and protected
-questions go to Main without destructive resets or invented concurrent attribution.
-
-**CLEAR means no supported contradiction in supplied facts, not correctness or approval.**
-Undeclared obligations and fabricated observations remain undetectable. A known successful
-outcome may be intentionally unchanged with Main's authorization and evidence; do not
-produce a cosmetic edit merely to satisfy a changed-file counter.
-
-## Independent verification and candidate holds
-
-Every owner self-checks. Tester is required by project/owner gates or meaningful residual
-risk, including behavior/state, integration, shared contracts, accessibility uncertainty,
-authentication, payments, schema and financial invariants. Default implementation requires
-independent review by default. An established reversible copy/style edit does not gain an
-extra reviewer merely because it touches UI.
-
-Tester starts in a context independent of the writer's investigation, with the original
-task, complete actual diff, deliverables, questions and authoritative requirements. Reuse
-that reviewer for the same repair loop, not unrelated work. It owns its separate verdict.
-
-Read controlling definitions, possible values, guards and helpers before asserting a semantic
-defect; inspect sibling cases and seek the smallest concrete counterexample. **Required gates
-still run even when no defect is suspected.** Optional extra probes target concrete concerns.
-New critical tests should exercise real entry points and meaningful negative controls where
-practical. Do not count syntax/setup failures as proof of the intended assertion, or mutate
-live work to plant a defect. Observers must report actual failure rather than fabricate success.
-
-Identify relevant staged/unstaged/untracked source, tests/config/lockfiles, contract and actual
-build/target/account. Hold relevant inputs stable during independent review. The hold is an
-ownership agreement, not a filesystem lock. Tester writes evidence/disposable data, not code
-or tests. Release before repair, re-hold the repaired candidate and rerun affected plus mandatory
-fresh checks. Main inspects decisive risk and actual visuals without repeating the entire review.
-
-Keep original logs and exit codes. Read exit status first, failure blocks next, summary last.
-A passing count in partial output is not a green run. Distinguish executed-pass, reused-pass,
-failed, blocked, unrun, deferred, authorized not-applicable, STALE and UNVERIFIED. Notes and
-unrelated paths do not invalidate focused evidence; actual dependency changes do. Unknown
-impact widens checks. See [verification](codex_workflow/verification.md).
-
-## Waiting, capacity and context lifecycle
-
-A wait timeout is not a new task. Use native completion notifications or supported long,
-interruptible waits with actual exposed parameters. Do not SEND for progress, inspect
-unfinished diffs, reload the browser or rerun tests merely because waiting returned.
-Polling-only clients back off within supported limits, not rapid model turns or sleep loops.
-Main re-enters for real decisions, required checkpoints, blockers and acceptance. Ordinary
-user-facing progress uses known state; an explicitly requested fresh snapshot is one
-coalesced owner request, not a cascade. Honor actual interruptions promptly.
-
-Smart targets **at most two Smart-owned open threads across the run**, usually one owner and
-one reviewer. Descendants, support and prior unfinished units count too. Lower client limits
-and unrelated open threads remain binding. A final response is not native slot release.
-
-Preserve results, settle writes and transfer useful resources, then use supported native
-closure on completed owned children, leaves before parent. Observe release before relying
-on capacity. On an error reconcile known handles once; retry only after observed state change.
-With one slot, save candidate/repair context, close the writer and dispatch the independent
-Tester from Main. Without a safe review path, checkpoint instead of dropping the gate.
-Never raise the cap, close unrelated/active work or silently move implementation back to Main.
-
-Closing an agent does not delete source, logs, browser profiles, servers or unique evidence.
-Keep the same writer for concrete corrections. Accepted milestones preserve decisions,
-candidate, gates, findings, next work and resource ownership. New unrelated contracts get
-fresh bounded contexts after release, not repeated login or infrastructure setup. No automatic
-parent restart, forced compaction or discarded live conversation. See [execution](codex_workflow/execution.md).
-
-## Configuration and activation
-
-Select **GPT-6.1 Sol / Medium** for Main in the client's supported selector when available.
-Senior's managed role selects **gpt-6.1-sol / xhigh**. The installer preserves explicit
-parent, profile, Plan effort and generic-child choices. It does not move an active session
-to a different model.
-
-The read-only assessment reports configured/recommended parent and `parent_baseline_status`.
-A matching disk setting is not observed live selection. A valid different selection is a
-warning, not corruption. Actual profile overrides, account access, tools and native capacity
-still require client evidence. No new catalog override, permission or concurrency setting
-is introduced by 2.7.
+Persist results, settle writes, transfer resources and close completed owned threads using native
+operations, leaves before parent. A final message is not a freed slot. Never close unrelated or
+active agents. On a capacity error reconcile once, retry only after observed change and respect
+lower owner limits. Without a safe independent-review path, checkpoint rather than omit the gate.
+New tasks get fresh bounded context, not needless reinstall/login/rebuild. Never auto-restart Main.
 
 ## Installation or update
 
-Open Codex in your project directory and send:
+Open Codex CLI or the Codex app and send:
 
 ```text
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
 ```
 
-After success, restart Codex manually and start a fresh conversation. Select the intended
-Main baseline explicitly; review preserved overrides before changing them. There is no
-per-project installation, uninstall-first requirement or global qualification ceremony.
-Use [targeted runtime checks](codex_workflow/runtime_check.md) for an actual uncertainty.
+After successful preview/apply/check, restart Codex manually and start a fresh conversation.
+Use the supported selector to choose the recommended Main model. Installing a recommendation
+does not switch an already-running conversation.
 
-The installer manages declared guides, eight worker definitions, managed instruction regions
-and Python helpers. It protects unrelated configuration and project files, stops on ownership
-conflicts, and creates exact conflict-checked rollback backups. The new challenge guide is
-installed on demand and protected like other managed files. Publication does not update your Mac.
+**Existing explicit settings are preserved.** An old cap of two or three remains two or three;
+3.0 reports that limitation instead of silently increasing it. Named roles explicitly choose
+their new models even when an old generic fallback is retained. Fresh installations with no
+explicit values receive a four-thread cap and Sol Medium generic fallback. Any deliberate change
+to existing capacity, parent/profile/Plan effort, permissions or speed is separate from installation.
+
+Locally customized managed role/policy files cause a conflict, not a forced overwrite. Exact
+rollback restores previous bytes/settings while retaining the backup trail. No project bootstrap
+or per-project database is required. Python 3.11+ is required.
 
 ## Validation and evaluation
 
@@ -391,33 +228,22 @@ python3 -B -m unittest discover -s scripts -p 'test_*.py' -v
 python3 -m compileall -q codex_workflow scripts
 ```
 
-CI runs Ubuntu/Python 3.11, Ubuntu/Python 3.12 and macOS/Python 3.12 with full Git history.
-Historical migration tests remain pinned; the new exact 2.6 -> 2.7 -> no-op reapply -> rollback
-path checks owner/project preservation, every role setting and local-edit protection.
-Executable regressions cover old false-clear inputs, full validation, stage transitions,
-identity mismatches, questions, real CLI behavior and candidate-helper integration.
+CI checks Ubuntu Python 3.11/3.12 and macOS Python 3.12. The active tests cover new routing,
+parallel read/write/resource conflicts, dependencies, reviewer capacity, native lifecycle,
+Main-authored review, evidence gates, installation and exact historical upgrades/rollback.
 
-Tests establish shipped instructions, helper behavior and installation, not live Codex
-compliance, independent model-review quality or measured savings. For comparison, count all
-model layers, setup, Main review, verification and rework per comparable accepted outcome.
-Account for carry-in workers once and avoid overlapping inclusive subtree totals. Raw tokens,
-cache share and API-price equivalents are diagnostics, not subscription billing.
+Obsolete 2.x prompt/model expectations are not retained as assertions about 3.0. Instead the
+exact archived 2.7.1 source and its unchanged 309-test suite run separately as a historical
+reference. That is not a substitute for tests of 3.0. Core candidate, hardening and release
+regressions remain active; current evidence and installer regressions are grouped by behavior.
+Git history is required in CI. A source archive without it reports historical tests unavailable,
+not passed.
 
-A lower Main share is useful when settled work moved to Luna, not when necessary judgment
-was removed. More agents are not automatically cheaper. No fixed saving percentage or number
-of working days follows from this release.
+Measure time to accepted result, total model work, correction rounds and required quality on
+comparable tasks. Model prices, cached tokens or lower Main share alone cannot measure your
+subscription allowance or productive speed. Parallelism can increase simultaneous consumption;
+smarter models can still cost more. No benchmark or native-compliance claim follows from CI.
 
-## Documentation
-
-[Main policy](codex_workflow/smart_orchestration.md) ·
-[Design](codex_workflow/design.md) ·
-[Execution](codex_workflow/execution.md) ·
-[Verification](codex_workflow/verification.md) ·
-[Browser](codex_workflow/browser.md) ·
-[Preflight contract](codex_workflow/challenge.md) ·
-[Boundary records](codex_workflow/boundary.md) ·
-[Runtime checks](codex_workflow/runtime_check.md) ·
-[Engineering notes](docs/smart_orchestration.md) ·
-[2.7 notes](docs/v2.7.md) ·
-[2.6 history](docs/v2.6.md) ·
-[Evaluation](docs/evaluation.md)
+[3.0 review and release notes](docs/v3.0.md) | [Main policy](codex_workflow/smart_orchestration.md) |
+[Execution](codex_workflow/execution.md) | [Targeted runtime checks](codex_workflow/runtime_check.md) |
+[Engineering notes](docs/smart_orchestration.md)
