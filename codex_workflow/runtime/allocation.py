@@ -116,6 +116,13 @@ def _scope(value):
     return value
 
 
+def _same_scope(a, b):
+    """Ordering of validated path sets does not change ownership."""
+    return a['workspace'] == b['workspace'] and all(
+        set(a[key]) == set(b[key])
+        for key in ('reads', 'writes', 'resource_reads', 'resource_writes'))
+
+
 def _overlap(a, b):
     return a == b or a.startswith(b + '/') or b.startswith(a + '/')
 
@@ -261,10 +268,18 @@ def next_action(obs: dict, request: dict) -> dict:
     if missing:
         return {**result, 'action': 'wait', 'reason': 'dependencies_not_accepted', 'dependencies': missing}
     if reuse and 'scope' in reuse:
-        if scope is not None and scope != reuse['scope']:
+        if scope is not None and not _same_scope(scope, reuse['scope']):
             return {**result, 'action': 'blocked', 'reason': 'scope_change_requires_transfer'}
         scope = reuse['scope']
     peers = [t for t in opened.values() if t['id'] != request['reuse_id']]
+    # Mixed legacy/scoped observations must not downgrade known concurrency evidence.
+    if scope is None and (obs.get('main_scope') is not None or any('scope' in t for t in peers)):
+        return {**result, 'action': 'inspect', 'reason': 'parallel_scopes_required'}
+    if role in WRITERS and request.get('candidate_held') is True:
+        return {**result, 'action': 'wait', 'reason': 'candidate_still_held'}
+    if (role == 'tester' and (scope is not None or 'candidate_held' in request)
+            and request.get('candidate_held') is not True):
+        return {**result, 'action': 'wait', 'reason': 'review_requires_candidate_hold'}
     if scope is not None:
         if 'main_scope' not in obs:
             return {**result, 'action': 'inspect', 'reason': 'main_activity_unknown'}
@@ -293,29 +308,42 @@ def next_action(obs: dict, request: dict) -> dict:
                 return {**result, 'action': 'wait', 'reason': 'scope_or_resource_conflict', 'peer': t['id']}
     elif any(t['unit'] != unit for t in peers):
         return {**result, 'action': 'inspect', 'reason': 'parallel_scopes_required'}
+    review_units = {t['unit'] for t in opened.values() if t['owned'] and t['role'] == 'tester'
+                    and t['state'] in {'running', 'waiting', 'completed'}}
+    reserved = {t['unit'] for t in opened.values() if t['owned'] and t.get('review_reserved', False)
+                and t['unit'] not in review_units}
+
+    def capacity(required):
+        if cap is None:
+            return {**result, 'reason': 'capacity_unknown'}
+        limit = SMART_OPEN_LIMIT if scope is not None else 2
+        if sum(t['owned'] for t in opened.values()) + required > limit:
+            return {**result, 'action': 'blocked', 'reason': 'smart_open_thread_budget', 'required_free': required}
+        if cap - len(opened) < required:
+            return {**result, 'action': 'blocked', 'reason': 'insufficient_open_thread_budget', 'required_free': required}
+        return None
+
     if reuse:
-        return {**result, 'action': 'reuse', 'reason': 'same_unit_delta', 'id': reuse['id'], 'intent': intent}
+        # Reusing context costs no new thread, but a new review obligation can need one.
+        if request['reserve'] and unit not in review_units:
+            if blocked := capacity(1):
+                return blocked
+        return {**result, 'action': 'reuse', 'reason': 'same_unit_delta', 'id': reuse['id'],
+                'intent': intent, 'record_review_reserved': bool(request['reserve'] or reuse.get('review_reserved', False))}
     if any(t['owned'] and t['unit'] == unit and t['role'] == role for t in opened.values()):
         return {**result, 'action': 'wait', 'reason': 'assignment_already_open'}
     if request['spawn_failed'] and not request['state_changed']:
         return {**result, 'action': 'blocked', 'reason': 'no_blind_spawn_retry'}
-    if cap is None:
-        return {**result, 'reason': 'capacity_unknown'}
-    reserved = {t['unit'] for t in opened.values() if t['owned'] and t.get('review_reserved', False)
-                and not any(r['owned'] and r['unit'] == t['unit'] and r['role'] == 'tester' for r in opened.values())}
-    if role == 'tester':
+    serving_queue = role == 'tester' and unit in reserved
+    if serving_queue:
         reserved.discard(unit)
-    if request['reserve']:
+    if request['reserve'] and unit not in review_units:
         reserved.add(unit)
-    # One reusable review slot is shared by queued reviews, not one per writer.
-    review_slot = bool(reserved) and role != 'tester' and not any(
-        t['owned'] and t['role'] == 'tester' for t in opened.values())
-    required = 1 + int(review_slot)
-    limit = SMART_OPEN_LIMIT if scope is not None else 2
-    if sum(t['owned'] for t in opened.values()) + required > limit:
-        return {**result, 'action': 'blocked', 'reason': 'smart_open_thread_budget', 'required_free': required}
-    if cap - len(opened) < required:
-        return {**result, 'action': 'blocked', 'reason': 'insufficient_open_thread_budget', 'required_free': required}
+    # One slot serves the queued reviews. A retained unrelated Tester is not free
+    # capacity; neither an unrelated writer nor an unrelated review may steal it.
+    required = 1 + int(bool(reserved) and not serving_queue)
+    if blocked := capacity(required):
+        return blocked
     return {**result, 'action': 'spawn', 'reason': 'budget_available', 'role': role,
             'reserve': request['reserve'], 'record_review_reserved': bool(request['reserve'])}
 
