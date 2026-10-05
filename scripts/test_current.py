@@ -20,7 +20,7 @@ from runtime.layout import PackageLayout, BUILTIN_WORKERS
 from runtime.smart_config import patch_config, bootstrap
 from runtime.smart_restore import prepare_restore
 
-VERSION = '3.0.0'
+VERSION = '3.0.1'
 EXPECTED = {
     'simple_executor': ('gpt-6-luna', 'low'),
     'routine_executor': ('gpt-6-luna', 'high'),

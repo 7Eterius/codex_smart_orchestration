@@ -43,27 +43,29 @@ are writers of those resources even if the agent's source role is read-only.
 ## Optional allocator observations
 
 Use existing structured facts only. No required ledger. Legacy unscoped observations support
-one unit and its reviewer; unrelated concurrent work requires scope information. A scope has
-workspace (canonical absolute real path), reads/writes (relative POSIX paths), and
-resource_reads/resource_writes (shared hierarchical resource IDs). Relative `.` means the
-entire workspace, not a resource wildcard. Resolve aliases before declaring scopes; the helper
-does not authenticate real paths or discover dependencies. Resource IDs must match across users.
+one unit and its reviewer, not a downgrade from known Main/peer scopes. Supply the missing
+request scope when concurrent access is already recorded. A scope has workspace (canonical
+absolute real path), reads/writes (relative POSIX paths), and resource_reads/resource_writes
+(shared hierarchical resource IDs). Relative `.` means the entire workspace. Resolve aliases;
+the helper does not authenticate paths or discover dependencies. Resource IDs must agree.
+Reordering identical validated path sets is not a scope change; adding access still requires transfer.
 
 Both observation threads and request can carry scope. Observation.main_scope is explicit null
 when Main has no concurrent access, otherwise Main's scope. Unknown Main/peer activity stops
 parallel scheduling. Requests can name depends_on; observation.accepted_units maps accepted
 prerequisites to evidence references. A final worker message alone is not an accepted dependency.
 
-Reserve one shared future review slot, when needed, using request.reserve=1 and record the
-returned review_reserved obligation on the writer. Pending reviews can share this reusable
-slot rather than reserving a slot per unfinished writer. An existing Tester occupies that
-pool. Do not fill reviewer capacity with unrelated execution. A reserve is planning, not a
-native slot allocation. Completed open threads still count, including retained workers.
+Reserve one shared future review slot when needed using request.reserve=1; record the returned
+review_reserved obligation on the writer, including reuse. Reusing a thread needs no new slot,
+but adding a review obligation needs real capacity or a same-unit reviewer. A retained unrelated,
+closing or unknown Tester is not reusable review capacity. Do not fill the last reserved slot
+with unrelated execution or reviews; a queued unit's reviewer can consume it. Reservations
+share one future slot, not one per writer. Completed open threads still count until native closure.
 
-For independent review, request.candidate_held=true and stopped writer state describe a real
-hold. For repair, release the hold first and explicitly set candidate_held=false; a stopped
-reviewer may remain for recheck after its mutable resources are released. Never manufacture
-these observations to make the allocator allow work. Parallel results are advisory, not locks.
+Scoped independent review requires request.candidate_held=true even without a live writer.
+An explicitly held candidate cannot resume writer work. For repair, release the hold first and
+set candidate_held=false; a stopped reviewer may remain for recheck after resource release.
+Readback grants no writes. Never fabricate observations. Parallel results are advisory, not locks.
 
 ## Review and repair
 
