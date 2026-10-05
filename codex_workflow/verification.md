@@ -1,63 +1,58 @@
-# Risk-based verification with intelligent review
+# Risk-based verification: execution is not judgment
 
-Every writer, including Main, self-checks. Independent review is required by project/owner
-gates and meaningful behavior, integration, security, payment, schema or data-integrity risk.
-A reversible established copy/style change with decisive checks does not automatically acquire
-a reviewer. Default now means normal Sol implementation, not a reason by itself for a full suite.
-Do not mistake a small diff for low risk. Main cannot self-certify a required independent gate.
+Every writer, including Main, self-checks. Independent semantic review is required by explicit
+project/owner gates and meaningful behavior, integration, security, payment, schema or data-integrity
+risk. A reversible established copy/style change with decisive checks does not automatically need
+a reviewer. Role names alone do not mandate a full suite. Small diffs can have large consequences.
+Main cannot self-certify a required independent gate.
 
-## Evidence and acceptance
+## Separate roles and evidence
 
-Use original requirements and controlling code for expected behavior, never assertions copied
-from current output. Actual state and executed tests outrank summaries. Preserve complete logs,
-exit codes and failure blocks. Missing proof is UNVERIFIED; affected dependency drift is STALE.
-Unrelated notes do not invalidate tests. Mandatory fresh checks remain fresh; an old green run
-cannot establish a current deployment, browser state or repaired finding.
+Tester/Luna Medium runs approved tests and supplies receipts. Reviewer/Luna Max independently
+examines behavior and completeness. Senior Reviewer/Sol High handles deep, critical-risk or
+stalled semantic review. Test strategy or causal diagnosis is not procedural Tester work.
+A green suite, a confident writer and a process exit code are not semantic sign-off.
 
-Optional challenge.py/boundary.py use existing records only; no mandatory ledger or per-tool
-preflight. CLEAR is not acceptance or authentic evidence. Handoff is distinct from acceptance:
-later checks stay pending, current known failures return for repair, addressed findings await
-independent resolution. Honest BLOCKED does not require a fake pass. Main alone accepts the
-result, separately from owner approval, commit or deployment authority.
+Use original requirements and controlling code for expected behavior, not assertions copied
+from current output. Original results outrank summaries. Preserve raw logs, real exit codes and
+failure blocks. Missing proof is UNVERIFIED; affected dependency drift is STALE. Unrelated notes
+do not invalidate tests. An old green run cannot establish current deployment/browser state.
+Read `testing.md` for discovery, shard completeness, run ownership, reuse and reporting.
 
-## One thorough first review, bounded corrections
+Optional challenge.py/boundary.py check supplied records; no mandatory ledger or per-tool preflight.
+CLEAR is not acceptance, authenticated evidence or release approval. Handoff is not acceptance;
+known failures return for repair and addressed findings await independent resolution. Honest
+BLOCKED does not require a fake pass. Main alone accepts, separately from commit/deploy authority.
 
-Tester is GPT-6.1 Sol Medium: use intelligence to identify controlling behavior and a small
-reproduction, not a large checklist of speculative concerns. Initially read the original task,
-complete actual bounded diff and each requested deliverable. Review without writer history.
-Read definitions, returned values, guards and affected consumers before asserting defects.
-Inspect sibling cases. Ground a counterexample; do not invent faults to look adversarial.
+## Independent first review, bounded corrections
 
-For corrections use the same suitable reviewer and a recorded reviewed candidate. Read every
-hunk of the correction delta, affected dependencies and original findings. Preserve only
-applicable prior coverage. Include Main fixes and concurrent mutations. Missing baseline,
-changed contract, unknown impact or a new reviewer requires full bounded review. Record this
-in the existing verdict, not a second database. Execute required independent gates even when
-no defect is suspected. Mandatory fresh/full checks override delta optimization.
+Read the original task, complete actual bounded diff and every deliverable in an independent
+context without writer reasoning/history. Find controlling behavior and concrete counterexamples.
+Inspect definitions, returned values, guards, affected consumers and sibling cases. Do not invent
+speculative faults to look adversarial. Critical checks should use real entry points and meaningful
+negative controls where practical, without mutating live work or altering observers to fake success.
 
-New critical checks should exercise real entry points and meaningful negative controls where
-practical. A disposable known-bad input must fail the intended assertion, not only setup or
-syntax. Never mutate live work to plant defects or alter observers to fabricate success.
-BLOCKING includes correctness, completeness and violations of the accepted design. Optional
-taste or cleanup is nonblocking. A worker repairs; reviewer/Main resolves from fresh evidence.
+A correction may reuse the same suitable reviewer and a recorded reviewed candidate. Read every
+hunk of the correction delta, affected dependencies and original findings. Include Main-authored
+and concurrent changes. Missing baseline, changed contract, unknown impact or a new reviewer
+requires full bounded review. Preserve only applicable prior coverage. Reuse valid test receipts;
+do not rerun a suite merely because a second role now reads its result. All mandated fresh/full
+gates still execute, regardless of whether an optional adversarial probe found a suspected defect.
 
-## Holds, parallel tests and integration
+BLOCKING means correctness, completeness or accepted-design violations. Optional taste/cleanup
+is nonblocking. A worker repairs; the independent reviewer resolves findings from current proof.
+Main directly inspects required visuals and consequential risks without duplicating the entire
+technical investigation. Tests, rendered journeys and screenshots answer complementary questions.
 
-Hold the reviewed source, test/config/lock inputs and build/target stable. Disjoint isolated
-work can proceed only when it cannot alter those inputs or shared resources. Whole-tree checks
-and mutable live-preview review must not run against active conflicting writers. An immutable
-preview can overlap later implementation. Temporary test outputs and accounts need ownership.
+## Holds and acceptance
 
-Release the hold before repair, identify the repaired candidate, re-hold and refresh affected
-plus mandated fresh gates. Tester never changes candidate code/tests. Main-authored repairs
-retain independent requirements. Failed independent review cannot be overwritten by writer
-self-checks. Unknown named questions go to Main, not guessed answers.
+Hold source, test/config/lock inputs, build and target stable. Isolated disjoint work may proceed
+only when it cannot alter those inputs or shared resources. Whole-tree checks cannot race writers.
+Temporary outputs and test accounts require ownership. Verifiers never change candidate source,
+tests or assertions; their writable output scopes must not overlap candidate inputs.
 
-Main directly inspects required design evidence and consequential risks without duplicating
-the complete technical investigation. Established tweaks can use one final visual check;
-new compositions need an early frame where it reduces rework. Tests, rendered journeys and
-screenshots answer different questions; preserve required complementary evidence.
-
-Reuse the narrowest decisive local checks while editing. Run the complete product gate at
-integration/release when required, not after every typo. Helpers establish consistency or
-identity only for listed inputs, not test coverage, runtime provenance, authority or savings.
+Release the hold before repair, identify and re-hold the repaired candidate, then refresh affected
+and mandated fresh gates. Main-authored repairs retain independent requirements. Failed review
+cannot be overwritten by writer self-checks or a procedural Tester. Preserve separate test and
+semantic verdicts. Unknown questions go to Main rather than guessed answers. Acceptance requires
+all applicable evidence and authority, not only the cheapest or most recent passing result.

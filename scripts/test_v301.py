@@ -53,7 +53,7 @@ def request(unit='b', **kw):
 def reproductions():
     unscoped = request()
     unscoped.pop('scope')
-    reviewer = request('a', role='tester', candidate_held=True)
+    reviewer = request('a', role='reviewer', candidate_held=True)
     reviewer.pop('scope')
     return {
         'unscoped Main conflict': (observation(main_scope=scope('src/b')), unscoped),
@@ -62,13 +62,13 @@ def reproductions():
                               request('a', reuse_id='a', candidate_held=True)),
         'retained unrelated reviewer': (
             observation(thread(review_reserved=True),
-                        thread('old-review', unit='old', role='tester', state='completed',
+                        thread('old-review', unit='old', role='reviewer', state='completed',
                                scope=scope('src/old', writes=[])), cap=3), request()),
         'ignored reuse reservation': (observation(thread(state='waiting'), cap=1),
                                       request('a', reuse_id='a', reserve=1)),
         'unrelated review steals reservation': (
             observation(thread('a', review_reserved=True), thread('b', review_reserved=True), cap=3),
-            request('other', role='tester', candidate_held=True, scope=scope('src/other', writes=[]))),
+            request('other', role='reviewer', candidate_held=True, scope=scope('src/other', writes=[]))),
     }
 
 
@@ -112,7 +112,7 @@ class ScopeAndHoldTests(unittest.TestCase):
     def test_standalone_scoped_review_needs_hold_even_without_live_writer(self):
         for flags in ({}, {'candidate_held': False}):
             with self.subTest(flags=flags):
-                req = request(role='tester', scope=scope('src/b', writes=[]), **flags)
+                req = request(role='reviewer', scope=scope('src/b', writes=[]), **flags)
                 self.assertEqual(a.next_action(observation(), req)['reason'], 'review_requires_candidate_hold')
         req['candidate_held'] = True
         self.assertEqual(a.next_action(observation(), req)['action'], 'spawn')
@@ -151,14 +151,14 @@ class ReviewCapacityTests(unittest.TestCase):
     def test_queued_reviewer_can_consume_the_shared_reserved_slot(self):
         obs = observation(thread('a', state='waiting', review_reserved=True),
                           thread('b', review_reserved=True), cap=3)
-        req = request('a', role='tester', candidate_held=True, scope=scope(writes=[]))
+        req = request('a', role='reviewer', candidate_held=True, scope=scope(writes=[]))
         self.assertEqual(a.next_action(obs, req)['action'], 'spawn')
 
     def test_two_independent_reviews_can_pipeline_without_wait_for_all(self):
         obs = observation(thread('a', state='waiting', review_reserved=True),
                           thread('b', state='waiting', review_reserved=True),
-                          thread('review-a', unit='a', role='tester', scope=scope(writes=[])))
-        req = request('b', role='tester', candidate_held=True, scope=scope('src/b', writes=[]))
+                          thread('review-a', unit='a', role='reviewer', scope=scope(writes=[])))
+        req = request('b', role='reviewer', candidate_held=True, scope=scope('src/b', writes=[]))
         self.assertEqual(a.next_action(obs, req)['action'], 'spawn')
         self.assertNotEqual(a.next_action(obs, request('unrelated'))['action'], 'spawn')
 
@@ -181,14 +181,14 @@ class ReviewCapacityTests(unittest.TestCase):
 
     def test_existing_same_unit_reviewer_needs_no_extra_reserved_slot(self):
         obs = observation(thread(state='waiting'),
-                          thread('review-a', unit='a', role='tester', state='completed',
+                          thread('review-a', unit='a', role='reviewer', state='completed',
                                  scope=scope(writes=[])), cap=2)
         req = request('a', reuse_id='a', reserve=1, candidate_held=False)
         self.assertEqual(a.next_action(obs, req)['action'], 'reuse')
 
     def test_closing_or_unknown_reviewer_is_not_reusable_capacity(self):
         for state in ('closing', 'unknown'):
-            obs = observation(thread('old-review', unit='b', role='tester', state=state,
+            obs = observation(thread('old-review', unit='b', role='reviewer', state=state,
                                      scope=scope(reads=[], writes=[])), cap=2)
             with self.subTest(state=state):
                 self.assertEqual(a.next_action(obs, request(reserve=1))['reason'],
@@ -201,10 +201,10 @@ class ReviewCapacityTests(unittest.TestCase):
         req['reserve'] = 1
         self.assertEqual(a.next_action(obs, req)['reason'], 'capacity_unknown')
 
-    def test_four_thread_ceiling_and_owner_cap_are_not_raised(self):
-        obs = observation(*(thread(x) for x in ('a', 'b', 'c', 'd')), cap=8)
-        self.assertEqual(a.next_action(obs, request('e'))['reason'], 'smart_open_thread_budget')
-        self.assertEqual(a.SMART_OPEN_LIMIT, 4)
+    def test_five_thread_policy_ceiling_is_not_a_fanout_target(self):
+        obs = observation(*(thread(x) for x in ('a', 'b', 'c', 'd', 'e')), cap=8)
+        self.assertEqual(a.next_action(obs, request('f'))['reason'], 'smart_open_thread_budget')
+        self.assertEqual(a.SMART_OPEN_LIMIT, 5)
 
     def test_no_new_review_obligation_is_not_forced_to_reserve(self):
         self.assertEqual(a.next_action(observation(thread(), cap=2), request())['action'], 'spawn')
@@ -243,7 +243,15 @@ class EntryPointTests(unittest.TestCase):
         exec(compile(ran.stdout, 'archived_allocation.py', 'exec'), old.__dict__)
         for name, (obs, req) in reproductions().items():
             with self.subTest(name=name):
-                self.assertIn(old.next_action(obs, req)['action'], ('spawn', 'reuse'))
+                # Historical 3.0 called its semantic reviewer 'tester'. Rename only role
+                # labels for the unchanged source; scopes, caps and evidence stay identical.
+                legacy_obs, legacy_req = copy.deepcopy((obs, req))
+                for t in legacy_obs['threads']:
+                    if t['role'] == 'reviewer':
+                        t['role'] = 'tester'
+                if legacy_req['role'] == 'reviewer':
+                    legacy_req['role'] = 'tester'
+                self.assertIn(old.next_action(legacy_obs, legacy_req)['action'], ('spawn', 'reuse'))
                 self.assertNotIn(a.next_action(obs, req)['action'], ('spawn', 'reuse'))
 
 

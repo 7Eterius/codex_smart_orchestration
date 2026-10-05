@@ -12,15 +12,16 @@ without control characters. At most 128 gates and 64 KiB of input are supported.
 {
   "schema": 1, "unit": "card", "attempt": "A2", "contract": "R1",
   "candidate": "fingerprint-or-build-id", "target": "preview/test-account",
-  "primary": "main", "writer": "main", "reviewer": "independent-tester",
+  "primary": "main", "writer": "main", "reviewer": "independent-reviewer",
   "hold": "held", "gates": {"behavior": true, "references": false}
 }
 ```
 
-Main may now be the writer. The independent reviewer must still differ from both writer
+Main may be the writer. The independent semantic reviewer must still differ from both writer
 and primary. A different name is a supplied identity, not proof of a separate model context.
-Primary and worker may differ as before. Hold is held/released. Each gate boolean means
-fresh execution required (true), or applicable reused evidence permitted (false), never PASS.
+Procedural Tester receipts do not replace that semantic verdict. Primary and worker may differ
+as before. Hold is held/released. Each gate boolean means fresh execution required (true), or
+applicable reused evidence permitted (false), never PASS.
 
 A separate verdict repeats unit/attempt/contract/candidate/target/reviewer, has an artifact
 reference and the exact gate map. Each gate has status/evidence. executed-pass satisfies

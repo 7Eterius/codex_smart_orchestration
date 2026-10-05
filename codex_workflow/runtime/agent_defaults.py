@@ -8,9 +8,9 @@ from .errors import ValidationError
 from .smart_config import _statements
 
 DEFAULTS = {
-    'max_concurrent_threads_per_session': 4,
-    'default_subagent_model': 'gpt-6.1-sol',
-    'default_subagent_reasoning_effort': 'medium',
+    'max_concurrent_threads_per_session': 5,
+    'default_subagent_model': 'gpt-6-luna',
+    'default_subagent_reasoning_effort': 'max',
 }
 
 
@@ -41,12 +41,12 @@ def configure(text: str) -> tuple[str, list[str], dict]:
         if key in agents and (not isinstance(agents[key], str) or not agents[key].strip()):
             raise ValidationError(f'agents.{key} must be a nonempty string')
         if key in agents and agents[key] != DEFAULTS[key]:
-            warnings.append(f'Explicit agents.{key} preserved; it differs from the Smart 3 balanced default. Named role settings still apply.')
+            warnings.append(f'Explicit agents.{key} preserved; it differs from the Smart 3.1 balanced default. Named role settings still apply.')
     cap = agents.get('max_concurrent_threads_per_session', agents.get('max_threads'))
-    if cap is not None and cap < 4:
+    if cap is not None and cap < 5:
         warnings.append('Existing lower concurrency cap preserved. Smart 3 uses fewer parallel branches or serial review; no cap increase was made.')
-    elif cap is not None and cap > 4:
-        warnings.append('Higher owner cap preserved. Smart 3 uses at most four owned open threads, not a fan-out target.')
+    elif cap is not None and cap > 5:
+        warnings.append('Higher owner cap preserved. Smart 3 uses at most five owned open threads, not a fan-out target.')
     if not added:
         return text, warnings, {}
     spans = list(_statements(text))

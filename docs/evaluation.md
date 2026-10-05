@@ -4,31 +4,39 @@ This is an opt-in worksheet for existing evidence, not a task admission gate, au
 telemetry system or instruction to create a log for every command. Keep private paths,
 credentials, raw conversations and customer data out of public reports.
 
-Choose comparable isolated tasks: a reversible content change, settled UI work, a
-behavioral bug, an authorized data/security fixture and a bounded browser journey.
+Choose comparable isolated tasks: a reversible content change, settled UI work, a behavioral
+bug, an authorized data/security fixture, a bounded browser journey and a test-heavy task.
 Fix requirements, initial state, tools and acceptance criteria before comparing runs.
-Use fresh equivalent fixtures; do not let one run inherit another's solution or test
-results. Repeat comparisons when useful and report the sample size and uncertainty.
+Use fresh equivalent fixtures; do not let one run inherit another's solution or test results.
+Repeat comparisons when useful and report sample size and uncertainty.
 
 Record one row per complete task, including failures and abandoned attempts:
 
 | Field | Meaning |
 | --- | --- |
 | Task/fixture revision | Reproducible initial state and authoritative gates |
-| Client/configuration scope | Applicable runtime evidence; actual model metadata or unknown |
+| Client/configuration scope | Actual model/effort metadata and supported runtime behavior, or unknown |
 | Outcome | Accepted, failed, blocked or incomplete, with independent evidence |
 | Work | Main re-entry, handoffs, repairs and repeated investigations across all roles |
 | Elapsed time | Whole task, including setup and verification |
-| Allowance | Actual observed usage, or explicitly unavailable |
-| Quality | Gate outcomes, residual issues and later discovered defects |
+| Model usage | Input, cached input, output and reasoning use when actually exposed |
+| Test work | Suite wall-time, focused/full run count, duplicate runs and supported sharding |
+| Allowance | Actual observed subscription usage, or explicitly unavailable |
+| Quality | First-pass acceptance, gate outcomes, residual issues and later discovered defects |
 
 Change one factor at a time: context scope, repair handoff, dispatch path or authorized
-model/effort choice. Preserve required independent checks. A faster incomplete result
-is not a win. Count setup, writer work, Tester work, Main reasoning, retries and repairs.
+model/effort choice. Preserve required independent checks. A faster incomplete result is not
+a win. Count setup, writer work, Tester execution, semantic review, Main reasoning and repairs.
 Raw token totals and public API-price equivalents are not subscription allowance.
 
-Before another attempt, ask what new evidence makes it useful. Routine compiler errors
-stay with the current owner. A repeated ineffective strategy needs a new diagnosis;
-a changed contract, architecture or authority needs Main. Known deep bounded work can
-use Default directly without a ritual cheap failure. Do not infer a general saving
-percentage from a small sample or tune model tiers merely to reduce one response's cost.
+For 3.1 compare ordinary Luna Max against 3.0.1's Sol Medium route, and Sol Low against both on
+moderate tasks. Separate machine test execution time from model/tool orchestration time. A cheap
+Tester does not make the underlying tests themselves faster. Track whether avoiding repeated
+suites saves time without lowering coverage or hiding failures. Include cases where Sol-first
+wins; Max effort and five-worker capacity are not universal cost or speed improvements.
+
+Before another attempt, ask what new evidence makes it useful. Routine compiler errors with
+progress stay with the current owner. A repeated ineffective strategy needs a new diagnosis;
+a changed contract, architecture or authority needs Main. Known deep work may start directly at
+Sol Medium or High without a ritual cheap failure. Do not infer a general saving percentage
+from a small sample or optimize model tiers merely to reduce one response's cost.

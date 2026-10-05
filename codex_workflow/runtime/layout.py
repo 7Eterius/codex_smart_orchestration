@@ -18,11 +18,12 @@ WORKER_MARKER = re.compile(r"^# codex-workflow-worker: ([A-Za-z0-9_-]+)$", re.MU
 VERSION_RE = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 BUILTIN_WORKERS = frozenset({
     "simple_executor", "routine_executor", "default_executor",
-    "senior_executor", "tester", "archivist", "companion", "investigator",
+    "senior_executor", "deep_executor", "tester", "reviewer", "senior_reviewer",
+    "archivist", "companion", "investigator",
 })
 DELEGATING_WORKERS = frozenset({"routine_executor", "default_executor"})
 _REQUIRED = (
-    "smart_orchestration.md", "execution.md", "verification.md", "browser.md",
+    "smart_orchestration.md", "execution.md", "verification.md", "testing.md", "browser.md",
     "runtime_check.md", "operate/VERSION", "operate/smart_install.md",
     "operate/user_AGENTS.md", "runtime/__init__.py", "runtime/_toml.py",
     "runtime/agent_defaults.py", "runtime/config_assessment.py", "runtime/errors.py",

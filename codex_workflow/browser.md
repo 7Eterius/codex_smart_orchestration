@@ -6,7 +6,7 @@ boundaries. Never claim a visual result without observing it.
 
 ## Choose intelligence by uncertainty
 
-Simple Luna Low handles explicit, repeatable recipes: extract exact page information, visit
+Simple Luna Max handles explicit, repeatable recipes: extract exact page information, visit
 a known settings panel, replay a specified journey, verify concrete states, capture requested
 evidence. Give a complete useful batch rather than a worker per click.
 
@@ -14,12 +14,12 @@ Sol handles unfamiliar dashboards, diagnosing broken pages, adaptive navigation,
 problems, unreliable selectors and ambiguous visual evidence. A browser is a tool, not a
 reason to choose a cheap model. If a known recipe fails and one evidence-based correction
 does not progress, stop repeating it and have Main/default_executor diagnose the actual cause.
-Do not reflexively increase Luna to Max. Main retains aesthetic and interaction decisions.
+Select Sol Low/Medium/High by demonstrated complexity, not a ritual ladder. Main retains aesthetic and interaction decisions.
 
 A quick Main-side lookup or already-open two-step check may be faster than transferring the
 session. Keep it direct when handoff overhead dominates. For substantial prescribed journeys,
 Simple is still the economical owner. A capable implementation owner may collect short evidence
-without an extra relay agent. Large mechanical batches can run beside independent Sol coding.
+without an extra relay agent. Large mechanical batches can run beside independent implementation.
 
 ## Reuse and prove
 

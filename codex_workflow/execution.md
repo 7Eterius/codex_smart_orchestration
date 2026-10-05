@@ -1,96 +1,92 @@
 # Bounded ownership and useful concurrency
 
-Main may execute directly; delegation is not compulsory. For a tiny understood correction or
-context-heavy critical path, a handoff can cost more than it saves. Otherwise select a coherent
-independent assignment and dispatch it before waiting for another result. Main owns integration,
-not necessarily every implementation detail. Read only task-relevant guides.
+Main may execute small understood or context-heavy critical-path work directly. Otherwise
+select a coherent independent assignment and dispatch ready work before waiting. Main owns
+integration, not every implementation detail. Read task-relevant guides only.
 
-## Choose an owner once
+## Choose the appropriate owner
 
-Sol/default_executor owns normal implementation, diagnosis, adaptive tool use and realizing
-Main's design. Luna/simple_executor handles explicit mechanical recipes; routine_executor
-handles prescribed bulk transformations. Senior handles evidenced depth or scoped advice.
-Never route a novel bug to Luna merely because the diff might be small. Do not run multiple
-agents to solve the same issue speculatively. The optional allocation.classify helper accepts
-kind/risk/settled/tiny/deep/independent_required plus mechanical/in_context/on_critical_path/stalled.
-Unknown mechanical fitness favors Sol. Required review is preserved for Main-authored changes.
+Routine/Luna Max owns ordinary implementation and bounded unknown bugs, including prescribed
+bulk changes. Simple/Luna Max handles known GUI journeys and extraction. Investigator/Luna Max
+handles bounded causal discovery. Default/Sol Low is the moderate-complexity lane, Deep/Sol Medium
+handles substantial interacting logic, and Senior/Sol High handles serious or critical-risk work.
+Use the appropriate lane immediately; no compulsory failure ladder. Main settles protected
+product/design/architecture choices, not every local technical decision.
 
-Give outcome, non-goals, requirements, scope, dependencies, resource/target, authority and checks.
-Workers discover technical implementation within the accepted contract. Return protected
-choices as DECISION_NEEDED; normal local diagnosis stays local. Preserve the original failure
-and evidence. A same-defect correction without progress triggers bounded Sol/Main diagnosis,
-not another cheap retry or a forced ladder through all reasoning levels.
+The optional allocation.classify helper accepts the existing six fields plus mechanical,
+in_context, on_critical_path, stalled and optional difficulty (ordinary/moderate/deep/serious).
+Legacy deep=true still means deep work; difficulty cannot lower it. Critical risk selects Senior.
+kind=verification remains semantic review; kind=testing means approved procedural test execution.
+Tester is not the legacy semantic reviewer. Use fresh post-upgrade conversations, not mixed
+old/new role contexts. The helper recommends; it does not inspect native model availability.
 
-## Parallel, not speculative
+Give requirements, non-goals, scopes, accepted prerequisites, targets/resources, authority and
+checks. Workers solve implementation within that brief. Return protected choices as DECISION_NEEDED.
+Keep original failures. One same-defect evidence-based repair without progress triggers an
+appropriate Sol/Main diagnosis; ordinary errors with progress do not require changing owners.
 
-Start with two independent branches where useful; at most four Smart-owned open threads,
-within the actual client cap. Main is not counted. Existing lower caps are preserved. A ready
-result can unblock the next assignment without waiting for the whole batch. Main can execute
-a disjoint task while helpers work, not duplicate their implementation.
+## Parallelism and resources
 
-Independence means no write/read or write/write conflict and no unmet prerequisite. Declare
-canonical workspace paths and all relevant input/output paths, including shared modules,
-lockfiles and build/test inputs. Unknown dependencies widen scopes. Separate source worktrees
-do not isolate shared accounts, databases, ports, deployments or browser sessions. Those need
-explicit resource identities. Worktrees are optional and require existing Git authority;
-never create them or modify Git configuration solely because parallelism is suggested.
+Start with two useful branches; at most five Smart-owned open threads, excluding Main, within
+actual client capacity. Existing lower caps and unrelated threads count. Main may work on a
+disjoint critical path. Use completed independent results without a slowest-worker barrier.
 
-A stable preview can be reviewed while a disjoint branch is edited. A reviewer of the mutable
-whole application instead holds its full dependency scope. Global checks run at the integration
-boundary, not against a changing tree. Tests that write snapshots, profiles or browser state
-are writers of those resources even if the agent's source role is read-only.
+Canonical read/write scopes include shared modules, lockfiles and all relevant build/test inputs.
+A write conflicts with another owner's reads or writes. Unknown dependencies widen scope.
+Separate worktrees do not isolate databases, accounts, ports, deployments or browser sessions.
+Declare shared mutable resource identities and Main's concurrent scope. Worktrees require
+existing Git authority; never create them or alter Git configuration just to manufacture parallelism.
+
+A stable isolated preview can overlap independent implementation. Global integrated checks run
+on stable inputs, never a changing whole tree. Test outputs, profiles and browser state have
+owners even when candidate source is read-only. Limit CPU/RAM and runner processes separately
+from agent threads. One test coordinator is the default; sharding requires supported, isolated
+resources and complete shard aggregation. Multiple agents must not launch the same suite.
 
 ## Optional allocator observations
 
-Use existing structured facts only. No required ledger. Legacy unscoped observations support
-one unit and its reviewer, not a downgrade from known Main/peer scopes. Supply the missing
-request scope when concurrent access is already recorded. A scope has workspace (canonical
-absolute real path), reads/writes (relative POSIX paths), and resource_reads/resource_writes
-(shared hierarchical resource IDs). Relative `.` means the entire workspace. Resolve aliases;
-the helper does not authenticate paths or discover dependencies. Resource IDs must agree.
-Reordering identical validated path sets is not a scope change; adding access still requires transfer.
+Use existing structured facts, not a required ledger. A scope has workspace (canonical absolute
+real path), reads/writes (relative POSIX paths), resource_reads/resource_writes (shared hierarchical
+resource IDs). Relative `.` means the entire workspace. Resolve aliases; the helper does not
+discover dependencies or authenticate paths. Equivalent reordered path sets remain equivalent.
 
-Both observation threads and request can carry scope. Observation.main_scope is explicit null
-when Main has no concurrent access, otherwise Main's scope. Unknown Main/peer activity stops
-parallel scheduling. Requests can name depends_on; observation.accepted_units maps accepted
-prerequisites to evidence references. A final worker message alone is not an accepted dependency.
+Observation.main_scope is null when Main is idle, otherwise explicit. Unknown Main/peer activity
+stops parallel allocation. Requests may name depends_on; observation.accepted_units maps accepted
+prerequisites to evidence. A final worker message is not acceptance. Unscoped legacy records allow
+one unit and review, not unproven fan-out or a downgrade from known scopes.
 
-Reserve one shared future review slot when needed using request.reserve=1; record the returned
-review_reserved obligation on the writer, including reuse. Reusing a thread needs no new slot,
-but adding a review obligation needs real capacity or a same-unit reviewer. A retained unrelated,
-closing or unknown Tester is not reusable review capacity. Do not fill the last reserved slot
-with unrelated execution or reviews; a queued unit's reviewer can consume it. Reservations
-share one future slot, not one per writer. Completed open threads still count until native closure.
+Reserve one shared future semantic-review slot with request.reserve=1. Record returned
+review_reserved obligations, including reuse. Reviewer and Senior Reviewer can serve that queue;
+Tester cannot consume it as semantic sign-off. A retained unrelated, closing or unknown reviewer
+is not reusable capacity. Reservations share one future slot, not one per writer. A queued unit's
+reviewer may consume it; unrelated work must not steal it. Completed open threads still count.
 
-Scoped independent review requires request.candidate_held=true even without a live writer.
-An explicitly held candidate cannot resume writer work. For repair, release the hold first and
-set candidate_held=false; a stopped reviewer may remain for recheck after resource release.
-Readback grants no writes. Never fabricate observations. Parallel results are advisory, not locks.
+Scoped testing/review requires candidate_held=true. A held candidate cannot resume writing.
+Release the hold before repair and set candidate_held=false. Stopped verifiers may remain for
+recheck only when resource handover is safe. Readback grants no writes. Verifier output scopes
+must not overlap candidate inputs. Observations remain advisory, not locks or native scheduling.
 
-## Review and repair
+## Verification and handoff
 
-Main dispatches Tester directly by default. Routine/Default may dispatch exactly one Tester
-and no other role only with explicit scheduling authority and observed native support.
-Direct named work needs no nested qualification. Tester starts independently of the writer's
-reasoning. Stable candidate, original task and decisive evidence are supplied, not a persuasion
-summary. It owns its verdict; Main owns acceptance and actual visual judgment.
+Main dispatches verifiers directly by default. Routine/Default may dispatch one required verifier
+at a time, only with explicit same-unit scheduling authority and observed native support. No other
+nested roles are permitted. Tester executes approved gates; Reviewer owns a separate semantic
+verdict. Main owns final acceptance and actual visual judgment. Required gates remain binding
+when Main wrote the change. Read `testing.md` and `verification.md` when relevant.
 
-Release holds before repair. Reuse suitable writer/reviewer context for concrete corrections.
-If Main fixes a small finding, stop/transfer the writer first, include Main's entire delta,
-refresh affected evidence and obtain required independent verification. Never write the same
-candidate concurrently. Same-reviewer delta review is unavailable when impact is unknown.
+Reuse suitable writer/reviewer context for concrete corrections. If Main fixes a finding, stop
+and transfer the writer first, include Main's entire delta, refresh affected proof and obtain
+required independent review. Preserve a repair capsule before releasing an owner to free capacity.
 
-## Wait, hand off and release
+## Wait and release
 
-Workers own commands and their waits. Main waits only after scheduling independent ready work;
-use completion notifications or supported long interruptible waits, not progress SEND loops.
-Timeout alone does not trigger inspection, tests or acknowledgements. Honor real user
-interruptions. A requested fresh status is one owner snapshot.
+Workers own commands and waits. Use completion notifications or long interruptible waits after
+ready independent work is assigned, not repeated progress SENDs. Timeout alone triggers neither
+a new test nor an acknowledgement. A requested status is one existing-state snapshot.
 
-After acceptance, preserve decisions, candidate, gates, findings, next work and resource owners.
-Close completed owned children leaves-first; observe native release before relying on the slot.
-Thread closure does not delete source, browser profiles, logs or servers. Keep concrete repair
-context, not idle agents indefinitely. A one-slot client can save the repair capsule, release
-the writer and run Tester serially. At capacity failure inspect relevant handles once; retry
-only after observed change. Never omit a required review, close unrelated work or raise caps.
-No automatic restart, hidden model downgrade, ungranted cleanup or permission expansion.
+After acceptance preserve candidate, gates, findings, decisions, next work and resource owners.
+Close completed owned children leaves-first; observe native release before relying on a slot.
+Closure does not delete source, logs, profiles or servers. A one-slot client can release a writer
+and run Tester then Reviewer serially. On capacity errors reconcile once and retry only after
+observed change. Never omit required review, raise owner caps, close unrelated work, expand
+permissions, silently downgrade models or automatically restart Main.
