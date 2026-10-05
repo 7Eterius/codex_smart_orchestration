@@ -1,35 +1,28 @@
-# Smart engineering notes
+# Engineering notes
 
-## 3.0: optimize the accepted outcome, not the cheapest individual call
+Smart 3.1 uses one adaptive ownership loop: Main judgment and small direct work, Luna Max ordinary
+implementation, Sol Low/Medium/High depth presets, procedural Tester/Luna Medium, and independent
+semantic Reviewer/Luna Max or Senior Reviewer/Sol High. Roles are on demand, not standing teams.
 
-The current architecture restores direct Main execution for small/context-heavy critical-path
-work and makes Sol Medium the normal solver. Luna has a bounded recipe lane. This intentionally
-supersedes 2.x mandatory delegation and its two-thread ceiling.
+The installer manages declared package inputs and named role templates only. It preserves unrelated
+settings and project files, rejects conflicts, previews before applying, and retains exact rollback
+backups. Explicit parent/profile/speed/permission/cap settings remain authoritative. Fresh child
+defaults are Luna Max and five threads; installation does not activate a running conversation.
 
-Parallel work needs proven independence in read/write scopes, dependencies and mutable
-resources, including Main's activity. The optional allocator checks those supplied facts with
-native capacity/lifecycle observations. Up to four owned threads is a ceiling, not a fan-out
-target. Existing explicit lower limits remain binding. One future reviewer slot is shared by
-waiting tasks, and completed useful results can advance without a batch-wide barrier.
+allocation.py is an advisory router/prospective scope-and-lifecycle checker. It neither discovers
+dependencies nor locks files, spawns agents, authenticates evidence or changes native capacity.
+Its five-thread policy excludes Main while actual open unrelated threads and lower owner caps
+still bind. Semantic-review reservations are not satisfied by procedural test execution.
 
-Main can write, but a required independent reviewer must still be a different agent. Holds,
-original evidence, meaningful tests, exact target identity and separate acceptance/deployment
-authority remain. Main retains product/design decisions and actual visual acceptance.
+candidate.py, boundary.py and challenge.py retain their bounded identity/evidence/consistency
+contracts. They operate on supplied records, not truth. Missing proof is UNVERIFIED, affected
+proof STALE, and explicit fresh gates cannot be reused away. No mandatory per-action ledger.
 
-The installer modifies only declared global Smart files and managed instruction regions.
-Explicit owner configuration, project files, locally modified managed files and exact rollback
-are protected. Fresh missing defaults differ from preserved old values; disk checks make that
-visible without claiming current-session activation.
+Tests retain installer hardening, current routing and concurrency cases, exact historical upgrades
+and rollback, 3.0.1 safety regressions, plus 3.1 role separation and five-thread cases. The exact
+archived 2.7.1 suite remains unchanged historical reference. Live model capability and quota
+savings are outside deterministic CI and must be evaluated separately.
 
-The test organization now separates current 3.0 behavioral tests from the exact historical
-2.7.1 suite. Current policy is not constrained by obsolete literal 2.x prompt strings. Historical
-source is never silently rewritten to satisfy new expectations. Archived upgrade/rollback tests
-exercise the real old installers with the new package.
-
-No runtime database, telemetry, dependency crawler, model-price calculator or global mandatory
-qualification gate is added. Optional helper output is only as trustworthy as its supplied
-facts. Source CI does not measure live speed, model judgment or allowance savings.
-
-See [3.0 review](v3.0.md), [current architecture](../README.md),
-[execution](../codex_workflow/execution.md) and [verification](../codex_workflow/verification.md).
-Earlier version documents remain historical records, not current instructions.
+[3.1 release notes](v3.1.md) | [3.0 history](v3.0.md) |
+[Main policy](../codex_workflow/smart_orchestration.md) |
+[Execution](../codex_workflow/execution.md) | [Testing](../codex_workflow/testing.md)

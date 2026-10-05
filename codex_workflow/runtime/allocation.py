@@ -12,10 +12,13 @@ from pathlib import Path
 import sys
 
 ROLES = frozenset({'simple_executor', 'routine_executor', 'default_executor',
-                   'senior_executor', 'tester', 'companion', 'investigator', 'archivist'})
+                   'senior_executor', 'deep_executor', 'tester', 'reviewer', 'senior_reviewer',
+                   'companion', 'investigator', 'archivist'})
 REVIEW_OWNERS = frozenset({'routine_executor', 'default_executor'})
-WRITERS = frozenset({'simple_executor', 'routine_executor', 'default_executor', 'senior_executor'})
-SMART_OPEN_LIMIT = 4
+WRITERS = frozenset({'simple_executor', 'routine_executor', 'default_executor', 'deep_executor', 'senior_executor'})
+REVIEWERS = frozenset({'reviewer', 'senior_reviewer'})
+VERIFIERS = REVIEWERS | frozenset({'tester'})
+SMART_OPEN_LIMIT = 5
 MAX_INPUT_BYTES = 65536
 MAX_THREADS = 128
 LIMITATION = 'Advisory policy from supplied observations, not native enforcement or a correctness/cost guarantee.'
@@ -44,18 +47,17 @@ def _text(value):
 
 
 def classify(task: dict) -> dict:
-    """Route uncertainty to intelligence, not every small job to another agent.
+    """Recommend fixed presets from supplied facts; no native model selection.
 
-    Existing six fields remain accepted. Optional mechanical/in_context/on_critical_path
-    and stalled describe why a handoff is useful. Absent mechanical is NOT evidence
-    that ordinary implementation or browser investigation is cheap-model work.
+    verification remains semantic; testing is procedural. Difficulty cannot weaken deep/critical.
     """
     _keys(task, {'kind', 'risk', 'settled', 'tiny', 'deep', 'independent_required'},
-          {'mechanical', 'in_context', 'on_critical_path', 'stalled'})
+          {'mechanical', 'in_context', 'on_critical_path', 'stalled', 'difficulty'})
     kind = _text(task['kind'])
-    if kind not in {'answer', 'judgment', 'operation', 'implementation', 'verification', 'discovery', 'memory'}:
+    if kind not in {'answer', 'judgment', 'operation', 'implementation', 'verification', 'testing', 'discovery', 'memory'}:
         raise AllocationError('Unrecognized assignment kind')
-    if _text(task['risk']) not in {'low', 'material', 'critical'}:
+    risk = _text(task['risk'])
+    if risk not in {'low', 'material', 'critical'}:
         raise AllocationError('Unrecognized risk')
     for key in ('settled', 'tiny', 'deep', 'independent_required', 'mechanical',
                 'in_context', 'on_critical_path', 'stalled'):
@@ -63,30 +65,51 @@ def classify(task: dict) -> dict:
             _bool(task[key])
     if task['tiny'] and task['deep']:
         raise AllocationError('Tiny and deep are contradictory')
-    review = task['independent_required'] or task['risk'] != 'low' or task['deep']
+    levels = ('ordinary', 'moderate', 'deep', 'serious')
+    difficulty = _text(task.get('difficulty', 'ordinary'))
+    if difficulty not in levels:
+        raise AllocationError('Unrecognized difficulty')
+    depth = max(levels.index(difficulty), 2 if task['deep'] else 0)
+    if kind == 'testing' and depth > 0:
+        raise AllocationError('Testing is approved procedural execution; use discovery or verification for test strategy/diagnosis')
+    if risk == 'critical':
+        depth = 3
+    stalled = task.get('stalled', False)
+    if stalled and kind not in {'testing', 'memory'}:
+        depth = max(depth, 1)
     mechanical = task.get('mechanical', False)
+    review = task['independent_required'] or risk != 'low' or depth >= 2
+    semantic = 'senior_reviewer' if depth >= 2 or (kind == 'verification' and stalled) else 'reviewer'
+    sol = {1: 'default_executor', 2: 'deep_executor', 3: 'senior_executor'}
     if kind == 'answer':
         role, reason = 'main', 'answer_without_team'
     elif kind == 'judgment' or not task['settled']:
         role, reason = 'main', 'resolve_judgment_or_contract'
+    elif kind == 'testing':
+        role, reason = 'tester', 'approved_test_execution_not_semantic_signoff'
     elif kind == 'verification':
-        role, reason = 'tester', 'independent_verification_without_writer'
+        role, reason = semantic, 'independent_semantic_review'
     elif kind == 'memory':
         role, reason = 'archivist', 'authorized_checkpoint_only'
-    elif task.get('stalled', False):
-        role, reason = 'default_executor', 'intelligent_diagnosis_not_another_cheap_retry'
+    elif stalled:
+        role, reason = sol[depth], 'appropriate_sol_after_stalled_correction'
     elif kind == 'discovery':
-        role, reason = ('companion', 'exact_lookup') if mechanical and not task['deep'] else ('investigator', 'causal_investigation')
+        if depth:
+            role, reason = sol[depth], 'higher_depth_causal_investigation'
+        else:
+            role, reason = ('companion', 'exact_lookup') if mechanical else ('investigator', 'bounded_causal_investigation')
     elif ((task['tiny'] and task.get('in_context', True))
           or (task.get('in_context', False) and task.get('on_critical_path', False))):
         role, reason = 'main', 'direct_bounded_finish_avoids_handoff'
-    elif task['deep'] or not mechanical or task['risk'] != 'low':
-        role, reason = 'default_executor', 'sol_problem_solving_default'
-    elif kind == 'operation' or task['tiny']:
-        role, reason = 'simple_executor', 'known_mechanical_work'
+    elif depth:
+        role, reason = sol[depth], 'sol_depth_selected_directly'
+    elif kind == 'operation' and not mechanical:
+        role, reason = 'default_executor', 'adaptive_tool_use_sol_low'
+    elif mechanical and (kind == 'operation' or task['tiny']):
+        role, reason = 'simple_executor', 'known_batched_recipe'
     else:
-        role, reason = 'routine_executor', 'prescribed_bulk_implementation'
-    reviewer = 'tester' if review and kind in {'implementation', 'operation'} else None
+        role, reason = 'routine_executor', 'ordinary_luna_max_implementation'
+    reviewer = semantic if review and kind in {'implementation', 'operation'} else None
     return {'owner': role, 'reviewer': reviewer, 'reason': reason, 'limitation': LIMITATION}
 
 
@@ -251,8 +274,11 @@ def next_action(obs: dict, request: dict) -> dict:
             return released
     if caller is not None:
         if (caller['state'] not in {'running', 'waiting'} or caller['role'] not in REVIEW_OWNERS
-                or role != 'tester' or caller['unit'] != unit or not caller.get('review_authorized', False)):
-            raise AllocationError('New review work requires an active same-unit owner with explicit review authority')
+                or role not in VERIFIERS or caller['unit'] != unit or not caller.get('review_authorized', False)):
+            raise AllocationError('New verification work requires an active same-unit owner with explicit review authority')
+        if any(t['owned'] and t['parent'] == obs['caller'] and t['role'] in VERIFIERS
+               and t['id'] != request['reuse_id'] for t in opened.values()):
+            return {**result, 'action': 'wait', 'reason': 'nested_verifier_already_open'}
     if request['reuse_id'] is not None:
         if (reuse is None or not reuse['owned'] or reuse['parent'] != obs['caller']
                 or reuse['role'] != role or reuse['unit'] != unit or reuse['state'] not in {'completed', 'waiting'}):
@@ -277,9 +303,12 @@ def next_action(obs: dict, request: dict) -> dict:
         return {**result, 'action': 'inspect', 'reason': 'parallel_scopes_required'}
     if role in WRITERS and request.get('candidate_held') is True:
         return {**result, 'action': 'wait', 'reason': 'candidate_still_held'}
-    if (role == 'tester' and (scope is not None or 'candidate_held' in request)
+    if (role in VERIFIERS and (scope is not None or 'candidate_held' in request)
             and request.get('candidate_held') is not True):
         return {**result, 'action': 'wait', 'reason': 'review_requires_candidate_hold'}
+    if role in VERIFIERS and scope is not None and _conflict(
+            scope, {**scope, 'writes': [], 'resource_reads': [], 'resource_writes': []}):
+        return {**result, 'action': 'blocked', 'reason': 'verifier_writes_input_scope'}
     if scope is not None:
         if 'main_scope' not in obs:
             return {**result, 'action': 'inspect', 'reason': 'main_activity_unknown'}
@@ -296,10 +325,10 @@ def next_action(obs: dict, request: dict) -> dict:
                 {**scope, 'reads': [], 'resource_reads': [], 'resource_writes': []},
                 {**t['scope'], 'reads': t['scope']['reads'] + t['scope']['writes'],
                  'writes': [], 'resource_reads': [], 'resource_writes': []}))
-            if (role == 'tester' and same_unit and t['role'] in WRITERS and stopped
+            if (role in VERIFIERS and same_unit and t['role'] in WRITERS and stopped
                     and request.get('candidate_held', False) and resources_safe and review_writes_safe):
                 continue
-            if (role in WRITERS and same_unit and t['role'] == 'tester' and stopped
+            if (role in WRITERS and same_unit and t['role'] in VERIFIERS and stopped
                     and request.get('candidate_held') is False and resources_safe):
                 continue
             if 'scope' not in t:
@@ -308,7 +337,7 @@ def next_action(obs: dict, request: dict) -> dict:
                 return {**result, 'action': 'wait', 'reason': 'scope_or_resource_conflict', 'peer': t['id']}
     elif any(t['unit'] != unit for t in peers):
         return {**result, 'action': 'inspect', 'reason': 'parallel_scopes_required'}
-    review_units = {t['unit'] for t in opened.values() if t['owned'] and t['role'] == 'tester'
+    review_units = {t['unit'] for t in opened.values() if t['owned'] and t['role'] in REVIEWERS
                     and t['state'] in {'running', 'waiting', 'completed'}}
     reserved = {t['unit'] for t in opened.values() if t['owned'] and t.get('review_reserved', False)
                 and t['unit'] not in review_units}
@@ -334,12 +363,12 @@ def next_action(obs: dict, request: dict) -> dict:
         return {**result, 'action': 'wait', 'reason': 'assignment_already_open'}
     if request['spawn_failed'] and not request['state_changed']:
         return {**result, 'action': 'blocked', 'reason': 'no_blind_spawn_retry'}
-    serving_queue = role == 'tester' and unit in reserved
+    serving_queue = role in REVIEWERS and unit in reserved
     if serving_queue:
         reserved.discard(unit)
     if request['reserve'] and unit not in review_units:
         reserved.add(unit)
-    # One slot serves the queued reviews. A retained unrelated Tester is not free
+    # One slot serves the queued reviews. A retained unrelated semantic reviewer is not free
     # capacity; neither an unrelated writer nor an unrelated review may steal it.
     required = 1 + int(bool(reserved) and not serving_queue)
     if blocked := capacity(required):

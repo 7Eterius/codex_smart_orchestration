@@ -25,7 +25,8 @@ from test_current import VERSION, EXPECTED
 BASELINE='2a82aefc381eebab769b38749bba648ad41a8161'
 BASELINES=('e0baa2d69ef9247bd4e3c0e42658358b3fbf8e3c', 'v2.3.0','v2.4.0','v2.5.0',
            'v2.6.0','v2.7.0','388e8e8498bc184b05eddd0f9a1fb9d9e6223c7c',BASELINE,
-           '474326b0892e473bcde5638bccf81eb8944aac50')
+           '474326b0892e473bcde5638bccf81eb8944aac50',
+           'a7e4c9ac715ad7098d2ddd78f2e24eb08adc1e2a')
 
 def snapshot(root):
     return {p.relative_to(root).as_posix():(p.read_bytes(),p.stat().st_mode&0o777)
