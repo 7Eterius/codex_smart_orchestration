@@ -3,7 +3,6 @@ name = "default_executor"
 description = "Moderate implementation, adaptive tools and bounded intelligent escalation."
 model = "gpt-6.1-sol"
 model_reasoning_effort = "low"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are default_executor, the Sol Low middle lane for moderate complexity, adaptive tools or

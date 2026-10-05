@@ -50,9 +50,10 @@ def classify(task: dict) -> dict:
     """Recommend fixed presets from supplied facts; no native model selection.
 
     verification remains semantic; testing is procedural. Difficulty cannot weaken deep/critical.
+    Optional previous_owner makes stalled recovery progress beyond a known attempted preset.
     """
     _keys(task, {'kind', 'risk', 'settled', 'tiny', 'deep', 'independent_required'},
-          {'mechanical', 'in_context', 'on_critical_path', 'stalled', 'difficulty'})
+          {'mechanical', 'in_context', 'on_critical_path', 'stalled', 'difficulty', 'previous_owner'})
     kind = _text(task['kind'])
     if kind not in {'answer', 'judgment', 'operation', 'implementation', 'verification', 'testing', 'discovery', 'memory'}:
         raise AllocationError('Unrecognized assignment kind')
@@ -69,14 +70,21 @@ def classify(task: dict) -> dict:
     difficulty = _text(task.get('difficulty', 'ordinary'))
     if difficulty not in levels:
         raise AllocationError('Unrecognized difficulty')
+    if task['tiny'] and difficulty in {'deep', 'serious'}:
+        raise AllocationError('Tiny and deep/serious difficulty are contradictory')
+    previous = _text(task['previous_owner']) if 'previous_owner' in task else None
+    if previous is not None and previous not in ROLES | {'main'}:
+        raise AllocationError('Unrecognized previous owner')
     depth = max(levels.index(difficulty), 2 if task['deep'] else 0)
     if kind == 'testing' and depth > 0:
         raise AllocationError('Testing is approved procedural execution; use discovery or verification for test strategy/diagnosis')
     if risk == 'critical':
         depth = 3
     stalled = task.get('stalled', False)
-    if stalled and kind not in {'testing', 'memory'}:
-        depth = max(depth, 1)
+    if stalled and kind != 'memory':
+        # Do not route an already-stalled Sol owner straight back to the same preset.
+        floor = {'default_executor': 2, 'deep_executor': 3}.get(previous, 1)
+        depth = max(depth, floor)
     mechanical = task.get('mechanical', False)
     review = task['independent_required'] or risk != 'low' or depth >= 2
     semantic = 'senior_reviewer' if depth >= 2 or (kind == 'verification' and stalled) else 'reviewer'
@@ -85,8 +93,12 @@ def classify(task: dict) -> dict:
         role, reason = 'main', 'answer_without_team'
     elif kind == 'judgment' or not task['settled']:
         role, reason = 'main', 'resolve_judgment_or_contract'
+    elif (stalled and kind != 'memory'
+          and previous in {'main', 'senior_executor', 'senior_reviewer'}):
+        role, reason = 'main', 'replan_after_senior_stall_not_another_retry'
     elif kind == 'testing':
-        role, reason = 'tester', 'approved_test_execution_not_semantic_signoff'
+        role, reason = ((sol[depth], 'stalled_testing_needs_diagnosis') if stalled
+                        else ('tester', 'approved_test_execution_not_semantic_signoff'))
     elif kind == 'verification':
         role, reason = semantic, 'independent_semantic_review'
     elif kind == 'memory':
@@ -272,7 +284,7 @@ def next_action(obs: dict, request: dict) -> dict:
         same = [t for t in opened.values() if t['owned'] and t['unit'] == unit and t['role'] == role]
         if not same and (released := cleanup()) is not None:
             return released
-    if caller is not None:
+    if caller is not None and intent == 'work':
         if (caller['state'] not in {'running', 'waiting'} or caller['role'] not in REVIEW_OWNERS
                 or role not in VERIFIERS or caller['unit'] != unit or not caller.get('review_authorized', False)):
             raise AllocationError('New verification work requires an active same-unit owner with explicit review authority')
@@ -303,9 +315,11 @@ def next_action(obs: dict, request: dict) -> dict:
         return {**result, 'action': 'inspect', 'reason': 'parallel_scopes_required'}
     if role in WRITERS and request.get('candidate_held') is True:
         return {**result, 'action': 'wait', 'reason': 'candidate_still_held'}
-    if (role in VERIFIERS and (scope is not None or 'candidate_held' in request)
-            and request.get('candidate_held') is not True):
+    if role in VERIFIERS and request.get('candidate_held') is not True:
         return {**result, 'action': 'wait', 'reason': 'review_requires_candidate_hold'}
+    # Legacy unscoped work never establishes safe verification or repair access.
+    if scope is None and (role in VERIFIERS or any(t['role'] in VERIFIERS for t in peers)):
+        return {**result, 'action': 'inspect', 'reason': 'verification_scope_required'}
     if role in VERIFIERS and scope is not None and _conflict(
             scope, {**scope, 'writes': [], 'resource_reads': [], 'resource_writes': []}):
         return {**result, 'action': 'blocked', 'reason': 'verifier_writes_input_scope'}

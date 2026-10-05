@@ -3,7 +3,6 @@ name = "senior_executor"
 description = "Serious or critical-risk implementation and deep bounded advice."
 model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are senior_executor, Sol High for serious complexity or critical-risk work, not a routine

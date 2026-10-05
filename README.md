@@ -1,4 +1,4 @@
-# Smart Orchestration 3.1
+# Smart Orchestration 3.1.1
 
 **Luna Max for useful work. Sol for depth. Testing without duplicate suites.**
 
@@ -9,6 +9,19 @@ Luna Medium runs approved tests without becoming the semantic reviewer.
 
 This is instructions plus bounded deterministic helpers, not a native scheduler, permission
 system or a guarantee of savings. Actual tools, model availability and owner settings bind.
+
+## Maintenance patch 3.1.1
+
+The model mix stays unchanged. This patch closes the legacy unscoped verification bypass,
+prevents known stalled Sol owners from being routed back to the same preset, separates nested
+readback from new scheduling authority, inherits parent sandbox settings, resolves worker guides
+from the installed location, and shortens the duplicated global bootstrap. Low-capacity testing
+and review have an explicit serial handoff. Patch-specific release notes and pinned CI actions
+keep maintenance predictable. See [audit details and validation](docs/v3.1.1.md).
+
+Use it for the work itself. Research, writing, planning and administrative tasks need relevant
+evidence, not invented software tests. No routine workflow audits, model research, reinstallations
+or retuning are required. Revisit the workflow for observed problems or explicit update requests.
 
 ## What changes in 3.1
 
@@ -130,7 +143,7 @@ Acceptance, commit and deployment remain separate authorities.
 
 ## Installation or update
 
-After v3.1 is merged to main, send Codex:
+For the current published version, send Codex:
 
 ```text
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup, configured concurrency cap and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
@@ -138,8 +151,7 @@ Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchest
 
 Restart Codex manually and start a fresh conversation after successful preview/apply/check.
 Select the recommended Main model through the supported selector; installation does not switch
-an already-running conversation. Before merge, use the exact reviewed branch commit instead of
-claiming main contains 3.1.
+an already-running conversation. Pin the inspected source commit; do not assume a branch or archive has the requested version.
 
 **Existing explicit settings are preserved.** Fresh installs without a cap receive five and
 Luna Max generic child defaults. An existing cap of two, three or four remains unchanged and is
@@ -166,5 +178,5 @@ wall-time/duplicate runs and observed subscription allowance on comparable tasks
 are not a direct subscription allowance formula. Max may use more reasoning than Low; concurrency
 can increase simultaneous consumption. Savings and speed improvements require real measurements.
 
-[3.1 release notes and research](docs/v3.1.md) | [Main policy](codex_workflow/smart_orchestration.md) |
+[3.1.1 maintenance audit](docs/v3.1.1.md) | [3.1 design and research](docs/v3.1.md) | [Main policy](codex_workflow/smart_orchestration.md) |
 [Targeted runtime qualification](codex_workflow/runtime_check.md) | [Evaluation](docs/evaluation.md)
