@@ -20,17 +20,21 @@ from runtime.layout import PackageLayout, BUILTIN_WORKERS
 from runtime.smart_config import patch_config, bootstrap
 from runtime.smart_restore import prepare_restore
 
-VERSION = '3.0.1'
+VERSION = '3.1.0'
 EXPECTED = {
-    'simple_executor': ('gpt-6-luna', 'low'),
-    'routine_executor': ('gpt-6-luna', 'high'),
-    'default_executor': ('gpt-6.1-sol', 'medium'),
-    'senior_executor': ('gpt-6.1-sol', 'xhigh'),
-    'tester': ('gpt-6.1-sol', 'medium'),
-    'investigator': ('gpt-6.1-sol', 'medium'),
-    'companion': ('gpt-6-luna', 'medium'),
-    'archivist': ('gpt-6-luna', 'medium'),
+    'simple_executor': ('gpt-6-luna', 'max'),
+    'routine_executor': ('gpt-6-luna', 'max'),
+    'default_executor': ('gpt-6.1-sol', 'low'),
+    'deep_executor': ('gpt-6.1-sol', 'medium'),
+    'senior_executor': ('gpt-6.1-sol', 'high'),
+    'tester': ('gpt-6-luna', 'medium'),
+    'reviewer': ('gpt-6-luna', 'max'),
+    'senior_reviewer': ('gpt-6.1-sol', 'high'),
+    'investigator': ('gpt-6-luna', 'max'),
+    'companion': ('gpt-6-luna', 'max'),
+    'archivist': ('gpt-6-luna', 'max'),
 }
+
 
 class PackageContracts(unittest.TestCase):
     def test_version_inventory_models_and_role_budgets(self):
@@ -48,7 +52,7 @@ class PackageContracts(unittest.TestCase):
 
     def test_prompt_budgets(self):
         for name, limit in {'smart_orchestration.md':1200, 'execution.md':1000,
-                            'verification.md':700, 'browser.md':650, 'design.md':600}.items():
+                            'verification.md':700, 'testing.md':650, 'browser.md':650, 'design.md':600}.items():
             self.assertLess(len((PACKAGE/name).read_text().split()), limit, name)
         self.assertLess(len(bootstrap(Path('/example')).split()), 400)
 
@@ -68,7 +72,7 @@ class PackageContracts(unittest.TestCase):
                        'only after observed state change', 'no-agent'):
             self.assertIn(phrase, text)
         self.assertIn('actual visual evidence', text)
-        self.assertIn('Luna Max is an optional', text)
+        self.assertIn('Luna Max is the ordinary delegated baseline', text)
 
     def test_links_and_install_contract(self):
         for path in [ROOT/'README.md', ROOT/'docs/v3.0.md', ROOT/'docs/smart_orchestration.md']:
@@ -76,7 +80,7 @@ class PackageContracts(unittest.TestCase):
                 if not target.startswith(('http:', 'https:', '#')):
                     self.assertTrue((path.parent/target.split('#')[0]).is_file(), (path,target))
         readme = (ROOT/'README.md').read_text()
-        self.assertTrue(readme.startswith('# Smart Orchestration 3.0'))
+        self.assertTrue(readme.startswith('# Smart Orchestration 3.1'))
         for text in ('current HEAD commit SHA of main', 'without --apply first',
                      'Do not use GitHub Releases', 'restart Codex manually'):
             self.assertIn(text, readme)
@@ -86,8 +90,8 @@ class ConfigurationTests(unittest.TestCase):
     def test_only_absent_balanced_defaults_are_inserted(self):
         text, warnings, added = configure('model="owner"\n')
         self.assertEqual(tomllib.loads(text)['agents'], DEFAULTS)
-        self.assertEqual(DEFAULTS['default_subagent_model'], 'gpt-6.1-sol')
-        self.assertEqual(DEFAULTS['max_concurrent_threads_per_session'], 4)
+        self.assertEqual(DEFAULTS['default_subagent_model'], 'gpt-6-luna')
+        self.assertEqual(DEFAULTS['max_concurrent_threads_per_session'], 5)
         self.assertEqual(configure(text)[0], text)
         self.assertEqual(configure(text)[2], {})
 
@@ -113,14 +117,14 @@ class ConfigurationTests(unittest.TestCase):
             self.assertTrue(warnings)
 
     def test_low_cap_is_visible_but_not_changed(self):
-        for cap in (1, 2, 3):
+        for cap in (1, 2, 3, 4):
             cfg = {'agents': {'max_threads': cap}}
             before = copy.deepcopy(cfg)
             result = assess_configuration(cfg)
             self.assertEqual(cfg, before)
             self.assertTrue(result['ok'])
             self.assertEqual(result['effective_configured_cap'], cap)
-            self.assertEqual(result['recommended_parallel_cap'], 4)
+            self.assertEqual(result['recommended_parallel_cap'], 5)
             self.assertTrue(any('lower cap' in x for x in result['warnings']))
 
     def test_invalid_or_disabled_configuration_fails_without_repair(self):

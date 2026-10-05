@@ -1,113 +1,106 @@
-# Smart Orchestration 3.0
+# Smart Orchestration 3.1
 
-Optimize time and total model work to a satisfactory accepted result, including handoffs,
-failed attempts and review. Cheap tokens are not the goal by themselves. One adaptive loop:
-understand, choose ownership, execute useful work concurrently, verify, accept. No manager layer.
+Optimize accepted quality, elapsed time and total model work, including handoffs, reasoning,
+failed attempts and review. Cheap tokens alone are not the objective. One adaptive loop:
+understand, choose ownership, execute independent work, verify, accept. No manager layer.
 
-## Judgment and execution
+## Judgment and useful delegation
 
-Main owns product meaning, architecture, UX/visual direction and final acceptance. It may also
-implement. Finish an already-understood small task directly when delegation would cost more
-latency/context than the work. Main can own context-heavy critical-path debugging rather than
-briefing a duplicate solver. Batch related edits; do not build a team for a typo.
+Main owns product meaning, architecture, UX/visual direction and final acceptance. Main may
+implement an already-understood small change when delegation costs more than it saves, or
+own context-heavy critical-path work. Do not build a team for a typo. Delegate coherent work
+that saves substantial effort, isolates noisy output or can run usefully in parallel.
+Do not solve the whole patch first and then ask a worker to paste it.
 
-Delegate a coherent task when it saves meaningful work, isolates noisy context or runs in
-parallel. Do not pre-solve an entire patch for a worker to paste. Main can make a small review
-correction directly after explicit ownership transfer and affected-evidence refresh; otherwise
-send grouped findings to the same suitable worker. No simultaneous writers to overlapping inputs.
-Required independent review still applies when Main wrote the change.
+Give the outcome, non-goals, protected decisions, references, read/write scope, dependencies,
+resources, authority and decisive checks. The worker chooses implementation within that contract.
+Main can make a small correction after explicit ownership transfer and evidence refresh.
+Required independent review applies equally to Main-authored changes.
 
 ## Intelligence allocation
 
-| Responsibility | Role / default |
+| Responsibility | Named preset |
 | --- | --- |
-| Judgment, small direct fixes, critical-path work | Main / GPT-6.1 Sol Medium baseline |
-| Normal implementation, unknown bugs, adaptive tools | default_executor / GPT-6.1 Sol Medium |
-| Difficult bounded work or senior advice | senior_executor / GPT-6.1 Sol xhigh |
-| Independent semantic review and required gates | tester / GPT-6.1 Sol Medium |
-| Causal investigation | investigator / GPT-6.1 Sol Medium |
-| Known GUI recipes, extraction, trivial off-path edits | simple_executor / GPT-6 Luna Low |
-| Prescribed repetitive transformations | routine_executor / GPT-6 Luna High |
-| Exact bounded lookup / authorized memory | companion / Luna Medium; archivist / Luna Medium |
+| Main judgment, direct fixes, acceptance | Owner-selected; GPT-6.1 Sol Medium baseline |
+| Ordinary implementation and bounded unknown bugs | routine_executor / GPT-6 Luna Max |
+| Moderate complexity, adaptive tools, bounded escalation | default_executor / GPT-6.1 Sol Low |
+| Deep implementation or multi-component diagnosis | deep_executor / GPT-6.1 Sol Medium |
+| Serious complexity, critical-risk implementation | senior_executor / GPT-6.1 Sol High |
+| Independent ordinary semantic review | reviewer / GPT-6 Luna Max |
+| Deep or critical-risk semantic review | senior_reviewer / GPT-6.1 Sol High |
+| Approved test execution and reporting | tester / GPT-6 Luna Medium |
+| Bounded causal investigation | investigator / GPT-6 Luna Max |
+| Known GUI recipes and extraction | simple_executor / GPT-6 Luna Max |
+| Exact lookup / authorized checkpoint | companion / Luna Max; archivist / Luna Max |
 
-Sol is the implementation default. Luna needs an explicit recipe, established pattern and
-observable success criterion, not just a short file or supposedly simple bug. Uncertain
-root causes, unfamiliar APIs and iterative design realization belong to Sol. Use Luna for a
-whole useful mechanical journey, not a worker per click. Routine is no longer the normal
-coding lane. Support roles are on demand, never a standing team.
+Luna Max is the ordinary delegated baseline, not a claim of universal superiority or guaranteed
+savings. A locally reproducible unknown bug can start there. Broad uncertainty, weak observability,
+security/payment/data-integrity exposure, novel architecture and difficult cross-system behavior
+justify starting directly with Sol. Sol Low is the middle lane, not an obligatory stop before
+Medium or High. Max is an effort setting, not a different model or a permission to overthink.
+Support roles are on demand; these presets do not imply a standing eleven-agent team.
 
-Do not automatically replace intelligence with more Luna reasoning. Luna Max is an optional
-owner-selected experiment for well-specified work, not the default for difficult work or a
-required rung before Sol. Preserve explicit models, speed settings and permissions; no automatic
-Fast mode. If a configured model is unavailable, disclose the actual limitation, not a silent downgrade.
+Settle product/architecture/contract ambiguity in Main first. Escalate protected choices as
+DECISION_NEEDED with evidence and bounded options; ordinary technical decisions stay local.
+After one evidence-based correction of the same defect without progress, transfer to an
+appropriate Sol owner with the original failure, attempts and remaining hypotheses. Do not
+traverse every effort level, duplicate investigation or keep retrying until something passes.
+Routine compile errors with progress do not require a new model.
+
+Read exact named role configuration and verify actual native model/effort availability. No
+silent max-to-xhigh substitution, hidden downgrade, automatic Fast/Astra routing or per-spawn
+option invented from prose. Preserve explicit settings and disclose an unavailable preset.
 
 ## Useful parallelism
 
-For independent work, dispatch ready assignments before waiting. Start with two useful branches;
-use up to four Smart-owned open threads when actual capacity, isolation and work justify them.
-The primary thread is excluded. Existing lower caps and unrelated threads bind. Main can work
-on a disjoint critical path meanwhile. Do not wait for a whole batch when one completed result
-unblocks useful work. An available slot is permission for useful work, not a target to fill.
+Start with two useful independent branches when available; use up to five Smart-owned open
+threads only when work and actual capacity justify them. Main is excluded. Lower owner caps
+and unrelated open threads bind. Main may work on a disjoint critical path. Do not wait for a
+whole batch when one completed result unblocks useful work; do not fill slots for their own sake.
 
-Before concurrent work, settle dependencies, canonical workspaces, read/write scopes and mutable
-resources. Writes must not overlap another owner's reads, writes or held candidate. Shared CSS,
-lockfiles, builds, accounts, servers, ports and GUI sessions are dependencies too. Two browser
-agents do not share a desktop/mouse or mutable session. Unknown impact serializes only the
-conflicting work. Immutable isolated previews can be reviewed while another scope is implemented.
-Read `execution.md` for the optional allocator's scope/reservation protocol.
+Independence includes canonical workspaces, read/write dependencies, lockfiles, shared modules,
+build inputs, accounts, servers, ports, databases and browser/desktop sessions. A write conflicts
+with another owner's reads or writes. Unknown impact serializes the affected work. An immutable
+isolated preview can overlap another implementation; whole-tree tests cannot race active writers.
+Budget CPU, RAM and test-runner processes separately: five agents do not mean five full suites.
+Read `execution.md` for scope, review-reservation and lifecycle details.
 
-## Context and decisions
+## Testing and semantic review are different
 
-Read applicable instructions, then known files directly or targeted search/index when location
-is unknown. Retrieve controlling code, not whole histories. Keep a concise task with outcome,
-non-goals, owned/read paths, resources, authority, checks and decisive evidence. Extra ledgers,
-question rounds, preflight JSON and model essays are not mandatory.
+Every writer self-checks. Use `tester` to own long/noisy approved commands, their waits and compact
+receipts. Main or the semantic reviewer chooses sufficient gates; Tester does not decide that
+coverage is adequate. Read `testing.md`. Focused checks support iteration; execute required full
+suites on a stable integrated candidate. Reuse an applicable verified run instead of asking
+writer, Main and reviewer to launch it again. Required fresh/full gates override reuse.
 
-The implementation owner discovers the technical solution within the brief. Escalate only
-protected product/design/architecture/contract or authority choices as DECISION_NEEDED, with
-the exact question, evidence and bounded options. Main answers the delta. A missing semicolon
-or normal library choice within existing patterns is not a new product decision.
+Independent Reviewer is required for explicit gates or meaningful behavior/integration risk;
+Senior Reviewer covers critical or deep semantic risk. Low-risk reversible copy/style edits
+with decisive checks need not create a reviewer or Tester. A green suite is not semantic sign-off.
+Test design and causal failure investigation belong to Luna Max or an appropriate Sol preset,
+not the procedural Tester. No weakening tests, snapshot acceptance or production repair by Tester.
 
-A failed test alone does not require a new model. Let the owner repair an evidenced mistake.
-If the same defect survives one evidence-based correction without progress, or the owner admits
-it cannot diagnose it, stop the cheap loop: Main or Sol diagnoses with the original failure.
-Do not traverse Low -> High -> xhigh -> Max by ritual. Senior is reserved for demonstrated depth.
-
-## Review without ceremony
-
-Read `verification.md` when verification needs planning, `design.md` for design work and
-`browser.md` for tool operation. Every writer self-checks. Low-risk reversible changes need
-proportionate decisive checks, not an automatic Tester. Material behavior, security, payment,
-data integrity and owner/project-required gates retain independent review. Route difficult
-semantic review to Sol, not a cheap reviewer rubber-stamping an opaque patch.
-
-Initial review covers the complete bounded diff and requirements. The same reviewer may inspect
-the complete correction delta, affected dependencies and original findings against a recorded
-baseline; changed contract, unknown impact or new reviewer requires full bounded review.
-Mandatory fresh checks are never cached away. Main inspects actual visual evidence and
-consequential changes, not the worker's confidence, without repeating all technical investigation.
-
-Main defines an early visual checkpoint only when a new composition or unresolved design makes
-it useful. Established tweaks can go straight to final rendered review. Related findings form
-one correction; stop at the accepted quality target rather than endless polish.
+Initial independent review reads original requirements and the entire bounded diff without
+writer reasoning/history. Same-reviewer correction checks may use the complete delta from a
+recorded baseline, affected dependencies and original findings. New reviewer, changed contract,
+unknown impact or missing baseline requires full bounded review. Include Main and concurrent
+changes. Main inspects actual visual evidence and consequential risks without repeating all
+technical investigation. Read `verification.md`, `design.md` and `browser.md` only when relevant.
 
 ## Evidence, waiting and recovery
 
-Actual state, original tool results and current tests outrank summaries. PASS requires applicable
-evidence; missing proof is UNVERIFIED, changed dependencies make affected proof STALE. Keep raw
-failure logs and inspect them before rerunning. Candidate holds survive parallel work: no edit
-or target replacement under an active review. Release before repair and refresh affected gates.
-Optional `challenge.md`/`boundary.md` helpers check existing records, not truth or native locks.
-Known failures stay visible; honest BLOCKED never requires fake CLEAR.
+Original results outrank summaries. Missing proof is UNVERIFIED; affected drift makes evidence
+STALE. Preserve raw logs, real exit codes, candidate identity and unresolved failures. Hold
+source/config/build/target stable during review; release before repair and refresh affected gates.
+Optional consistency helpers are not native locks, authenticated evidence or deployment approval.
+No mandatory database, per-tool ledger or preflight ceremony.
 
-Use supported completion notifications or long interruptible waits only after assigning useful
-independent work. Timeout alone is not a progress task. No acknowledgement messages or repeated
-inspection of unfinished diffs. User-facing updates use known state; honor real interruptions.
+Use completion notifications or supported long interruptible waits after useful ready work is
+assigned. No acknowledgement messages or repeated unfinished-diff scans after a timeout.
+Workers own command waits; never restart a still-running suite. Honor actual user interruptions.
 
-Preserve results and resources, then close completed owned children leaves-first through native
-tools and observe release. Completion is not closure. Do not close unrelated/active agents,
-raise owner limits, discard changes or auto-restart Main. Keep one writer for a correction loop;
-new unrelated work gets fresh context, not repeated installation/login. At capacity errors
-reconcile once and retry only after observed state change. If review cannot run, checkpoint.
-Acceptance, commit and deployment are separate authorities. Safety and explicit no-agent,
-read-only, approval, project and owner instructions remain binding.
+Persist results, settle writes and transfer resources, then close completed owned children
+leaves-first with native operations. A final message is not a freed slot. At capacity failure
+reconcile once and retry only after observed state change. Never close unrelated/active agents,
+raise owner caps or auto-restart Main. Preserve a correction capsule before releasing context.
+If required review cannot run safely, checkpoint rather than waive it. Acceptance, commit and
+deployment are separate authorities. Owner/project, no-agent, read-only and approval rules bind.

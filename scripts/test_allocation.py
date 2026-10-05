@@ -40,8 +40,8 @@ def request(unit='b', **kw):
 
 
 class RoutingTests(unittest.TestCase):
-    def test_normal_feature_uses_sol_owner(self):
-        self.assertEqual(a.classify(task())['owner'],'default_executor')
+    def test_normal_feature_uses_luna_max_owner(self):
+        self.assertEqual(a.classify(task())['owner'],'routine_executor')
     def test_tiny_known_change_can_finish_in_main(self):
         self.assertEqual(a.classify(task(tiny=True))['owner'],'main')
     def test_tiny_off_path_recipe_can_use_simple(self):
@@ -54,21 +54,21 @@ class RoutingTests(unittest.TestCase):
         self.assertEqual(a.classify(task(kind='operation',mechanical=True))['owner'],'simple_executor')
     def test_prescribed_bulk_is_luna_routine(self):
         self.assertEqual(a.classify(task(mechanical=True))['owner'],'routine_executor')
-    def test_material_recipe_is_not_cheap_by_default(self):
+    def test_material_recipe_retains_independent_review(self):
         result=a.classify(task(mechanical=True,risk='material'))
-        self.assertEqual((result['owner'],result['reviewer']),('default_executor','tester'))
+        self.assertEqual((result['owner'],result['reviewer']),('routine_executor','reviewer'))
     def test_stalled_cheap_work_does_not_get_cheap_retry(self):
         self.assertEqual(a.classify(task(mechanical=True,stalled=True))['owner'],'default_executor')
     def test_main_fix_preserves_required_review(self):
-        self.assertEqual(a.classify(task(tiny=True,independent_required=True))['reviewer'],'tester')
-    def test_deep_requires_review_not_forced_luna_max(self):
-        r=a.classify(task(deep=True)); self.assertEqual((r['owner'],r['reviewer']),('default_executor','tester'))
+        self.assertEqual(a.classify(task(tiny=True,independent_required=True))['reviewer'],'reviewer')
+    def test_deep_starts_sol_medium_with_senior_review(self):
+        r=a.classify(task(deep=True)); self.assertEqual((r['owner'],r['reviewer']),('deep_executor','senior_reviewer'))
     def test_design_authority_stays_main(self):
         self.assertEqual(a.classify(task(kind='judgment'))['owner'],'main')
         self.assertEqual(a.classify(task(settled=False))['owner'],'main')
     def test_verification_does_not_spawn_writer_or_reviewer_chain(self):
         r=a.classify(task(kind='verification',risk='critical'))
-        self.assertEqual((r['owner'],r['reviewer']),('tester',None))
+        self.assertEqual((r['owner'],r['reviewer']),('senior_reviewer',None))
     def test_exact_lookup_vs_causal_investigation(self):
         self.assertEqual(a.classify(task(kind='discovery',mechanical=True))['owner'],'companion')
         self.assertEqual(a.classify(task(kind='discovery'))['owner'],'investigator')
@@ -80,7 +80,7 @@ class RoutingTests(unittest.TestCase):
 class ParallelTests(unittest.TestCase):
     def test_two_disjoint_workers_can_start(self):
         self.assertEqual(a.next_action(observation(thread()),request())['action'],'spawn')
-    def test_four_scoped_threads_not_five(self):
+    def test_preserved_four_thread_owner_cap_blocks_fifth(self):
         obs=observation(thread('a'),thread('b'),thread('c'))
         self.assertEqual(a.next_action(obs,request('d'))['action'],'spawn')
         obs['threads'].append(thread('d'))
@@ -138,26 +138,26 @@ class ParallelTests(unittest.TestCase):
         self.assertEqual(a.next_action(obs,request('c'))['reason'],'insufficient_open_thread_budget')
     def test_reviewer_consumes_shared_slot_not_an_extra_reservation(self):
         obs=observation(thread('a',state='waiting',review_reserved=True),thread('b',review_reserved=True),cap=3)
-        req=request('a',role='tester',scope=scope('src/a',writes=[]),candidate_held=True)
+        req=request('a',role='reviewer',scope=scope('src/a',writes=[]),candidate_held=True)
         self.assertEqual(a.next_action(obs,req)['action'],'spawn')
     def test_review_needs_stopped_writer_and_real_hold(self):
         for state,held in (('running',True),('waiting',False)):
             obs=observation(thread(state=state))
-            self.assertNotEqual(a.next_action(obs,request('a',role='tester',scope=scope(writes=[]),candidate_held=held))['action'],'spawn')
+            self.assertNotEqual(a.next_action(obs,request('a',role='reviewer',scope=scope(writes=[]),candidate_held=held))['action'],'spawn')
     def test_hold_never_authorizes_reviewer_to_edit_source(self):
         obs=observation(thread(state='waiting',released_resources=True))
-        req=request('a',role='tester',scope=scope(),candidate_held=True)
+        req=request('a',role='reviewer',scope=scope(),candidate_held=True)
         self.assertNotEqual(a.next_action(obs,req)['action'],'spawn')
     def test_review_does_not_take_unreleased_browser(self):
         obs=observation(thread(state='waiting',scope=scope(resource_writes=['browser/default'])))
-        req=request('a',role='tester',scope=scope(writes=[],resource_writes=['browser/default']),candidate_held=True)
+        req=request('a',role='reviewer',scope=scope(writes=[],resource_writes=['browser/default']),candidate_held=True)
         self.assertNotEqual(a.next_action(obs,req)['action'],'spawn')
     def test_repair_can_reuse_stopped_reviewer_after_hold_release(self):
-        obs=observation(thread('a',state='waiting'),thread('review',unit='a',role='tester',state='completed',scope=scope(writes=[])))
+        obs=observation(thread('a',state='waiting'),thread('review',unit='a',role='reviewer',state='completed',scope=scope(writes=[])))
         req=request('a',reuse_id='a',candidate_held=False)
         self.assertEqual(a.next_action(obs,req)['action'],'reuse')
     def test_repair_cannot_race_active_reviewer(self):
-        obs=observation(thread('a',state='waiting'),thread('review',unit='a',role='tester',scope=scope(writes=[])))
+        obs=observation(thread('a',state='waiting'),thread('review',unit='a',role='reviewer',scope=scope(writes=[])))
         self.assertNotEqual(a.next_action(obs,request('a',reuse_id='a',candidate_held=False))['action'],'reuse')
     def test_reuse_cannot_widen_scope(self):
         obs=observation(thread(state='waiting'))

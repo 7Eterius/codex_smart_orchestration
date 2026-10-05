@@ -39,16 +39,16 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
     cap = agents.get(caps[1], agents.get(caps[0]))
     if cap is None:
         warnings.append('No concurrency cap is established here; live default is unverified.')
-    elif type(cap) is int and cap < 4:
+    elif type(cap) is int and cap < 5:
         warnings.append('Existing lower cap is preserved; parallelism is limited to that capacity. Main can execute directly, and required review can run serially.')
-    elif type(cap) is int and cap > 4:
-        warnings.append('Higher cap preserved; Smart 3 uses at most four owned open threads and does not fill slots without useful independent work.')
+    elif type(cap) is int and cap > 5:
+        warnings.append('Higher cap preserved; Smart 3 uses at most five owned open threads and does not fill slots without useful independent work.')
     for key in ('default_subagent_model', 'default_subagent_reasoning_effort'):
         value = agents.get(key)
         if key in agents and (not isinstance(value, str) or not value.strip()):
             errors.append(f'agents.{key} must be a nonempty string.')
         elif value != DEFAULTS[key]:
-            warnings.append(f'agents.{key} is absent or differs from the balanced Sol fallback; preserved, not inferred as live selection. Named roles explicitly choose their models.')
+            warnings.append(f'agents.{key} is absent or differs from the balanced Luna Max fallback; preserved, not inferred as live selection. Named roles explicitly choose their models.')
     for key in ('multi_agent', 'multi_agent_v2'):
         if key in tables['features']:
             value = tables['features'][key]
@@ -84,7 +84,7 @@ def assess_configuration(cfg: dict[str, Any]) -> dict[str, Any]:
         'configured_parent': parent, 'recommended_parent': dict(MAIN_BASELINE),
         'parent_baseline_status': baseline_status,
         'configured_child_defaults': {key: agents.get(key) for key in DEFAULTS},
-        'effective_configured_cap': cap, 'recommended_parallel_cap': 4,
+        'effective_configured_cap': cap, 'recommended_parallel_cap': 5,
         'ok': not errors,
         'assessment_scope': 'Supplied on-disk configuration only; ok is not live activation or measured savings.',
     }
