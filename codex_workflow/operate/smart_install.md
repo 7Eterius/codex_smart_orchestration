@@ -15,9 +15,10 @@ python3 -B codex_workflow/runtime/smart_install.py --check
 ```
 
 Use the same verified interpreter and source for both steps. Preview validates package,
-eight named roles, current managed-file conflicts and existing configuration without
-writes. Apply only a clean result. On conflicts stop, do not force, delete locks or
-uninstall first. Updates from source at the same version are supported.
+eleven named presets, current managed-file conflicts and existing configuration without
+writes. These are available roles, not eleven concurrent workers. Apply only a clean result.
+On conflicts stop, do not force, delete locks or uninstall first. Updates from source at
+the same version are supported.
 
 An agent inside Codex must not quit, relaunch, or wait for Codex to exit during installation.
 Let the command complete in this session and inspect its exit status/JSON. Then ask the
@@ -31,18 +32,25 @@ bootstrap and absent generic child defaults. It preserves explicit parent/model/
 speed, tools, permissions, cap and generic fallback choices. It never edits projects.
 An older generic child model is warned about, not silently changed. Use named roles.
 
+Fresh defaults are Luna Max and a five-thread cap. Existing explicit lower caps stay
+unchanged; report them rather than silently increasing them. Deliberate owner configuration
+is required to raise a lower cap. Native available capacity can be lower still. Main is
+excluded from the worker cap. Five is a ceiling, not a fan-out target.
+
 ## What the result means
 
 Report version, selected Git source commit when known, package fingerprint, backup,
-warnings and disk check. The fingerprint identifies bytes, not an authenticated Git
-commit. `execution_policy: adaptive` describes installed policy; `runtime_observation:
-not_inspected` is not an activation failure or an execution-mode gate. No disk check
-can prove live role selection, permission inheritance, thread availability or savings.
+warnings, configured concurrency cap and disk check. The fingerprint identifies bytes,
+not an authenticated Git commit. `execution_policy: adaptive` describes installed policy;
+`runtime_observation: not_inspected` is not an activation failure or an execution-mode gate.
+No disk check proves live role selection, permission inheritance, thread availability or savings.
 
-After manual restart, describe the actual available owner/reviewer when beginning
-substantive work. Use `runtime_check.md` only for a needed uncertain mechanism. Do not
-run an expensive full qualification or audit during every install. Direct named workers
-remain the route when delegated review has not been demonstrated.
+After manual restart use a fresh conversation: 3.1's Tester is procedural Luna Medium,
+not the old semantic reviewer. Describe the actual available owner/reviewer when beginning
+substantive work. Use `runtime_check.md` only for a needed uncertain mechanism. Do not run
+an expensive full qualification or audit during every install. Direct named workers remain
+the route when delegated verification has not been demonstrated. Do not silently substitute
+an unavailable model or effort.
 
 ## Safe retirement and rollback
 

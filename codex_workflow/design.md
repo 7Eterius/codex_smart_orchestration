@@ -10,11 +10,12 @@ Inspect the actual product and relevant accepted references. State the visual ou
 decisions, important states/viewports and acceptance criteria. Use established tokens/components
 before inventing replacements. Avoid elaborate briefs for established tweaks.
 
-Main can implement a small, understood adjustment directly. A coherent redesign normally goes
-to default_executor (Sol Medium), not Luna by default: good realization often needs technical
-judgment, responsive reasoning and efficient diagnosis. Routine Luna is for genuinely prescribed
-repetition after those choices are settled. Do not instruct a cheap worker merely to paste a
-complete Main-authored patch.
+Main can implement a small, understood adjustment directly. Ordinary settled implementation goes
+to Routine/Luna Max, including coherent responsive component work and prescribed transformations.
+Use Default/Sol Low for moderate interacting behavior, Deep/Sol Medium for substantial redesign
+implementation, and Senior/Sol High for serious technical depth. Main settles uncertain visual
+and product direction before implementation. Do not instruct a worker merely to paste a complete
+Main-authored patch; delegate the problem within the accepted contract.
 
 For new composition or uncertain direction, inspect an early running frame before expensive
 polish. For an established adjustment, one decisive final rendered check can suffice. An early
@@ -31,10 +32,12 @@ allowed changes, protected decisions and fresh checks. Avoid vague requests to p
 
 Keep the same suitable owner through concrete corrections. Main may finish a tiny obvious fix
 after ownership transfer, but never edit under an active writer. Include Main's changes in the
-candidate delta and obtain any required independent recheck. Otherwise return the grouped
-findings to Sol or the appropriate mechanical worker. Reassess fresh visuals, not old screenshots.
+candidate delta and obtain any required independent recheck. Otherwise return grouped findings
+to the appropriate implementation owner. Reassess fresh visuals, not old screenshots. One
+same-defect evidence-based correction without progress warrants appropriate Sol/Main diagnosis.
 
-Independent technical review is risk-based and does not replace Main's visual acceptance.
+Independent semantic review is risk-based and does not replace Main's visual acceptance.
+Procedural Tester runs approved commands; it is neither semantic nor aesthetic sign-off.
 An accepted design violation may block; optional taste is not a reason for endless cycles.
 Stop when the authorized target and required gates hold. Design-only requests stop at the
 concept rather than creating implementation work.
