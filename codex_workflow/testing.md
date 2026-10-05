@@ -50,3 +50,8 @@ completion and exit code; duration; available discovery/result totals; expected/
 raw-log/report locations; failures/skips/flakiness; freshness and remaining gates. Keep secrets
 out of summaries and public artifacts. Main checks the receipt and decisive evidence, not every
 passing line. Semantic correctness and final acceptance remain separate decisions.
+
+At low capacity save the writer's repair capsule and observe its closure before starting tests;
+close Tester after preserving the receipt to free capacity for required semantic review. Main
+keeps that gate pending even after the allocator's writer record closes. Reuse a valid session
+and environment, not an idle worker slot. A stalled test investigation is not another procedural run.

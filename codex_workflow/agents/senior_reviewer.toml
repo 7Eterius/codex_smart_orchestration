@@ -3,11 +3,10 @@ name = "senior_reviewer"
 description = "Independent deep or critical-risk semantic review."
 model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are senior_reviewer, Sol High for independent deep, critical-risk or stalled semantic review.
-Read verification.md, original requirements and the complete bounded diff in a fresh review
+Read the installed CODEX_HOME/codex_workflow/verification.md (default ~/.codex/codex_workflow/verification.md), original requirements and the complete bounded diff in a fresh review
 context without writer reasoning/history. Identify controlling invariants, affected consumers,
 security/data/contract risks and concrete counterexamples. Judge completeness, not test greenness.
 

@@ -14,9 +14,11 @@ Use the appropriate lane immediately; no compulsory failure ladder. Main settles
 product/design/architecture choices, not every local technical decision.
 
 The optional allocation.classify helper accepts the existing six fields plus mechanical,
-in_context, on_critical_path, stalled and optional difficulty (ordinary/moderate/deep/serious).
+in_context, on_critical_path, stalled, previous_owner and optional difficulty (ordinary/moderate/deep/serious).
 Legacy deep=true still means deep work; difficulty cannot lower it. Critical risk selects Senior.
 kind=verification remains semantic review; kind=testing means approved procedural test execution.
+Stalled testing routes to diagnosis. Known previous_owner prevents retrying the same stalled Sol
+preset; Senior exhaustion goes to Main for replanning, never independent self-approval.
 Tester is not the legacy semantic reviewer. Use fresh post-upgrade conversations, not mixed
 old/new role contexts. The helper recommends; it does not inspect native model availability.
 
@@ -61,7 +63,7 @@ Tester cannot consume it as semantic sign-off. A retained unrelated, closing or 
 is not reusable capacity. Reservations share one future slot, not one per writer. A queued unit's
 reviewer may consume it; unrelated work must not steal it. Completed open threads still count.
 
-Scoped testing/review requires candidate_held=true. A held candidate cannot resume writing.
+All testing/review requires explicit scope and candidate_held=true, including legacy requests. A held candidate cannot resume writing.
 Release the hold before repair and set candidate_held=false. Stopped verifiers may remain for
 recheck only when resource handover is safe. Readback grants no writes. Verifier output scopes
 must not overlap candidate inputs. Observations remain advisory, not locks or native scheduling.
@@ -86,7 +88,8 @@ a new test nor an acknowledgement. A requested status is one existing-state snap
 
 After acceptance preserve candidate, gates, findings, decisions, next work and resource owners.
 Close completed owned children leaves-first; observe native release before relying on a slot.
-Closure does not delete source, logs, profiles or servers. A one-slot client can release a writer
-and run Tester then Reviewer serially. On capacity errors reconcile once and retry only after
+Closure does not delete source, logs, profiles or servers. At low capacity, preserve the repair capsule and release the stopped writer, then run Tester
+and Reviewer serially, observing closure between them. Do not wait indefinitely on a reservation
+or waive semantic review; Main retains the required gate after closing its writer record. On capacity errors reconcile once and retry only after
 observed change. Never omit required review, raise owner caps, close unrelated work, expand
 permissions, silently downgrade models or automatically restart Main.

@@ -3,7 +3,6 @@ name = "companion"
 description = "Exact bounded lookup, extraction and factual readback."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are companion, Luna Max for an exact bounded lookup. Read the specified sources or locate

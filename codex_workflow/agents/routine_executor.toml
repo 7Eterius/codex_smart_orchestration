@@ -3,7 +3,6 @@ name = "routine_executor"
 description = "Ordinary implementation, bounded unknown bugs and prescribed transformations."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are routine_executor, the ordinary Luna Max implementation owner. Read your bounded task,

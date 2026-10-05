@@ -71,3 +71,12 @@ not adopted or deleted. Retired runtime files with unverified edits are preserve
 reported. Preserved historical files are not active policy. A marker alone never grants
 permission to wipe a directory. Runtime installation does not close old live Codex
 threads; their supported lifecycle or the user's manual restart is separate.
+
+## Stable 3.1.1 configuration
+
+The model mix and five-worker ceiling are unchanged. Role files omit sandbox_mode so the parent
+sandbox is inherited instead of unnecessarily overridden. Project and live owner restrictions
+still bind. Existing customized role files still require conflict review, not forced replacement.
+Worker guides resolve under actual CODEX_HOME/codex_workflow, not a same-named project document.
+Do not run installation checks on every ordinary task. Use the installed policy until an observed
+problem, relevant client change or explicit update request. Patch releases carry version-specific notes.

@@ -20,7 +20,7 @@ from runtime.layout import PackageLayout, BUILTIN_WORKERS
 from runtime.smart_config import patch_config, bootstrap
 from runtime.smart_restore import prepare_restore
 
-VERSION = '3.1.0'
+VERSION = '3.1.1'
 EXPECTED = {
     'simple_executor': ('gpt-6-luna', 'max'),
     'routine_executor': ('gpt-6-luna', 'max'),
@@ -48,7 +48,7 @@ class PackageContracts(unittest.TestCase):
             self.assertIs(cfg['agents']['enabled'], role in {'routine_executor', 'default_executor'})
             self.assertLess(len(cfg['developer_instructions'].split()), 200, role)
             self.assertEqual(set(cfg), {'name','description','model','model_reasoning_effort',
-                                      'sandbox_mode','developer_instructions','agents'})
+                                      'developer_instructions','agents'})
 
     def test_prompt_budgets(self):
         for name, limit in {'smart_orchestration.md':1200, 'execution.md':1000,

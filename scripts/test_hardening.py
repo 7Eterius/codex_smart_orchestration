@@ -119,7 +119,10 @@ class AllocationHardening(unittest.TestCase):
             a.next_action(observation(thread(review_authorized='true')), request())
 
     def test_authorized_same_unit_review_is_allowed(self):
-        result = a.next_action(observation(thread(), caller='writer'), request(role='tester'))
+        sc = dict(workspace='/repo', reads=['src'], writes=[], resource_reads=[], resource_writes=[])
+        owner = thread(scope={**sc, 'writes':['src']})
+        result = a.next_action(observation(owner, caller='writer', main_scope=None),
+                               request(role='tester', scope=sc, candidate_held=True))
         self.assertEqual(result['action'], 'spawn')
 
     def test_cleanup_precedes_unrelated_new_unit_authorization(self):
