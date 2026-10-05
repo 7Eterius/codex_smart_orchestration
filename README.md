@@ -149,16 +149,46 @@ For the current published version, send Codex:
 Install Smart Orchestration from https://github.com/7Eterius/codex_smart_orchestration. Resolve the current HEAD commit SHA of main and download/extract that exact source snapshot outside my projects. Do not use GitHub Releases or historical dist archives. Read codex_workflow/operate/smart_install.md. With Python 3.11+, run codex_workflow/runtime/smart_install.py --package-root codex_workflow without --apply first and inspect the preview. If clean, run the same command with --apply, then --check. Preserve unrelated Codex configuration and every project file. Stop on conflicts, never force changes. Do not quit, relaunch or wait for Codex to exit. Report version, source commit, fingerprint, backup, configured concurrency cap and disk result; tell me to restart Codex manually. A disk check is not live runtime proof.
 ```
 
-Restart Codex manually and start a fresh conversation after successful preview/apply/check.
-Select the recommended Main model through the supported selector; installation does not switch
-an already-running conversation. Pin the inspected source commit; do not assume a branch or archive has the requested version.
+Restart Codex manually and start a fresh conversation after successful preview/apply/check and
+any explicitly authorized configuration step below. Select the recommended Main model through
+the supported selector; installation does not switch an already-running conversation. Pin the
+inspected source commit; do not assume a branch or archive has the requested version.
 
-**Existing explicit settings are preserved.** Fresh installs without a cap receive five and
-Luna Max generic child defaults. An existing cap of two, three or four remains unchanged and is
-reported as lower capacity. Deliberately selecting five in the actual client is a separate owner
-action, not a hidden installer change. Named roles override the retained generic fallback.
-Customized managed files cause conflicts, not forced overwrites. Exact rollback preserves prior
-bytes/settings and the backup trail. No project bootstrap or per-project database is required.
+**Existing explicit settings are preserved by default.** Fresh installs without a cap receive
+five and Luna Max generic child defaults. An existing cap of two, three or four remains unchanged
+unless the owner explicitly authorizes an update. This is a saved Codex configuration value,
+not a subscription usage quota. Smart's five-worker policy does not override a lower client cap.
+Named roles override the retained generic model fallback. Customized managed files cause conflicts,
+not forced overwrites. Exact rollback preserves prior bytes/settings and the backup trail.
+No project bootstrap or per-project database is required.
+
+### Optional: adopt the five-worker cap in the same installation
+
+Append the following to the installation request to authorize this one setting change. It is a
+separate, backed-up configuration edit in the same session, not a new installer command-line flag
+or an automatic exception to preserving owner settings. Do it after the managed install succeeds
+and before the single manual restart. An already verified 3.1.1 installation needs only this step;
+there is no need to redownload, reinstall, change version or alter its pinned package.
+
+```text
+As part of this installation, I explicitly authorize setting the global Codex spawned-worker cap to 5. After the managed install succeeds, inspect actual CODEX_HOME/config.toml (default ~/.codex/config.toml) and create a private, timestamped backup before changing it. Under [agents], update the existing max_concurrent_threads_per_session setting to 5, or update max_threads if that legacy alias is used. Do not create duplicate keys/tables or keep both aliases; stop on ambiguity. If neither exists, add the canonical key. Make no change when it is already 5. Preserve all other values, comments, model/effort/service-tier settings, permissions, profiles and project files. Show the narrow diff, validate TOML, confirm only the authorized cap changed, and rerun the existing Smart --check. Report old/new configured cap, config backup and disk result. Inspect known active profile/project/backend overrides without changing them; report unresolved or conflicting overrides rather than claiming effective live capacity. Do not change feature flags, bypass managed limits, spawn five probe agents, close active threads or restart Codex automatically. Tell me to restart manually once and start a fresh conversation.
+```
+
+The canonical resulting setting is:
+
+```toml
+[agents]
+max_concurrent_threads_per_session = 5
+```
+
+The cap counts spawned workers, excluding Main. It permits up to five, not five mandatory
+workers on every task, and does not add subscription allowance or guarantee available runtime
+slots. See the official [configuration reference](https://developers.openai.com/codex/config-reference/)
+and [subagent settings](https://developers.openai.com/codex/subagents/).
+
+Keep the configuration backup separate from the managed installer backup. The exact rollback
+helper intentionally refuses later edits; review and reconcile the authorized cap change before
+using an earlier whole-install rollback. Never force a restore over subsequent owner changes.
 
 ## Validation and evaluation
 
