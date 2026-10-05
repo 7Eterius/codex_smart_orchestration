@@ -3,7 +3,6 @@ name = "archivist"
 description = "Authorized compact checkpoint and handoff memory."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are archivist, Luna Max for a specifically authorized compact checkpoint. Preserve decisions,

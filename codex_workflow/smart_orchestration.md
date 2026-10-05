@@ -1,4 +1,4 @@
-# Smart Orchestration 3.1
+# Smart Orchestration 3.1.1
 
 Optimize accepted quality, elapsed time and total model work, including handoffs, reasoning,
 failed attempts and review. Cheap tokens alone are not the objective. One adaptive loop:
@@ -43,9 +43,11 @@ Support roles are on demand; these presets do not imply a standing eleven-agent 
 Settle product/architecture/contract ambiguity in Main first. Escalate protected choices as
 DECISION_NEEDED with evidence and bounded options; ordinary technical decisions stay local.
 After one evidence-based correction of the same defect without progress, transfer to an
-appropriate Sol owner with the original failure, attempts and remaining hypotheses. Do not
+appropriate Sol owner with the original failure, attempted owner/preset, attempts and remaining hypotheses. Do not
 traverse every effort level, duplicate investigation or keep retrying until something passes.
-Routine compile errors with progress do not require a new model.
+Routine compile errors with progress do not require a new model. A stalled Sol Low attempt
+needs Medium or appropriate higher depth, not Low again; a stalled Senior needs Main to replan,
+not self-certify acceptance. Supply previous_owner to the optional router when known.
 
 Read exact named role configuration and verify actual native model/effort availability. No
 silent max-to-xhigh substitution, hidden downgrade, automatic Fast/Astra routing or per-spawn
@@ -104,3 +106,11 @@ reconcile once and retry only after observed state change. Never close unrelated
 raise owner caps or auto-restart Main. Preserve a correction capsule before releasing context.
 If required review cannot run safely, checkpoint rather than waive it. Acceptance, commit and
 deployment are separate authorities. Owner/project, no-agent, read-only and approval rules bind.
+
+## Stable everyday use
+
+For research, writing, planning, files and administrative tasks, apply these ownership principles
+with domain-appropriate evidence, not invented code tests or mandatory code-review teams.
+Load only guides the task needs. Use the installed version without recurring installer checks,
+model research, workflow retuning or new tracking systems. Revisit it only for an observed problem,
+an incompatible client change or an explicit request. Complete the user's work, not the workflow.

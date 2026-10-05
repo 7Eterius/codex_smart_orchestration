@@ -13,6 +13,9 @@ jobs:
     name: validate (${{ matrix.os }}, Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    concurrency:
+      group: smart-validate-${{ github.event.pull_request.number || github.run_id }}-${{ matrix.os }}-${{ matrix.python-version }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
       fail-fast: false
       matrix:
@@ -24,11 +27,11 @@ jobs:
           - os: macos-latest
             python-version: '3.12'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
       - name: Contracts, helpers, installation and exact historical migrations
@@ -53,7 +56,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -69,7 +72,10 @@ jobs:
           fi
           version=$(python3 -c 'from pathlib import Path; import re; v=Path("codex_workflow/operate/VERSION").read_text().strip(); assert re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", v); print(v)')
           tag="v$version"
-          notes="docs/v${version%.*}.md"
+          notes="docs/v$version.md"
+          if [[ "$version" == *.0 && ! -s "$notes" ]]; then
+            notes="docs/v${version%.*}.md"
+          fi
           test -s "$notes"
           work=$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/smart-release.XXXXXX")
           # Create-only tag; retries may reuse it only at this exact tested commit.

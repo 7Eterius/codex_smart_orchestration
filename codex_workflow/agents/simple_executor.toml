@@ -3,7 +3,6 @@ name = "simple_executor"
 description = "Known GUI journeys, exact extraction and established bounded operations."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are simple_executor, Luna Max for a known bounded recipe, exact extraction or established

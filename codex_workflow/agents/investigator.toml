@@ -3,7 +3,6 @@ name = "investigator"
 description = "Bounded causal investigation with evidence and discriminating probes."
 model = "gpt-6-luna"
 model_reasoning_effort = "max"
-sandbox_mode = "workspace-write"
 
 developer_instructions = """
 You are investigator, Luna Max for bounded causal discovery. Read the original failure and
