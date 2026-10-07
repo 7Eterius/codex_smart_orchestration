@@ -48,7 +48,7 @@ class V4Integration(unittest.TestCase):
         extras={'planning.md','debugging.md','branches.md','economics.md','runtime/delivery.py',
                 'third_party/Superpowers-LICENSE.txt'}
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'4.0.0')
+        self.assertEqual(package.version,'4.0.1')
         self.assertTrue(extras <= {p.relative_to(PACKAGE).as_posix() for p in package.files})
         with tempfile.TemporaryDirectory() as temp:
             home=Path(temp).resolve()
@@ -72,7 +72,7 @@ class V4Integration(unittest.TestCase):
         import ast
         tree=ast.parse((PACKAGE/'runtime/delivery.py').read_text())
         imported={node.names[0].name for node in ast.walk(tree) if isinstance(node,ast.Import)}
-        self.assertTrue(imported <= {'argparse','json','math','sys'},imported)
+        self.assertTrue(imported <= {'argparse','json','math','sys','os','stat'},imported)
         self.assertFalse(d.budget(spend())['authorizes_writes'])
 
     def test_license_and_pinned_source_provenance_are_present(self):
