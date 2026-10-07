@@ -1,4 +1,4 @@
-# Smart Orchestration 4.0.0
+# Smart Orchestration 4.0.1
 
 **Smart model routing. Disciplined engineering. Evidence without unnecessary ceremony.**
 
@@ -9,6 +9,20 @@ Luna Medium runs approved tests without becoming the semantic reviewer.
 
 This is instructions plus bounded deterministic helpers, not a native scheduler, permission
 system or a guarantee of savings. Actual tools, model availability and owner settings bind.
+
+## Bugfix 4.0.1
+
+The model map and five-worker ceiling are unchanged. The delivery adviser now compares decimal
+budgets without binary-rounding errors, accounts for already-open workers when supplied, and
+supports a recorded bounded replan without resetting cumulative repair history. Tester/reviewer
+recovery requires implementation handoff. Read-only code research/docs avoid irrelevant test or
+worktree setup. Descriptor-based input checks reject final-component symlink/special-file races
+on supported POSIX hosts; programming defects are not disguised as bad input.
+
+Existing required fields remain supported. New optional fields are described in the installed
+debugging/economics guides and [4.0.1 bugfix notes](docs/v4.0.1.md). These are advisory source fixes,
+not measured native-agent speed or allowance improvements. Use the complete pinned release source
+and the existing preview/apply/check update procedure. No extra plugin or service is required.
 
 ## What is new in 4.0
 

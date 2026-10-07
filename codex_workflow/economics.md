@@ -52,3 +52,12 @@ cumulative repair limits from small supplied facts. `allocation.py` still handle
 scopes and capacity. Neither spawns workers, reads live quota, locks files or accepts results.
 No helper input/ledger is required merely to do work. See `docs/v4.0.md` in the source for the
 protocol and evaluation cases; the installed policy is self-contained for ordinary operation.
+
+## Budget observation precision
+
+For delivery.py, supply optional open_workers from existing observations, counting owned open
+threads until native closure. Quota ceilings then cover existing plus new workers. Omission keeps
+legacy next-batch-only advice, explicitly labeled new_batch_only; explicit null requests inspection.
+No worker is closed automatically. Decimal budget comparisons preserve the supplied values without
+binary subtraction drift, but estimates and observations remain unverified. Required allocator
+scope/capacity/review reservations still apply; no extra quota audit is needed.

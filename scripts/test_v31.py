@@ -66,7 +66,7 @@ class ModelRoutingTests(unittest.TestCase):
         self.assertEqual(a.ROLES,BUILTIN_WORKERS)
         package=PackageLayout.resolve(ROOT/'codex_workflow')
         self.assertIn('testing.md',INSTALLED_RUNTIME_FILES)
-        self.assertEqual(package.version,'4.0.0')
+        self.assertEqual(package.version,'4.0.1')
 
 class TestAndReviewCapacityTests(unittest.TestCase):
     def test_fifth_independent_thread_fits_observed_capacity(self):
