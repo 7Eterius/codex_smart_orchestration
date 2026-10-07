@@ -56,3 +56,11 @@ and mandated fresh gates. Main-authored repairs retain independent requirements.
 cannot be overwritten by writer self-checks or a procedural Tester. Preserve separate test and
 semantic verdicts. Unknown questions go to Main rather than guessed answers. Acceptance requires
 all applicable evidence and authority, not only the cheapest or most recent passing result.
+
+## Completion claims and integrated review
+
+Report spec compliance and technical quality in one independent pass. Bind every completion claim
+to the actual candidate, fulfilled requirements and decisive evidence; a test pass is not deployment
+or live installation proof. Large features need integrated contract review, not duplicate suites.
+The debugging.md circuit breaker stops repair dispatch, never accepts unresolved required findings.
+Keep material new blockers visible even outside a correction diff.

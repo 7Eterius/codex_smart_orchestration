@@ -40,3 +40,10 @@ progress stay with the current owner. A repeated ineffective strategy needs a ne
 a changed contract, architecture or authority needs Main. Known deep work may start directly at
 Sol Medium or High without a ritual cheap failure. Do not infer a general saving percentage
 from a small sample or optimize model tiers merely to reduce one response's cost.
+
+For 4.0 evaluate the method, not only the model: clear copy edit without ceremony, ambiguous
+feature with targeted decisions, reproducible behavior bug with honest RED/GREEN, pure refactor
+with characterization, lost-context recovery without redispatch, low-quota required review, and
+large-feature integration with complete candidate evidence. Keep matched requirements, baselines
+and quality gates. Record repeated suites, unproductive repair waves and stale-evidence acceptance
+as failures. Deterministic helper tests do not prove native LLM behavior or future cost savings.

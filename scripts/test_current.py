@@ -20,7 +20,7 @@ from runtime.layout import PackageLayout, BUILTIN_WORKERS
 from runtime.smart_config import patch_config, bootstrap
 from runtime.smart_restore import prepare_restore
 
-VERSION = '3.1.1'
+VERSION = '4.0.0'
 EXPECTED = {
     'simple_executor': ('gpt-6-luna', 'max'),
     'routine_executor': ('gpt-6-luna', 'max'),
@@ -80,7 +80,7 @@ class PackageContracts(unittest.TestCase):
                 if not target.startswith(('http:', 'https:', '#')):
                     self.assertTrue((path.parent/target.split('#')[0]).is_file(), (path,target))
         readme = (ROOT/'README.md').read_text()
-        self.assertTrue(readme.startswith('# Smart Orchestration 3.1'))
+        self.assertTrue(readme.startswith('# Smart Orchestration 4.0'))
         for text in ('current HEAD commit SHA of main', 'without --apply first',
                      'Do not use GitHub Releases', 'restart Codex manually'):
             self.assertIn(text, readme)

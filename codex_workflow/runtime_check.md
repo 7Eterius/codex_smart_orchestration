@@ -22,3 +22,9 @@ only when explicitly authorized and genuinely needed; direct Main dispatch is th
 
 Record supported behavior, actual observations and remaining UNVERIFIED limits in the current
 result. Do not turn a targeted probe into a global audit, mandatory ledger or benchmark claim.
+
+For 4.0, qualify only the methods needed by the next real task: relevant guide resolution,
+original-failure diagnosis, meaningful RED/GREEN where suitable, stable evidence reuse and
+checkpoint recovery without redispatch. delivery.py decisions do not prove native compliance or
+quota enforcement. Report a conflicting second orchestration bootstrap; never disable/remove an
+existing plugin without authorization. Do not install Superpowers as a dependency of Smart.

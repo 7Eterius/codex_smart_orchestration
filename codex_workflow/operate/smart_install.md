@@ -80,3 +80,12 @@ still bind. Existing customized role files still require conflict review, not fo
 Worker guides resolve under actual CODEX_HOME/codex_workflow, not a same-named project document.
 Do not run installation checks on every ordinary task. Use the installed policy until an observed
 problem, relevant client change or explicit update request. Patch releases carry version-specific notes.
+
+## 4.0 method upgrade
+
+The complete package adds planning/debugging/branch/economics guides, the optional delivery
+adviser, and an upstream license notice. The model/effort map is unchanged. Main remains selected
+by the owner, not silently changed to a recommendation. No additional Superpowers installation,
+server, hook or telemetry is required. Report conflicting orchestration bootstraps without
+removing plugins automatically. The README's explicit backed-up five-worker cap opt-in remains
+available in the same installation session; existing lower caps are otherwise preserved.

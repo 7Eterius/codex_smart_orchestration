@@ -12,12 +12,11 @@ SMART = Marker('<!-- smart-orchestration-start -->', '<!-- smart-orchestration-e
 
 def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
-    return f'''Smart Orchestration 3.1.1. For substantive work Main reads {json.dumps(policy, ensure_ascii=False)} once; named workers follow their role/task and relevant project rules, not the full Main policy.
-Optimize accepted quality, elapsed time and total work. Main owns product/architecture/design judgment and acceptance. Main may implement tiny understood fixes or context-heavy critical-path work. Delegate coherent work without pre-solving the patch.
-Luna Max handles ordinary work; Sol Low/Medium/High handles moderate/deep/serious work. Tester/Luna Medium executes approved tests, never semantic sign-off. Independent Reviewer handles required semantic gates. Follow the installed policy for exact presets and evidence-based recovery; no silent downgrade or repeated stalled attempt.
-Run useful independent work in parallel within actual capacity, at most five owned open workers excluding Main. Declare scopes/resources, freeze verification inputs, preserve review capacity and observe native closure. Main may work on a disjoint path.
-Reuse applicable evidence, never waive mandatory fresh/full gates. Missing proof is UNVERIFIED; drift STALE. Main inspects actual visuals. No duplicate suites or status polling on timeout.
-Preserve owner/project, approval, no-agent, read-only, sandbox and speed settings. No ungranted writes or automatic restart. Disk checks are not live proof. Do not audit or retune the workflow during ordinary tasks.'''
+    return f'''Smart Orchestration 4.0: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and bounded task.
+Main owns product/architecture/design and acceptance. Main may implement small understood or disjoint critical-path work. Delegate coherent outcomes, not pre-solved patches. Preserve Luna Max ordinary work, Sol Low/Medium/High depth, Luna Medium procedural Tester and separate independent semantic review.
+Read only relevant planning, debugging, testing, branches and economics guides. Brainstorm only real ambiguity; plan deliverables, not microsteps. Use meaningful RED/GREEN where appropriate, not deletion rituals. Carry original evidence and cumulative repair counts across handoffs; exhausted loops or quota checkpoint blockers, never certify them.
+Run useful independent work in parallel, at most five owned open workers within actual capacity and owner limits. Keep read/write/resource scopes, candidate holds, review capacity and observed native closure. Reuse valid test evidence; required fresh/full gates bind. Main inspects actual visuals.
+Use domain-appropriate evidence. No second orchestration bootstrap, mandatory per-command ledger, recurring audit, silent model downgrade, permission expansion or automatic restart. Owner/project instructions and approval boundaries bind. Disk checks are not live activation or savings.'''
 
 
 def _statements(text: str):

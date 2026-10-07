@@ -274,7 +274,7 @@ class InstallationAndStartupTests(unittest.TestCase):
         after=len(bootstrap(Path('/example')).split())
         self.assertLess(after,220)
         self.assertLess(after,before*0.6)
-        print(f'\nBootstrap word count: 3.1.0={before}; 3.1.1={after}. Word counts are not token or allowance measurements.')
+        print(f'\nBootstrap word count: 3.1.0={before}; current={after}. Word counts are not token or allowance measurements.')
 
     def test_worker_guides_resolve_to_installed_location(self):
         for role,guide in (('tester','testing.md'),('reviewer','verification.md'),('senior_reviewer','verification.md')):
@@ -307,7 +307,7 @@ class InstallationAndStartupTests(unittest.TestCase):
             for target in re.findall(r'\]\(([^)]+)\)',path.read_text()):
                 if not target.startswith(('https:','http:','#')):
                     self.assertTrue((path.parent/target.split('#')[0]).is_file(),target)
-        self.assertTrue((ROOT/'README.md').read_text().startswith('# Smart Orchestration 3.1.1'))
+        self.assertTrue((ROOT/'README.md').read_text().startswith('# Smart Orchestration 4.0.0'))
 
 
 class ReleaseMaintenanceTests(unittest.TestCase):
