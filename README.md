@@ -1,6 +1,6 @@
-# Smart Orchestration 3.1.1
+# Smart Orchestration 4.0.0
 
-**Luna Max for useful work. Sol for depth. Testing without duplicate suites.**
+**Smart model routing. Disciplined engineering. Evidence without unnecessary ceremony.**
 
 Smart is a global Codex workflow balancing accepted quality, response time and total model work.
 Main retains product, architecture, UX/design judgment and final acceptance. Coherent ordinary
@@ -10,7 +10,47 @@ Luna Medium runs approved tests without becoming the semantic reviewer.
 This is instructions plus bounded deterministic helpers, not a native scheduler, permission
 system or a guarantee of savings. Actual tools, model availability and owner settings bind.
 
-## Maintenance patch 3.1.1
+## What is new in 4.0
+
+Smart keeps its Codex-specific model routing and quota discipline, with selected Superpowers
+engineering practices adapted to the task rather than a second orchestrator.
+
+```text
+Main judgment + Smart routing + bounded quota-aware work
+  |-- Systematic debugging: evidence, cause, one discriminating hypothesis
+  |-- Targeted brainstorming only for genuinely unclear outcomes
+  |-- Lean deliverable/decision/interface plans and long-task checkpoints
+  |-- Real RED/GREEN for testable behavior; characterization or alternatives otherwise
+  |-- Cumulative repair circuit breaker, never a shortcut to false completion
+  |-- Evidence bound to the candidate, without duplicate valid test runs
+  `-- Native-first branch/worktree workflow for large features and safe integration
+```
+
+Clear authorized work needs no repeat brainstorming gate. Plans describe contracts and coherent
+outcomes, not full Main-authored code for a cheaper typist. Small tasks stay direct when useful.
+Three failed causal fixes or three task repair/re-review waves triggers Main replanning; changing
+workers does not reset counts. Budget exhaustion preserves blockers instead of waiving them.
+
+Use a compact durable checkpoint for long/handoff work, not a ledger for every command. Reconcile
+actual candidate/process state after context loss before repeating accepted work. Review spec and
+technical quality together; keep independent review and actual visual acceptance where required.
+Reuse appropriate test receipts, while all mandated fresh/full gates still run.
+
+All eleven named presets and the five-worker ceiling remain unchanged. Main remains owner-selected;
+Sol Medium is a recommendation, not an installer override. Observed low quota narrows concurrency,
+and unknown usage does not trigger an expensive routine audit. Optional delivery.py advice is not
+native quota metering, scheduling, enforcement or acceptance.
+
+No Superpowers installation is needed. Do not activate two orchestration bootstraps for the same
+work; report existing conflicts rather than automatically remove plugins. No telemetry, daemon,
+new manager or standing agent team is added. Upstream methodology is credited and its MIT notice
+is included in the package.
+
+[4.0 source review, design and protocol](docs/v4.0.md) |
+[Planning](codex_workflow/planning.md) | [Debugging](codex_workflow/debugging.md) |
+[Economics](codex_workflow/economics.md) | [Branches](codex_workflow/branches.md)
+
+## Retained 3.1.1 reliability foundations
 
 The model mix stays unchanged. This patch closes the legacy unscoped verification bypass,
 prevents known stalled Sol owners from being routed back to the same preset, separates nested
@@ -23,7 +63,7 @@ Use it for the work itself. Research, writing, planning and administrative tasks
 evidence, not invented software tests. No routine workflow audits, model research, reinstallations
 or retuning are required. Revisit the workflow for observed problems or explicit update requests.
 
-## What changes in 3.1
+## Preserved model routing from 3.1
 
 | Responsibility | 3.0 | 3.1 |
 | --- | --- | --- |
@@ -167,7 +207,7 @@ No project bootstrap or per-project database is required.
 Append the following to the installation request to authorize this one setting change. It is a
 separate, backed-up configuration edit in the same session, not a new installer command-line flag
 or an automatic exception to preserving owner settings. Do it after the managed install succeeds
-and before the single manual restart. An already verified 3.1.1 installation needs only this step;
+and before the single manual restart. An already verified current installation needs only this cap step;
 there is no need to redownload, reinstall, change version or alter its pinned package.
 
 ```text
@@ -208,5 +248,5 @@ wall-time/duplicate runs and observed subscription allowance on comparable tasks
 are not a direct subscription allowance formula. Max may use more reasoning than Low; concurrency
 can increase simultaneous consumption. Savings and speed improvements require real measurements.
 
-[3.1.1 maintenance audit](docs/v3.1.1.md) | [3.1 design and research](docs/v3.1.md) | [Main policy](codex_workflow/smart_orchestration.md) |
+[4.0 adaptation and validation](docs/v4.0.md) | [3.1.1 maintenance audit](docs/v3.1.1.md) | [3.1 design and research](docs/v3.1.md) | [Main policy](codex_workflow/smart_orchestration.md) |
 [Targeted runtime qualification](codex_workflow/runtime_check.md) | [Evaluation](docs/evaluation.md)

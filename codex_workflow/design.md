@@ -49,3 +49,7 @@ contracts and interactions are settled. Shared styles, lockfiles and the same li
 are not independent. Main can judge one immutable preview while another isolated scope is
 built; hold the reviewed inputs. Unknown cross-component impact requires coordinated integration,
 not simultaneous guesses. Preserve Git, production, privacy and owner approval boundaries.
+
+Use planning.md only for genuine unresolved outcomes or consequential choices; clear authorized
+visual work needs no repeat approval ritual. testing.md permits rendered evidence for visual
+changes rather than fake RED/GREEN, without replacing required behavioral or accessibility checks.

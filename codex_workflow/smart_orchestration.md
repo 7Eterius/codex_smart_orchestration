@@ -99,8 +99,7 @@ unexplained green reruns. Read `testing.md` and `verification.md` when needed.
 Independent semantic review covers original requirements plus complete bounded diff: spec
 compliance and technical quality in one pass. Same-reviewer correction review covers the entire
 delta and affected dependencies against a recorded baseline. New reviewer, changed contract,
-missing baseline or unknown impact requires full bounded review. Main examines actual visual
-evidence and consequential risks without repeating all technical investigation.
+missing baseline or unknown impact requires full bounded review. Main examines actual visual evidence and consequential risks without repeating all technical investigation.
 
 Before a completion claim, bind it to the actual candidate, decisive logs/exit statuses and
 fulfilled requirements. Test pass is not build, deployment, visual approval or installation
@@ -116,7 +115,6 @@ because a wait returned. Honor real user interruptions. Preserve results/resourc
 owned children leaves-first and rely on slots only after observed state change. Never close
 unrelated/active workers, raise owner limits, delete useful evidence or auto-restart Main.
 
-For non-code work use domain-appropriate evidence, not invented code tests. Operate without recurring
-installer checks, model research or workflow retuning. Do not install/run Superpowers alongside
+For non-code work use domain-appropriate evidence, not invented code tests. Operate without recurring installer checks, model research or workflow retuning. Do not install/run Superpowers alongside
 Smart as a second orchestration layer; keep its techniques as these integrated guides. No telemetry,
 new daemon or automatic plugin removal. Owner/project, approval, no-agent and read-only rules bind.

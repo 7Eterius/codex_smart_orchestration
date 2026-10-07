@@ -1,6 +1,6 @@
 # Engineering notes
 
-Smart 3.1 uses one adaptive ownership loop: Main judgment and small direct work, Luna Max ordinary
+Smart 4.0 uses one adaptive ownership loop: Main judgment and small direct work, Luna Max ordinary
 implementation, Sol Low/Medium/High depth presets, procedural Tester/Luna Medium, and independent
 semantic Reviewer/Luna Max or Senior Reviewer/Sol High. Roles are on demand, not standing teams.
 
@@ -26,3 +26,8 @@ savings are outside deterministic CI and must be evaluated separately.
 [3.1 release notes](v3.1.md) | [3.0 history](v3.0.md) |
 [Main policy](../codex_workflow/smart_orchestration.md) |
 [Execution](../codex_workflow/execution.md) | [Testing](../codex_workflow/testing.md)
+
+4.0 adds conditionally loaded planning/debugging/branches/economics methods and an optional
+stateless delivery adviser. The adviser recommends practice depth, bounds the next batch from
+supplied quota/budget facts, and trips cumulative repair breakers without accepting work. It does
+not replace allocation, evidence or native permissions. See [4.0 adaptation and validation](v4.0.md).
