@@ -93,3 +93,11 @@ and Reviewer serially, observing closure between them. Do not wait indefinitely 
 or waive semantic review; Main retains the required gate after closing its writer record. On capacity errors reconcile once and retry only after
 observed change. Never omit required review, raise owner caps, close unrelated work, expand
 permissions, silently downgrade models or automatically restart Main.
+
+## Method is not another orchestration layer
+
+Use planning.md for unclear outcomes or long-task checkpoints, debugging.md for causal repair and
+cumulative circuit breakers, economics.md for bounded batches, and branches.md for large-feature
+isolation/integration. Keep one review owner for spec and quality; do not duplicate worker-spawned
+review. Carry accepted-unit evidence and repair counts across model/context changes. New methods
+never weaken the existing ownership, hold, scope, capacity or acceptance constraints above.
