@@ -307,7 +307,7 @@ class InstallationAndStartupTests(unittest.TestCase):
             for target in re.findall(r'\]\(([^)]+)\)',path.read_text()):
                 if not target.startswith(('https:','http:','#')):
                     self.assertTrue((path.parent/target.split('#')[0]).is_file(),target)
-        self.assertTrue((ROOT/'README.md').read_text().startswith('# Smart Orchestration 4.0.0'))
+        self.assertTrue((ROOT/'README.md').read_text().startswith('# Smart Orchestration 4.0.1'))
 
 
 class ReleaseMaintenanceTests(unittest.TestCase):

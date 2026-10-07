@@ -51,3 +51,11 @@ confidence. Batch related justified fixes, then inspect the complete correction 
 dependencies. A newly discovered real blocker stays visible even outside the original review diff.
 At the cap or budget exhaustion, checkpoint BLOCKED/UNVERIFIED. Never relabel required failures as
 optional, accept a dependent task on broken prerequisites, or mark a blocked task done to escape.
+
+## Bounded resume after replanning
+
+With delivery.py, Main records optional `replan`: task, defect, decision_ref, current cumulative
+failed_fixes and repair_rounds, and attempt_limit (1-3). Identity must match. Lifetime counters
+never decrease; the new window consumes their deltas and reports remaining_attempts. New evidence,
+quota, authority and implementation ownership still bind. Only the exact new baseline acknowledges
+a prior stall; later failures can stop again. Changing workers alone is not a replan.
