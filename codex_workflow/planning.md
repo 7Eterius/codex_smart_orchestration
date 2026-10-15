@@ -52,3 +52,7 @@ After context loss, compare the checkpoint with actual Git/files/process state. 
 accepted work, restart a live test process or treat a stale completion line as proof. Unknown or
 changed identity requires reconciliation. Changing workers does not reset repair budgets. Preserve
 checkpoint/evidence through integration; cleanup is a separate authorized action.
+
+At material assignment changes use handoffs.md: carry source/resource scope, native owner/preset,
+purpose/risk, evidence, cumulative attempts and pending gates. Use one compact existing record.
+Do not infer duplicated investigation from old role tags or encrypted followup counts.

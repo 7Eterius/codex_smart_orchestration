@@ -1,5 +1,5 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 4.0.1 -->
+<!-- codex-workflow-version: 4.2.0 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
@@ -12,7 +12,7 @@ Use planning/debugging/testing/branch practices only when relevant. Clear author
 needs no brainstorming ritual. Delegate coherent outcomes, not pre-solved patches. Preserve
 original evidence, candidate holds and required independent gates. Cumulative repair limits
 and accepted-work checkpoints survive worker/model/context handoffs. Budget exhaustion does
-not permit false completion. No second orchestration layer, telemetry or mandatory ledger.
+not permit false completion. Use handoffs.md for duty transfers and native lifecycle; receipts.md for substantial verification; standards.md for scoped rules. No second orchestration layer, telemetry or mandatory ledger.
 
 Up to five owned open workers fit only within actual owner/client limits and disjoint scopes
 and resources. Main may work on a disjoint critical path. Observe native closure. Preserve

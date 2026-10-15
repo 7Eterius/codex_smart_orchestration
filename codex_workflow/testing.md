@@ -57,3 +57,7 @@ passes. At low capacity, preserve receipts and observe native closure before sem
 Return candidate/scope; command/cwd/environment; completion/exit; duration; exposed totals/shards;
 log/report locations; failures/skips/flakiness; freshness and remaining gates. Keep secrets private.
 Main inspects the receipt and decisive evidence. Semantic correctness and acceptance stay separate.
+
+Read receipts.md when existing commands lack reliable execution receipts. Wrapper zero is not a
+nested test pass. Keep failed/intermediate artifacts under unique names. Tester cannot author new
+verification logic merely because its files are ignored; hand that scope to appropriate ownership.

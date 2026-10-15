@@ -1,4 +1,4 @@
-# Smart Orchestration 4.0.1
+# Smart Orchestration 4.2.0
 
 **Smart model routing. Disciplined engineering. Evidence without unnecessary ceremony.**
 
@@ -24,7 +24,31 @@ debugging/economics guides and [4.0.1 bugfix notes](docs/v4.0.1.md). These are a
 not measured native-agent speed or allowance improvements. Use the complete pinned release source
 and the existing preview/apply/check update procedure. No extra plugin or service is required.
 
-## What is new in 4.0
+## New in 4.2: evidence-led efficiency
+
+The targeted 4.0.1 audit corrected the apparent fourteen-worker peak to copied parent history;
+genuine own closed turns in that episode peaked at five. Historical open-thread occupancy remains
+unresolved. Sampled repeats included status checks, changed inputs and real RED/GREEN. Sampled
+Deep/Senior assignments were justified, so **all eleven model/effort presets remain unchanged**.
+
+4.2 improves concrete mechanisms instead: explicit duty/ownership/risk transitions with useful
+context reuse; actual native capacity-domain distinctions; procedural Tester boundaries; original
+subprocess exits and uniquely preserved evidence; scoped, example-backed standards in the existing
+review; and omission of repeated no-change acknowledgements. No extra manager, compulsory workflow
+ledger, automatic hook, external decider, project mutation or quota-driven model downgrade.
+
+Optional Python helpers replace repetitive bookkeeping only where needed. Small tasks stay direct.
+The offline collector now handles copied ancestor turns, test words inside status inspections and
+zero wrappers with conflicting nested status. It remains source-only, not installed telemetry.
+No real-project speed, quality or allowance saving is claimed from synthetic tests.
+
+[4.2 design, protocols and audit lessons](docs/v4.2.md) |
+[Handoffs and native lifecycle](codex_workflow/handoffs.md) |
+[Verification receipts](codex_workflow/receipts.md) |
+[Scoped standards](codex_workflow/standards.md) |
+[Offline collector](tools/stats/README.md)
+
+## Retained 4.0 engineering foundations
 
 Smart keeps its Codex-specific model routing and quota discipline, with selected Superpowers
 engineering practices adapted to the task rather than a second orchestrator.

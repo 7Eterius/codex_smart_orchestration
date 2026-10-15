@@ -57,10 +57,12 @@ cannot be overwritten by writer self-checks or a procedural Tester. Preserve sep
 semantic verdicts. Unknown questions go to Main rather than guessed answers. Acceptance requires
 all applicable evidence and authority, not only the cheapest or most recent passing result.
 
-## Completion claims and integrated review
+## Scoped standards and completion
 
-Report spec compliance and technical quality in one independent pass. Bind every completion claim
-to the actual candidate, fulfilled requirements and decisive evidence; a test pass is not deployment
-or live installation proof. Large features need integrated contract review, not duplicate suites.
-The debugging.md circuit breaker stops repair dispatch, never accepts unresolved required findings.
-Keep material new blockers visible even outside a correction diff.
+Read standards.md for applicable project criteria and optional labelled reviewer evaluation. Keep
+mechanical checks first and one independent spec/quality pass. Rules supplement requirements;
+changed or missing evidence stays visible. Writers cannot weaken standards to approve their patch.
+Bind completion to actual candidate and decisive evidence. Inspect wrapper/nested-exit conflicts;
+process success is not coverage, deployment or live activation. Preserve unique failed artifacts.
+Large features need integrated contract review, not duplicate suites. A circuit breaker never
+accepts unresolved required findings. Main retains actual visual judgment and final acceptance.

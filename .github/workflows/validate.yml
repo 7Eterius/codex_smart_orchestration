@@ -36,6 +36,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Contracts, helpers, installation and exact historical migrations
         run: python -B -m unittest discover -s scripts -p 'test_*.py' -v
+      - name: Offline collector regression suite
+        run: python -B -m unittest discover -s tools/stats -p 'test_*.py' -v
       - name: Syntax and changed-commit whitespace checks
         shell: bash
         run: |
