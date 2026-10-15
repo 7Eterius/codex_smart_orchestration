@@ -48,3 +48,10 @@ not rehashed or reconstructed from a summary. Retention cleanup needs explicit a
 There is no installed stop-hook that forces endless continuation or reruns a full suite after each
 edit. New hooks require verified current-client support, existing trust/approval and failure tests
 for the actual tool paths. Hooks do not replace native sandbox, capacity or protected CI controls.
+
+4.2.1 takes the pre-run fingerprint after cooperative admission, avoiding a redundant scan and
+rejecting an already-running identical batch before hashing. The post-run read is always fresh.
+Use optional --expected-candidate with the preview fingerprint when that exact candidate is the
+approval target. Each completed command gets a create-only .result.json before the next starts,
+so later interruption/errors do not erase earlier exits. CLI SIGTERM/SIGHUP cancels the owned group;
+SIGKILL cannot be handled. No-retry, required gates and external-state limitations are unchanged.

@@ -55,3 +55,8 @@ remove superseded duplicates through authorized maintenance, not automatic worke
 The Jev/Perplexity article informs this method, but neither service is installed or called. Any
 future external classification is opt-in, uses approved data and must show net benefit against the
 same labelled cases. Keep sensitive code, screenshots and private audits local unless authorized.
+
+Evaluation fixture-inputs --compact emits schema 2: complete rules once, label-free cases by
+reference. Expanded inputs remain default. Optional prediction split=development or split=holdout
+limits completeness to that split; omission scores all cases. Results retain run_ref, not model
+qualification. Catalog/prediction CLI reads allow 4 MiB; handoffs stay at 64 KiB.

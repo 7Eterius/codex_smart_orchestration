@@ -15,7 +15,7 @@ from runtime import work_contracts as w
 
 class Package42(unittest.TestCase):
     def test_current_version_and_eleven_roles(self):
-        self.assertEqual(PackageLayout.resolve(PACKAGE).version,'4.2.0')
+        self.assertEqual(PackageLayout.resolve(PACKAGE).version,'4.2.1')
         self.assertEqual(len(BUILTIN_WORKERS),11)
         self.assertEqual(w.ROLES,BUILTIN_WORKERS|{'main'})
 
@@ -60,7 +60,7 @@ class Package42(unittest.TestCase):
 
     def test_standalone_collector_version_and_cli(self):
         module=ROOT/'tools/stats/smart_weekly_stats.py'
-        self.assertIn("VERSION = '1.2.0'",module.read_text())
+        self.assertIn("VERSION = '1.2.1'",module.read_text())
         ran=subprocess.run([sys.executable,'-B',str(module),'--help'],capture_output=True,text=True,timeout=10)
         self.assertEqual(ran.returncode,0,ran.stderr)
 
