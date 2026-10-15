@@ -18,7 +18,8 @@ def api(path,payload=None,method=None):
     if method: args+=['--method',method]
     args+=['repos/'+REPO+'/'+path]
     if payload is not None: args+=['--input','-']
-    ran=subprocess.run(args,input=None if payload is None else json.dumps(payload),text=True,capture_output=True,check=True)
+    ran=subprocess.run(args,input=None if payload is None else json.dumps(payload),text=True,capture_output=True)
+    if ran.returncode: raise RuntimeError('GitHub API '+path+': '+ran.stderr[-4000:])
     return json.loads(ran.stdout)
 
 assert git('rev-parse','HEAD')==parent
@@ -27,15 +28,17 @@ here=Path(__file__).resolve().parent
 blob=base64.b64decode(''.join(p.read_text().strip() for p in sorted(here.glob('payload.part*'))),validate=True)
 assert hashlib.sha256(blob).hexdigest()==(here/'payload.sha256').read_text().strip()
 paths=list(json.loads(bz2.decompress(blob))['files'])
-subprocess.run(['git','add','-u','--','README.md','codex_workflow','docs','scripts','.github/workflows/validate.yml'],check=True)
+# Workflow changes are applied through the owner's connector to the clean PR.
+# The temporary content-only runner does not attempt to publish workflow edits.
+subprocess.run(['git','add','-u','--','README.md','codex_workflow','docs','scripts'],check=True)
 subprocess.run(['git','add','--',*paths],check=True)
 names=subprocess.check_output(['git','diff','--cached','--name-only','-z']).decode().split('\0')
 entries=[]
 for name in filter(None,names):
     p=Path(name)
-    assert p.parts[0] in {'README.md','codex_workflow','docs','scripts','tools','examples'} or name=='.github/workflows/validate.yml'
+    assert p.parts[0] in {'README.md','codex_workflow','docs','scripts','tools','examples'}
     assert p.is_file() and not p.is_symlink()
-    assert p.suffix in {'.md','.py','.toml','.json','.yml','.txt'} or p.name=='VERSION'
+    assert p.suffix in {'.md','.py','.toml','.json','.txt'} or p.name=='VERSION'
     entries.append(dict(path=name,mode='100755' if p.stat().st_mode&0o111 else '100644',type='blob',content=p.read_text()))
 assert entries
 assert Path('codex_workflow/operate/VERSION').read_text().strip()=='4.2.0'
