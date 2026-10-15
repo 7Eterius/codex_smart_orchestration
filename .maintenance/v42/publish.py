@@ -27,7 +27,7 @@ here=Path(__file__).resolve().parent
 blob=base64.b64decode(''.join(p.read_text().strip() for p in sorted(here.glob('payload.part*'))),validate=True)
 assert hashlib.sha256(blob).hexdigest()==(here/'payload.sha256').read_text().strip()
 paths=list(json.loads(bz2.decompress(blob))['files'])
-subprocess.run(['git','add','-u','--','README.md','codex_workflow','docs','scripts','tools','examples','.github/workflows/validate.yml'],check=True)
+subprocess.run(['git','add','-u','--','README.md','codex_workflow','docs','scripts','.github/workflows/validate.yml'],check=True)
 subprocess.run(['git','add','--',*paths],check=True)
 names=subprocess.check_output(['git','diff','--cached','--name-only','-z']).decode().split('\0')
 entries=[]
