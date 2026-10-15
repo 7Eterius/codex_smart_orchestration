@@ -23,6 +23,8 @@ BUILTIN_WORKERS = frozenset({
 })
 DELEGATING_WORKERS = frozenset({"routine_executor", "default_executor"})
 _REQUIRED = (
+    "handoffs.md", "receipts.md", "standards.md",
+    "runtime/work_contracts.py", "runtime/verification_run.py", "runtime/review_rules.py",
     "planning.md", "debugging.md", "branches.md", "economics.md",
     "runtime/delivery.py", "third_party/Superpowers-LICENSE.txt",
     "smart_orchestration.md", "execution.md", "verification.md", "testing.md", "browser.md",

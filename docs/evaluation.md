@@ -47,3 +47,12 @@ with characterization, lost-context recovery without redispatch, low-quota requi
 large-feature integration with complete candidate evidence. Keep matched requirements, baselines
 and quality gates. Record repeated suites, unproductive repair waves and stale-evidence acceptance
 as failures. Deterministic helper tests do not prove native LLM behavior or future cost savings.
+
+For 4.2, exclude copied parent turns before worker-overlap analysis; distinguish logical turns,
+command envelopes, native residency and inference. Recognize executed commands rather than test
+words in status filters, and preserve native wrapper versus embedded outcome evidence. Segment
+real duties at material handoffs instead of treating lifetime role tags as cost labels. Repeated
+commands after changed inputs or RED/GREEN are not automatically waste. Evaluate scoped review
+rules on separately labelled development/holdout cases; synthetic plumbing tests do not qualify
+a model. No target Luna percentage, weekly waste estimate or savings claim follows from the
+purposive audit. Keep private provenance local.

@@ -31,3 +31,8 @@ savings are outside deterministic CI and must be evaluated separately.
 stateless delivery adviser. The adviser recommends practice depth, bounds the next batch from
 supplied quota/budget facts, and trips cumulative repair breakers without accepting work. It does
 not replace allocation, evidence or native permissions. See [4.0 adaptation and validation](v4.0.md).
+
+Smart 4.2 retains routing and allocator behavior while adding explicit assignment/native-domain
+advice, create-only original-exit verification receipts, scoped reviewer criteria/evaluation,
+and source-only collector attribution regressions. No native admission enforcement or model
+quality is implied by helper tests. See [4.2 design and limits](v4.2.md).

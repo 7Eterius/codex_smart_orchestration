@@ -28,3 +28,9 @@ original-failure diagnosis, meaningful RED/GREEN where suitable, stable evidence
 checkpoint recovery without redispatch. delivery.py decisions do not prove native compliance or
 quota enforcement. Report a conflicting second orchestration bootstrap; never disable/remove an
 existing plugin without authorization. Do not install Superpowers as a dependency of Smart.
+
+For 4.2, distinguish the actual backend's effective capacity from every on-disk cap namespace.
+A completed turn is not closure and persistent history is not continuous residency. Use existing
+native evidence when necessary; no cap-probe fan-out or automatic namespace edits. Use handoffs.md.
+Optional receipts/standards helpers do not prove native enforcement or model quality. No automatic
+hooks, external deciders, background collectors or repeat full-suite qualification is introduced.
