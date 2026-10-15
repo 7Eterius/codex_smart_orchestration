@@ -104,6 +104,7 @@ def transition(facts):
             raise ContractError('Review baseline is only for the same retained reviewer')
     payload = {k:facts[k] for k in ('task','assignment','purpose','to_role','scope_ref',
                                     'requirement_ref','failed_fixes','repair_rounds')}
+    payload.update({k:facts[k] for k in ('from_owner','to_owner','from_role','risk','authority_ref')})
     payload.update(pending_gates=list(facts['pending_gates']),evidence_refs=list(facts['evidence_refs']))
     if not facts['previous_work_stopped']:
         return result('wait_for_handover', **payload)
@@ -122,6 +123,8 @@ def transition(facts):
         payload['review_baseline_ref']=facts['review_baseline_ref']
         if not facts['candidate_held']:
             return result('hold_candidate_before_review', **payload)
+    if facts['purpose']=='semantic_review' and not facts['candidate_held']:
+        return result('hold_candidate_before_review', **payload)
     return result('reuse_bounded_context' if same else 'transfer_ready_for_allocator', **payload)
 
 
@@ -150,14 +153,16 @@ def capacity(facts):
                   observation_basis='Caller asserts current effective native-domain observation; not independently checked.')
 
 
-def read_json(path):
+def read_json(path, max_bytes=65536):
+    if type(max_bytes) is not int or not 1<=max_bytes<=4*1024*1024:
+        raise ContractError('Invalid JSON byte limit')
     if path.is_symlink(): raise ContractError('Symlink input')
     fd=os.open(path, os.O_RDONLY|getattr(os,'O_NOFOLLOW',0)|getattr(os,'O_NONBLOCK',0))
     try:
         if not stat.S_ISREG(os.fstat(fd).st_mode): raise ContractError('Input must be regular')
-        with os.fdopen(fd,'rb',closefd=False) as stream: raw=stream.read(65537)
+        with os.fdopen(fd,'rb',closefd=False) as stream: raw=stream.read(max_bytes+1)
     finally: os.close(fd)
-    if len(raw)>65536: raise ContractError('Input too large')
+    if len(raw)>max_bytes: raise ContractError('Input too large')
     def pairs(values):
         out={}
         for k,v in values:

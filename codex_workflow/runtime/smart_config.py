@@ -12,7 +12,7 @@ SMART = Marker('<!-- smart-orchestration-start -->', '<!-- smart-orchestration-e
 
 def bootstrap(home: Path) -> str:
     policy = str(home / 'codex_workflow' / 'smart_orchestration.md')
-    return f'''Smart Orchestration 4.2.0: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and bounded assignment.
+    return f'''Smart Orchestration 4.2.1: Main reads {json.dumps(policy, ensure_ascii=False)} once for substantive work. Named workers follow their role and bounded assignment.
 Main owns judgment and acceptance. Main may implement small understood or disjoint critical-path work. Delegate coherent outcomes, not pre-solved patches. Preserve named Luna/Sol routing and separate procedural testing from independent review.
 Use relevant guides only. Reuse related context; substantive duty/risk/scope changes require explicit suitable ownership, evidence, repair history and pending gates. Native roles cannot be changed by prose. Suppress no-change acknowledgements, not decisions or blockers.
 Run useful independent work in parallel, at most five owned open workers within verified native capacity. Completion is not closure; copied parent turns are not worker activity. Preserve scopes, candidate holds and independent gates.

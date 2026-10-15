@@ -32,3 +32,10 @@ Unknown, deleted, unsupported, remote or omitted records remain outside the evid
 Tests: `python3 -B -m unittest discover -s tools/stats -p 'test_*.py' -v` from source root.
 The synthetic fixtures include the reported failure mechanisms without any private source logs.
 This is an optional source tool, not an installed agent bootstrap, daemon or telemetry requirement.
+
+## Collector 1.2.1
+
+Malformed duration strings are unavailable evidence, not fatal parser exceptions. Exact workflow
+markers (including 4.2.0/4.2.1) are separate from series-only markers and mixed versions. These are
+session associations, not proof of per-call activation. The audit's copied-parent-turn correction
+and native occupancy uncertainty remain unchanged. No raw logs are automatically rerun.

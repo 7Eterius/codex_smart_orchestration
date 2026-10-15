@@ -93,19 +93,21 @@ def execute(command, root, log_path):
         except OSError as exc:
             return dict(status='launch_error',exit_code=None,error_type=type(exc).__name__,
                         output_complete=False,output_bytes=0,output_sha256=output_hash.hexdigest())
-        selector=selectors.DefaultSelector()
-        selector.register(process.stdout,selectors.EVENT_READ)
+        selector=None
         try:
+            selector=selectors.DefaultSelector()
+            selector.register(process.stdout,selectors.EVENT_READ)
             while True:
                 remaining=command['timeout_seconds']-(time.monotonic()-started)
                 if remaining<=0:
                     status='timeout'; _stop(process); break
-                events=selector.select(min(remaining,0.2))
+                events=selector.select(remaining)
                 if events:
                     data=os.read(process.stdout.fileno(),65536)
                     if not data:
-                        if process.poll() is not None: break
-                        time.sleep(min(remaining,0.02)); continue
+                        # EOF can precede child exit. Block on that owned process, not a spin loop.
+                        process.wait(timeout=max(.1,command['timeout_seconds']-(time.monotonic()-started)))
+                        break
                     available=MAX_OUTPUT-size
                     kept=data[:available]; log.write(kept); output_hash.update(kept); size+=len(kept)
                     lines=(marker_tail+kept).split(b'\n'); marker_tail=lines.pop()[-4096:]
@@ -125,7 +127,8 @@ def execute(command, root, log_path):
         except BaseException:
             _stop(process); raise
         finally:
-            selector.close(); process.stdout.close()
+            if selector is not None: selector.close()
+            process.stdout.close()
         match=re.fullmatch(rb'exit_status=(-?\d{1,6})\s*',marker_tail)
         if match: nested.add(int(match[1]))
         code=process.returncode
@@ -138,16 +141,21 @@ def execute(command, root, log_path):
                     test_verdict='not_inferred_from_process_exit')
 
 
-def run(plan, evidence_parent, apply=False):
+def run(plan, evidence_parent, apply=False, expected_candidate=None):
     root=validate(plan)
-    before=candidate.snapshot(root,plan['inputs'])
+    if expected_candidate is not None and (not isinstance(expected_candidate,str)
+            or not re.fullmatch(r'[0-9a-f]{64}',expected_candidate)):
+        raise ValueError('Expected candidate must be a SHA-256 fingerprint')
     parent=evidence_parent.expanduser()
     if not parent.is_dir() or parent.is_symlink(): raise ValueError('Evidence parent must already exist')
     parent=parent.resolve(strict=True)
-    for scope in before['scopes']:
-        watched=root/scope['path']
+    for name in plan['inputs']:
+        watched=root/candidate._relative(name)
         if parent==watched or parent.is_relative_to(watched): raise ValueError('Evidence must be outside watched inputs')
     if not apply:
+        before=candidate.snapshot(root,plan['inputs'])
+        if expected_candidate is not None and before['fingerprint']!=expected_candidate:
+            raise ValueError('Candidate differs from the supplied preview fingerprint')
         return dict(action='preview',commands=len(plan['commands']),candidate=before['fingerprint'],
                     plan_digest=digest(plan),writes=False,limitation=LIMITATION)
     # Cooperative lock for the same plan in the same chosen evidence parent only.
@@ -160,8 +168,11 @@ def run(plan, evidence_parent, apply=False):
         try: fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:
             return dict(action='already_running',commands_executed=0,limitation=LIMITATION)
-        # Recheck after admission; identity is not a native source lock.
-        if not candidate.verify(before)['matched']: raise ValueError('Inputs drifted before execution')
+        # Read after admission rather than hashing once before and again after the lock.
+        # Optional preview pin binds the approved candidate, not only current bytes.
+        before=candidate.snapshot(root,plan['inputs'])
+        if expected_candidate is not None and before['fingerprint']!=expected_candidate:
+            raise ValueError('Candidate differs from the supplied preview fingerprint')
         folder=parent/('smart-check-'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:12])
         folder.mkdir(mode=0o700)
         write_new(folder/'candidate.before.json',before)
@@ -172,6 +183,7 @@ def run(plan, evidence_parent, apply=False):
                 rows.append(dict(id=command['id'],status='not_run')); continue
             log=folder/(command['id']+'.log')
             row=execute(command,root,log); row.update(id=command['id'],log=log.name)
+            write_new(folder/(command['id']+'.result.json'),row)
             rows.append(row)
             halted=not row.get('expected_process_outcome_observed',False)
         try:
@@ -192,18 +204,29 @@ def run(plan, evidence_parent, apply=False):
         os.close(fd)  # Preserve the stable lock inode. Unlinking creates a race between contenders.
 
 
+def _cancel_signal(signum, frame):
+    raise KeyboardInterrupt
+
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--plan',type=Path,required=True)
     parser.add_argument('--evidence-parent',type=Path,required=True)
     parser.add_argument('--apply',action='store_true')
+    parser.add_argument('--expected-candidate',help='Optional preview fingerprint; fail before execution on drift')
     args=parser.parse_args(argv)
+    previous={sig:signal.signal(sig,_cancel_signal) for sig in (signal.SIGTERM,signal.SIGHUP)}
     try:
-        out=run(read_json(args.plan),args.evidence_parent,args.apply)
+        out=run(read_json(args.plan),args.evidence_parent,args.apply,args.expected_candidate)
         print(json.dumps(out,sort_keys=True))
         return 0 if out['action'] in {'preview','expected_process_outcomes_observed'} else 1
+    except KeyboardInterrupt:
+        print(json.dumps(dict(action='interrupted',semantic_acceptance=False,limitation=LIMITATION)))
+        return 1
     except (OSError,ValueError,RecursionError) as exc:
         print(json.dumps(dict(action='error',error=str(exc),limitation=LIMITATION)))
         return 2
+    finally:
+        for sig,handler in previous.items():signal.signal(sig,handler)
 
 if __name__=='__main__': raise SystemExit(main())

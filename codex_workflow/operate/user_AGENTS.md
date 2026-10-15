@@ -1,22 +1,12 @@
 <!-- codex-workflow-user-id: viettran-edgeAI/codex_workflow -->
-<!-- codex-workflow-version: 4.2.0 -->
+<!-- codex-workflow-version: 4.2.1 -->
 <!-- codex-workflow-user-managed-start -->
 # Smart Orchestration
 
-For substantive work Main reads installed `codex_workflow/smart_orchestration.md` under
-actual CODEX_HOME (default `~/.codex`) once. Named workers follow their role and bounded task.
-Main owns product, architecture, design and acceptance; small understood work can stay direct.
-Preserve the Luna Max / Sol Low-Medium-High routing and separate Luna Medium Tester.
-
-Use planning/debugging/testing/branch practices only when relevant. Clear authorized work
-needs no brainstorming ritual. Delegate coherent outcomes, not pre-solved patches. Preserve
-original evidence, candidate holds and required independent gates. Cumulative repair limits
-and accepted-work checkpoints survive worker/model/context handoffs. Budget exhaustion does
-not permit false completion. Use handoffs.md for duty transfers and native lifecycle; receipts.md for substantial verification; standards.md for scoped rules. No second orchestration layer, telemetry or mandatory ledger.
-
-Up to five owned open workers fit only within actual owner/client limits and disjoint scopes
-and resources. Main may work on a disjoint critical path. Observe native closure. Preserve
-explicit models, parent/profile/speed/sandbox settings, permissions and lower capacity unless
-an owner authorizes a change. Install via `operate/smart_install.md`, restart manually and
-use a fresh conversation. Disk integrity is not live activation or measured savings.
+For substantive work, Main reads `~/.codex/codex_workflow/smart_orchestration.md` once,
+using actual CODEX_HOME. Named workers follow their bounded assignment and role.
+The installed policy defines routing, selective methods, ownership, verification and
+native lifecycle limits. Do not load every guide or invoke every optional helper.
+Preserve owner/project instructions, permissions and selected Main settings. No
+automatic restart, hook activation, external service or project bootstrap is required.
 <!-- codex-workflow-user-managed-end -->

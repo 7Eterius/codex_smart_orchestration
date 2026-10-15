@@ -1,8 +1,7 @@
-# Smart Orchestration 4.2
+# Smart Orchestration 4.2.1
 
-Optimize accepted quality, elapsed time and total model work, including context, failed attempts,
-verification and handoffs. One adaptive loop: understand, assign, execute, verify, accept. Replace
-repetitive bookkeeping with existing tools, not a second orchestrator or mandatory ceremony.
+Optimize accepted quality, elapsed time and total work, including repairs and verification.
+Understand, assign, execute, verify, accept. Use existing tools, not another orchestrator.
 
 ## Judgment and ownership
 
@@ -42,7 +41,7 @@ and ownership transfer explicit. Carry requirement, candidate, scope/resources, 
 cumulative repair counts and pending gates. A retained Investigator does not silently become a writer;
 Tester does not author/diagnose its own new check and call that procedural verification. Use a suitable
 named owner or Main after transfer. A prose role change cannot change native model/configuration.
-Historical role tags and token volume do not prove what work actually occurred. Read handoffs.md.
+Role tags and token volume do not prove duty. Use handoffs.md at material transfers.
 
 ## Scale the method
 
@@ -59,10 +58,12 @@ Read installed guides only when relevant:
 | Substantial approved verification lacking a reliable wrapper | receipts.md |
 | Applicable project standards or reviewer calibration | standards.md |
 
-Tiny tasks stay direct. Plans describe deliverables, dependencies and decisions, not every click.
-For long work keep one compact identity-bound checkpoint with accepted units, evidence, unresolved
-findings, live process/resource owners and next action. Reconcile actual state after context loss;
-do not redispatch accepted work, restart live suites or reset repair history. No mandatory ledger.
+Clear low-risk work stays direct when Main has context. Otherwise use one coherent owner,
+focused checks and required independent gates, not an obligatory agent pipeline. Native/CI receipts
+may replace optional helpers. Plans name deliverables, not clicks.
+Long-task checkpoints preserve identity, accepted work/evidence, findings, live owners and next
+action. Reconcile actual state after context loss; never redispatch accepted work, restart live
+suites or reset repair history. No mandatory ledger.
 
 ## Useful parallelism and economics
 

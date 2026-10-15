@@ -34,10 +34,10 @@ import tomllib
 import zipfile
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-VERSION = '1.2.0'
+VERSION = '1.2.1'
 UTC = timezone.utc
 SCHEMA_REFERENCE = 'openai/codex@f0c5077c34ec7a76b4ad9134835925e6ae3d72ec'
-SMART_REFERENCE = 'Smart 4.2.0 presets (unchanged model/effort map from 4.0.1)'
+SMART_REFERENCE = 'Smart 4.2.1 presets (unchanged model/effort map from 4.0.1)'
 EXPECTED = {
     'simple_executor': ('gpt-6-luna', 'max'),
     'routine_executor': ('gpt-6-luna', 'max'),
@@ -244,11 +244,12 @@ def parse_duration(value):
         return float(value)
     if isinstance(value, dict) and finite(value.get('secs'), 1e9) and finite(value.get('nanos', 0), 1e9):
         return value['secs'] + value.get('nanos', 0)/1e9
-    if isinstance(value, str):
-        m = re.fullmatch(r'([\d.]+)\s*(ms|s|seconds)', value)
+    if isinstance(value, str) and len(value)<=64:
+        m = re.fullmatch(r'(\d+(?:\.\d+)?|\.\d+)\s*(ms|s|seconds)', value)
         if m:
             n = float(m[1])
-            return n / 1000 if m[2] == 'ms' else n
+            seconds=n/1000 if m[2]=='ms' else n
+            return seconds if finite(seconds,1e9) else None
     return None
 
 
@@ -894,14 +895,14 @@ class Collector:
         s=self.sessions[sid]
         root=self.sessions.get(self.root(sid),s)
         markers=s.version_markers|root.version_markers
-        if '4.2.0' in markers or '4.2' in markers:
-            return 'mixed_smart_instruction_versions' if markers-{'4.2','4.2.0'} else 'instruction_marker_4.2_series'
-        if '4.0.1' in markers:
-            return 'instruction_marker_4.0.1'
-        if '4.0' in markers:
-            return 'instruction_marker_4.0_series_patch_unproven'
         if markers:
-            return 'other_smart_instruction_version'
+            exact={v for v in markers if re.fullmatch(r'\d+\.\d+\.\d+',v)}
+            series={'.'.join(v.split('.')[:2]) for v in markers}
+            if len(exact)>1 or len(series)>1:
+                return 'mixed_smart_instruction_versions'
+            if exact:
+                return 'instruction_marker_'+next(iter(exact))
+            return 'instruction_marker_'+next(iter(series))+'_series_patch_unproven'
         if s.role in EXPECTED:
             return 'smart_named_role_only'
         if sid in self.parents_with_smart_roles:

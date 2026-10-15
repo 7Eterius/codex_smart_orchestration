@@ -48,7 +48,7 @@ class V4Integration(unittest.TestCase):
         extras={'planning.md','debugging.md','branches.md','economics.md','runtime/delivery.py',
                 'third_party/Superpowers-LICENSE.txt'}
         package=PackageLayout.resolve(PACKAGE)
-        self.assertEqual(package.version,'4.2.0')
+        self.assertEqual(package.version,'4.2.1')
         self.assertTrue(extras <= {p.relative_to(PACKAGE).as_posix() for p in package.files})
         with tempfile.TemporaryDirectory() as temp:
             home=Path(temp).resolve()
