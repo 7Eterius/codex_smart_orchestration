@@ -1,4 +1,4 @@
-# Smart Orchestration 4.2.0
+# Smart Orchestration 4.2.1
 
 **Smart model routing. Disciplined engineering. Evidence without unnecessary ceremony.**
 
@@ -24,7 +24,19 @@ debugging/economics guides and [4.0.1 bugfix notes](docs/v4.0.1.md). These are a
 not measured native-agent speed or allowance improvements. Use the complete pinned release source
 and the existing preview/apply/check update procedure. No extra plugin or service is required.
 
-## New in 4.2: evidence-led efficiency
+## Maintenance 4.2.1: small efficiency gains, stronger receipts
+
+Keep all eleven model presets and required verification. This patch removes duplicated startup
+policy and one redundant pre-run fingerprint scan, avoids busy polling after output EOF, preserves
+per-command results on later failure, checks preview-pinned candidate identity when requested, and
+hardens bounded candidate reads. It fixes incomplete handoff identity, split-specific evaluation,
+large valid catalog CLI input, and collector duration/version attribution. Compact evaluation
+packets carry each complete rule once. Small understood tasks need no obligatory worker pipeline.
+No measured subscription saving or task-speed percentage is claimed; no extra manager or service.
+
+[4.2.1 audit, changes and validation boundaries](docs/v4.2.1.md)
+
+## Retained 4.2: evidence-led efficiency
 
 The targeted 4.0.1 audit corrected the apparent fourteen-worker peak to copied parent history;
 genuine own closed turns in that episode peaked at five. Historical open-thread occupancy remains

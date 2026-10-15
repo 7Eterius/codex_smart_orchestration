@@ -59,12 +59,38 @@ def _content_id(scopes: list[dict], files: dict) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
+def _read_regular(path: Path, limit: int):
+    """Bound a descriptor read and reject final-component replacement/special files.
+
+    This is not an atomic directory snapshot or protection against all ancestry races.
+    """
+    fd = os.open(path, os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0))
+    try:
+        before = os.fstat(fd)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > limit:
+            raise CandidateError('Input must be a bounded regular file')
+        with os.fdopen(fd, 'rb', closefd=False) as stream:
+            content = stream.read(limit + 1)
+        after = os.fstat(fd)
+        named = path.lstat()
+        def identity(info):
+            return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns,
+                    info.st_ctime_ns, info.st_mode)
+        if (len(content) != before.st_size or len(content) > limit
+                or identity(before) != identity(after) or identity(after) != identity(named)):
+            raise CandidateError(f'Input changed during read: {path}')
+        return content, after
+    finally:
+        os.close(fd)
+
+
 def snapshot(root: Path, paths: list[str]) -> dict:
     root = _root(root)
     if not paths or len(paths) > MAX_FILES:
         raise CandidateError("Supply a bounded nonempty set of explicit input paths")
     names = sorted({_relative(p) for p in paths})
     scopes, files, total = [], {}, 0
+    visited_directories = set()
     for name in names:
         target = _safe(root, name)
         if not target.exists():
@@ -78,7 +104,16 @@ def snapshot(root: Path, paths: list[str]) -> dict:
             _safe(root, relative)
             mode = path.lstat().st_mode
             if stat.S_ISDIR(mode):
-                children = list(path.iterdir())
+                if relative in visited_directories:
+                    continue
+                visited_directories.add(relative)
+                if len(visited_directories) + len(files) > MAX_FILES:
+                    raise CandidateError('Candidate scope exceeds entry limit; narrow the inputs')
+                children = []
+                for child in path.iterdir():
+                    children.append(child)
+                    if len(children) + len(pending) + len(files) > MAX_FILES:
+                        raise CandidateError('Candidate scope exceeds entry limit; narrow the inputs')
                 if len(children) + len(pending) + len(files) > MAX_FILES:
                     raise CandidateError("Candidate scope exceeds entry limit; narrow the inputs")
                 pending.extend(sorted(children, reverse=True))
@@ -87,17 +122,10 @@ def snapshot(root: Path, paths: list[str]) -> dict:
                 raise CandidateError(f"Candidate input is not a regular file: {relative}")
             if relative in files:
                 continue
-            before = path.stat()
-            if before.st_size + total > MAX_BYTES or len(files) >= MAX_FILES:
-                raise CandidateError("Candidate scope exceeds size limit; narrow the inputs")
-            # Bound reads even when a file grows after stat().
-            with path.open("rb") as stream:
-                content = stream.read(MAX_BYTES - total + 1)
-            after = path.stat()
-            if (len(content) != before.st_size or len(content) + total > MAX_BYTES
-                    or (before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns)
-                    != (after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns)):
-                raise CandidateError(f"Candidate input changed during read: {relative}")
+            if len(files) >= MAX_FILES:
+                raise CandidateError('Candidate scope exceeds entry limit; narrow the inputs')
+            content, after = _read_regular(path, MAX_BYTES - total)
+            _safe(root, relative)
             files[relative] = {"sha256": hashlib.sha256(content).hexdigest(),
                                "bytes": len(content), "mode": stat.S_IMODE(after.st_mode)}
             total += len(content)
@@ -172,10 +200,7 @@ def _unique_pairs(pairs):
 def read_manifest(path: Path) -> dict:
     if path.is_symlink() or not path.is_file():
         raise CandidateError("Manifest must be a regular file")
-    with path.open("rb") as stream:
-        content = stream.read(MAX_MANIFEST_BYTES + 1)
-    if len(content) > MAX_MANIFEST_BYTES:
-        raise CandidateError("Manifest exceeds size limit")
+    content, _ = _read_regular(path, MAX_MANIFEST_BYTES)
     try:
         value = json.loads(content, object_pairs_hook=_unique_pairs)
     except RecursionError as error:

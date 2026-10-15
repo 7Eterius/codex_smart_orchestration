@@ -47,3 +47,8 @@ closure for completed owned agents, then observe release. At uncertainty reconci
 known suitable stopped owner or proceed serially within known capacity. Do not spawn to probe a cap,
 close unrelated/active work or waive required independent review. Persistent uncertainty stays visible.
 No daemon, resident scheduler or mandatory per-command ledger is introduced.
+
+Reuse current native capacity/role evidence within its unchanged domain; reconcile after a
+material lifecycle/configuration change, missing evidence or admission error, not every command.
+Transfer advice retains owner identities, risk and authority references. New semantic review
+needs a held candidate as well as an independent suitable owner and the existing allocator checks.

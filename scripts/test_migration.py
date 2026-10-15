@@ -31,7 +31,8 @@ BASELINES=('e0baa2d69ef9247bd4e3c0e42658358b3fbf8e3c', 'v2.3.0','v2.4.0','v2.5.0
            'a6ad69249cf264c969c106e44b15bda1f4bf9ef3',
            '332da7c08adfce2ac4d24d8a4a9a69dae3ebe017',
            '776e0fc58e388996faa3471edb5b80286052bf5c',
-           'e725c152dea3a8794df0eb2d418831905382ca8c')
+           'e725c152dea3a8794df0eb2d418831905382ca8c',
+           'e96ad3bd5cbd368141f58d1940466b80fd27f578')
 
 def snapshot(root):
     return {p.relative_to(root).as_posix():(p.read_bytes(),p.stat().st_mode&0o777)
