@@ -23,7 +23,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Assemble exact-base source changes
-        run: python -B .maintenance/v42/prepare.py
+        run: |
+          python -B .maintenance/v42/prepare.py
+          python -B .maintenance/v42/refine.py
       - name: Current suite and exact historical migrations
         run: python -B -m unittest discover -s scripts -p 'test_*.py' -v
       - name: Offline collector regressions
