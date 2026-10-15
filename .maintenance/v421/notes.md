@@ -1,0 +1,84 @@
+# Smart Orchestration 4.2.1
+
+Maintenance review of `e96ad3bd5cbd368141f58d1940466b80fd27f578` (4.2.0).
+The goal is a modest speed/cost improvement without lowering intelligence, required checks or
+independent review. There is no measured native Codex saving percentage in this release.
+
+## Review scope and preserved architecture
+
+Review covered current orchestration policy and handoffs, role routing/capacity, evidence and
+candidate identity, command execution, scoped review evaluation, collector parsing/cohorts,
+installation/rollback, package declaration, documentation and CI. Existing allocator, recovery,
+permission, independent verdict and transaction contracts remain tested and unchanged. All eleven
+role files are byte-identical to 4.2.0. Main remains owner-selected. The five-worker policy and
+lower explicit settings are unchanged; historical V2 occupancy is still not retrospectively known.
+
+## Concrete fixes
+
+- Verification used three full listed-input snapshot passes for a normal applied run, and even
+  reread source before rejecting an active duplicate batch. Admission now precedes its baseline
+  read, followed by a fresh post-run snapshot: two passes, no cached hashes. A refused active
+  duplicate performs no snapshot. Optional `--expected-candidate` binds an approved preview
+  fingerprint and refuses changed input before launch. Neither file identity nor the cooperative
+  same-plan/evidence-directory lock is a native source lock or complete dependency attestation.
+- The receipt runner used 200 ms polling and repeatedly polled an EOF stream while its process
+  still ran. It now waits for output until the real deadline and waits for the owned process at
+  EOF. This avoids periodic wakeups without shortening a command timeout or ignoring its exit.
+- Each completed command now gets a create-only private `.result.json` before a later command can
+  fail. CLI SIGTERM/SIGHUP follows the existing owned-process-group cancellation path and reports
+  interrupted evidence, not PASS. SIGKILL, power loss, escaped process groups and host failure are
+  not recoverable guarantees. Original logs are bounded; truncation remains incomplete evidence.
+- Candidate reads now inspect the opened no-follow, nonblocking descriptor, check regular-file
+  type and size, and compare file identity before/after the read against the final named file.
+  A final-component symlink/special-file swap cannot silently turn a read into a blocking stream.
+  This is targeted hardening, not a complete hostile-filesystem or directory-ancestry boundary.
+  Overlapping scopes enumerate the same directory once and traversal bounds include directories.
+  Unchanged file inventories retain their existing fingerprints.
+- Material handoff results now preserve actual source/destination owners, prior role, risk and
+  authority reference. A new semantic-review transfer needs a held candidate too. These remain
+  supplied-fact recommendations, never native role changes or independently verified permission.
+- Evaluation can now score only a declared development or holdout split, rejecting extra/unknown
+  cases rather than always calling a complete holdout batch incomplete. No split means all cases,
+  preserving the earlier contract. Results retain run_ref for traceability. The valid bounded
+  catalog format can exceed the former shared 64 KiB CLI limit; its reader is now bounded at
+  4 MiB, without expanding the ordinary handoff input limit.
+- Expanded fixture packets now carry references and scope that were previously omitted. Optional
+  `fixture-inputs --compact` uses schema 2 with one complete rule per batch and label-free cases,
+  avoiding repeated standards text. Expanded schema remains the default for compatibility.
+- Source-only collector 1.2.1 treats malformed duration strings as missing evidence instead of
+  aborting a scan. Exact, series-only and mixed instruction-version associations are distinguished,
+  including 4.2.1. No historical usage, copied-parent-turn or open-thread metric is reinterpreted
+  as native activation or savings. No user raw logs were rerun for this patch.
+
+## Leaner ordinary operation
+
+The global AGENTS managed block is now a short locator rather than a second copy of the bootstrap
+and Main policy. Named role definitions and conditional guide loading are unchanged. A clear small
+low-risk task should use the shortest authorized path: Main or one coherent writer, focused checks,
+and only required independent gates. Helpers replace missing bookkeeping, not existing reliable
+native/CI receipts. No Investigator/Tester/Reviewer pipeline is created just to populate roles.
+Current native capability facts may be reused while their domain remains unchanged; reconcile real
+changes or uncertainty, not each tool call. These are instructions, not measured model compliance.
+
+## Validation
+
+Regression cases include counterexamples loaded from the exact original commit, real isolated
+subprocesses, expected failures, preview drift, busy-lock early rejection, EOF before nonzero exit,
+SIGTERM/SIGHUP cleanup, preserved per-command outcomes, bounded safe reads, unchanged fingerprints,
+complete split evaluation and malformed collector data. Exact 4.2.0 upgrade/no-op/rollback joins
+existing historical migration coverage. Normal CI validates Linux Python 3.11/3.12 and macOS
+Python 3.12; the separate historical reference and source-only collector remain distinct suites.
+Final counts and successful run references are recorded by the release/PR after actual execution.
+
+Operation counts and text sizes are deterministic measurements. They do not establish overall
+latency, model quality, subscription allowance or percent savings on real projects. No daemon,
+external dependency, automatic hook, paid service, model downgrade or per-command ledger is added.
+User projects, installed configuration, local logs and backups are not modified from this review.
+
+## Installation
+
+Use a complete clean snapshot of current main outside project directories, record its commit,
+read `codex_workflow/operate/smart_install.md`, then use Python 3.11+ for preview/apply/check.
+Preserve owner models, explicit caps, profiles, permissions and backup history. Finish in the
+current Codex session; restart manually afterward and begin a fresh conversation. Source-only
+collector and example rules are not installed as telemetry or copied into projects.

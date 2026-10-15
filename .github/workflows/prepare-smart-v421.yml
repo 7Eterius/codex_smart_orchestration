@@ -1,0 +1,40 @@
+name: Prepare isolated Smart 4.2.1
+on:
+  push:
+    branches: [maintenance/prepare-v4.2.1]
+    paths: ['.maintenance/v421/**', '.github/workflows/prepare-smart-v421.yml']
+permissions:
+  contents: read
+jobs:
+  prepare:
+    if: github.repository == '7Eterius/codex_smart_orchestration' && github.ref == 'refs/heads/maintenance/prepare-v4.2.1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Verify original 4.2.0 baseline
+        run: |
+          python -B -m unittest discover -s scripts -p 'test_*.py' -v
+          python -B -m unittest discover -s tools/stats -p 'test_*.py' -v
+      - name: Apply exact-base patch
+        run: python -B .maintenance/v421/prepare.py
+      - name: Current contracts and original counterexamples
+        run: python -B -m unittest discover -s scripts -p 'test_*.py' -v
+      - name: Offline collector regressions
+        run: python -B -m unittest discover -s tools/stats -p 'test_*.py' -v
+      - name: Syntax and whitespace
+        run: |
+          python -m compileall -q codex_workflow scripts tools/stats
+          git diff --check
+      - name: Publish tested source to this preparation branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -B .maintenance/v421/publish.py
