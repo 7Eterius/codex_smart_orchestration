@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "id": "failure-masking",
+      "scopes": [
+        "src"
+      ],
+      "mistake": "Failure is replaced with success.",
+      "fix": "Preserve original failure.",
+      "references": [
+        "src/runner.py"
+      ],
+      "exceptions": [
+        "Explicit expected RED."
+      ],
+      "severity": "blocking",
+      "check": "semantic",
+      "cases": [
+        {
+          "id": "bad",
+          "expected": "violation",
+          "split": "development",
+          "state": "Returns zero after a failed check."
+        },
+        {
+          "id": "good",
+          "expected": "compliant",
+          "split": "development",
+          "state": "Returns the original nonzero status."
+        },
+        {
+          "id": "neighbor",
+          "expected": "compliant",
+          "split": "holdout",
+          "state": "Only renames a local variable."
+        },
+        {
+          "id": "missing",
+          "expected": "unverified",
+          "split": "holdout",
+          "state": "No execution evidence available."
+        },
+        {
+          "id": "exception",
+          "expected": "not_applicable",
+          "split": "holdout",
+          "state": "An isolated negative control intentionally expects failure."
+        }
+      ]
+    }
+  ]
+}

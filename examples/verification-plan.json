@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "task": "replace-with-authorized-task",
+  "requirement_ref": "approved-requirement-reference",
+  "root": "/absolute/project",
+  "inputs": ["src", "tests", "package.json", "package-lock.json"],
+  "environment_ref": "approved-local-environment-and-target",
+  "commands": [
+    {"id": "focused-tests", "argv": ["npm", "run", "test:focused"], "timeout_seconds": 300},
+    {"id": "required-build", "argv": ["npm", "run", "build"], "timeout_seconds": 900}
+  ]
+}

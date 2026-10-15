@@ -47,3 +47,7 @@ operators. Closing an agent does not authorize deleting profiles, logs or server
 Billing, permissions, production, external messages and destructive clicks retain authorization
 requirements even when mechanically easy. No unsupported tool flags, simulated evidence,
 permission escalation or side-effect repetition after an uncertain response. Reconcile state first.
+
+Before fixing repeated locator failures, inspect the actual accessible role/name, visibility and
+container scope. A new journey/probe or diagnostic helper needs check-design ownership, not an
+unannounced expansion of procedural Tester. Preserve failed traces under distinct attempt names.

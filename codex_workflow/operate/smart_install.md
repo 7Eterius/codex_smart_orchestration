@@ -89,3 +89,11 @@ by the owner, not silently changed to a recommendation. No additional Superpower
 server, hook or telemetry is required. Report conflicting orchestration bootstraps without
 removing plugins automatically. The README's explicit backed-up five-worker cap opt-in remains
 available in the same installation session; existing lower caps are otherwise preserved.
+
+## 4.2 boundaries
+
+The declared package adds handoff/receipt/standard guides and three optional helpers. Models,
+efforts, permissions and explicit caps remain. Collector and example/evaluation corpora stay
+source-only and are not installed as telemetry or project rules. No hooks or decider services are
+automatically activated. Preserve known V2 settings without inventing precedence; actual native
+admission still needs runtime evidence. Complete preview/apply/check and restart manually once.

@@ -94,10 +94,13 @@ or waive semantic review; Main retains the required gate after closing its write
 observed change. Never omit required review, raise owner caps, close unrelated work, expand
 permissions, silently downgrade models or automatically restart Main.
 
-## Method is not another orchestration layer
+## Material transfers and native lifecycle
 
-Use planning.md for unclear outcomes or long-task checkpoints, debugging.md for causal repair and
-cumulative circuit breakers, economics.md for bounded batches, and branches.md for large-feature
-isolation/integration. Keep one review owner for spec and quality; do not duplicate worker-spawned
-review. Carry accepted-unit evidence and repair counts across model/context changes. New methods
-never weaken the existing ownership, hold, scope, capacity or acceptance constraints above.
+Read handoffs.md at substantive duty/scope/risk changes. Preserve useful context, requirement,
+source/resource ownership, authority, original evidence, cumulative repairs and pending gates.
+A retained Investigator is not automatically an implementation owner. Tester runs selected
+procedures; new check authoring and diagnosis need appropriate ownership even in ignored artifacts.
+No prose retag changes native model/role. Capacity facts must identify the effective native domain,
+primary inclusion and actual retained/open/closed states, not copied turns or disk keys alone.
+Optional work_contracts.py advice cannot replace allocation scope/reservation checks. No duplicate
+review seats, status acknowledgements or mandatory per-command ledger.
